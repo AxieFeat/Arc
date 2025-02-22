@@ -1,0 +1,168 @@
+{
+  "meta": {
+    "format_version": "1.0"
+  },
+  "name":"Модель хуя",
+  "elements": [
+    {
+      "light_level": 0,
+      "light_color": 0,
+      "from": [
+        5,
+        0,
+        7
+      ],
+      "to": [
+        11,
+        2,
+        9
+      ],
+      "origin": [
+        7,
+        0,
+        7
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            6,
+            2
+          ],
+          "texture": 0
+        },
+        "east": {
+          "uv": [
+            2,
+            8,
+            4,
+            10
+          ],
+          "texture": 0
+        },
+        "south": {
+          "uv": [
+            0,
+            2,
+            6,
+            4
+          ],
+          "texture": 0
+        },
+        "west": {
+          "uv": [
+            4,
+            8,
+            6,
+            10
+          ],
+          "texture": 0
+        },
+        "up": {
+          "uv": [
+            6,
+            6,
+            0,
+            4
+          ],
+          "texture": 0
+        },
+        "down": {
+          "uv": [
+            6,
+            6,
+            0,
+            8
+          ],
+          "texture": 0
+        }
+      }
+    },
+    {
+      "light_level": 0,
+      "light_color": 0,
+      "from": [
+        7,
+        2,
+        7
+      ],
+      "to": [
+        9,
+        8,
+        9
+      ],
+      "origin": [
+        7,
+        2,
+        7
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            6,
+            0,
+            8,
+            6
+          ],
+          "texture": 0
+        },
+        "east": {
+          "uv": [
+            6,
+            6,
+            8,
+            12
+          ],
+          "texture": 0
+        },
+        "south": {
+          "uv": [
+            0,
+            8,
+            2,
+            14
+          ],
+          "texture": 0
+        },
+        "west": {
+          "uv": [
+            8,
+            0,
+            10,
+            6
+          ],
+          "texture": 0
+        },
+        "up": {
+          "uv": [
+            10,
+            8,
+            8,
+            6
+          ],
+          "texture": 0
+        },
+        "down": {
+          "uv": [
+            10,
+            8,
+            8,
+            10
+          ],
+          "texture": 0
+        }
+      }
+    }
+  ],
+  "textures":[
+    {
+      "id": 0,
+      "width": 16,
+      "height": 16,
+      "uv_width": 16,
+      "uv_height": 16,
+      "source":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAJ9JREFUOE9jjN7z5T8DHjDz1CSwLE9VFSM2ZYwUG/DjbhFWFyTfbwJbSNAFFBuw5cpDrC5Y/kKYOBdQbEBwYglWF3xolwS7oPBNCJj20ZHHHgsUGwALRG9uabBNG+f9BNP+SexgWqDyOZheO78HuwuoZgCHch+KDc4vesFhs1eiGKvNsFTJCHMB1Q3Alz+Q5XC6gGgDiFWISx3eACLGcABRymQRSTk1zwAAAABJRU5ErkJggg=="
+    }
+  ]
+}

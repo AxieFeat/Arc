@@ -1,0 +1,126 @@
+package arc.math
+
+import arc.Arc
+import arc.annotations.MutableType
+import arc.annotations.TypeFactory
+import org.jetbrains.annotations.ApiStatus
+import java.math.BigInteger
+
+/**
+ * Represents a 3D point with integer precision.
+ *
+ * This interface defines a mutable 3-dimensional point (x, y, z) where each component
+ * is an integer value. It provides methods for packing the point into a single
+ * integer and for creating and unpacking instances of [Point3i].
+ */
+// TODO Fix packing.
+@Suppress("INAPPLICABLE_JVM_NAME")
+@MutableType
+interface Point3i {
+
+    /**
+     * The X-coordinate of the 3D point.
+     *
+     * Represents the horizontal axis value of the point within a 3D space. This property
+     * is mutable and can be changed to update the X-coordinate of the point.
+     */
+    @get:JvmName("x")
+    var x: Int
+
+    /**
+     * Represents the y-coordinate of a 3D integer point.
+     *
+     * The y variable is a mutable property used to define the vertical axis value
+     * of a point in 3D integer space. It is part of a coordinate system where it
+     * typically works alongside x and z to determine the position of the point.
+     */
+    @get:JvmName("y")
+    var y: Int
+
+    /**
+     * The Z component of a 3D integer point.
+     *
+     * Represents the depth coordinate in a 3D space, corresponding to the third dimension.
+     * This property can be accessed or modified to represent the Z-axis value of the point.
+     */
+    @get:JvmName("z")
+    var z: Int
+
+    /**
+     * Packs the x, y, and z fields of the class into a single BigInteger.
+     * The fields are masked to 21 bits, with x occupying the least significant bits,
+     * y shifted left by 21 bits, and z shifted left by 42 bits.
+     *
+     * @return A BigInteger composed of the packed x, y, and z values.
+     */
+    fun pack(): BigInteger {
+        val xBits = BigInteger.valueOf(x.toLong() and 0x1FFFFFL)
+        val yBits = BigInteger.valueOf(y.toLong() and 0x1FFFFFL).shiftLeft(21)
+        val zBits = BigInteger.valueOf(z.toLong() and 0x1FFFFFL).shiftLeft(42)
+
+        return xBits.or(yBits).or(zBits)
+    }
+
+    @TypeFactory
+    @ApiStatus.Internal
+    interface Factory {
+
+        /**
+         * Create new instance of [Point3i]
+         *
+         * @param x X position
+         * @param y Y position
+         * @param z Z position
+         *
+         * @return New instance of [Point3i].
+         */
+        fun create(x: Int, y: Int, z: Int): Point3i
+
+    }
+
+    companion object {
+
+        @JvmField
+        val BIT_MASK_21: Long = 0b11111_11111_11111_11111_11111
+
+        /**
+         * [Point3i] with zero values.
+         */
+        @JvmField
+        val ZERO = of(0, 0, 0)
+
+        /**
+         * Create instance of [Point3i] by [Factory].
+         *
+         * @param x X position
+         * @param y Y position.
+         * @param z Z position.
+         *
+         * @return New instance of [Point3i].
+         */
+        @JvmStatic
+        fun of(x: Int, y: Int, z: Int): Point3i {
+            return Arc.factory<Factory>().create(x, y, z)
+        }
+
+        /**
+         * Unpack point.
+         *
+         * @param packed Packet point via [Point3i.pack].
+         *
+         * @return Unpacked instance of [Point3i].
+         */
+        @JvmStatic
+        fun unpack(packed: BigInteger): Point3i {
+            val mask = BigInteger.valueOf(BIT_MASK_21)
+
+            return of(
+                x = packed.and(mask).toInt(),
+                y = packed.shiftRight(21).and(mask).toInt(),
+                z = packed.shiftRight(42).and(mask).toInt()
+            )
+        }
+
+    }
+
+}
