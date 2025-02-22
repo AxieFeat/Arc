@@ -3,7 +3,6 @@ package arc
 import arc.annotations.MutableType
 import arc.annotations.TypeFactory
 import arc.files.LocationSpace
-import arc.graphics.Drawer
 import arc.graphics.RenderSystem
 import arc.input.InputDevice
 import arc.window.Window
@@ -43,13 +42,6 @@ interface Application {
     val window: Window
 
     /**
-     * Represents the graphical drawer system used for initiating and managing rendering operations.
-     * Provides capabilities to define drawing primitives and vertex formats for rendering graphical elements.
-     */
-    @get:JvmName("drawer")
-    val drawer: Drawer
-
-    /**
      * Represents the rendering system used by the application for managing
      * all rendering operations. Provides functionality such as binding shaders,
      * textures, managing frame lifecycle, enabling/disabling rendering options
@@ -61,14 +53,6 @@ interface Application {
      */
     @get:JvmName("renderSystem")
     val renderSystem: RenderSystem
-
-    /**
-     * Represents the engine used within the application. It provides
-     * core functionalities like window management, render systems,
-     * and control over frames per second (fps).
-     */
-    @get:JvmName("engine")
-    val engine: Engine
 
     /**
      * Represents the file location management system for the application.
@@ -84,12 +68,6 @@ interface Application {
      */
     @get:JvmName("inputDevices")
     val inputDevices: Set<InputDevice>
-
-    /**
-     * Current input device of application. It's last used device from [inputDevices].
-     */
-    @get:JvmName("inputDevice")
-    val inputDevice: InputDevice
 
     /**
      * Represents the current text stored in the system clipboard.

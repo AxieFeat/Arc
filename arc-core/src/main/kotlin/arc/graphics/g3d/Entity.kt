@@ -5,18 +5,24 @@ import arc.annotations.MutableType
 import arc.annotations.TypeFactory
 import arc.graphics.g3d.model.Model
 import arc.math.Point3d
+import arc.util.Copyable
 import org.jetbrains.annotations.ApiStatus
 import org.joml.Quaternionf
+import java.util.UUID
 
 /**
  * Represents an entity within a 3D environment.
  *
  * An entity is a mutable object that has attributes such as position, scale, rotation,
  * and model representation.
+ *
+ * You can store entities in [ChunkSection].
+ *
+ * @see ChunkSection
  */
 @Suppress("INAPPLICABLE_JVM_NAME")
 @MutableType
-interface Entity {
+interface Entity : Copyable<Entity> {
 
     /**
      * Represents the unique identifier of an entity.
@@ -25,8 +31,8 @@ interface Entity {
      * It is commonly used for entity management tasks such as retrieval, comparison, and storage,
      * particularly in game engine systems and chunk-based environments.
      */
-    @get:JvmName("id")
-    val id: Int
+    @get:JvmName("uuid")
+    val uuid: UUID
 
     /**
      * Represents the 3D model associated with this entity.
@@ -82,26 +88,6 @@ interface Entity {
     var offset: Point3d
 
     /**
-     * Represents the position of the chunk where the entity is located.
-     *
-     * The `chunkPosition` is a 3D point defined by its x, y, and z coordinates, which determine
-     * the global position of the chunk containing the entity. This value is used for spatial
-     * calculations and determining the chunk's relationship to other entities or chunks in the environment.
-     */
-    @get:JvmName("chunkPosition")
-    val chunkPosition: Point3d
-
-    /**
-     * Represents the chunk section associated with this entity.
-     *
-     * The chunk section contains the spatial and logical groupings of entities,
-     * facilitating organization and operations, such as collision checks and updates,
-     * within specific areas of the 3D environment.
-     */
-    @get:JvmName("chunk")
-    val chunk: ChunkSection
-
-    /**
      * Indicates whether the entity is viewable.
      *
      * This property is typically used to determine if the entity is currently visible
@@ -118,6 +104,17 @@ interface Entity {
      */
     fun isCollide(other: Entity): Boolean
 
+    /**
+     * Creates and returns a new instance of the `Entity` class with identical properties.
+     *
+     * This method is used to create a duplicate of the current `Entity` object.
+     * The returned `Entity` is distinct from the original, allowing for modifications
+     * without affecting the original instance.
+     *
+     * @return A new instance of `Entity` with the same properties as the original.
+     */
+    override fun copy(): Entity
+
     @ApiStatus.Internal
     @TypeFactory
     interface Factory {
@@ -125,13 +122,12 @@ interface Entity {
         /**
          * Create new instance [Entity].
          *
-         * @param id ID of this entity.
-         * @param chunk Chunk of this entity.
+         * @param uuid Unique ID of this entity.
          * @param model Model of this entity.
          *
          * @return New instance of [Entity].
          */
-        fun create(id: Int, chunk: ChunkSection, model: Model): Entity
+        fun create(uuid: UUID, model: Model): Entity
 
     }
 
@@ -140,15 +136,14 @@ interface Entity {
         /**
          * Create new instance [Entity].
          *
-         * @param id ID of this entity.
-         * @param chunk Chunk of this entity.
+         * @param uuid Unique ID of this entity.
          * @param model Model of this entity.
          *
          * @return New instance of [Entity].
          */
         @JvmStatic
-        fun create(id: Int, chunk: ChunkSection, model: Model): Entity {
-            return Arc.factory<Factory>().create(id, chunk, model)
+        fun create(uuid: UUID, model: Model): Entity {
+            return Arc.factory<Factory>().create(uuid, model)
         }
 
     }

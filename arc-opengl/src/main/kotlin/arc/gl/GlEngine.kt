@@ -1,7 +1,6 @@
 package arc.gl
 
 import arc.Configuration
-import arc.Engine
 import arc.gl.graphics.GlRenderSystem
 import arc.graphics.RenderSystem
 import arc.window.Window

@@ -57,6 +57,19 @@ interface RenderSystem {
     val isBlendEnabled: Boolean
 
     /**
+     * Represents the graphical drawer system used for initiating and managing rendering operations.
+     * Provides capabilities to define drawing primitives and vertex formats for rendering graphical elements.
+     */
+    @get:JvmName("drawer")
+    val drawer: Drawer
+
+    /**
+     * Current game scene. Render scene represents all viewable objects in screen.
+     */
+    @get:JvmName("scene")
+    val scene: Scene
+
+    /**
      * Binds the specified shader instance for rendering operations.
      *
      * This method activates the given shader, making it the one in use
@@ -105,6 +118,13 @@ interface RenderSystem {
      * depending on the rendering context.
      */
     fun endFrame()
+
+    /**
+     * Sets the current scene to the provided scene object.
+     *
+     * @param scene The scene to be set as the current scene.
+     */
+    fun setScene(scene: Scene)
 
     /**
      * Enables depth testing for the rendering system.

@@ -31,6 +31,11 @@ interface ChunkSection {
     val isEmpty: Boolean
 
     /**
+     * Is this section has changes from time of creation.
+     */
+    val isChanged: Boolean
+
+    /**
      * Get entity by it ID.
      *
      * @param id ID of entity.
