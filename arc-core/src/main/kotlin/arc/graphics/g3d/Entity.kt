@@ -6,6 +6,7 @@ import arc.annotations.TypeFactory
 import arc.graphics.g3d.model.Model
 import arc.math.Point3d
 import arc.util.Copyable
+import arc.util.Identifiable
 import org.jetbrains.annotations.ApiStatus
 import org.joml.Quaternionf
 import java.util.UUID
@@ -22,7 +23,7 @@ import java.util.UUID
  */
 @Suppress("INAPPLICABLE_JVM_NAME")
 @MutableType
-interface Entity : Copyable<Entity> {
+interface Entity : Copyable<Entity>, Identifiable {
 
     /**
      * Represents the unique identifier of an entity.
@@ -32,7 +33,7 @@ interface Entity : Copyable<Entity> {
      * particularly in game engine systems and chunk-based environments.
      */
     @get:JvmName("uuid")
-    val uuid: UUID
+    override val uuid: UUID
 
     /**
      * Represents the 3D model associated with this entity.

@@ -6,13 +6,13 @@ package arc
  * This enum provides a predefined set of platform constants, such as `WINDOWS`, `LINUX`, `MACOS`, and more.
  * It can also support the scenario when the platform is unknown using the `UNKNOWN` constant.
  */
-enum class OSPlatform(name: String? = null) {
+enum class OSPlatform(name: String) {
     WINDOWS("windows"),
     LINUX("linux"),
     MACOS("macos"),
     ANDROID("android"),
 
-    UNKNOWN;
+    UNKNOWN("unknown");
 
     companion object {
 

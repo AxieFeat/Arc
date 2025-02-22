@@ -29,4 +29,18 @@ interface EntityCollider {
      */
     fun processCollision(entity1: Entity, entity2: Entity)
 
+    /**
+     * Updates the collision state and processes any necessary adjustments or actions
+     * within the 3D environment.
+     *
+     * The `update` function is responsible for checking and handling collisions
+     * between entities. It ensures that the state of each entity is appropriately adjusted
+     * based on detected collisions, applying necessary effects such as positional changes,
+     * rotation updates, or other triggered responses.
+     *
+     * Implementations of this method should manage the lifecycle of the collision detection
+     * and response processes, maintaining the integrity and stability of the environment.
+     */
+    fun update()
+
 }

@@ -4,6 +4,7 @@ import arc.Arc
 import arc.annotations.MutableType
 import arc.annotations.TypeFactory
 import arc.graphics.g3d.Entity
+import arc.util.Identifiable
 import org.jetbrains.annotations.ApiStatus
 import java.util.UUID
 
@@ -17,13 +18,13 @@ import java.util.UUID
  */
 @Suppress("INAPPLICABLE_JVM_NAME")
 @MutableType
-interface ParticleStack {
+interface ParticleStack : Identifiable {
 
     /**
      * Unique id of particle stack.
      */
     @get:JvmName("uuid")
-    val uuid: UUID
+    override val uuid: UUID
 
     /**
      * Basic entity of this particle.

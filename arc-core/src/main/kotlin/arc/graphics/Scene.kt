@@ -1,7 +1,10 @@
 package arc.graphics
 
+import arc.Arc
 import arc.annotations.MutableType
+import arc.annotations.TypeFactory
 import arc.graphics.g3d.ChunkContainer
+import org.jetbrains.annotations.ApiStatus
 
 /**
  * Represents a mutable scene within the application. A scene typically contains a camera,
@@ -110,5 +113,36 @@ interface Scene {
      * of the scene, such as active elements, visibility settings, and interactions.
      */
     fun render()
+
+    @ApiStatus.Internal
+    @TypeFactory
+    interface Factory {
+
+        /**
+         * Creates and returns a new instance of a `Scene`. Each scene is a self-contained environment
+         * that typically includes elements such as a camera, graphical components, and associated
+         * update and rendering logic. The created scene can be dynamically managed and utilized
+         * within the context of an application to represent distinct graphical states or levels.
+         *
+         * @return A newly created `Scene` instance ready for use.
+         */
+        fun create(): Scene
+
+    }
+
+    companion object {
+
+        /**
+         * Creates and returns a new instance of a `Scene`. Each scene is a self-contained environment
+         * that typically includes elements such as a camera, graphical components, and associated
+         * update and rendering logic. The created scene can be dynamically managed and utilized
+         * within the context of an application to represent distinct graphical states or levels.
+         *
+         * @return A newly created `Scene` instance ready for use.
+         */
+        @JvmStatic
+        fun create(): Scene = Arc.factory<Factory>().create()
+
+    }
 
 }
