@@ -4,7 +4,7 @@ import arc.assets.TextureAsset
 import arc.graphics.Texture
 import java.io.File
 
-data class GlTextureAsset(
+internal data class GlTextureAsset(
     override val file: File
 ) : TextureAsset {
 

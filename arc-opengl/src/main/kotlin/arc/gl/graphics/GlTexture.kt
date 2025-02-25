@@ -7,7 +7,7 @@ import org.lwjgl.stb.STBImage
 import org.lwjgl.system.MemoryStack
 import java.nio.ByteBuffer
 
-data class GlTexture(
+internal data class GlTexture(
     override val asset: TextureAsset,
 ) : Texture {
 

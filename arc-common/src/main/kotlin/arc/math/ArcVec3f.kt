@@ -2,7 +2,7 @@ package arc.math
 
 import kotlin.math.*
 
-data class ArcVec3f(
+internal data class ArcVec3f(
     override var x: Float,
     override var y: Float,
     override var z: Float

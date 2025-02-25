@@ -1,6 +1,6 @@
 package arc.math
 
-data class ArcPoint3I(
+internal data class ArcPoint3I(
     override var x: Int,
     override var y: Int,
     override var z: Int

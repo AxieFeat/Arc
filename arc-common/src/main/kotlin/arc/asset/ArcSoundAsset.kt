@@ -3,7 +3,7 @@ package arc.asset
 import arc.assets.SoundAsset
 import java.io.File
 
-data class ArcSoundAsset(
+internal data class ArcSoundAsset(
     override val file: File
 ) : SoundAsset {
 

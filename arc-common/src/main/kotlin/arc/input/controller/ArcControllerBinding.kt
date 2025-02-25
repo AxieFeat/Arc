@@ -3,7 +3,7 @@ package arc.input.controller
 import arc.input.AbstractBinding
 import arc.input.KeyCode
 
-class ArcControllerBinding(
+internal class ArcControllerBinding(
     id: String,
     key: KeyCode,
 ) : AbstractBinding(id, key), ControllerBinding {

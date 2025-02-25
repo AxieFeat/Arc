@@ -4,6 +4,7 @@ import arc.*
 import arc.files.ArcLocationSpace
 import arc.files.LocationSpace
 import arc.gl.graphics.GlDrawer
+import arc.gl.graphics.GlRenderSystem
 import arc.graphics.Drawer
 import arc.graphics.RenderSystem
 import arc.input.InputDevice
@@ -17,12 +18,9 @@ object GlApplication : AbstractApplication() {
     override val platform: Platform = GlPlatform
 
     override lateinit var window: Window
-    override lateinit var drawer: Drawer
     override lateinit var renderSystem: RenderSystem
-    override lateinit var engine: Engine
     override val locationSpace: LocationSpace = ArcLocationSpace
     override lateinit var inputDevices: Set<InputDevice>
-    override lateinit var inputDevice: InputDevice
 
     override fun init(configuration: Configuration) {
         this.window = Window.create(
@@ -32,9 +30,7 @@ object GlApplication : AbstractApplication() {
             width = configuration.windowWidth
         )
 
-        this.engine = GlEngine(configuration)
-        this.renderSystem = engine.renderSystem
-        this.drawer = GlDrawer
+        this.renderSystem = GlRenderSystem
 
         window.create()
 

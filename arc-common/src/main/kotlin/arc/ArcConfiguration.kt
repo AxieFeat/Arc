@@ -1,6 +1,6 @@
 package arc
 
-data class ArcConfiguration(
+internal data class ArcConfiguration(
     override val windowName: String = "Arc engine",
     override val windowWidth: Int = 720,
     override val windowHeight: Int = 420,

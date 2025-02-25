@@ -1,10 +1,12 @@
 package arc
 
 import arc.asset.ArcAssetStack
+import arc.asset.ArcFontAsset
 import arc.asset.ArcSoundAsset
 import arc.asset.shader.ArcFragmentShader
 import arc.asset.shader.ArcVertexShader
 import arc.assets.AssetStack
+import arc.assets.FontAsset
 import arc.assets.MutableAssetStack
 import arc.assets.SoundAsset
 import arc.assets.shader.FragmentShader
@@ -58,6 +60,7 @@ object ArcFactoryProvider : FactoryProvider {
         register<VertexShader.Factory>(ArcVertexShader.Factory)
         register<AssetStack.Factory>(ArcAssetStack.Factory)
         register<MutableAssetStack.Factory>(ArcAssetStack.MutableFactory)
+        register<FontAsset.Factory>(ArcFontAsset.Factory)
     }
 
     private fun modifyField(clazz: Class<*>, name: String, value: Any) {

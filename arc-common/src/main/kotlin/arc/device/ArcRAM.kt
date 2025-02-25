@@ -2,7 +2,7 @@ package arc.device
 
 import oshi.SystemInfo
 
-data class ArcRAM(
+internal data class ArcRAM(
     private val systemInfo: SystemInfo
 ) : RAM {
     override val available: Long

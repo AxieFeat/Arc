@@ -2,4 +2,4 @@ package arc.gl
 
 import arc.AbstractPlatform
 
-object GlPlatform : AbstractPlatform("opengl")
+internal object GlPlatform : AbstractPlatform("opengl")

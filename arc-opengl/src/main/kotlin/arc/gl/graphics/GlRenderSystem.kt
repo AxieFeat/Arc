@@ -1,19 +1,18 @@
 package arc.gl.graphics
 
 import arc.gl.GlApplication
-import arc.graphics.EmptyShaderInstance
-import arc.graphics.RenderSystem
-import arc.graphics.ShaderInstance
-import arc.graphics.Texture
+import arc.graphics.*
 import arc.graphics.vertex.VertexFormatElement
 import org.lwjgl.opengl.GL41
 
-object GlRenderSystem : RenderSystem {
+internal object GlRenderSystem : RenderSystem {
 
     override var shader: ShaderInstance = EmptyShaderInstance
 
     override var isDepthTestEnabled: Boolean = true
     override var isBlendEnabled: Boolean = true
+    override val drawer: Drawer = GlDrawer
+    override var scene: Scene = EmptyScene
     override var isCullEnabled: Boolean = true
 
     override fun bindShader(shader: ShaderInstance) {
@@ -32,6 +31,10 @@ object GlRenderSystem : RenderSystem {
     override fun endFrame() {
         shader.unbind()
         shader = EmptyShaderInstance
+    }
+
+    override fun setScene(scene: Scene) {
+        this.scene = scene
     }
 
     override fun enableDepthTest() {
@@ -70,7 +73,7 @@ object GlRenderSystem : RenderSystem {
     }
 
     override fun setShaderColor(r: Float, g: Float, b: Float, a: Float) {
-        GL41.glVertexAttrib4f(VertexFormatElement.COLOR.attributeIndex, r, g, b, a)
+        GL41.glVertexAttrib4f(VertexFormatElement.COLOR.index, r, g, b, a)
     }
 
     override fun clearDepth(depth: Double) {

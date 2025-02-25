@@ -2,7 +2,7 @@ package arc.device
 
 import oshi.hardware.GraphicsCard
 
-data class ArcGPU(
+internal data class ArcGPU(
     private val graphicsCard: GraphicsCard
 ) : GPU {
 

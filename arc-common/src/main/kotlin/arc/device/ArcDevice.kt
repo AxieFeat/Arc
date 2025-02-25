@@ -3,7 +3,7 @@ package arc.device
 import arc.OSPlatform
 import oshi.SystemInfo
 
-object ArcDevice : Device {
+internal object ArcDevice : Device {
 
     private val systemInfo = SystemInfo()
 

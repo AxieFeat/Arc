@@ -1,6 +1,6 @@
 package arc.math
 
-data class ArcPoint2I(
+internal data class ArcPoint2I(
     override var x: Int,
     override var y: Int
 ) : Point2i {

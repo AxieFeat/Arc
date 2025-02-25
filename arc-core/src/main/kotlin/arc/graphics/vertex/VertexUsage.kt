@@ -17,7 +17,6 @@ enum class VertexUsage(
     NORMAL("Normal"),
     COLOR("Vertex Color"),
     UV("UV"),
-    PADDING("Padding"),
-    GENERIC("Generic");
+    PADDING("Padding");
 
 }

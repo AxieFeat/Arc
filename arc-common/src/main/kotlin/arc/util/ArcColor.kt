@@ -1,6 +1,6 @@
 package arc.util
 
-data class ArcColor(
+internal data class ArcColor(
     override var red: Int = 255,
     override var green: Int = 255,
     override var blue: Int = 255,

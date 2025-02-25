@@ -3,7 +3,7 @@ package arc.input.mouse
 import arc.input.AbstractBinding
 import arc.input.KeyCode
 
-class ArcMouseBinding(
+internal class ArcMouseBinding(
     id: String,
     key: KeyCode,
 ) : AbstractBinding(id, key), MouseBinding {

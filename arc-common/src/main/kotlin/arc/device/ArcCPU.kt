@@ -2,7 +2,7 @@ package arc.device
 
 import oshi.SystemInfo
 
-data class ArcCPU(
+internal data class ArcCPU(
     private val systemInfo: SystemInfo
 ): CPU {
 

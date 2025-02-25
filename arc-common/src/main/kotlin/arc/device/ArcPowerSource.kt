@@ -3,7 +3,7 @@ package arc.device
 import java.time.LocalDate
 
 @Suppress("WHEN_ENUM_CAN_BE_NULL_IN_JAVA")
-data class ArcPowerSource(
+internal data class ArcPowerSource(
     private val powerSource: oshi.hardware.PowerSource
 ) : PowerSource {
 

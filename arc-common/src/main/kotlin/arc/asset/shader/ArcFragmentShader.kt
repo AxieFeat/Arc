@@ -3,7 +3,7 @@ package arc.asset.shader
 import arc.assets.shader.FragmentShader
 import java.io.File
 
-data class ArcFragmentShader(
+internal data class ArcFragmentShader(
     override val file: File
 ) : FragmentShader {
 

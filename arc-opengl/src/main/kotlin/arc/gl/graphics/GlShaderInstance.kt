@@ -5,7 +5,7 @@ import arc.assets.shader.VertexShader
 import arc.graphics.ShaderInstance
 import org.lwjgl.opengl.GL41
 
-data class GlShaderInstance(
+internal data class GlShaderInstance(
     override val vertex: VertexShader,
     override val fragment: FragmentShader
 ) : ShaderInstance {

@@ -3,7 +3,7 @@ package arc.asset.shader
 import arc.assets.shader.VertexShader
 import java.io.File
 
-data class ArcVertexShader(
+internal data class ArcVertexShader(
     override val file: File
 ) : VertexShader {
 

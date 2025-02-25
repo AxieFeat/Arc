@@ -1,6 +1,6 @@
 package arc.math
 
-data class ArcRay(
+internal data class ArcRay(
     override var origin: Vec3f,
     override var direction: Vec3f
 ) : Ray {

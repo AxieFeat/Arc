@@ -11,7 +11,7 @@ import arc.math.Point2d
  */
 @Suppress("INAPPLICABLE_JVM_NAME")
 @MutableType
-interface Component {
+interface UIComponent {
 
     /**
      * Position of this element in screen.

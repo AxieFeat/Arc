@@ -4,7 +4,7 @@ import arc.input.ArcBindingProcessor
 import arc.input.BindingProcessor
 import arc.input.KeyCode
 
-class ArcKeyboardInput(
+internal class ArcKeyboardInput(
     override val bindingProcessor: BindingProcessor = ArcBindingProcessor(),
 ) : KeyboardInput {
 

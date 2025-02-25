@@ -7,7 +7,7 @@ import arc.graphics.vertex.VertexFormat
 import arc.math.Point3i
 import arc.util.Color
 
-data class GlDrawBuffer(
+internal data class GlDrawBuffer(
     override var mode: DrawerMode,
     override var format: VertexFormat
 ) : DrawBuffer {

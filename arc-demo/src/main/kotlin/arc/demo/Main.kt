@@ -8,6 +8,7 @@ fun main() {
     ArcFactoryProvider.install()
     ArcFactoryProvider.bootstrap()
 
+    // Preload implementations.
     GlApplication.preload()
 
     val game = Game()

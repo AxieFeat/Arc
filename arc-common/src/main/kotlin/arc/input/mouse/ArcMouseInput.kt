@@ -4,7 +4,7 @@ import arc.input.BindingProcessor
 import arc.input.KeyCode
 import arc.math.Point2d
 
-class ArcMouseInput(
+internal class ArcMouseInput(
     override val bindingProcessor: BindingProcessor
 ) : MouseInput {
 

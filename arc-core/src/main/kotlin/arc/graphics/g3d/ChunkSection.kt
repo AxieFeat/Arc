@@ -2,6 +2,7 @@ package arc.graphics.g3d
 
 import arc.annotations.ImmutableType
 import arc.math.Point3i
+import java.util.*
 
 /**
  * This interface represents chunk section.
@@ -38,11 +39,11 @@ interface ChunkSection {
     /**
      * Get entity by it ID.
      *
-     * @param id ID of entity.
+     * @param uuid ID of entity.
      *
      * @return Instance of [Entity] or null, if not found.
      */
-    operator fun get(id: Int): Entity?
+    operator fun get(uuid: UUID): Entity?
 
     /**
      * Add new entity to this section.
@@ -52,10 +53,5 @@ interface ChunkSection {
      * @return [entity] for chaining.
      */
     fun add(entity: Entity): Entity
-
-    /**
-     * Update this chunk.
-     */
-    fun update()
 
 }

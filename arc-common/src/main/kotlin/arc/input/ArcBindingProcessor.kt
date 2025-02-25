@@ -1,6 +1,6 @@
 package arc.input
 
-class ArcBindingProcessor : BindingProcessor {
+internal class ArcBindingProcessor : BindingProcessor {
 
     override val bindings: MutableList<Binding> = mutableListOf()
 

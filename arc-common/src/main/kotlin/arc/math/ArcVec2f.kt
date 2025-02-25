@@ -7,7 +7,7 @@ import kotlin.math.sin
 import kotlin.math.sqrt
 
 @Suppress("LocalVariableName")
-data class ArcVec2f(
+internal data class ArcVec2f(
     override var x: Float,
     override var y: Float
 ) : Vec2f {

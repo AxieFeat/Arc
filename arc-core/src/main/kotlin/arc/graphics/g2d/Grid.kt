@@ -13,7 +13,7 @@ interface Grid {
      * Renderable components of this grid.
      */
     @get:JvmName("components")
-    val components: List<Component>
+    val UIComponents: List<UIComponent>
 
     /**
      * Rows count of this grid.
@@ -32,16 +32,16 @@ interface Grid {
      *
      * @param row Row number (X)
      * @param column Column number (X)
-     * @param component Component to add.
+     * @param UIComponent Component to add.
      */
-    fun add(row: Int, column: Int, component: Component)
+    fun add(row: Int, column: Int, UIComponent: UIComponent)
 
     /**
      * Remove component from this grid.
      *
-     * @param component Component to remove.
+     * @param UIComponent Component to remove.
      */
-    fun remove(component: Component)
+    fun remove(UIComponent: UIComponent)
 
     /**
      * Render all components of this grid via [GuiRender].

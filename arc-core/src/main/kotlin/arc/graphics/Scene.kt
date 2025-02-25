@@ -93,17 +93,6 @@ interface Scene {
     val chunkContainer: ChunkContainer
 
     /**
-     * Updates the state of the scene.
-     *
-     * This method is responsible for applying any necessary changes to the scene's state
-     * during each update cycle. It processes updates related to the scene's components
-     * such as the camera, input handling, active elements, or other dynamic aspects.
-     * This method should be invoked regularly (e.g., within a game loop or an update
-     * function) to ensure the scene is kept consistent and interactive.
-     */
-    fun update()
-
-    /**
      * Renders the current state of the scene.
      *
      * This method is responsible for handling all rendering operations for the scene,

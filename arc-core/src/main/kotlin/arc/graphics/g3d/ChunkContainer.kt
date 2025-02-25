@@ -32,20 +32,4 @@ interface ChunkContainer {
      */
     operator fun get(x: Int, y: Int, z: Int): ChunkSection
 
-    /**
-     * Update chunk section on some location.
-     *
-     * @param point3i Point with offsets.
-     */
-    fun updateSection(point3i: Point3i)
-
-    /**
-     * Update chunk section on some location.
-     *
-     * @param x X offset of chunk.
-     * @param y Y offset of chunk
-     * @param z Z offset of chunk.
-     */
-    fun updateSection(x: Int, y: Int, z: Int)
-
 }

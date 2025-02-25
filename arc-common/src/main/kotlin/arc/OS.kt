@@ -1,6 +1,6 @@
 package arc
 
-object OS {
+internal object OS {
 
     @JvmStatic
     fun execSafe(vararg command: String): Boolean {

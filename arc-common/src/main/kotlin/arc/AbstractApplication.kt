@@ -6,7 +6,6 @@ import java.awt.Toolkit
 import java.awt.datatransfer.StringSelection
 import java.io.File
 
-
 abstract class AbstractApplication : Application {
 
     override var clipboardText: String

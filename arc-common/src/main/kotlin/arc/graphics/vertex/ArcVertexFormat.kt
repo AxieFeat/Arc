@@ -1,10 +1,6 @@
 package arc.graphics.vertex
 
-import it.unimi.dsi.fastutil.ints.IntArrayList
-import it.unimi.dsi.fastutil.ints.IntList
-import it.unimi.dsi.fastutil.objects.ObjectArrayList
-
-data class ArcVertexFormat(
+internal  data class ArcVertexFormat(
     override val elements: MutableMap<String, VertexFormatElement>,
     override val offset: Int,
     //override val vertexSize: Int
@@ -21,7 +17,7 @@ data class ArcVertexFormat(
     override fun nameOf(vertexFormatElement: VertexFormatElement): String? {
         if(!elements.containsValue(vertexFormatElement)) return null
 
-        return vertexFormatElement.name
+        return TODO()
     }
 
     override fun getElement(name: String): VertexFormatElement? {
@@ -35,7 +31,8 @@ data class ArcVertexFormat(
 
         override fun add(name: String, vertexFormat: VertexFormatElement): VertexFormat.Builder {
             elements[name] = vertexFormat
-            offset += vertexFormat.byteSize
+            // TODO
+//            offset += vertexFormat.byteSize
 
             return this
         }

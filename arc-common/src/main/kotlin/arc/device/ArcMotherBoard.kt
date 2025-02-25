@@ -2,7 +2,7 @@ package arc.device
 
 import oshi.SystemInfo
 
-data class ArcMotherBoard(
+internal data class ArcMotherBoard(
     private val systemInfo: SystemInfo
 ) : MotherBoard {
 

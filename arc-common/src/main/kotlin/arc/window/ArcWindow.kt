@@ -8,7 +8,7 @@ import org.lwjgl.glfw.GLFW.GLFW_TRUE
 import org.lwjgl.glfw.GLFWErrorCallback
 import org.lwjgl.system.MemoryUtil
 
-class ArcWindow(
+internal class ArcWindow(
     override val name: String,
     override var handler: WindowHandler,
     override var width: Int,
