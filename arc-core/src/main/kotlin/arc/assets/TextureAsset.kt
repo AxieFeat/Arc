@@ -3,7 +3,7 @@ package arc.assets
 import arc.Arc
 import arc.annotations.ImmutableType
 import arc.annotations.TypeFactory
-import arc.graphics.Texture
+import arc.texture.Texture
 import org.jetbrains.annotations.ApiStatus
 import java.io.File
 

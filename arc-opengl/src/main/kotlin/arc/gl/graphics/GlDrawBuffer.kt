@@ -2,7 +2,7 @@ package arc.gl.graphics
 
 import arc.graphics.DrawBuffer
 import arc.graphics.DrawerMode
-import arc.graphics.ShaderInstance
+import arc.shader.ShaderInstance
 import arc.graphics.vertex.VertexFormat
 import arc.math.Point3i
 import arc.util.Color

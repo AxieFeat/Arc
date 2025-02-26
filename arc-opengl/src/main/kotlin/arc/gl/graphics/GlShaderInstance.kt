@@ -2,7 +2,7 @@ package arc.gl.graphics
 
 import arc.assets.shader.FragmentShader
 import arc.assets.shader.VertexShader
-import arc.graphics.ShaderInstance
+import arc.shader.ShaderInstance
 import org.lwjgl.opengl.GL41
 
 internal data class GlShaderInstance(

@@ -2,6 +2,7 @@ package arc.graphics
 
 import arc.assets.shader.FragmentShader
 import arc.assets.shader.VertexShader
+import arc.shader.ShaderInstance
 import java.io.File
 
 object EmptyShaderInstance : ShaderInstance {

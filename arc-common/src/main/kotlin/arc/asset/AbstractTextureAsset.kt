@@ -1,7 +1,7 @@
 package arc.asset
 
 import arc.assets.TextureAsset
-import arc.graphics.Texture
+import arc.texture.Texture
 import java.io.File
 
 @Suppress("LeakingThis")

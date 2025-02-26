@@ -1,4 +1,4 @@
-package arc.graphics
+package arc.texture
 
 import arc.Arc
 import arc.annotations.ImmutableType

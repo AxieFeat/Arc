@@ -1,7 +1,7 @@
 package arc.gl.graphics
 
 import arc.assets.TextureAsset
-import arc.graphics.Texture
+import arc.texture.Texture
 import org.lwjgl.opengl.GL41
 import org.lwjgl.stb.STBImage
 import org.lwjgl.system.MemoryStack

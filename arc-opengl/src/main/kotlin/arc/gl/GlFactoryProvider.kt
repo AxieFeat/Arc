@@ -9,8 +9,8 @@ import arc.gl.graphics.GlShaderInstance
 import arc.gl.graphics.GlTexture
 import arc.graphics.DrawBuffer
 import arc.graphics.Scene
-import arc.graphics.ShaderInstance
-import arc.graphics.Texture
+import arc.shader.ShaderInstance
+import arc.texture.Texture
 import arc.register
 
 object GlFactoryProvider {

@@ -5,6 +5,7 @@ import arc.annotations.MutableType
 import arc.annotations.TypeFactory
 import arc.graphics.vertex.VertexConsumer
 import arc.graphics.vertex.VertexFormat
+import arc.shader.ShaderInstance
 import org.jetbrains.annotations.ApiStatus
 
 /**

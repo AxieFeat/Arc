@@ -1,6 +1,8 @@
 package arc.graphics
 
 import arc.annotations.MutableType
+import arc.shader.ShaderInstance
+import arc.texture.Texture
 import org.jetbrains.annotations.Range
 
 /**
@@ -295,6 +297,12 @@ interface RenderSystem {
      * clearing any customizations or transformations that might have been applied.
      */
     fun resetViewport()
+
+    fun translate(x: Float, y: Float, z: Float)
+
+    fun rotate(angle: Float, x: Float, y: Float, z: Float)
+
+    fun matrixMode(mode: Int)
 
 
 }

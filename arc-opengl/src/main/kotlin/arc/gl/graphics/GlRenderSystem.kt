@@ -3,6 +3,8 @@ package arc.gl.graphics
 import arc.gl.GlApplication
 import arc.graphics.*
 import arc.graphics.vertex.VertexFormatElement
+import arc.shader.ShaderInstance
+import arc.texture.Texture
 import org.lwjgl.opengl.GL41
 
 internal object GlRenderSystem : RenderSystem {
