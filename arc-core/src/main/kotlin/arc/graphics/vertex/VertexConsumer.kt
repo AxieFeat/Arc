@@ -58,6 +58,13 @@ interface VertexConsumer {
     fun setColor(color: Color): VertexConsumer
 
     /**
+     * Disable color for current vertex.
+     *
+     * @return Current instance of [VertexConsumer].
+     */
+    fun noColor(): VertexConsumer
+
+    /**
      * Set first UV of current vertex.
      *
      * @param u Horizontal value.
@@ -106,5 +113,16 @@ interface VertexConsumer {
      * @return Current instance of [VertexConsumer].
      */
     fun setNormal(x: Int, y: Int, z: Int): VertexConsumer
+
+    /**
+     * Set offsets for current vertex.
+     *
+     * @param x X value.
+     * @param y Y value.
+     * @param z Z value.
+     *
+     * @return Current instance of [VertexConsumer].
+     */
+    fun setTranslation(x: Double, y: Double, z: Double): VertexConsumer
 
 }

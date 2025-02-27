@@ -16,7 +16,7 @@ import org.jetbrains.annotations.ApiStatus
  */
 @Suppress("INAPPLICABLE_JVM_NAME")
 @ImmutableType
-interface Texture {
+interface Texture : TextureLike {
 
     /**
      * Asset of this texture.
@@ -47,7 +47,7 @@ interface Texture {
      * Once bound, the texture remains active until it is unbound or another
      * texture is bound in its place.
      */
-    fun bind()
+    override fun bind()
 
     /**
      * Unbinds the texture from the current rendering context.
@@ -58,7 +58,7 @@ interface Texture {
      * another texture is bound to ensure proper state management in the
      * rendering pipeline.
      */
-    fun unbind()
+    override fun unbind()
 
     /**
      * Releases the resources associated with the texture.

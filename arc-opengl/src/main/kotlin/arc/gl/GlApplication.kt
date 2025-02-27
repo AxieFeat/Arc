@@ -1,11 +1,12 @@
 package arc.gl
 
-import arc.*
+import arc.AbstractApplication
+import arc.ArcApplicationFactory
+import arc.Configuration
+import arc.Platform
 import arc.files.ArcLocationSpace
 import arc.files.LocationSpace
-import arc.gl.graphics.GlDrawer
 import arc.gl.graphics.GlRenderSystem
-import arc.graphics.Drawer
 import arc.graphics.RenderSystem
 import arc.input.InputDevice
 import arc.window.EmptyWindowHandler

@@ -17,6 +17,12 @@ import org.jetbrains.annotations.ApiStatus
 interface ShaderInstance {
 
     /**
+     * ID of this shader in render system.
+     */
+    @get:JvmName("id")
+    val id: Int
+
+    /**
      * The vertex shader associated with this shader instance.
      *
      * A vertex shader is responsible for processing vertex data, which includes transformations,
@@ -36,6 +42,12 @@ interface ShaderInstance {
      */
     @get:JvmName("fragment")
     val fragment: FragmentShader
+
+    /**
+     * Uniform of this shader.
+     */
+    @get:JvmName("uniforms")
+    val uniforms: ShaderUniforms
 
     /**
      * Compiles the vertex and fragment shaders for this shader instance.
@@ -79,10 +91,15 @@ interface ShaderInstance {
          *
          * @param vertexShader Vertex shader for instance.
          * @param fragmentShader Fragment shader for instance.
+         * @param uniforms Uniforms of shader.
          *
          * @return New instance of [ShaderInstance].
          */
-        fun create(vertexShader: VertexShader, fragmentShader: FragmentShader): ShaderInstance
+        fun create(
+            vertexShader: VertexShader,
+            fragmentShader: FragmentShader,
+            uniforms: ShaderUniforms
+        ): ShaderInstance
 
     }
 
@@ -93,12 +110,17 @@ interface ShaderInstance {
          *
          * @param vertexShader Vertex shader for instance.
          * @param fragmentShader Fragment shader for instance.
+         * @param uniforms Uniforms of shader.
          *
          * @return New instance of [ShaderInstance].
          */
         @JvmStatic
-        fun of(vertexShader: VertexShader, fragmentShader: FragmentShader): ShaderInstance {
-            return Arc.factory<Factory>().create(vertexShader, fragmentShader)
+        fun of(
+            vertexShader: VertexShader,
+            fragmentShader: FragmentShader,
+            uniforms: ShaderUniforms
+        ): ShaderInstance {
+            return Arc.factory<Factory>().create(vertexShader, fragmentShader, uniforms)
         }
 
     }

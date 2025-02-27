@@ -2,6 +2,7 @@ package arc.gl.graphics
 
 import arc.graphics.DrawBuffer
 import arc.graphics.DrawerMode
+import arc.graphics.vertex.VertexConsumer
 import arc.shader.ShaderInstance
 import arc.graphics.vertex.VertexFormat
 import arc.math.Point3i
@@ -38,6 +39,10 @@ internal data class GlDrawBuffer(
         return this
     }
 
+    override fun noColor(): VertexConsumer {
+        return this
+    }
+
     override fun setUv(u: Int, v: Int): GlDrawBuffer {
         return this
     }
@@ -55,6 +60,10 @@ internal data class GlDrawBuffer(
     }
 
     override fun setNormal(x: Int, y: Int, z: Int): GlDrawBuffer {
+        return this
+    }
+
+    override fun setTranslation(x: Double, y: Double, z: Double): GlDrawBuffer {
         return this
     }
 

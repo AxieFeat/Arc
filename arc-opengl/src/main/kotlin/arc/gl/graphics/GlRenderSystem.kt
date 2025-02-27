@@ -5,6 +5,7 @@ import arc.graphics.*
 import arc.graphics.vertex.VertexFormatElement
 import arc.shader.ShaderInstance
 import arc.texture.Texture
+import arc.texture.TextureLike
 import org.lwjgl.opengl.GL41
 
 internal object GlRenderSystem : RenderSystem {
@@ -23,7 +24,7 @@ internal object GlRenderSystem : RenderSystem {
         shader.bind()
     }
 
-    override fun bindTexture(id: Int, texture: Texture) {
+    override fun bindTexture(id: Int, texture: TextureLike) {
 
     }
 

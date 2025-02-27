@@ -3,6 +3,7 @@ package arc.graphics
 import arc.annotations.MutableType
 import arc.shader.ShaderInstance
 import arc.texture.Texture
+import arc.texture.TextureLike
 import org.jetbrains.annotations.Range
 
 /**
@@ -96,7 +97,7 @@ interface RenderSystem {
      * @param texture The texture to bind. The texture should contain valid image data
      *                and must be properly prepared for rendering operations.
      */
-    fun bindTexture(id: Int, texture: Texture)
+    fun bindTexture(id: Int, texture: TextureLike)
 
     /**
      * Initializes a new rendering frame by preparing the rendering system.

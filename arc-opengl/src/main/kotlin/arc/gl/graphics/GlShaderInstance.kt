@@ -3,19 +3,21 @@ package arc.gl.graphics
 import arc.assets.shader.FragmentShader
 import arc.assets.shader.VertexShader
 import arc.shader.ShaderInstance
+import arc.shader.ShaderUniforms
 import org.lwjgl.opengl.GL41
 
 internal data class GlShaderInstance(
     override val vertex: VertexShader,
-    override val fragment: FragmentShader
+    override val fragment: FragmentShader,
+    override val uniforms: ShaderUniforms
 ) : ShaderInstance {
 
-    private var programId = 0
+    override var id = 0
     private var vertexShaderId = 0
     private var fragmentShaderId = 0
 
     override fun compileShaders() {
-        programId = GL41.glCreateProgram()
+        id = GL41.glCreateProgram()
         vertexShaderId = createShader(vertex.file.readText(), GL41.GL_VERTEX_SHADER)
         fragmentShaderId = createShader(fragment.file.readText(), GL41.GL_FRAGMENT_SHADER)
 
@@ -23,7 +25,7 @@ internal data class GlShaderInstance(
     }
 
     override fun bind() {
-        GL41.glUseProgram(programId)
+        GL41.glUseProgram(id)
     }
 
     override fun unbind() {
@@ -43,24 +45,24 @@ internal data class GlShaderInstance(
             throw RuntimeException("Error compiling Shader code: " + GL41.glGetShaderInfoLog(shaderId, 1024))
         }
 
-        GL41.glAttachShader(programId, shaderId)
+        GL41.glAttachShader(id, shaderId)
 
         return shaderId
     }
 
     private fun link() {
-        GL41.glLinkProgram(programId)
+        GL41.glLinkProgram(id)
 
-        check(GL41.glGetProgrami(programId, GL41.GL_LINK_STATUS) != 0) {
-            "Error linking Shader code: ${GL41.glGetProgramInfoLog(programId, 1024)}"
+        check(GL41.glGetProgrami(id, GL41.GL_LINK_STATUS) != 0) {
+            "Error linking Shader code: ${GL41.glGetProgramInfoLog(id, 1024)}"
         }
 
         GL41.glDetachShader(
-            programId,
+            id,
             vertexShaderId
         )
         GL41.glDetachShader(
-            programId,
+            id,
             fragmentShaderId
         )
 
@@ -75,8 +77,12 @@ internal data class GlShaderInstance(
 
 
     object Factory : ShaderInstance.Factory {
-        override fun create(vertexShader: VertexShader, fragmentShader: FragmentShader): ShaderInstance {
-            return GlShaderInstance(vertexShader, fragmentShader)
+        override fun create(
+            vertexShader: VertexShader,
+            fragmentShader: FragmentShader,
+            uniforms: ShaderUniforms
+        ): ShaderInstance {
+            return GlShaderInstance(vertexShader, fragmentShader, uniforms)
         }
     }
 

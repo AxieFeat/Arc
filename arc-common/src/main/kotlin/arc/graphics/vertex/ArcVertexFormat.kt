@@ -1,36 +1,33 @@
 package arc.graphics.vertex
 
-internal  data class ArcVertexFormat(
-    override val elements: MutableMap<String, VertexFormatElement>,
-    override val offset: Int,
-    //override val vertexSize: Int
+internal data class ArcVertexFormat(
+    override val elements: MutableList<VertexFormatElement> = mutableListOf(),
+    override val offsets: MutableList<Int> = mutableListOf()
 ) : VertexFormat {
 
-//    override val elementMask: Int = run {
-//        elements.stream().mapToInt(VertexFormatElement::mask).reduce(0) { ix: Int, jx: Int -> ix or jx }
-//    }
+    override fun add(vertexFormatElement: VertexFormatElement) {
+        elements.add(vertexFormatElement)
+    }
 
     override fun contains(vertexFormatElement: VertexFormatElement): Boolean {
-        return elements.containsValue(vertexFormatElement)
+        return elements.contains(vertexFormatElement)
     }
 
-    override fun nameOf(vertexFormatElement: VertexFormatElement): String? {
-        if(!elements.containsValue(vertexFormatElement)) return null
-
-        return TODO()
+    override fun getElement(index: Int): VertexFormatElement {
+        return elements[index]
     }
 
-    override fun getElement(name: String): VertexFormatElement? {
-        return elements[name]
+    override fun getOffset(index: Int): Int {
+        return offsets[index]
     }
 
     class Builder : VertexFormat.Builder {
 
-        private val elements = mutableMapOf<String, VertexFormatElement>()
-        private var offset = 0
+        private val elements = mutableListOf<VertexFormatElement>()
+        private val offsets = mutableListOf<Int>()
 
-        override fun add(name: String, vertexFormat: VertexFormatElement): VertexFormat.Builder {
-            elements[name] = vertexFormat
+        override fun add(vertexFormat: VertexFormatElement): VertexFormat.Builder {
+            elements.add(vertexFormat)
             // TODO
 //            offset += vertexFormat.byteSize
 
@@ -38,13 +35,13 @@ internal  data class ArcVertexFormat(
         }
 
         override fun padding(offset: Int): VertexFormat.Builder {
-            this.offset += offset
+//            this.offset += offset
 
             return this
         }
 
         override fun build(): VertexFormat {
-            return ArcVertexFormat(elements, offset)
+            return ArcVertexFormat(elements, offsets)
         }
 
     }

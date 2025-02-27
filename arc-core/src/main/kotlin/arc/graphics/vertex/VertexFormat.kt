@@ -1,48 +1,24 @@
 package arc.graphics.vertex
 
 import arc.Arc
-import arc.annotations.ImmutableType
+import arc.annotations.MutableType
 import arc.annotations.TypeFactory
 import org.jetbrains.annotations.ApiStatus
 
 /**
  * Represents a format structure for defining vertex attributes and their properties.
- *
- * This interface allows for defining and managing a vertex format with attributes such as
- * offsets, elements, and their mappings. It provides utility methods to check for the existence
- * of specific elements and to retrieve elements or their names by reference.
  */
-@ImmutableType
+@MutableType
 @Suppress("INAPPLICABLE_JVM_NAME")
 interface VertexFormat {
 
-//    /**
-//     * Size of [VertexFormat].
-//     */
-//    @get:JvmName("vertexSize")
-//    val vertexSize: Int
-
-    /**
-     * The `offset` property represents the byte offset of this vertex format within a data structure.
-     * It is used to determine the starting position of the vertex data for processing, storage, or rendering.
-     */
-    @get:JvmName("offset")
-    val offset: Int
-
-//    /**
-//     * Element mask.
-//     */
-//    val elementMask: Int
-
-    /**
-     * A map of vertex format elements used by the [VertexFormat]. Each entry associates a string key
-     * (representing the name of the element) with a specific [VertexFormatElement] instance.
-     *
-     * This property provides access to all elements defined in the vertex format, allowing retrieval
-     * or inspection of their properties via their mapped names.
-     */
     @get:JvmName("elements")
-    val elements: Map<String, VertexFormatElement>
+    val elements: List<VertexFormatElement>
+
+    @get:JvmName("offsets")
+    val offsets: List<Int>
+
+    fun add(vertexFormatElement: VertexFormatElement)
 
     /**
      * Is [VertexFormat] contains some [VertexFormatElement].
@@ -54,22 +30,15 @@ interface VertexFormat {
     fun contains(vertexFormatElement: VertexFormatElement): Boolean
 
     /**
-     * Get name of some [VertexFormatElement] in this [VertexFormat].
+     * Get element from [elements] by [index].
      *
-     * @param vertexFormatElement Some vertex format element.
+     * @param index Index of element.
      *
-     * @return Name of element or null if not present.
+     * @return Instance of [VertexFormatElement] .
      */
-    fun nameOf(vertexFormatElement: VertexFormatElement): String?
+    fun getElement(index: Int): VertexFormatElement
 
-    /**
-     * Get element from [elements] by [name].
-     *
-     * @param name Name of element.
-     *
-     * @return Instance of [VertexFormatElement] or null if not found.
-     */
-    fun getElement(name: String): VertexFormatElement?
+    fun getOffset(index: Int): Int
 
     /**
      * Use this interface to build own [VertexFormat].
@@ -79,12 +48,11 @@ interface VertexFormat {
         /**
          * Add vertex parameter.
          *
-         * @param name Name of parameter.
          * @param vertexFormat Vertex format.
          *
          * @return Current instance of [Builder].
          */
-        fun add(name: String, vertexFormat: VertexFormatElement): Builder
+        fun add(vertexFormat: VertexFormatElement): Builder
 
         /**
          * Add offset for [VertexFormat].
