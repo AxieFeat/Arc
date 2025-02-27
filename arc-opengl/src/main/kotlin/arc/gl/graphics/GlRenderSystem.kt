@@ -14,6 +14,7 @@ internal object GlRenderSystem : RenderSystem {
     override var isDepthTestEnabled: Boolean = true
     override var isBlendEnabled: Boolean = true
     override val drawer: Drawer = GlDrawer
+    @set:JvmName("_setScene")
     override var scene: Scene = EmptyScene
     override var isCullEnabled: Boolean = true
 
@@ -96,5 +97,17 @@ internal object GlRenderSystem : RenderSystem {
 
     override fun resetViewport() {
         setViewport(0, 0, GlApplication.window.width, GlApplication.window.height)
+    }
+
+    override fun translate(x: Float, y: Float, z: Float) {
+        GL41.glTranslatef(x, y, z)
+    }
+
+    override fun rotate(angle: Float, x: Float, y: Float, z: Float) {
+        GL41.glRotatef(angle, x, y, z)
+    }
+
+    override fun matrixMode(mode: Int) {
+        GL41.glMatrixMode(mode)
     }
 }

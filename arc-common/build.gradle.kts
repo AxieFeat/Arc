@@ -11,6 +11,7 @@ private val natives = listOf(
 
 dependencies {
     api(project(":arc-core"))
+    implementation(project(":arc-extensions:arc-profiling"))
 
     api("it.unimi.dsi:fastutil:8.5.15")
 

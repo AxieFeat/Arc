@@ -10,7 +10,7 @@ import java.io.File
  * Assets are considered immutable. This is enforced by the annotation [ImmutableType],
  * which ensures that all fields are read-only and cannot be modified after creation.
  *
- * Common asset examples include [ModelAsset], [TextureAsset], and [SoundAsset].
+ * Common asset examples include [TextureAsset], and [SoundAsset].
  */
 @Suppress("INAPPLICABLE_JVM_NAME")
 @ImmutableType
