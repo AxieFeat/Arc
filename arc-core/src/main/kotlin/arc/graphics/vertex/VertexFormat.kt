@@ -18,6 +18,9 @@ interface VertexFormat {
     @get:JvmName("offsets")
     val offsets: List<Int>
 
+    @get:JvmName("nextOffset")
+    val nextOffset: Int
+
     fun add(vertexFormatElement: VertexFormatElement)
 
     /**
@@ -40,6 +43,8 @@ interface VertexFormat {
 
     fun getOffset(index: Int): Int
 
+    fun clear()
+
     /**
      * Use this interface to build own [VertexFormat].
      */
@@ -53,15 +58,6 @@ interface VertexFormat {
          * @return Current instance of [Builder].
          */
         fun add(vertexFormat: VertexFormatElement): Builder
-
-        /**
-         * Add offset for [VertexFormat].
-         *
-         * @param offset Offset size.
-         *
-         * @return Current instance of [Builder].
-         */
-        fun padding(offset: Int): Builder
 
         /**
          * Build [VertexFormat].

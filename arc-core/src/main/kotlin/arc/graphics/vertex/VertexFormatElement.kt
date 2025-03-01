@@ -62,6 +62,9 @@ interface VertexFormatElement {
     @get:JvmName("count")
     val count: Int
 
+    val size: Int
+        get() = type.size * this.count
+
     @ApiStatus.Internal
     @TypeFactory
     interface Factory {
