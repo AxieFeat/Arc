@@ -1,4 +1,4 @@
-package arc.gl.graphics
+package arc.gl.texture
 
 import arc.assets.TextureAsset
 import arc.texture.Texture
@@ -11,7 +11,7 @@ internal data class GlTexture(
     override val asset: TextureAsset,
 ) : Texture {
 
-    private var id: Int = GL41.glGenTextures()
+    override var id: Int = GL41.glGenTextures()
 
     override val width: Int
     override val height: Int

@@ -1,6 +1,7 @@
 package arc.graphics.vertex
 
 import arc.annotations.MutableType
+import arc.math.Point3d
 import arc.math.Point3i
 import arc.util.Color
 
@@ -19,22 +20,13 @@ interface VertexConsumer {
     /**
      * Add vertex.
      *
-     * @param point Location of point.
-     *
-     * @return Current instance of [VertexConsumer].
-     */
-    fun addVertex(point: Point3i): VertexConsumer
-
-    /**
-     * Add vertex.
-     *
      * @param x X position.
      * @param y Y position.
      * @param z Z position.
      *
      * @return Current instance of [VertexConsumer].
      */
-    fun addVertex(x: Int, y: Int, z: Int): VertexConsumer
+    fun addVertex(x: Float, y: Float, z: Float): VertexConsumer
 
     /**
      * Set color of current vertex.
@@ -65,43 +57,14 @@ interface VertexConsumer {
     fun noColor(): VertexConsumer
 
     /**
-     * Set first UV of current vertex.
+     * Set UV of current vertex.
      *
      * @param u Horizontal value.
      * @param v Vertical value.
      *
      * @return Current instance of [VertexConsumer].
      */
-    fun setUv(u: Int, v: Int): VertexConsumer
-
-    /**
-     * Set second UV of current vertex.
-     *
-     * @param u Horizontal value.
-     * @param v Vertical value.
-     *
-     * @return Current instance of [VertexConsumer].
-     */
-    fun setUv1(u: Int, v: Int): VertexConsumer
-
-    /**
-     * Set third UV of current vertex.
-     *
-     * @param u Horizontal value.
-     * @param v Vertical value.
-     *
-     * @return Current instance of [VertexConsumer].
-     */
-    fun setUv2(u: Int, v: Int): VertexConsumer
-
-    /**
-     * Set normal for current vertex.
-     *
-     * @param point Values of normal.
-     *
-     * @return Current instance of [VertexConsumer].
-     */
-    fun setNormal(point: Point3i): VertexConsumer
+    fun setTexture(u: Int, v: Int): VertexConsumer
 
     /**
      * Set normal for current vertex.
@@ -112,7 +75,7 @@ interface VertexConsumer {
      *
      * @return Current instance of [VertexConsumer].
      */
-    fun setNormal(x: Int, y: Int, z: Int): VertexConsumer
+    fun setNormal(x: Float, y: Float, z: Float): VertexConsumer
 
     /**
      * Set offsets for current vertex.
@@ -123,6 +86,6 @@ interface VertexConsumer {
      *
      * @return Current instance of [VertexConsumer].
      */
-    fun setTranslation(x: Double, y: Double, z: Double): VertexConsumer
+    fun setTranslation(x: Float, y: Float, z: Float): VertexConsumer
 
 }

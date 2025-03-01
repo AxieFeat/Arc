@@ -4,8 +4,7 @@ import arc.gl.GlApplication
 import arc.graphics.*
 import arc.graphics.vertex.VertexFormatElement
 import arc.shader.ShaderInstance
-import arc.texture.Texture
-import arc.texture.TextureLike
+import org.lwjgl.opengl.GL15.*
 import org.lwjgl.opengl.GL41
 
 internal object GlRenderSystem : RenderSystem {
@@ -24,17 +23,21 @@ internal object GlRenderSystem : RenderSystem {
         shader.bind()
     }
 
-    override fun bindTexture(id: Int, texture: TextureLike) {
-
+    override fun bindTexture(id: Int) {
+        GlHelper.setActiveTexture(id)
     }
 
     override fun beginFrame() {
-        shader = EmptyShaderInstance
+        GlApplication.window.beginFrame()
+
+        glClear(GL_COLOR_BUFFER_BIT or GL_DEPTH_BUFFER_BIT)
+        resetViewport()
     }
 
     override fun endFrame() {
         shader.unbind()
         shader = EmptyShaderInstance
+        GlApplication.window.endFrame()
     }
 
     override fun setScene(scene: Scene) {

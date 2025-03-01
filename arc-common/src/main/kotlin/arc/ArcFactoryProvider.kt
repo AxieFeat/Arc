@@ -9,6 +9,10 @@ import arc.assets.MutableAssetStack
 import arc.assets.SoundAsset
 import arc.assets.shader.FragmentShader
 import arc.assets.shader.VertexShader
+import arc.graphics.vertex.ArcVertexFormat
+import arc.graphics.vertex.ArcVertexFormatElement
+import arc.graphics.vertex.VertexFormat
+import arc.graphics.vertex.VertexFormatElement
 import arc.math.*
 import arc.profiler.ArcProfiler
 import arc.profiler.Profiler
@@ -54,6 +58,9 @@ object ArcFactoryProvider : FactoryProvider {
         register<Application.Factory>(ArcApplicationFactory)
         register<Configuration.Factory>(ArcConfiguration.Factory)
         register<Profiler.Factory>(ArcProfiler.Factory)
+
+        register<VertexFormat.BuilderFactory>(ArcVertexFormat.BuilderFactory)
+        register<VertexFormatElement.Factory>(ArcVertexFormatElement.Factory)
 
         // Assets
         register<SoundAsset.Factory>(ArcSoundAsset.Factory)

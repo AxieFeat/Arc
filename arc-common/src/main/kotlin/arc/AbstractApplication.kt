@@ -2,8 +2,6 @@ package arc
 
 import arc.OS.execSafe
 import org.lwjgl.glfw.GLFW
-import java.awt.Toolkit
-import java.awt.datatransfer.StringSelection
 import java.io.File
 
 abstract class AbstractApplication : Application {

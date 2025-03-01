@@ -21,6 +21,9 @@ interface VertexFormat {
     @get:JvmName("nextOffset")
     val nextOffset: Int
 
+    @get:JvmName("normalElementOffset")
+    val normalElementOffset: Int
+
     fun add(vertexFormatElement: VertexFormatElement)
 
     /**

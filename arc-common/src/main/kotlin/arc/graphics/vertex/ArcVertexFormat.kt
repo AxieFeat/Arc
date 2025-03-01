@@ -8,7 +8,7 @@ internal data class ArcVertexFormat(
     override var nextOffset = 0
     private var colorElementOffset = -1
     private val uvOffsetsById: MutableList<Int> = mutableListOf()
-    private var normalElementOffset = -1
+    override var normalElementOffset = -1
 
     override fun add(vertexFormatElement: VertexFormatElement) {
         if (vertexFormatElement.usage == VertexUsage.POSITION && this.hasPosition()) {

@@ -20,6 +20,11 @@ import org.jetbrains.annotations.ApiStatus
 @MutableType
 interface DrawBuffer : VertexConsumer {
 
+    val isEnded: Boolean
+
+    @get:JvmName("bufferSize")
+    val bufferSize: Int
+
     /**
      * Represents the drawing mode used for rendering operations within the buffer.
      *
@@ -40,27 +45,7 @@ interface DrawBuffer : VertexConsumer {
     @get:JvmName("format")
     val format: VertexFormat
 
-    /**
-     * Draws the current buffer using the preconfigured rendering states and attributes.
-     *
-     * This method assumes that the buffer has been properly prepared,
-     * and it renders the contents of the buffer using internal state variables like `mode` and `format`.
-     * It is typically used for rendering shapes, models, or other graphical elements.
-     */
-    fun draw()
-
-    /**
-     * Draws graphical content using the given shader instance.
-     *
-     * This method utilizes the provided `ShaderInstance` to control the rendering
-     * pipeline. The shader instance should be properly compiled and bound before calling
-     * this method. The method assumes that the internal buffer and state (e.g., mode, format)
-     * of the `DrawBuffer` class have been configured.
-     *
-     * @param shaderInstance The shader instance to be used for rendering. It defines how
-     *                       vertex and fragment data is processed during the rendering pipeline.
-     */
-    fun draw(shaderInstance: ShaderInstance)
+    fun end()
 
     @ApiStatus.Internal
     @TypeFactory
@@ -71,10 +56,11 @@ interface DrawBuffer : VertexConsumer {
          *
          * @param mode Draw mode.
          * @param format Vertex setting.
+         * @param bufferSize Size for buffer.
          *
          * @return New instance of [DrawBuffer]
          */
-        fun create(mode: DrawerMode, format: VertexFormat): DrawBuffer
+        fun create(mode: DrawerMode, format: VertexFormat, bufferSize: Int): DrawBuffer
 
     }
 
@@ -85,12 +71,13 @@ interface DrawBuffer : VertexConsumer {
          *
          * @param mode Draw mode.
          * @param format Vertex setting.
+         * @param bufferSize Size for buffer.
          *
          * @return New instance of [DrawBuffer]
          */
         @JvmStatic
-        fun create(mode: DrawerMode, format: VertexFormat): DrawBuffer {
-            return Arc.factory<Factory>().create(mode, format)
+        fun create(mode: DrawerMode, format: VertexFormat, bufferSize: Int = 2097152): DrawBuffer {
+            return Arc.factory<Factory>().create(mode, format, bufferSize)
         }
 
     }

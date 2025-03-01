@@ -6,8 +6,7 @@ val macosArmNatives = "natives-macos-arm64"
 
 private val natives = listOf(
     "org.lwjgl:lwjgl-opengl",
-    "org.lwjgl:lwjgl-stb",
-    "org.lwjgl:lwjgl-util"
+    "org.lwjgl:lwjgl-stb"
 )
 
 dependencies {

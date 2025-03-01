@@ -2,9 +2,7 @@ package arc.window
 
 import arc.math.Point2i
 import org.lwjgl.glfw.Callbacks
-import org.lwjgl.glfw.GLFW
-import org.lwjgl.glfw.GLFW.GLFW_FALSE
-import org.lwjgl.glfw.GLFW.GLFW_TRUE
+import org.lwjgl.glfw.GLFW.*
 import org.lwjgl.glfw.GLFWErrorCallback
 import org.lwjgl.system.MemoryUtil
 
@@ -24,45 +22,45 @@ internal class ArcWindow(
     override var isResizable: Boolean = true
         set(value) {
             field = value
-            GLFW.glfwWindowHint(GLFW.GLFW_RESIZABLE, if(isResizable) GLFW_TRUE else GLFW_FALSE)
+            glfwWindowHint(GLFW_RESIZABLE, if(isResizable) GLFW_TRUE else GLFW_FALSE)
         }
 
     override var isHide: Boolean = false
         set(value) {
             field = value
-            GLFW.glfwWindowHint(GLFW.GLFW_VISIBLE, if(value) GLFW_FALSE else GLFW_TRUE)
+            glfwWindowHint(GLFW_VISIBLE, if(value) GLFW_FALSE else GLFW_TRUE)
         }
 
     override fun resize(width: Int, height: Int) {
-        GLFW.glfwSetWindowSize(handle, width, height)
+        glfwSetWindowSize(handle, width, height)
     }
 
     override fun create() {
-        GLFW.glfwSetErrorCallback(defaultErrorCallback)
+        glfwSetErrorCallback(defaultErrorCallback)
 
-        check(GLFW.glfwInit()) { "Unable to initialize GLFW" }
+        check(glfwInit()) { "Unable to initialize GLFW" }
 
-        GLFW.glfwDefaultWindowHints()
-        GLFW.glfwWindowHint(GLFW.GLFW_VISIBLE, if(isHide) GLFW_FALSE else GLFW_TRUE)
-        GLFW.glfwWindowHint(GLFW.GLFW_RESIZABLE, if(isResizable) GLFW_TRUE else GLFW_FALSE)
+        glfwDefaultWindowHints()
+        glfwWindowHint(GLFW_VISIBLE, if(isHide) GLFW_FALSE else GLFW_TRUE)
+        glfwWindowHint(GLFW_RESIZABLE, if(isResizable) GLFW_TRUE else GLFW_FALSE)
 
-        GLFW.glfwWindowHint(GLFW.GLFW_CONTEXT_VERSION_MAJOR, 4)
-        GLFW.glfwWindowHint(GLFW.GLFW_CONTEXT_VERSION_MINOR, 1)
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4)
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1)
 
-        handle = GLFW.glfwCreateWindow(width, height, name, MemoryUtil.NULL, MemoryUtil.NULL)
+        handle = glfwCreateWindow(width, height, name, MemoryUtil.NULL, MemoryUtil.NULL)
 
-        GLFW.glfwSetWindowPosCallback(handle, ::onMove)
-        GLFW.glfwSetFramebufferSizeCallback(handle, ::onResize)
-        GLFW.glfwSetWindowFocusCallback(handle, ::onFocus)
-        GLFW.glfwSetCursorEnterCallback(handle, ::onEnter)
-        GLFW.glfwSetCursorPosCallback(handle, ::onCursorMove)
-        GLFW.glfwSetScrollCallback(handle, ::onScroll)
+        glfwSetWindowPosCallback(handle, ::onMove)
+        glfwSetFramebufferSizeCallback(handle, ::onResize)
+        glfwSetWindowFocusCallback(handle, ::onFocus)
+        glfwSetCursorEnterCallback(handle, ::onEnter)
+        glfwSetCursorPosCallback(handle, ::onCursorMove)
+        glfwSetScrollCallback(handle, ::onScroll)
 
-        GLFW.glfwMakeContextCurrent(handle)
+        glfwMakeContextCurrent(handle)
 
         val arrWidth = IntArray(1)
         val arrHeight = IntArray(1)
-        GLFW.glfwGetFramebufferSize(handle, arrWidth, arrHeight)
+        glfwGetFramebufferSize(handle, arrWidth, arrHeight)
         width = arrWidth[0]
         height = arrHeight[0]
     }
@@ -70,8 +68,20 @@ internal class ArcWindow(
     override fun close() {
         Callbacks.glfwFreeCallbacks(handle)
         this.defaultErrorCallback.close()
-        GLFW.glfwDestroyWindow(handle)
-        GLFW.glfwTerminate()
+        glfwDestroyWindow(handle)
+        glfwTerminate()
+    }
+
+    override fun shouldClose(): Boolean {
+        return glfwWindowShouldClose(handle)
+    }
+
+    override fun beginFrame() {
+        glfwPollEvents()
+    }
+
+    override fun endFrame() {
+        glfwSwapBuffers(handle)
     }
 
     private fun onMove(handle: Long, x: Int, y: Int) {

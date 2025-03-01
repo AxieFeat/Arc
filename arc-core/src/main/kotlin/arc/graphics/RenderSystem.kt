@@ -88,16 +88,10 @@ interface RenderSystem {
     /**
      * Binds the specified texture to the rendering system using the provided identifier.
      *
-     * This method associates a texture resource to a specific ID in the rendering pipeline,
-     * allowing it to be used in subsequent rendering operations. The texture must be valid
-     * and properly initialized before being bound.
-     *
      * @param id The unique identifier to bind the texture to. This ID is used to reference
      *           the texture in the rendering context.
-     * @param texture The texture to bind. The texture should contain valid image data
-     *                and must be properly prepared for rendering operations.
      */
-    fun bindTexture(id: Int, texture: TextureLike)
+    fun bindTexture(id: Int)
 
     /**
      * Initializes a new rendering frame by preparing the rendering system.

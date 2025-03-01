@@ -1,4 +1,4 @@
-package arc.gl.graphics
+package arc.gl.shader
 
 import arc.assets.shader.FragmentShader
 import arc.assets.shader.VertexShader

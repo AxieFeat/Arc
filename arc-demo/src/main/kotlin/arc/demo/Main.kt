@@ -10,6 +10,7 @@ fun main() {
 
     // Preload implementations.
     GlApplication.preload()
+    //VkApplication.preload()
 
     val game = Game()
 

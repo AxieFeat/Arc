@@ -138,6 +138,12 @@ interface Window {
      */
     fun close()
 
+    fun shouldClose(): Boolean
+
+    fun beginFrame()
+
+    fun endFrame()
+
     @ApiStatus.Internal
     @TypeFactory
     interface Factory {
