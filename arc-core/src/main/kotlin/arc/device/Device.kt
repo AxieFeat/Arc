@@ -29,13 +29,13 @@ interface Device {
     val java: String
 
     /**
-     * Central processor model name.
+     * Central processor model.
      */
     @get:JvmName("cpu")
     val cpu: CPU
 
     /**
-     * Graphic card models of device.
+     * Graphic cards of device.
      */
     @get:JvmName("gpu")
     val gpu: List<GPU>

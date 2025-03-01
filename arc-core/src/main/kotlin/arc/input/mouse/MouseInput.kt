@@ -17,6 +17,7 @@ interface MouseInput : InputDevice {
     /**
      * Position of cursor in window.
      */
+    @get:JvmName("position")
     var position: Point2d
 
     override val type: DeviceType

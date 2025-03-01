@@ -10,7 +10,6 @@ import arc.input.InputDevice
  * @see InputDevice
  */
 @ImmutableType
-@Suppress("INAPPLICABLE_JVM_NAME")
 interface KeyboardInput : InputDevice {
 
     override val type: DeviceType
