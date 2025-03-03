@@ -2,6 +2,7 @@ package arc.demo
 
 import arc.Application
 import arc.Configuration
+import arc.assets.TextureAsset
 import arc.assets.shader.FragmentShader
 import arc.assets.shader.UniformAsset
 import arc.assets.shader.VertexShader
@@ -11,6 +12,7 @@ import arc.graphics.vertex.VertexFormat
 import arc.graphics.vertex.VertexFormatElement
 import arc.shader.ShaderInstance
 import arc.shader.ShaderUniforms
+import arc.texture.Texture
 import arc.util.Color
 import arc.window.WindowHandler
 
@@ -39,10 +41,17 @@ class Game : WindowHandler {
         )
         shader.compileShaders()
 
+//        val texture = Texture.from(
+//            TextureAsset.from(
+//                classpath("arc/texture/mojang.png"),
+//            )
+//        )
+
         while (!application.window.shouldClose()) {
             application.renderSystem.beginFrame()
 
             shader.bind()
+//            texture.bind()
 
             val drawer = application.renderSystem.drawer // Get drawer of application.
 
@@ -64,6 +73,7 @@ class Game : WindowHandler {
             // Draw this buffer via drawer.
 //            drawer.draw(buffer)
 
+//            texture.unbind()
             shader.unbind()
 
             application.renderSystem.endFrame()

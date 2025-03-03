@@ -25,18 +25,6 @@ interface Texture : TextureLike {
     val asset: TextureAsset
 
     /**
-     * Width of this texture.
-     */
-    @get:JvmName("width")
-    val width: Int
-
-    /**
-     * Height of this texture.
-     */
-    @get:JvmName("height")
-    val height: Int
-
-    /**
      * Binds the texture to the current rendering context.
      *
      * This method activates the texture, making it available for use in subsequent
@@ -95,7 +83,7 @@ interface Texture : TextureLike {
          * @return New instance of [Texture].
          */
         @JvmStatic
-        fun create(asset: TextureAsset): Texture {
+        fun from(asset: TextureAsset): Texture {
             return Arc.factory<Factory>().create(asset)
         }
 

@@ -38,15 +38,15 @@ interface FrameBuffer {
     @TypeFactory
     interface Factory {
 
-        fun create(width: Int, height: Int): FrameBuffer
+        fun create(width: Int, height: Int, useDepth: Boolean): FrameBuffer
 
     }
 
     companion object {
 
         @JvmStatic
-        fun create(width: Int, height: Int): FrameBuffer {
-            return Arc.factory<Factory>().create(width, height)
+        fun create(width: Int, height: Int, useDepth: Boolean): FrameBuffer {
+            return Arc.factory<Factory>().create(width, height, useDepth)
         }
 
     }

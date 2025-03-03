@@ -4,7 +4,7 @@ import arc.graphics.ArcScene
 import arc.graphics.Drawer
 import arc.graphics.Scene
 
-class GlScene(
+internal class GlScene(
     override val drawer: Drawer = GlDrawer
 ) : ArcScene() {
 

@@ -4,8 +4,7 @@ import arc.gl.GlApplication
 import arc.graphics.*
 import arc.graphics.vertex.VertexFormatElement
 import arc.shader.ShaderInstance
-import org.lwjgl.opengl.GL15.*
-import org.lwjgl.opengl.GL41
+import org.lwjgl.opengl.GL41.*
 
 internal object GlRenderSystem : RenderSystem {
 
@@ -24,7 +23,7 @@ internal object GlRenderSystem : RenderSystem {
     }
 
     override fun bindTexture(id: Int) {
-        GlHelper.setActiveTexture(id)
+        glBindTexture(GL_TEXTURE_2D, id)
     }
 
     override fun beginFrame() {
@@ -46,57 +45,57 @@ internal object GlRenderSystem : RenderSystem {
 
     override fun enableDepthTest() {
         isDepthTestEnabled = true
-        GL41.glEnable(GL41.GL_DEPTH_TEST)
+        glEnable(GL_DEPTH_TEST)
     }
 
     override fun disableDepthTest() {
         isDepthTestEnabled = false
-        GL41.glDisable(GL41.GL_DEPTH_TEST)
+        glDisable(GL_DEPTH_TEST)
     }
 
     override fun enableCull() {
         isCullEnabled = true
-        GL41.glEnable(GL41.GL_CULL_FACE)
+        glEnable(GL_CULL_FACE)
     }
 
     override fun disableCull() {
         isCullEnabled = false
-        GL41.glDisable(GL41.GL_CULL_FACE)
+        glDisable(GL_CULL_FACE)
     }
 
     override fun enableBlend() {
         isBlendEnabled = true
-        GL41.glEnable(GL41.GL_BLEND)
+        glEnable(GL_BLEND)
     }
 
     override fun disableBlend() {
         isBlendEnabled = false
-        GL41.glDisable(GL41.GL_BLEND)
+        glDisable(GL_BLEND)
     }
 
 
     override fun polygonMode(face: Int, mode: Int) {
-        GL41.glPolygonMode(face, mode)
+        glPolygonMode(face, mode)
     }
 
     override fun setShaderColor(r: Float, g: Float, b: Float, a: Float) {
-        GL41.glVertexAttrib4f(VertexFormatElement.COLOR.index, r, g, b, a)
+        glVertexAttrib4f(VertexFormatElement.COLOR.index, r, g, b, a)
     }
 
     override fun clearDepth(depth: Double) {
-        GL41.glClearDepth(depth)
+        glClearDepth(depth)
     }
 
     override fun colorMask(red: Boolean, green: Boolean, blue: Boolean, alpha: Boolean) {
-        GL41.glColorMask(red, green, blue, alpha)
+        glColorMask(red, green, blue, alpha)
     }
 
     override fun depthMask(value: Boolean) {
-        GL41.glDepthMask(value)
+        glDepthMask(value)
     }
 
     override fun setViewport(x: Int, y: Int, width: Int, height: Int) {
-        GL41.glViewport(x, y, width, height)
+        glViewport(x, y, width, height)
     }
 
     override fun resetViewport() {
@@ -104,14 +103,22 @@ internal object GlRenderSystem : RenderSystem {
     }
 
     override fun translate(x: Float, y: Float, z: Float) {
-        GL41.glTranslatef(x, y, z)
+        glTranslatef(x, y, z)
     }
 
     override fun rotate(angle: Float, x: Float, y: Float, z: Float) {
-        GL41.glRotatef(angle, x, y, z)
+        glRotatef(angle, x, y, z)
     }
 
     override fun matrixMode(mode: Int) {
-        GL41.glMatrixMode(mode)
+        glMatrixMode(mode)
+    }
+
+    override fun clearColor(red: Float, green: Float, blue: Float, alpha: Float) {
+        glClearColor(red, green, blue, alpha)
+    }
+
+    override fun clear(mask: Int) {
+        glClear(mask)
     }
 }

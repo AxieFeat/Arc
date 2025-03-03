@@ -299,5 +299,8 @@ interface RenderSystem {
 
     fun matrixMode(mode: Int)
 
+    fun clearColor(red: Float, green: Float, blue: Float, alpha: Float)
+
+    fun clear(mask: Int)
 
 }

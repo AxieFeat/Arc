@@ -1,5 +1,6 @@
 package arc.gl.graphics
 
+import arc.gl.GlHelper
 import arc.graphics.vertex.VertexFormat
 import arc.graphics.vertex.VertexFormatElement
 import arc.graphics.vertex.VertexUsage

@@ -8,7 +8,7 @@ internal data class GlTextureAsset(
     override val file: File
 ) : TextureAsset {
 
-    override val texture: Texture = Texture.create(this)
+    override val texture: Texture = Texture.from(this)
 
     override fun bind(): Texture {
         texture.bind()

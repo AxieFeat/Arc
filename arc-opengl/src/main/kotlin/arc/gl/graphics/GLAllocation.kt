@@ -6,7 +6,7 @@ import java.nio.ByteOrder
 import java.nio.FloatBuffer
 import java.nio.IntBuffer
 
-object GLAllocation {
+internal object GLAllocation {
 
     @Synchronized
     fun generateDisplayLists(range: Int): Int {

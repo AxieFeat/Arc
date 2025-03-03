@@ -20,4 +20,6 @@ dependencies {
         api("$name:$lwjglVersion:$macosNatives")
         api("$name:$lwjglVersion:$macosArmNatives")
     }
+
+    implementation("commons-io:commons-io:2.18.0")
 }

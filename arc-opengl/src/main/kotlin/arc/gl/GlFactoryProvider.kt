@@ -17,7 +17,7 @@ import arc.texture.Texture
 import arc.register
 import arc.shader.ShaderUniforms
 
-object GlFactoryProvider {
+internal object GlFactoryProvider {
 
     private val provider = ArcFactoryProvider
 

@@ -9,6 +9,6 @@ abstract class AbstractTextureAsset(
     override val file: File
 ): TextureAsset {
 
-    override val texture: Texture = Texture.create(this)
+    override val texture: Texture = Texture.from(this)
 
 }
