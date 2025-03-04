@@ -1,9 +1,7 @@
 package arc.input.keyboard
 
+import arc.input.*
 import arc.input.ArcBindingProcessor
-import arc.input.BindingProcessor
-import arc.input.KeyCode
-import arc.input.KeyType
 import arc.input.mouse.ArcMouseInput
 import arc.window.Window
 import org.lwjgl.glfw.GLFW
@@ -17,10 +15,9 @@ internal object ArcKeyboardInput : KeyboardInput {
         if(key.keyType != KeyType.KEY) return false
 
         try {
-            if(GLFW.glfwGetKey(ArcMouseInput.window.handle, key.id) == GLFW.GLFW_PRESS) return true
-        } catch (throwable: Throwable) {
-            return false
-        }
+            if(GLFW.glfwGetKey(window.handle, key.id) == GLFW.GLFW_PRESS ||
+                GLFW.glfwGetKey(window.handle, key.id) == GLFW.GLFW_REPEAT) return true
+        } catch (ignore: Throwable) {}
 
         return false
     }
@@ -29,23 +26,34 @@ internal object ArcKeyboardInput : KeyboardInput {
         if(key.keyType != KeyType.KEY) return false
 
         try {
-            if(GLFW.glfwGetKey(ArcMouseInput.window.handle, key.id) == GLFW.GLFW_RELEASE) return true
-        } catch (throwable: Throwable) {
-            return false
-        }
+            if(GLFW.glfwGetKey(window.handle, key.id) == GLFW.GLFW_RELEASE ||
+                GLFW.glfwGetKey(window.handle, key.id) == GLFW.GLFW_REPEAT) return true
+        } catch (ignore: Throwable) {}
 
         return false
     }
 
     fun keyUpdate(key: KeyCode, pressed: Boolean) {
         bindingProcessor.bindings.forEach { binding ->
-            if(binding.key == key || binding.key == KeyCode.ANY || binding.key == KeyCode.ANY_KEY) {
-                if(pressed) {
-                    binding.onPress(key)
-                } else {
-                    binding.onRelease(key)
+
+            when(binding) {
+                is Binding -> {
+                    if (binding.key == key || binding.key == KeyCode.ANY || binding.key == KeyCode.ANY_KEY) {
+                        if (pressed) {
+                            binding.onPress(key)
+                        } else {
+                            binding.onRelease(key)
+                        }
+                    }
+                }
+
+                is MultiBinding -> {
+                    if(ArcInput.checkForAll(binding.keys, pressed)) {
+                        binding.onPress()
+                    }
                 }
             }
+
         }
     }
 

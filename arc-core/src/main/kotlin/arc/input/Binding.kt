@@ -14,13 +14,13 @@ import arc.input.mouse.MouseBinding
  */
 @Suppress("INAPPLICABLE_JVM_NAME")
 @ImmutableType
-interface Binding {
+interface Binding : BindingLike {
 
     /**
      * ID of this binding.
      */
     @get:JvmName("id")
-    val id: String
+    override val id: String
 
     /**
      * Key of binding.

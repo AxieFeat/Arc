@@ -1,9 +1,7 @@
 package arc.input.mouse
 
+import arc.input.*
 import arc.input.ArcBindingProcessor
-import arc.input.BindingProcessor
-import arc.input.KeyCode
-import arc.input.KeyType
 import arc.math.Point2d
 import arc.window.Window
 import org.lwjgl.glfw.GLFW
@@ -42,23 +40,39 @@ internal object ArcMouseInput : MouseInput {
         if(key == KeyCode.MOUSE_SCROLL) return
 
         bindingProcessor.bindings.forEach { binding ->
-            if(binding.key == key || binding.key == KeyCode.ANY || binding.key == KeyCode.ANY_MOUSE) {
-                if(pressed) {
-                    binding.onPress(key)
-                } else {
-                    binding.onRelease(key)
+
+            when(binding) {
+                is Binding -> {
+                    if (binding.key == key || binding.key == KeyCode.ANY || binding.key == KeyCode.ANY_MOUSE) {
+                        if (pressed) {
+                            binding.onPress(key)
+                        } else {
+                            binding.onRelease(key)
+                        }
+                    }
+                }
+
+                is MultiBinding -> {
+                    if(ArcInput.checkForAll(binding.keys, pressed)) {
+                        binding.onPress()
+                    }
                 }
             }
+
         }
     }
 
     fun scrollUpdate(xOffset: Double, yOffset: Double) {
         bindingProcessor.bindings.forEach { binding ->
-            if(binding.key == KeyCode.MOUSE_SCROLL || binding.key == KeyCode.ANY || binding.key == KeyCode.ANY_MOUSE) {
-                if(binding is MouseBinding) {
-                    binding.onScroll(xOffset, yOffset)
+
+            when(binding) {
+                is MouseBinding -> {
+                    if (binding.key == KeyCode.MOUSE_SCROLL || binding.key == KeyCode.ANY || binding.key == KeyCode.ANY_MOUSE) {
+                        binding.onScroll(xOffset, yOffset)
+                    }
                 }
             }
+
         }
     }
 

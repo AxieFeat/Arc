@@ -7,6 +7,7 @@ import arc.assets.shader.UniformAsset
 import arc.assets.shader.VertexShader
 import arc.demo.bind.EscBind
 import arc.demo.bind.KeyLogger
+import arc.demo.bind.MultiBind
 import arc.demo.bind.ScrollBind
 import arc.files.classpath
 import arc.graphics.DrawerMode
@@ -39,6 +40,9 @@ class Game : WindowHandler {
         // Also we can create "Key-logger" - very bad thing :D
         application.keyboard.bindingProcessor.bind(KeyLogger)
         application.mouse.bindingProcessor.bind(KeyLogger)
+
+        // Also we can add Multi-bindings
+        application.keyboard.bindingProcessor.bind(MultiBind)
 
         loop()
     }

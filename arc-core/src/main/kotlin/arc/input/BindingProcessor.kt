@@ -19,21 +19,21 @@ interface BindingProcessor {
      * List of all bindings.
      */
     @get:JvmName("bindings")
-    val bindings: List<Binding>
+    val bindings: List<BindingLike>
 
     /**
      * Add new binding to processor.
      *
      * @param binding Binding to add.
      */
-    fun bind(binding: Binding)
+    fun bind(binding: BindingLike)
 
     /**
      * Remove binding from processor.
      *
      * @param binding Binding to remove.
      */
-    fun unbind(binding: Binding)
+    fun unbind(binding: BindingLike)
 
     /**
      * Remove binding from processor.
@@ -43,12 +43,12 @@ interface BindingProcessor {
     fun unbind(id: String)
 
     /**
-     * Get [Binding] by it [id].
+     * Get [BindingLike] by it [id].
      *
-     * @param id ID of [Binding].
+     * @param id ID of [BindingLike].
      *
-     * @return Instance of [Binding] or null if not found.
+     * @return Instance of [BindingLike] or null if not found.
      */
-    operator fun get(id: String): Binding?
+    operator fun get(id: String): BindingLike?
 
 }
