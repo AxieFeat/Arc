@@ -5,6 +5,7 @@ import arc.input.ArcBindingProcessor
 import arc.input.mouse.ArcMouseInput
 import arc.window.Window
 import org.lwjgl.glfw.GLFW
+import java.util.concurrent.Executors
 
 internal object ArcKeyboardInput : KeyboardInput {
 
@@ -34,26 +35,32 @@ internal object ArcKeyboardInput : KeyboardInput {
     }
 
     fun keyUpdate(key: KeyCode, pressed: Boolean) {
-        bindingProcessor.bindings.forEach { binding ->
+        if(key.keyType != KeyType.KEY) return
 
-            when(binding) {
-                is Binding -> {
-                    if (binding.key == key || binding.key == KeyCode.ANY || binding.key == KeyCode.ANY_KEY) {
-                        if (pressed) {
-                            binding.onPress(key)
-                        } else {
-                            binding.onRelease(key)
+        ArcInput.executor.submit {
+            bindingProcessor.bindings.forEach { binding ->
+
+                ArcInput.executor.submit {
+                    when (binding) {
+                        is Binding -> {
+                            if (binding.key == key || binding.key == KeyCode.ANY || binding.key == KeyCode.ANY_KEY) {
+                                if (pressed) {
+                                    binding.onPress(key)
+                                } else {
+                                    binding.onRelease(key)
+                                }
+                            }
+                        }
+
+                        is MultiBinding -> {
+                            if (ArcInput.checkForAll(binding.keys, pressed)) {
+                                binding.onPress()
+                            }
                         }
                     }
                 }
 
-                is MultiBinding -> {
-                    if(ArcInput.checkForAll(binding.keys, pressed)) {
-                        binding.onPress()
-                    }
-                }
             }
-
         }
     }
 

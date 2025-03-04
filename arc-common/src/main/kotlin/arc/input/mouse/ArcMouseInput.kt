@@ -39,40 +39,48 @@ internal object ArcMouseInput : MouseInput {
     fun keyUpdate(key: KeyCode, pressed: Boolean) {
         if(key == KeyCode.MOUSE_SCROLL) return
 
-        bindingProcessor.bindings.forEach { binding ->
+        ArcInput.executor.submit {
+            bindingProcessor.bindings.forEach { binding ->
 
-            when(binding) {
-                is Binding -> {
-                    if (binding.key == key || binding.key == KeyCode.ANY || binding.key == KeyCode.ANY_MOUSE) {
-                        if (pressed) {
-                            binding.onPress(key)
-                        } else {
-                            binding.onRelease(key)
+                ArcInput.executor.submit {
+                    when (binding) {
+                        is Binding -> {
+                            if (binding.key == key || binding.key == KeyCode.ANY || binding.key == KeyCode.ANY_MOUSE) {
+                                if (pressed) {
+                                    binding.onPress(key)
+                                } else {
+                                    binding.onRelease(key)
+                                }
+                            }
+                        }
+
+                        is MultiBinding -> {
+                            if (ArcInput.checkForAll(binding.keys, pressed)) {
+                                binding.onPress()
+                            }
                         }
                     }
                 }
 
-                is MultiBinding -> {
-                    if(ArcInput.checkForAll(binding.keys, pressed)) {
-                        binding.onPress()
-                    }
-                }
             }
-
         }
     }
 
     fun scrollUpdate(xOffset: Double, yOffset: Double) {
-        bindingProcessor.bindings.forEach { binding ->
+        ArcInput.executor.submit {
+            bindingProcessor.bindings.forEach { binding ->
 
-            when(binding) {
-                is MouseBinding -> {
-                    if (binding.key == KeyCode.MOUSE_SCROLL || binding.key == KeyCode.ANY || binding.key == KeyCode.ANY_MOUSE) {
-                        binding.onScroll(xOffset, yOffset)
+                ArcInput.executor.submit {
+                    when (binding) {
+                        is MouseBinding -> {
+                            if (binding.key == KeyCode.MOUSE_SCROLL || binding.key == KeyCode.ANY || binding.key == KeyCode.ANY_MOUSE) {
+                                binding.onScroll(xOffset, yOffset)
+                            }
+                        }
                     }
                 }
-            }
 
+            }
         }
     }
 
