@@ -2,19 +2,18 @@ package arc.demo
 
 import arc.Application
 import arc.Configuration
-import arc.assets.TextureAsset
 import arc.assets.shader.FragmentShader
 import arc.assets.shader.UniformAsset
 import arc.assets.shader.VertexShader
+import arc.demo.bind.EscBind
+import arc.demo.bind.KeyLogger
+import arc.demo.bind.ScrollBind
 import arc.files.classpath
 import arc.graphics.DrawerMode
 import arc.graphics.vertex.VertexFormat
 import arc.graphics.vertex.VertexFormatElement
-import arc.input.keyboard.KeyboardInput
-import arc.input.mouse.MouseInput
 import arc.shader.ShaderInstance
 import arc.shader.ShaderUniforms
-import arc.texture.Texture
 import arc.util.Color
 import arc.window.WindowHandler
 

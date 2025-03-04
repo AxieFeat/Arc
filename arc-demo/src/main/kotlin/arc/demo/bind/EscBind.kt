@@ -1,4 +1,4 @@
-package arc.demo
+package arc.demo.bind
 
 import arc.input.Binding
 import arc.input.KeyCode

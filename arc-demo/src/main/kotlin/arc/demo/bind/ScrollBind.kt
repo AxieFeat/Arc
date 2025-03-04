@@ -1,4 +1,4 @@
-package arc.demo
+package arc.demo.bind
 
 import arc.input.KeyCode
 import arc.input.mouse.MouseBinding
