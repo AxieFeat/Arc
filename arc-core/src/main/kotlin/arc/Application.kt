@@ -5,6 +5,9 @@ import arc.annotations.TypeFactory
 import arc.files.LocationSpace
 import arc.graphics.RenderSystem
 import arc.input.InputDevice
+import arc.input.controller.ControllerInput
+import arc.input.keyboard.KeyboardInput
+import arc.input.mouse.MouseInput
 import arc.window.Window
 import arc.window.WindowException
 import org.jetbrains.annotations.ApiStatus
@@ -62,12 +65,14 @@ interface Application {
     @get:JvmName("locationSpace")
     val locationSpace: LocationSpace
 
-    /**
-     * List of all input devices available in [Application].
-     * Can change in runtime.
-     */
-    @get:JvmName("inputDevices")
-    val inputDevices: Set<InputDevice>
+    @get:JvmName("mouse")
+    val mouse: MouseInput
+
+    @get:JvmName("keyboard")
+    val keyboard: KeyboardInput
+
+    @get:JvmName("controllers")
+    val controllers: List<ControllerInput>
 
     /**
      * Represents the current text stored in the system clipboard.

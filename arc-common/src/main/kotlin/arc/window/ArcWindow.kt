@@ -1,11 +1,16 @@
 package arc.window
 
+import arc.input.KeyCode
+import arc.input.KeyType
+import arc.input.keyboard.ArcKeyboardInput
+import arc.input.mouse.ArcMouseInput
 import arc.math.Point2i
 import org.lwjgl.glfw.Callbacks
 import org.lwjgl.glfw.GLFW.*
 import org.lwjgl.glfw.GLFWErrorCallback
 import org.lwjgl.system.MemoryUtil
 
+@Suppress("UNUSED_PARAMETER")
 internal class ArcWindow(
     override val name: String,
     override var handler: WindowHandler,
@@ -55,6 +60,7 @@ internal class ArcWindow(
         glfwSetCursorEnterCallback(handle, ::onEnter)
         glfwSetCursorPosCallback(handle, ::onCursorMove)
         glfwSetScrollCallback(handle, ::onScroll)
+        glfwSetKeyCallback(handle, ::onKey)
 
         glfwMakeContextCurrent(handle)
 
@@ -84,6 +90,22 @@ internal class ArcWindow(
         glfwSwapBuffers(handle)
     }
 
+    private fun onKey(handle: Long, key: Int, scancode: Int, action: Int, mods: Int) {
+        val keyCode = KeyCode.fromId(key)
+
+        when (keyCode.keyType) {
+            KeyType.KEY -> {
+                ArcKeyboardInput.keyUpdate(keyCode, action == GLFW_PRESS)
+            }
+
+            KeyType.MOUSE -> {
+                ArcMouseInput.keyUpdate(keyCode, action == GLFW_PRESS)
+            }
+
+            else -> {}
+        }
+    }
+
     private fun onMove(handle: Long, x: Int, y: Int) {
         this.position.x = x
         this.position.y = y
@@ -93,10 +115,15 @@ internal class ArcWindow(
 
     private fun onCursorMove(handle: Long, x: Double, y: Double) {
         handler.cursorMove(x, y)
+
+        ArcMouseInput.position.x = x
+        ArcMouseInput.position.y = y
     }
 
     private fun onScroll(handle: Long, xOffset: Double, yOffset: Double) {
         handler.scroll(xOffset, yOffset)
+
+        ArcMouseInput.scrollUpdate(xOffset, yOffset)
     }
 
     private fun onResize(handle: Long, width: Int, height: Int) {

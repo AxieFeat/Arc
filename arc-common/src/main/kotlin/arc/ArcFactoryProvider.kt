@@ -45,8 +45,12 @@ object ArcFactoryProvider : FactoryProvider {
     @JvmStatic
     fun bootstrap() {
         // Points
-        register<Point2i.Factory>(ArcPoint2I.Factory)
-        register<Point3i.Factory>(ArcPoint3I.Factory)
+        register<Point2i.Factory>(ArcPoint2i.Factory)
+        register<Point3i.Factory>(ArcPoint3i.Factory)
+        register<Point2d.Factory>(ArcPoint2d.Factory)
+        register<Point3d.Factory>(ArcPoint3d.Factory)
+
+        register<AABB.Factory>(ArcAABB.Factory)
 
         // Vectors
         register<Vec2f.Factory>(ArcVec2f.Factory)

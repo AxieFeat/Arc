@@ -31,11 +31,11 @@ interface Binding {
     /**
      * Calls when this key is pressed
      */
-    fun onPress()
+    fun onPress(key: KeyCode)
 
     /**
      * Calls when this key is released.
      */
-    fun onRelease()
+    fun onRelease(key: KeyCode)
 
 }

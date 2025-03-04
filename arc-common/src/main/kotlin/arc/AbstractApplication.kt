@@ -1,6 +1,11 @@
 package arc
 
 import arc.OS.execSafe
+import arc.input.controller.ControllerInput
+import arc.input.keyboard.ArcKeyboardInput
+import arc.input.keyboard.KeyboardInput
+import arc.input.mouse.ArcMouseInput
+import arc.input.mouse.MouseInput
 import org.lwjgl.glfw.GLFW
 import java.io.File
 
@@ -13,6 +18,10 @@ abstract class AbstractApplication : Application {
         set(value) {
             GLFW.glfwSetClipboardString(window.handle, value)
         }
+
+    override val controllers: MutableList<ControllerInput> = mutableListOf()
+    override val mouse: MouseInput = ArcMouseInput
+    override val keyboard: KeyboardInput = ArcKeyboardInput
 
     override fun openURL(url: String) {
         Thread {

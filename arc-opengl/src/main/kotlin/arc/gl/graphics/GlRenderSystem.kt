@@ -3,6 +3,7 @@ package arc.gl.graphics
 import arc.gl.GlApplication
 import arc.graphics.*
 import arc.graphics.vertex.VertexFormatElement
+import arc.input.ArcInput
 import arc.shader.ShaderInstance
 import org.lwjgl.opengl.GL41.*
 

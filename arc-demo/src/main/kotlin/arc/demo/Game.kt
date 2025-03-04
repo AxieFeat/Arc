@@ -10,6 +10,8 @@ import arc.files.classpath
 import arc.graphics.DrawerMode
 import arc.graphics.vertex.VertexFormat
 import arc.graphics.vertex.VertexFormatElement
+import arc.input.keyboard.KeyboardInput
+import arc.input.mouse.MouseInput
 import arc.shader.ShaderInstance
 import arc.shader.ShaderUniforms
 import arc.texture.Texture
@@ -21,13 +23,23 @@ import arc.window.WindowHandler
  */
 class Game : WindowHandler {
 
-    private val application: Application = Application.find("opengl")
+    private lateinit var application: Application
 
-    fun start(configuration: Configuration = Configuration.create()) {
+    fun start(application: Application, configuration: Configuration = Configuration.create()) {
+        this.application = application
+
         application.init(configuration)
 
         // Set window handler to this instance.
         application.window.handler = this
+
+        // Set up bindings.
+        application.keyboard.bindingProcessor.bind(EscBind)
+        application.mouse.bindingProcessor.bind(ScrollBind)
+
+        // Also we can create "Key-logger" - very bed thing :D
+        application.keyboard.bindingProcessor.bind(KeyLogger)
+        application.mouse.bindingProcessor.bind(KeyLogger)
 
         loop()
     }

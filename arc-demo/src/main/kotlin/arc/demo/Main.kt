@@ -1,5 +1,6 @@
 package arc.demo
 
+import arc.Application
 import arc.ArcFactoryProvider
 import arc.gl.GlApplication
 
@@ -8,11 +9,17 @@ fun main() {
     ArcFactoryProvider.install()
     ArcFactoryProvider.bootstrap()
 
-    // Preload implementations.
-    GlApplication.preload()
-    //VkApplication.preload()
+    // Select implementation by property.
+    val application = if (System.getProperty("arc.application") == "vulkan") {
+        //VkApplication.preload()
+        //Application.find("vulkan")
+        TODO()
+    } else {
+        GlApplication.preload()
+        Application.find("opengl")
+    }
 
     val game = Game()
 
-    game.start()
+    game.start(application)
 }

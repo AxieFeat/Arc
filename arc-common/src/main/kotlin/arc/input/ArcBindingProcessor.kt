@@ -5,6 +5,9 @@ internal class ArcBindingProcessor : BindingProcessor {
     override val bindings: MutableList<Binding> = mutableListOf()
 
     override fun bind(binding: Binding) {
+        if(bindings.any { it.id == binding.id }) {
+            return
+        }
         bindings.add(binding)
     }
 
