@@ -10,16 +10,14 @@ fun main() {
     ArcFactoryProvider.bootstrap()
 
     // Select implementation by property.
-    val application = if (System.getProperty("arc.application") == "vulkan") {
-        //VkApplication.preload()
-        //Application.find("vulkan")
-        TODO()
-    } else {
-        GlApplication.preload()
-        Application.find("opengl")
+    when(System.getProperty("arc.application")) {
+        "opengl" -> GlApplication.preload()
+        //"vulkan" -> VkApplication.preload()
+
+        else -> GlApplication.preload()
     }
 
     val game = Game()
 
-    game.start(application)
+    game.start()
 }

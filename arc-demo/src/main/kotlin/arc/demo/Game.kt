@@ -23,11 +23,9 @@ import arc.window.WindowHandler
  */
 class Game : WindowHandler {
 
-    private lateinit var application: Application
+    private val application: Application = Application.find()
 
-    fun start(application: Application, configuration: Configuration = Configuration.create()) {
-        this.application = application
-
+    fun start(configuration: Configuration = Configuration.create()) {
         application.init(configuration)
 
         // Set window handler to this instance.

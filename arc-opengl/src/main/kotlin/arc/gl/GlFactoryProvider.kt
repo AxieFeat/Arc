@@ -1,5 +1,6 @@
 package arc.gl
 
+import arc.Application
 import arc.ArcFactoryProvider
 import arc.assets.TextureAsset
 import arc.assets.shader.UniformAsset
@@ -23,6 +24,8 @@ internal object GlFactoryProvider {
 
     @JvmStatic
     fun bootstrap() {
+        provider.register<Application.Factory>(GlApplication.Factory)
+
         provider.register<TextureAsset.Factory>(GlTextureAsset.Factory)
         provider.register<Texture.Factory>(GlTexture.Factory)
 

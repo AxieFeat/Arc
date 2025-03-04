@@ -59,7 +59,6 @@ object ArcFactoryProvider : FactoryProvider {
         // Misc
         register<Color.Factory>(ArcColor.Factory)
         register<Window.Factory>(ArcWindow.Factory)
-        register<Application.Factory>(ArcApplicationFactory)
         register<Configuration.Factory>(ArcConfiguration.Factory)
         register<Profiler.Factory>(ArcProfiler.Factory)
 

@@ -1,9 +1,6 @@
 package arc.gl
 
-import arc.AbstractApplication
-import arc.ArcApplicationFactory
-import arc.Configuration
-import arc.Platform
+import arc.*
 import arc.files.ArcLocationSpace
 import arc.files.LocationSpace
 import arc.gl.graphics.GlRenderSystem
@@ -53,10 +50,13 @@ object GlApplication : AbstractApplication() {
      */
     @JvmStatic
     fun preload() {
-        ArcApplicationFactory.register(GlPlatform.id) {
-            GlFactoryProvider.bootstrap()
+        GlFactoryProvider.bootstrap()
+    }
 
-            return@register GlApplication
+    internal object Factory : Application.Factory {
+        override fun find(): Application {
+            return GlApplication
         }
+
     }
 }

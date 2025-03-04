@@ -132,28 +132,24 @@ interface Application {
     interface Factory {
 
         /**
-         * Find specific implementation of [Application].
-         *
-         * @param impl Name of implementation. (e.g. opengl, vulkan)
+         * Find specific implementation of [Application] in current context.
          *
          * @return Instance of [Application].
          */
-        fun find(impl: String): Application
+        fun find(): Application
 
     }
 
     companion object {
 
         /**
-         * Find specific implementation of [Application].
-         *
-         * @param impl Name of implementation. (e.g. opengl, vulkan)
+         * Find specific implementation of [Application] in current context.
          *
          * @return Instance of [Application].
          */
         @JvmStatic
-        fun find(impl: String): Application {
-            return Arc.factory<Factory>().find(impl)
+        fun find(): Application {
+            return Arc.factory<Factory>().find()
         }
 
     }
