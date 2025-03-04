@@ -1,6 +1,5 @@
 package arc.demo
 
-import arc.Application
 import arc.ArcFactoryProvider
 import arc.gl.GlApplication
 

@@ -3,7 +3,7 @@
 Русский | English
 
 Игровой движок для создания 3D/2D игр, который не привязан
-к конкретной реализации рендера, звука и т.п.
+к конкретной реализации. То есть его можно использовать практически с любой технологией и платформой
 
 #### Плюсы Arc:
 1. Современное API на Kotlin
@@ -24,8 +24,11 @@
 ```kotlin
 fun main() {
     
-    // Создаём приложение на Vulkan API.
-    val application: Application = Application.find("vulkan")
+    // Предзагружаем OpenGL.
+    GlApplication.preload()
+    
+    // Находим приложение в текущем контексте (Это будет OpenGL реализация)
+    val application: Application = Application.find()
     application.init() // Инициализируем все системы. Это так же создаст окно.
 
     // Получаем шейдер и компилируем его
@@ -34,19 +37,18 @@ fun main() {
 
     val renderSystem: RenderSystem = application.renderSystem
 
-    // Создаём буффер для рендера. В этом примере он статичный поэтому одна постоянная инстанса.
-    val buffer: DrawBuffer = createBuffer(application)
-
     while (true) {
-        // Обновляем окно GLFW
-        glfwPollEvents()
-
-        // Начинаем кадр
+        // Начинаем кадр рендера
         renderSystem.beginFrame()
 
-        renderSystem.bindShader(shader) // Выбираем шейдер
+        shader.bind() // Устанавливаем шейдер в текущем контексте
+        
         renderSystem.setShaderColor(1f, 1f, 1f, 1f) // Устанавливаем цвет шейдера
-        buffer.draw() // Выполняем рендер с помощью заранее созданного буфера
+
+        val buffer: DrawBuffer = createBuffer(application)
+        application.renderSystem.drawer.draw(buffer) // Рисуем наш квадрат
+
+        shader.unbind()
 
         // Заканчиваем кадр
         renderSystem.endFrame()
@@ -54,12 +56,14 @@ fun main() {
 }
 
 private fun getShaderInstance(locationSpace: LocationSpace): ShaderInstance {
-    val vertex: File = locationSpace.classpath("arc/shader/example.vsh")
-    val fragment: File = locationSpace.classpath("arc/shader/example.fsh")
+    val vertex: File = classpath("arc/shader/example.vsh")
+    val fragment: File = classpath("arc/shader/example.fsh")
+    val uniform: File = classpath("arc/shader/example.json")
 
     return ShaderInstance.of(
         VertexShader.from(vertex),
-        FragmentShader.from(fragment)
+        FragmentShader.from(fragment),
+        ShaderUniforms.from(UniformAsset.from(uniform))
     )
 }
 
@@ -67,8 +71,8 @@ private fun createBuffer(application: Application): DrawBuffer {
     val buffer: DrawBuffer = application.drawer.begin(
         DrawerMode.QUADS,
         VertexFormat.builder()
-            // Добавьте здесь параметры для вашего формата.
-            // Предположим, что мы указали здесь цвет и позицию.
+            .add(VertexFormatElement.POSITION)
+            .add(VertexFormatElement.COLOR)
             .build()
     )
 
@@ -85,6 +89,7 @@ private fun quad(buffer: DrawBuffer, x0: Int, y0: Int, x1: Int, y1: Int, z: Int,
     buffer.addVertex(x0, y1, z).setColor(color)
     buffer.addVertex(x1, y1, z).setColor(color)
     buffer.addVertex(x1, y0, z).setColor(color)
+    buffer.end()
 }
 
 class Handler : WindowHandler {
