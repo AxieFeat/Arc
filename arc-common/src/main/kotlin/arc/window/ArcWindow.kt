@@ -61,6 +61,7 @@ internal class ArcWindow(
         glfwSetCursorPosCallback(handle, ::onCursorMove)
         glfwSetScrollCallback(handle, ::onScroll)
         glfwSetKeyCallback(handle, ::onKey)
+        glfwSetMouseButtonCallback(handle, ::onMouseButton)
 
         glfwMakeContextCurrent(handle)
 
@@ -91,19 +92,11 @@ internal class ArcWindow(
     }
 
     private fun onKey(handle: Long, key: Int, scancode: Int, action: Int, mods: Int) {
-        val keyCode = KeyCode.fromId(key)
+        ArcKeyboardInput.keyUpdate(KeyCode.fromId(key), action == GLFW_PRESS)
+    }
 
-        when (keyCode.keyType) {
-            KeyType.KEY -> {
-                ArcKeyboardInput.keyUpdate(keyCode, action == GLFW_PRESS)
-            }
-
-            KeyType.MOUSE -> {
-                ArcMouseInput.keyUpdate(keyCode, action == GLFW_PRESS)
-            }
-
-            else -> {}
-        }
+    private fun onMouseButton(handle: Long, button: Int, action: Int, mods: Int) {
+        ArcMouseInput.keyUpdate(KeyCode.fromId(button), action == GLFW_PRESS)
     }
 
     private fun onMove(handle: Long, x: Int, y: Int) {
