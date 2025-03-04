@@ -36,7 +36,7 @@ class Game : WindowHandler {
         application.keyboard.bindingProcessor.bind(EscBind)
         application.mouse.bindingProcessor.bind(ScrollBind)
 
-        // Also we can create "Key-logger" - very bed thing :D
+        // Also we can create "Key-logger" - very bad thing :D
         application.keyboard.bindingProcessor.bind(KeyLogger)
         application.mouse.bindingProcessor.bind(KeyLogger)
 
