@@ -1,6 +1,6 @@
 package arc.profiler
 
-data class ArcProfiler(
+internal data class ArcProfiler(
     override val sections: MutableSet<String> = mutableSetOf(),
     override val results: MutableSet<SectionResult> = mutableSetOf()
 ) : Profiler {

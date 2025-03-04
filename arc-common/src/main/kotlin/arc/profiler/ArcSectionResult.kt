@@ -1,6 +1,6 @@
 package arc.profiler
 
-data class ArcSectionResult(
+internal data class ArcSectionResult(
     override val name: String,
     override val time: Long,
 ) : SectionResult {
