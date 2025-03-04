@@ -1,7 +1,6 @@
 package arc.input
 
 import arc.annotations.ImmutableType
-import arc.input.controller.ControllerBinding
 import arc.input.mouse.MouseBinding
 
 /**

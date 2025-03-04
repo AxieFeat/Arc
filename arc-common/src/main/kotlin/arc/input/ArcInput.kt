@@ -11,6 +11,13 @@ object ArcInput {
     fun install(application: Application) {
         ArcMouseInput.window = application.window
         ArcKeyboardInput.window = application.window
+
+        updateControllers()
+    }
+
+    @JvmStatic
+    fun updateControllers() {
+
     }
 
     @JvmStatic

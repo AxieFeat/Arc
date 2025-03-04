@@ -7,36 +7,11 @@ enum class KeyCode(
     val keyType: KeyType,
     val id: Int,
     val char: Char? = null,
-    val axis: Boolean = false
 ) {
     
     ANY(KeyType.UNKNOWN, -1),
     ANY_KEY(KeyType.KEY, -1),
     ANY_MOUSE(KeyType.MOUSE, -1),
-    ANY_CONTROLLER(KeyType.CONTROLLER, -1),
-
-    //controller, TODO
-//    CONTROLLER_A(KeyType.CONTROLLER, 0),
-//    CONTROLLER_B(KeyType.CONTROLLER, 1),
-//    CONTROLLER_X(KeyType.CONTROLLER, 2),
-//    CONTROLLER_Y(KeyType.CONTROLLER, 3),
-//    CONTROLLER_GUIDE(KeyType.CONTROLLER, 8),
-//    CONTROLLER_L_BUMPER(KeyType.CONTROLLER, 4),
-//    CONTROLLER_R_BUMPER(KeyType.CONTROLLER, 5),
-//    CONTROLLER_BACK(KeyType.CONTROLLER, 6),
-//    CONTROLLER_START(KeyType.CONTROLLER, 7),
-//
-//    CONTROLLER_PAD_UP(KeyType.CONTROLLER, 11),
-//    CONTROLLER_PAD_DOWN(KeyType.CONTROLLER, 13),
-//    CONTROLLER_PAD_LEFT(KeyType.CONTROLLER, 14),
-//    CONTROLLER_PAD_RIGHT(KeyType.CONTROLLER, 12),
-//
-//    CONTROLLER_L_TRIGGER(KeyType.CONTROLLER, 4, axis = true),
-//    CONTROLLER_R_TRIGGER(KeyType.CONTROLLER, 5, axis = true),
-//    CONTROLLER_L_STICK_Y_AXIS(KeyType.CONTROLLER, 1, axis = true),
-//    CONTROLLER_L_STICK_X_AXIS(KeyType.CONTROLLER, 0, axis = true),
-//    CONTROLLER_R_STICK_Y_AXIS(KeyType.CONTROLLER, 3, axis = true),
-//    CONTROLLER_R_STICK_X_AXIS(KeyType.CONTROLLER, 2 ,axis = true),
 
     //mouse
     MOUSE_LEFT(KeyType.MOUSE, 0),
@@ -44,7 +19,8 @@ enum class KeyCode(
     MOUSE_MIDDLE(KeyType.MOUSE, 2),
     MOUSE_BACK(KeyType.MOUSE, 3),
     MOUSE_FORWARD(KeyType.MOUSE, 4),
-    MOUSE_SCROLL(KeyType.SCROLL, -1, axis = true),
+    // Not have ID because it processes with other method.
+    MOUSE_SCROLL(KeyType.MOUSE, -1),
 
     //keyboard
     KEY_ESCAPE(KeyType.KEY, 256),

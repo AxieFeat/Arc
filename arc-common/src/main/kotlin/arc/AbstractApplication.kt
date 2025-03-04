@@ -1,7 +1,6 @@
 package arc
 
 import arc.OS.execSafe
-import arc.input.controller.ControllerInput
 import arc.input.keyboard.ArcKeyboardInput
 import arc.input.keyboard.KeyboardInput
 import arc.input.mouse.ArcMouseInput
@@ -19,7 +18,6 @@ abstract class AbstractApplication : Application {
             GLFW.glfwSetClipboardString(window.handle, value)
         }
 
-    override val controllers: MutableList<ControllerInput> = mutableListOf()
     override val mouse: MouseInput = ArcMouseInput
     override val keyboard: KeyboardInput = ArcKeyboardInput
 

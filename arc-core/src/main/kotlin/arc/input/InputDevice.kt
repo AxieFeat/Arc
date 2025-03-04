@@ -2,14 +2,12 @@ package arc.input
 
 import arc.annotations.ImmutableType
 import arc.input.mouse.MouseInput
-import arc.input.controller.ControllerInput
 import arc.input.keyboard.KeyboardInput
 
 /**
- * This interface represents some input device (e.g. Keyboard or Controller).
+ * This interface represents some input device (e.g. Keyboard or Mouse).
  *
  * @see MouseInput
- * @see ControllerInput
  * @see KeyboardInput
  */
 @ImmutableType

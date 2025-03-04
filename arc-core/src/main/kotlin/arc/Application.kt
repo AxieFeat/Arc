@@ -4,8 +4,6 @@ import arc.annotations.MutableType
 import arc.annotations.TypeFactory
 import arc.files.LocationSpace
 import arc.graphics.RenderSystem
-import arc.input.InputDevice
-import arc.input.controller.ControllerInput
 import arc.input.keyboard.KeyboardInput
 import arc.input.mouse.MouseInput
 import arc.window.Window
@@ -65,14 +63,17 @@ interface Application {
     @get:JvmName("locationSpace")
     val locationSpace: LocationSpace
 
+    /**
+     * Mouse input device of this application.
+     */
     @get:JvmName("mouse")
     val mouse: MouseInput
 
+    /**
+     * Keyboard input device of this application.
+     */
     @get:JvmName("keyboard")
     val keyboard: KeyboardInput
-
-    @get:JvmName("controllers")
-    val controllers: List<ControllerInput>
 
     /**
      * Represents the current text stored in the system clipboard.

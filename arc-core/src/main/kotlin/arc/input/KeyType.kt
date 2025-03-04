@@ -7,8 +7,6 @@ enum class KeyType {
 
     KEY,
     MOUSE,
-    CONTROLLER,
-    SCROLL,
 
     UNKNOWN
 
