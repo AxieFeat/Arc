@@ -303,4 +303,19 @@ interface RenderSystem {
 
     fun clear(mask: Int)
 
+    fun loadIdentity()
+
+    fun ortho(left: Double, right: Double, bottom: Double, top: Double, zNear: Double, zFar: Double)
+
+    fun enableTexture2D()
+
+    fun disableTexture2D()
+
+    fun enableLighting()
+
+    fun disableLighting()
+
+    fun enableAlpha()
+
+    fun disableAlpha()
 }

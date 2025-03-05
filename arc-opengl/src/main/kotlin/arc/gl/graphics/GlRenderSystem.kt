@@ -2,8 +2,6 @@ package arc.gl.graphics
 
 import arc.gl.GlApplication
 import arc.graphics.*
-import arc.graphics.vertex.VertexFormatElement
-import arc.input.ArcInput
 import arc.shader.ShaderInstance
 import org.lwjgl.opengl.GL41.*
 
@@ -80,7 +78,7 @@ internal object GlRenderSystem : RenderSystem {
     }
 
     override fun setShaderColor(r: Float, g: Float, b: Float, a: Float) {
-        glVertexAttrib4f(VertexFormatElement.COLOR.index, r, g, b, a)
+        glColor4f(r, g, b, a)
     }
 
     override fun clearDepth(depth: Double) {
@@ -121,5 +119,37 @@ internal object GlRenderSystem : RenderSystem {
 
     override fun clear(mask: Int) {
         glClear(mask)
+    }
+
+    override fun loadIdentity() {
+        glLoadIdentity()
+    }
+
+    override fun ortho(left: Double, right: Double, bottom: Double, top: Double, zNear: Double, zFar: Double) {
+        glOrtho(left, right, bottom, top, zNear, zFar)
+    }
+
+    override fun enableTexture2D() {
+        glEnable(GL_TEXTURE_2D)
+    }
+
+    override fun disableTexture2D() {
+        glDisable(GL_TEXTURE_2D)
+    }
+
+    override fun enableLighting() {
+        glEnable(GL_LIGHTING)
+    }
+
+    override fun disableLighting() {
+        glDisable(GL_LIGHTING)
+    }
+
+    override fun enableAlpha() {
+        glEnable(GL_ALPHA)
+    }
+
+    override fun disableAlpha() {
+        glDisable(GL_ALPHA)
     }
 }

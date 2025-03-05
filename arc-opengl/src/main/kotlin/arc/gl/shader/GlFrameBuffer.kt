@@ -1,9 +1,15 @@
 package arc.gl.shader
 
 import arc.gl.GlHelper
+import arc.gl.graphics.GlDrawer
 import arc.gl.graphics.GlRenderSystem
 import arc.gl.texture.TextureUtil
+import arc.graphics.DrawBuffer
+import arc.graphics.DrawerMode
+import arc.graphics.vertex.VertexFormat
+import arc.graphics.vertex.VertexFormatElement
 import arc.shader.FrameBuffer
+import arc.util.Color
 import org.lwjgl.opengl.GL11
 import org.lwjgl.opengl.GL41
 import java.nio.ByteBuffer
@@ -107,6 +113,51 @@ internal data class GlFrameBuffer(
         }
     }
 
+    override fun render(width: Int, height: Int) {
+        GlRenderSystem.colorMask(red = true, green = true, blue = true, alpha = false)
+        GlRenderSystem.disableDepthTest()
+        GlRenderSystem.depthMask(false)
+
+        GlRenderSystem.matrixMode(GL41.GL_PROJECTION)
+        GlRenderSystem.loadIdentity()
+
+
+        GlRenderSystem.ortho(0.0, width.toDouble(), height.toDouble(), 0.0, 1000.0, 3000.0)
+
+        GlRenderSystem.matrixMode(GL41.GL_MODELVIEW)
+        GlRenderSystem.loadIdentity()
+
+        GlRenderSystem.translate(0.0f, 0.0f, -2000.0f)
+        GlRenderSystem.setViewport(0, 0, width, height)
+
+        GlRenderSystem.enableTexture2D()
+        GlRenderSystem.disableLighting()
+        GlRenderSystem.disableAlpha()
+
+        GlRenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f)
+        bindTexture()
+
+        val f: Float = width.toFloat()
+        val f1: Float = height.toFloat()
+        val f2: Float = this.width.toFloat() / this.textureWidth.toFloat()
+        val f3: Float = this.height.toFloat() / this.textureHeight.toFloat()
+
+        val buffer = DrawBuffer.create(DrawerMode.QUADS, format)
+
+        buffer.addVertex(0f, f1, 0f).setTexture(0, 0).setColor(Color.WHITE)
+        buffer.addVertex(f, f1, 0f).setTexture(f1.toInt(), 0).setColor(Color.WHITE)
+        buffer.addVertex(f, 0f, 0f).setTexture(f2.toInt(), f3.toInt()).setColor(Color.WHITE)
+        buffer.addVertex(0f, 0f, 0f).setTexture(0, f3.toInt()).setColor(Color.WHITE)
+        buffer.end()
+
+        GlDrawer.draw(buffer)
+
+        unbindTexture()
+
+        GlRenderSystem.depthMask(true)
+        GlRenderSystem.colorMask(red = true, green = true, blue = true, alpha = true)
+    }
+
     private fun clear() {
         this.bind(true)
         GlRenderSystem.clearColor(
@@ -140,7 +191,14 @@ internal data class GlFrameBuffer(
         override fun create(width: Int, height: Int, useDepth: Boolean): FrameBuffer {
             return GlFrameBuffer(width, height, useDepth)
         }
+    }
 
+    companion object {
+        private val format = VertexFormat.builder()
+            .add(VertexFormatElement.POSITION)
+            .add(VertexFormatElement.UV0)
+            .add(VertexFormatElement.COLOR)
+            .build()
     }
 
 }

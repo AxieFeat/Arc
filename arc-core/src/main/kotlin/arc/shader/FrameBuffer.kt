@@ -34,6 +34,8 @@ interface FrameBuffer {
 
     fun delete()
 
+    fun render(width: Int, height: Int)
+
     @ApiStatus.Internal
     @TypeFactory
     interface Factory {
