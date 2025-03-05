@@ -4,6 +4,7 @@ import arc.Arc
 import arc.annotations.ImmutableType
 import arc.annotations.TypeFactory
 import arc.assets.shader.FragmentShader
+import arc.assets.shader.ShaderData
 import arc.assets.shader.VertexShader
 import org.jetbrains.annotations.ApiStatus
 
@@ -44,10 +45,10 @@ interface ShaderInstance {
     val fragment: FragmentShader
 
     /**
-     * Uniform of this shader.
+     * Data of shader.
      */
     @get:JvmName("uniforms")
-    val uniforms: ShaderUniforms
+    val data: ShaderData
 
     /**
      * Compiles the vertex and fragment shaders for this shader instance.
@@ -91,14 +92,14 @@ interface ShaderInstance {
          *
          * @param vertexShader Vertex shader for instance.
          * @param fragmentShader Fragment shader for instance.
-         * @param uniforms Uniforms of shader.
+         * @param shaderData Data of shader.
          *
          * @return New instance of [ShaderInstance].
          */
         fun create(
             vertexShader: VertexShader,
             fragmentShader: FragmentShader,
-            uniforms: ShaderUniforms
+            shaderData: ShaderData
         ): ShaderInstance
 
     }
@@ -110,7 +111,7 @@ interface ShaderInstance {
          *
          * @param vertexShader Vertex shader for instance.
          * @param fragmentShader Fragment shader for instance.
-         * @param uniforms Uniforms of shader.
+         * @param shaderData Data of shader.
          *
          * @return New instance of [ShaderInstance].
          */
@@ -118,9 +119,9 @@ interface ShaderInstance {
         fun of(
             vertexShader: VertexShader,
             fragmentShader: FragmentShader,
-            uniforms: ShaderUniforms
+            shaderData: ShaderData
         ): ShaderInstance {
-            return Arc.factory<Factory>().create(vertexShader, fragmentShader, uniforms)
+            return Arc.factory<Factory>().create(vertexShader, fragmentShader, shaderData)
         }
 
     }

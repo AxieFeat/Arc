@@ -3,7 +3,7 @@ package arc.demo
 import arc.Application
 import arc.Configuration
 import arc.assets.shader.FragmentShader
-import arc.assets.shader.UniformAsset
+import arc.assets.shader.ShaderData
 import arc.assets.shader.VertexShader
 import arc.demo.bind.EscBind
 import arc.demo.bind.KeyLogger
@@ -14,7 +14,6 @@ import arc.graphics.DrawerMode
 import arc.graphics.vertex.VertexFormat
 import arc.graphics.vertex.VertexFormatElement
 import arc.shader.ShaderInstance
-import arc.shader.ShaderUniforms
 import arc.util.Color
 import arc.window.WindowHandler
 
@@ -50,7 +49,7 @@ class Game : WindowHandler {
         val shader = ShaderInstance.of(
             VertexShader.from(classpath("arc/shader/position_color/position_color.vsh")),
             FragmentShader.from(classpath("arc/shader/position_color/position_color.fsh")),
-            ShaderUniforms.from(UniformAsset.from(classpath("arc/shader/position_color/position_color.json")))
+            ShaderData.from(classpath("arc/shader/position_color/position_color.json"))
         )
         shader.compileShaders()
 

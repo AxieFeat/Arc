@@ -1,15 +1,15 @@
 package arc.gl.shader
 
 import arc.assets.shader.FragmentShader
+import arc.assets.shader.ShaderData
 import arc.assets.shader.VertexShader
 import arc.shader.ShaderInstance
-import arc.shader.ShaderUniforms
 import org.lwjgl.opengl.GL41
 
 internal data class GlShaderInstance(
     override val vertex: VertexShader,
     override val fragment: FragmentShader,
-    override val uniforms: ShaderUniforms
+    override val data: ShaderData
 ) : ShaderInstance {
 
     override var id = 0
@@ -80,9 +80,9 @@ internal data class GlShaderInstance(
         override fun create(
             vertexShader: VertexShader,
             fragmentShader: FragmentShader,
-            uniforms: ShaderUniforms
+            data: ShaderData
         ): ShaderInstance {
-            return GlShaderInstance(vertexShader, fragmentShader, uniforms)
+            return GlShaderInstance(vertexShader, fragmentShader, data)
         }
     }
 
