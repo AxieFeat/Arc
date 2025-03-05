@@ -1,8 +1,15 @@
 #version 410
 
-layout (location=0) in vec3 inPosition;
+in vec3 Position;
+in vec4 Color;
 
-void main()
-{
-    gl_Position = vec4(inPosition, 1.0);
+uniform mat4 ModelViewMat;
+uniform mat4 ProjMat;
+
+out vec4 vertexColor;
+
+void main() {
+    gl_Position = ProjMat * ModelViewMat * vec4(Position, 1.0);
+
+    vertexColor = Color;
 }

@@ -227,6 +227,7 @@ internal data class GlDrawBuffer(
     fun reset() {
         this.vertexCount = 0
         this.vertexFormatIndex = 0
+        this.vertexFormatElement = format.getElement(vertexFormatIndex)
     }
 
     private fun endVertex() {

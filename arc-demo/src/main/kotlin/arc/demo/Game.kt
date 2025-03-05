@@ -9,13 +9,17 @@ import arc.demo.bind.EscBind
 import arc.demo.bind.KeyLogger
 import arc.demo.bind.MultiBind
 import arc.demo.bind.ScrollBind
-import arc.files.classpath
+import arc.files.ArcLocationSpace.classpath
 import arc.graphics.DrawerMode
 import arc.graphics.vertex.VertexFormat
 import arc.graphics.vertex.VertexFormatElement
+import arc.shader.FrameBuffer
 import arc.shader.ShaderInstance
 import arc.util.Color
 import arc.window.WindowHandler
+import org.lwjgl.opengl.GL11
+import java.awt.Frame
+
 
 /**
  * This own game main class.
@@ -46,12 +50,12 @@ class Game : WindowHandler {
 
     // Infinity game loop.
     private fun loop() {
-        val shader = ShaderInstance.of(
-            VertexShader.from(classpath("arc/shader/position_color/position_color.vsh")),
-            FragmentShader.from(classpath("arc/shader/position_color/position_color.fsh")),
-            ShaderData.from(classpath("arc/shader/position_color/position_color.json"))
-        )
-        shader.compileShaders()
+//        val shader = ShaderInstance.of(
+//            VertexShader.from(classpath("arc/shader/position_color/position_color.vsh")),
+//            FragmentShader.from(classpath("arc/shader/position_color/position_color.fsh")),
+//            ShaderData.from(classpath("arc/shader/position_color/position_color.json"))
+//        )
+//        shader.compileShaders()
 
 //        val texture = Texture.from(
 //            TextureAsset.from(
@@ -59,34 +63,47 @@ class Game : WindowHandler {
 //            )
 //        )
 
+//        val frameBuffer = FrameBuffer.create(
+//            application.window.width,
+//            application.window.height,
+//            true
+//        )
+
+        val format = VertexFormat.builder() // Configure vertex format.
+            .add(VertexFormatElement.POSITION)
+            .add(VertexFormatElement.COLOR)
+            .build()
+
         while (!application.window.shouldClose()) {
             application.renderSystem.beginFrame()
 
-            shader.bind()
+//            shader.bind()
 //            texture.bind()
 
             val drawer = application.renderSystem.drawer // Get drawer of application.
 
             val buffer = drawer.begin( // Create new buffer for writing vertex data.
-                DrawerMode.QUADS, // Set mode to Quads.
-                VertexFormat.builder() // Configure vertex format.
-                    .add(VertexFormatElement.POSITION)
-                    .add(VertexFormatElement.COLOR)
-                    .build()
+                DrawerMode.TRIANGLE_STRIP, // TODO Why DrawerMode.QUADS not work with quads...?
+                format
             )
 
             // Write values to buffer.
             buffer.addVertex(0f, 0f, 0f).setColor(Color.RED)
-            buffer.addVertex(0f, 100f, 0f).setColor(Color.YELLOW)
-            buffer.addVertex(100f, 0f, 0f).setColor(Color.AQUA)
-            buffer.addVertex(100f, 100f, 0f).setColor(Color.GOLD)
+            buffer.addVertex(0.5f, 0f, 0f).setColor(Color.AQUA)
+            buffer.addVertex(0f, 0.5f, 0f).setColor(Color.YELLOW)
+            buffer.addVertex(0.5f, 0.5f, 0f).setColor(Color.GREEN)
             buffer.end() // End writing in buffer.
 
             // Draw this buffer via drawer.
-//            drawer.draw(buffer)
+            drawer.draw(buffer)
+
+//            frameBuffer.render(
+//                application.window.width,
+//                application.window.height,
+//            )
 
 //            texture.unbind()
-            shader.unbind()
+//            shader.unbind()
 
             application.renderSystem.endFrame()
         }

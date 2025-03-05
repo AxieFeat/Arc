@@ -18,13 +18,11 @@ enum class DrawerMode(
     val connectedPrimitives: Boolean
 ) {
 
-    LINES(4, 2, 2, false),
-    LINE_STRIP(5, 2, 1, true),
-    DEBUG_LINES(1, 2, 2, false),
-    DEBUG_LINE_STRIP(3, 2, 1, true),
+    LINES(1, 2, 2, false),
+    LINE_STRIP(3, 2, 1, true),
     TRIANGLES(4, 3, 3, false),
     TRIANGLE_STRIP(5, 3, 1, true),
     TRIANGLE_FAN(6, 3, 1, true),
-    QUADS(4, 4, 4, false);
+    QUADS(7, 4, 4, false);
 
 }
