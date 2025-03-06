@@ -2,23 +2,15 @@ package arc.demo
 
 import arc.Application
 import arc.Configuration
-import arc.assets.shader.FragmentShader
-import arc.assets.shader.ShaderData
-import arc.assets.shader.VertexShader
 import arc.demo.bind.EscBind
 import arc.demo.bind.KeyLogger
 import arc.demo.bind.MultiBind
 import arc.demo.bind.ScrollBind
-import arc.files.ArcLocationSpace.classpath
 import arc.graphics.DrawerMode
 import arc.graphics.vertex.VertexFormat
 import arc.graphics.vertex.VertexFormatElement
-import arc.shader.FrameBuffer
-import arc.shader.ShaderInstance
 import arc.util.Color
 import arc.window.WindowHandler
-import org.lwjgl.opengl.GL11
-import java.awt.Frame
 
 
 /**
@@ -66,7 +58,7 @@ class Game : WindowHandler {
 //        val frameBuffer = FrameBuffer.create(
 //            application.window.width,
 //            application.window.height,
-//            true
+//            false
 //        )
 
         val format = VertexFormat.builder() // Configure vertex format.
@@ -74,13 +66,16 @@ class Game : WindowHandler {
             .add(VertexFormatElement.COLOR)
             .build()
 
+        val renderSystem = application.renderSystem
+        val drawer = renderSystem.drawer // Get drawer of application.
+
         while (!application.window.shouldClose()) {
-            application.renderSystem.beginFrame()
+            renderSystem.beginFrame()
 
 //            shader.bind()
 //            texture.bind()
 
-            val drawer = application.renderSystem.drawer // Get drawer of application.
+//            frameBuffer.bind(false)
 
             val buffer = drawer.begin( // Create new buffer for writing vertex data.
                 DrawerMode.TRIANGLE_STRIP, // TODO Why DrawerMode.QUADS not work with quads...?
@@ -88,14 +83,20 @@ class Game : WindowHandler {
             )
 
             // Write values to buffer.
-            buffer.addVertex(0f, 0f, 0f).setColor(Color.RED)
-            buffer.addVertex(0.5f, 0f, 0f).setColor(Color.AQUA)
-            buffer.addVertex(0f, 0.5f, 0f).setColor(Color.YELLOW)
+            buffer.addVertex(-0.5f, -0.5f, 0f).setColor(Color.RED)
+            buffer.addVertex(0.5f, -0.5f, 0f).setColor(Color.AQUA)
+            buffer.addVertex(-0.5f, 0.5f, 0f).setColor(Color.YELLOW)
             buffer.addVertex(0.5f, 0.5f, 0f).setColor(Color.GREEN)
             buffer.end() // End writing in buffer.
 
+            renderSystem.rotate(1f, 0.5f, 0.5f, 0.5f)
+
             // Draw this buffer via drawer.
             drawer.draw(buffer)
+
+//            frameBuffer.unbind()
+
+//            application.renderSystem.rotate(0f, 0f, 0f, 0f)
 
 //            frameBuffer.render(
 //                application.window.width,
