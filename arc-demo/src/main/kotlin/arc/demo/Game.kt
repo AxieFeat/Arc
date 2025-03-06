@@ -20,6 +20,11 @@ class Game : WindowHandler {
 
     private val application: Application = Application.find()
 
+    private val quadFormat =  VertexFormat.builder() // Configure vertex format.
+        .add(VertexFormatElement.POSITION)
+        .add(VertexFormatElement.COLOR)
+        .build()
+
     fun start(configuration: Configuration = Configuration.create()) {
         application.init(configuration)
 
@@ -42,72 +47,41 @@ class Game : WindowHandler {
 
     // Infinity game loop.
     private fun loop() {
-//        val shader = ShaderInstance.of(
-//            VertexShader.from(classpath("arc/shader/position_color/position_color.vsh")),
-//            FragmentShader.from(classpath("arc/shader/position_color/position_color.fsh")),
-//            ShaderData.from(classpath("arc/shader/position_color/position_color.json"))
-//        )
-//        shader.compileShaders()
-
-//        val texture = Texture.from(
-//            TextureAsset.from(
-//                classpath("arc/texture/mojang.png"),
-//            )
-//        )
-
-//        val frameBuffer = FrameBuffer.create(
-//            application.window.width,
-//            application.window.height,
-//            false
-//        )
-
-        val format = VertexFormat.builder() // Configure vertex format.
-            .add(VertexFormatElement.POSITION)
-            .add(VertexFormatElement.COLOR)
-            .build()
-
         val renderSystem = application.renderSystem
-        val drawer = renderSystem.drawer // Get drawer of application.
 
         while (!application.window.shouldClose()) {
             renderSystem.beginFrame()
 
-//            shader.bind()
-//            texture.bind()
+//            renderSystem.rotate(1f, 0.5f, 0.5f, 0.5f)
 
-//            frameBuffer.bind(false)
-
-            val buffer = drawer.begin( // Create new buffer for writing vertex data.
-                DrawerMode.TRIANGLE_STRIP, // TODO Why DrawerMode.QUADS not work with quads...?
-                format
-            )
-
-            // Write values to buffer.
-            buffer.addVertex(-0.5f, -0.5f, 0f).setColor(Color.RED)
-            buffer.addVertex(0.5f, -0.5f, 0f).setColor(Color.AQUA)
-            buffer.addVertex(-0.5f, 0.5f, 0f).setColor(Color.YELLOW)
-            buffer.addVertex(0.5f, 0.5f, 0f).setColor(Color.GREEN)
-            buffer.end() // End writing in buffer.
-
-            renderSystem.rotate(1f, 0.5f, 0.5f, 0.5f)
-
-            // Draw this buffer via drawer.
-            drawer.draw(buffer)
-
-//            frameBuffer.unbind()
-
-//            application.renderSystem.rotate(0f, 0f, 0f, 0f)
-
-//            frameBuffer.render(
-//                application.window.width,
-//                application.window.height,
-//            )
-
-//            texture.unbind()
-//            shader.unbind()
+            quad(0, 0, 350, 350, Color.GREEN)
 
             application.renderSystem.endFrame()
         }
+    }
+
+    private fun quad(x0: Int, y0: Int, x1: Int, y1: Int, color: Color) {
+        val buffer = application.renderSystem.drawer.begin(
+            DrawerMode.QUADS,
+            quadFormat
+        )
+
+        val height = application.window.height
+        val width = application.window.width
+
+        // Write values to buffer.
+        buffer.addVertex(x0.normalize(width), y1.normalize(height), 0f).setColor(color)
+        buffer.addVertex(x1.normalize(width), y1.normalize(height), 0f).setColor(color)
+        buffer.addVertex(x1.normalize(width), y0.normalize(height), 0f).setColor(color)
+        buffer.addVertex(x0.normalize(width), y0.normalize(height), 0f).setColor(color)
+        buffer.end() // End writing in buffer.
+
+        // Draw this buffer via drawer.
+        application.renderSystem.drawer.draw(buffer)
+    }
+
+    private fun Int.normalize(maxResolution: Int): Float {
+        return (this.toFloat() / (maxResolution / 2)) - 1f
     }
 
 }
