@@ -9,6 +9,7 @@ import arc.demo.bind.ScrollBind
 import arc.graphics.DrawerMode
 import arc.graphics.vertex.VertexFormat
 import arc.graphics.vertex.VertexFormatElement
+import arc.profiler.*
 import arc.util.Color
 import arc.window.WindowHandler
 
@@ -19,6 +20,7 @@ import arc.window.WindowHandler
 class Game : WindowHandler {
 
     private val application: Application = Application.find()
+    private val profiler: Profiler = Profiler.create().also { setProfilerContext(it) }
 
     private val quadFormat =  VertexFormat.builder() // Configure vertex format.
         .add(VertexFormatElement.POSITION)
@@ -50,38 +52,42 @@ class Game : WindowHandler {
         val renderSystem = application.renderSystem
 
         while (!application.window.shouldClose()) {
-            renderSystem.beginFrame()
+            begin("render")
 
-//            renderSystem.rotate(1f, 0.5f, 0.5f, 0.5f)
+            section("beginFrame") {
+                renderSystem.beginFrame()
+            }
 
-            quad(0, 0, 350, 350, Color.GREEN)
+            begin("quad")
+            quad(Color.GREEN)
+            end("quad")
 
-            application.renderSystem.endFrame()
+            begin("endFrame")
+            renderSystem.endFrame()
+            end("endFrame")
+
+            end("render")
+
+            val result = profiler.end()
+            println(result)
         }
     }
 
-    private fun quad(x0: Int, y0: Int, x1: Int, y1: Int, color: Color) {
+    private fun quad(color: Color) {
         val buffer = application.renderSystem.drawer.begin(
             DrawerMode.QUADS,
             quadFormat
         )
 
-        val height = application.window.height
-        val width = application.window.width
-
         // Write values to buffer.
-        buffer.addVertex(x0.normalize(width), y1.normalize(height), 0f).setColor(color)
-        buffer.addVertex(x1.normalize(width), y1.normalize(height), 0f).setColor(color)
-        buffer.addVertex(x1.normalize(width), y0.normalize(height), 0f).setColor(color)
-        buffer.addVertex(x0.normalize(width), y0.normalize(height), 0f).setColor(color)
+        buffer.addVertex(-1f, 1f, 0f).setColor(color)
+        buffer.addVertex(1f, 1f, 0f).setColor(color)
+        buffer.addVertex(1f, 0f, 0f).setColor(color)
+        buffer.addVertex(-1f, 0f, 0f).setColor(color)
         buffer.end() // End writing in buffer.
 
         // Draw this buffer via drawer.
         application.renderSystem.drawer.draw(buffer)
-    }
-
-    private fun Int.normalize(maxResolution: Int): Float {
-        return (this.toFloat() / (maxResolution / 2)) - 1f
     }
 
 }

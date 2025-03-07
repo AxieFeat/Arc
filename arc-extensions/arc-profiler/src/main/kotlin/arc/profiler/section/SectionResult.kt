@@ -1,4 +1,4 @@
-package arc.profiler
+package arc.profiler.section
 
 import arc.annotations.ImmutableType
 
@@ -9,18 +9,23 @@ import arc.annotations.ImmutableType
  */
 @ImmutableType
 @Suppress("INAPPLICABLE_JVM_NAME")
-interface SectionResult : Comparable<SectionResult> {
+interface SectionResult : Section {
 
     /**
-     * Name of this section.
+     * Children of this section.
      */
-    @get:JvmName("name")
-    val name: String
+    override val child: List<SectionResult>
+
+    /**
+     * End time of this section.
+     */
+    @get:JvmName("endTime")
+    val endTime: Long
 
     /**
      * Duration of this section in nanoseconds.
      */
     @get:JvmName("time")
-    val time: Long
+    val duration: Long
 
 }

@@ -9,6 +9,6 @@ include("arc-vulkan")
 include("arc-opengl")
 include("arc-common")
 include("arc-extensions")
-include("arc-extensions:arc-profiling")
-findProject(":arc-extensions:arc-profiling")?.name = "arc-profiling"
+include("arc-extensions:arc-profiler")
+findProject(":arc-extensions:arc-profiler")?.name = "arc-profiler"
 include("arc-demo")

@@ -1,31 +1,18 @@
 package arc.profiler
 
+import arc.profiler.section.*
+import arc.profiler.section.ArcRootSection
+
 internal data class ArcProfiler(
-    override val sections: MutableSet<String> = mutableSetOf(),
-    override val results: MutableSet<SectionResult> = mutableSetOf()
+    override val root: RootSection = ArcRootSection(),
 ) : Profiler {
 
-    private val time = mutableMapOf<String, Long>()
-
-    override fun startSection(name: String) {
-        time[name] = System.nanoTime()
-        sections.add(name)
+    override fun start(name: String): ActiveSection {
+        return root.start(name)
     }
 
-    override fun endSection(name: String): SectionResult {
-        val result = ArcSectionResult(
-            name,
-            time[name] ?: 0L,
-        )
-        time.remove(name)
-        results.add(result)
-
-        return result
-    }
-
-    override fun clear() {
-        sections.clear()
-        results.clear()
+    override fun end(): TreeSectionResult {
+        return root.end()
     }
 
     object Factory : Profiler.Factory {
@@ -33,5 +20,6 @@ internal data class ArcProfiler(
             return ArcProfiler()
         }
     }
+
 
 }

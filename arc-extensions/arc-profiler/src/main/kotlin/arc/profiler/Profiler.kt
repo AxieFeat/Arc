@@ -1,49 +1,41 @@
 package arc.profiler
 
 import arc.Arc
-import arc.annotations.MutableType
+import arc.annotations.ImmutableType
 import arc.annotations.TypeFactory
+import arc.profiler.section.ActiveSection
+import arc.profiler.section.RootSection
+import arc.profiler.section.TreeSectionResult
 import org.jetbrains.annotations.ApiStatus
 
 /**
  * This interface represents profiler for collecting debug info.
  */
-@MutableType
+@ImmutableType
 @Suppress("INAPPLICABLE_JVM_NAME")
 interface Profiler {
 
     /**
-     * Set of all sections in profiler.
+     * Root section of profiler.
      */
-    @get:JvmName("sections")
-    val sections: Set<String>
+    @get:JvmName("root")
+    val root: RootSection
 
     /**
-     * Set of all section results in profiler.
-     */
-    @get:JvmName("results")
-    val results: Set<SectionResult>
-
-    /**
-     * Start new section.
-     *
-     * @param name Name of section.
-     */
-    fun startSection(name: String)
-
-    /**
-     * End section by name.
+     * Create section in [root].
      *
      * @param name Name of section.
      *
-     * @return Result of section.
+     * @return Instance of [ActiveSection].
      */
-    fun endSection(name: String): SectionResult
+    fun start(name: String): ActiveSection
 
     /**
-     * Clear profiler data.
+     * End [root] section.
+     *
+     * @return Instance of [TreeSectionResult]
      */
-    fun clear()
+    fun end(): TreeSectionResult
 
     @ApiStatus.Internal
     @TypeFactory

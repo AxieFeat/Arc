@@ -12,16 +12,16 @@ class ProfilerTest {
 
         val profiler = Profiler.create()
 
-        profiler.startSection("math")
+        val active = profiler.start("math")
         var result = 1
 
         for (i in 0..100) {
             result *= 2
         }
-        val sectionResult = profiler.endSection("math")
+        val sectionResult = active.end()
 
         println("=== ProfilerTest:test ====")
-        println("Time of execution: ${sectionResult.time / 1000000}")
+        println("Time of execution: ${sectionResult.duration / 1000000}")
         println("=== ProfilerTest:test ====")
     }
 
