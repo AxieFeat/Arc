@@ -50,6 +50,21 @@ fun begin(name: String): ActiveSection {
 }
 
 /**
+ * End previous section and start new.
+ *
+ * @param name Name of new section.
+ *
+ * @return Instance of [ActiveSection].
+ */
+@JvmSynthetic
+fun endAndBegin(name: String): ActiveSection {
+    parent.end()
+    parent = if (sectionStack.isNotEmpty()) sectionStack.removeLast() else context.root
+
+    return begin(name)
+}
+
+/**
  * End section in current context.
  *
  * @param name Name of section.

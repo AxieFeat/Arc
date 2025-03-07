@@ -12,6 +12,8 @@ import arc.graphics.vertex.VertexFormatElement
 import arc.profiler.*
 import arc.util.Color
 import arc.window.WindowHandler
+import java.util.concurrent.Executors
+import java.util.concurrent.TimeUnit
 
 
 /**
@@ -51,6 +53,8 @@ class Game : WindowHandler {
     private fun loop() {
         val renderSystem = application.renderSystem
 
+        debug()
+
         while (!application.window.shouldClose()) {
             begin("render")
 
@@ -60,16 +64,14 @@ class Game : WindowHandler {
 
             begin("quad")
             quad(Color.GREEN)
-            end("quad")
 
-            begin("endFrame")
+            endAndBegin("endFrame")
             renderSystem.endFrame()
             end("endFrame")
 
             end("render")
 
-            val result = profiler.end()
-            println(result)
+            end()
         }
     }
 
@@ -88,6 +90,12 @@ class Game : WindowHandler {
 
         // Draw this buffer via drawer.
         application.renderSystem.drawer.draw(buffer)
+    }
+
+    private fun debug() {
+        Executors.newScheduledThreadPool(1).scheduleAtFixedRate({
+            println(profiler.root.result)
+        }, 0, 10000, TimeUnit.MILLISECONDS)
     }
 
 }
