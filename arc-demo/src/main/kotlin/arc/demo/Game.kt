@@ -47,13 +47,16 @@ class Game : WindowHandler {
         application.keyboard.bindingProcessor.bind(MultiBind)
 
         loop()
+
+        // Close application after exit from loop.
+        application.close()
     }
 
     // Infinity game loop.
     private fun loop() {
         val renderSystem = application.renderSystem
 
-        debug()
+        debug() // Debug printer for profiler.
 
         while (!application.window.shouldClose()) {
             begin("render")
@@ -71,7 +74,7 @@ class Game : WindowHandler {
 
             end("render")
 
-            end()
+            end() // End root section in profiler.
         }
     }
 
