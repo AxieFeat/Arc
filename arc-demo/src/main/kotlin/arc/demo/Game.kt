@@ -65,8 +65,8 @@ class Game : WindowHandler {
                 renderSystem.beginFrame()
             }
 
-            begin("quad")
-            quad(Color.GREEN)
+            begin("exampleRender")
+            doRender()
 
             endAndBegin("endFrame")
             renderSystem.endFrame()
@@ -78,17 +78,19 @@ class Game : WindowHandler {
         }
     }
 
-    private fun quad(color: Color) {
+    private fun doRender() {
         val buffer = application.renderSystem.drawer.begin(
-            DrawerMode.QUADS,
+            DrawerMode.TRIANGLE_STRIP,
             quadFormat
         )
 
+        application.renderSystem.rotate(1f, 0.5f, 0.5f, 0.5f)
+
         // Write values to buffer.
-        buffer.addVertex(-1f, 1f, 0f).setColor(color)
-        buffer.addVertex(1f, 1f, 0f).setColor(color)
-        buffer.addVertex(1f, 0f, 0f).setColor(color)
-        buffer.addVertex(-1f, 0f, 0f).setColor(color)
+        buffer.addVertex(0.35f, 0.5f, 0f).setColor(Color.of(226, 68, 97))
+        buffer.addVertex(-0.35f, 0.5f, 0f).setColor(Color.of(127, 82, 255))
+        buffer.addVertex(-0.35f, -0.5f, 0f).setColor(Color.of(149, 61, 245))
+        buffer.addVertex(0.35f, -0.5f, 0f).setColor(Color.of(149, 61, 245))
         buffer.end() // End writing in buffer.
 
         // Draw this buffer via drawer.
