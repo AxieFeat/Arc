@@ -81,8 +81,6 @@ internal object GlVertexUploader {
                 }
             }
         }
-
-        buffer.reset()
     }
 
 }

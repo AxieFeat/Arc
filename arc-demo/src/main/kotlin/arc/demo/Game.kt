@@ -6,6 +6,7 @@ import arc.demo.bind.EscBind
 import arc.demo.bind.KeyLogger
 import arc.demo.bind.MultiBind
 import arc.demo.bind.ScrollBind
+import arc.graphics.DrawBuffer
 import arc.graphics.DrawerMode
 import arc.graphics.vertex.VertexFormat
 import arc.graphics.vertex.VertexFormatElement
@@ -58,6 +59,8 @@ class Game : WindowHandler {
 
         debug() // Debug printer for profiler.
 
+        val bufferForRender = createBuffer()
+
         while (!application.window.shouldClose()) {
             begin("render")
 
@@ -66,7 +69,7 @@ class Game : WindowHandler {
             }
 
             begin("exampleRender")
-            doRender()
+            doRender(bufferForRender)
 
             endAndBegin("endFrame")
             renderSystem.endFrame()
@@ -78,13 +81,11 @@ class Game : WindowHandler {
         }
     }
 
-    private fun doRender() {
+    private fun createBuffer(): DrawBuffer {
         val buffer = application.renderSystem.drawer.begin(
             DrawerMode.TRIANGLE_STRIP,
             quadFormat
         )
-
-        application.renderSystem.rotate(1f, 0.5f, 0.5f, 0.5f)
 
         // Write values to buffer.
         buffer.addVertex(0.35f, 0.5f, 0f).setColor(Color.of(226, 68, 97))
@@ -92,6 +93,12 @@ class Game : WindowHandler {
         buffer.addVertex(-0.35f, -0.5f, 0f).setColor(Color.of(149, 61, 245))
         buffer.addVertex(0.35f, -0.5f, 0f).setColor(Color.of(149, 61, 245))
         buffer.end() // End writing in buffer.
+
+        return buffer
+    }
+
+    private fun doRender(buffer: DrawBuffer) {
+        application.renderSystem.rotate(1f, 0.5f, 0.5f, 0.5f)
 
         // Draw this buffer via drawer.
         application.renderSystem.drawer.draw(buffer)
