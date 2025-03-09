@@ -14,7 +14,7 @@ import arc.shader.ShaderInstance
 import arc.util.Color
 
 class MainScene(
-    private val application: Application
+    application: Application
 ) : AbstractScene(application, 100f) {
 
     private val positionColor = VertexFormat.builder() // Configure vertex format.
@@ -35,14 +35,14 @@ class MainScene(
         updateDelta()
 
         shader.bind()
-        application.renderSystem.drawer.draw(buffer)
+        drawer.draw(buffer)
         shader.unbind()
 
         calculateFps()
     }
 
     private fun createBuffer(): DrawBuffer {
-        val buffer = application.renderSystem.drawer.begin(
+        val buffer = drawer.begin(
             DrawerMode.TRIANGLES,
             positionColor
         )

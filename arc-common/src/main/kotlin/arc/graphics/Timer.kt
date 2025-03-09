@@ -2,7 +2,7 @@ package arc.graphics
 
 import arc.OS
 
-class Timer(
+internal class Timer(
     var ticksPerSecond: Float
 ) {
     /**
