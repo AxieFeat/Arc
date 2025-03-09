@@ -67,17 +67,6 @@ interface VertexConsumer {
     fun setTexture(u: Int, v: Int): VertexConsumer
 
     /**
-     * Set normal for current vertex.
-     *
-     * @param x X value.
-     * @param y Y value.
-     * @param z Z value.
-     *
-     * @return Current instance of [VertexConsumer].
-     */
-    fun setNormal(x: Float, y: Float, z: Float): VertexConsumer
-
-    /**
      * Set offsets for current vertex.
      *
      * @param x X value.

@@ -43,7 +43,7 @@ internal object GlVertexUploader {
 
         glBindVertexArray(0)
 
-        glDeleteVertexArrays(vao)
+//        glDeleteVertexArrays(vao)
     }
 
 }

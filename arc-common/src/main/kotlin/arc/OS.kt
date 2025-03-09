@@ -1,5 +1,7 @@
 package arc
 
+import org.lwjgl.glfw.GLFW
+
 internal object OS {
 
     @JvmStatic
@@ -10,6 +12,11 @@ internal object OS {
         } catch (t: Throwable) {
             return false
         }
+    }
+
+    @JvmStatic
+    fun getTime(): Long {
+        return (GLFW.glfwGetTime() * 1000L).toLong()
     }
 
 }

@@ -138,13 +138,8 @@ internal data class GlDrawBuffer(
     }
 
     override fun setTexture(u: Int, v: Int): VertexConsumer {
-        return this
-    }
+        if (isEnded) return this
 
-    override fun setNormal(x: Float, y: Float, z: Float): VertexConsumer {
-        this.xOffset = x
-        this.yOffset = y
-        this.zOffset = z
         return this
     }
 

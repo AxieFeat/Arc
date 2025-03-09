@@ -31,10 +31,9 @@ internal data class ArcTreeSectionResult(
     override fun pretty(level: Int): String {
         val sectionInfo = if(level > 0) {
             val indent = "  ".repeat(level)
-
-            "$indent- $name: ${duration / 1000000}ms, ${usage}%"
+            "$indent- $name: ${BigDecimal(duration / 1000000.0).setScale(2, RoundingMode.HALF_UP).toDouble()}ms, ${usage}%"
         } else {
-            "${name.uppercase()}: ${duration / 1000000}ms, ${usage}%"
+            "${name.uppercase()}: ${BigDecimal(duration / 1000000.0).setScale(2, RoundingMode.HALF_UP).toDouble()}ms, ${usage}%"
         }
 
         if (child.isEmpty()) {

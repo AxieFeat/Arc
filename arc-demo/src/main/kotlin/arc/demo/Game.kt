@@ -30,11 +30,6 @@ class Game : WindowHandler {
     private val application: Application = Application.find()
     private val profiler: Profiler = Profiler.create().also { setProfilerContext(it) }
 
-    private val quadFormat =  VertexFormat.builder() // Configure vertex format.
-        .add(VertexFormatElement.POSITION)
-        .add(VertexFormatElement.COLOR)
-        .build()
-
     fun start(configuration: Configuration = Configuration.create()) {
         application.init(configuration)
 
@@ -61,16 +56,11 @@ class Game : WindowHandler {
     // Infinity game loop.
     private fun loop() {
         val renderSystem = application.renderSystem
-        val shader = ShaderInstance.of(
-            VertexShader.from(classpath("arc/shader/position_color/position_color.vsh")),
-            FragmentShader.from(classpath("arc/shader/position_color/position_color.fsh")),
-            ShaderData.from(classpath("arc/shader/position_color/position_color.json")),
-        )
-        shader.compileShaders()
 
         debug() // Debug printer for profiler.
 
-        val bufferForRender = createBuffer()
+        val scene = MainScene(application)
+        renderSystem.setScene(scene)
 
         while (!application.window.shouldClose()) {
             begin("render")
@@ -79,11 +69,9 @@ class Game : WindowHandler {
                 renderSystem.beginFrame()
             }
 
-            begin("exampleRender")
+            begin("scene")
 
-            shader.bind()
-            doRender(bufferForRender)
-            shader.unbind()
+            scene.render() // Render our scene.
 
             endAndBegin("endFrame")
             renderSystem.endFrame()
@@ -95,33 +83,10 @@ class Game : WindowHandler {
         }
     }
 
-    private fun createBuffer(): DrawBuffer {
-        val buffer = application.renderSystem.drawer.begin(
-            DrawerMode.QUADS,
-            quadFormat
-        )
-
-        // Write values to buffer.
-        buffer.addVertex(0.35f, 0.5f, 0f).setColor(Color.of(226, 68, 97))
-        buffer.addVertex(-0.35f, 0.5f, 0f).setColor(Color.of(127, 82, 255))
-        buffer.addVertex(-0.35f, -0.5f, 0f).setColor(Color.of(149, 61, 245))
-        buffer.addVertex(0.35f, -0.5f, 0f).setColor(Color.of(149, 61, 245))
-        buffer.end() // End writing in buffer.
-
-        return buffer
-    }
-
-    private fun doRender(buffer: DrawBuffer) {
-//        application.renderSystem.rotate(1f, 0.5f, 0.5f, 0.5f)
-
-        // Draw this buffer via drawer.
-        application.renderSystem.drawer.draw(buffer)
-    }
-
     private fun debug() {
         Executors.newScheduledThreadPool(1).scheduleAtFixedRate({
             println(profiler.root.result)
-        }, 0, 10000, TimeUnit.MILLISECONDS)
+        }, 0, 10, TimeUnit.SECONDS)
     }
 
 }
