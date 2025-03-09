@@ -1,6 +1,7 @@
 package arc.graphics
 
 import arc.graphics.vertex.VertexFormat
+import arc.shader.ShaderInstance
 
 /**
  * Drawer interface for creating and managing rendering buffers.

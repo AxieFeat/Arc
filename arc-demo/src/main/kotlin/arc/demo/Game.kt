@@ -2,15 +2,20 @@ package arc.demo
 
 import arc.Application
 import arc.Configuration
+import arc.assets.shader.FragmentShader
+import arc.assets.shader.ShaderData
+import arc.assets.shader.VertexShader
 import arc.demo.bind.EscBind
 import arc.demo.bind.KeyLogger
 import arc.demo.bind.MultiBind
 import arc.demo.bind.ScrollBind
+import arc.files.classpath
 import arc.graphics.DrawBuffer
 import arc.graphics.DrawerMode
 import arc.graphics.vertex.VertexFormat
 import arc.graphics.vertex.VertexFormatElement
 import arc.profiler.*
+import arc.shader.ShaderInstance
 import arc.util.Color
 import arc.window.WindowHandler
 import java.util.concurrent.Executors
@@ -56,6 +61,12 @@ class Game : WindowHandler {
     // Infinity game loop.
     private fun loop() {
         val renderSystem = application.renderSystem
+        val shader = ShaderInstance.of(
+            VertexShader.from(classpath("arc/shader/position_color/position_color.vsh")),
+            FragmentShader.from(classpath("arc/shader/position_color/position_color.fsh")),
+            ShaderData.from(classpath("arc/shader/position_color/position_color.json")),
+        )
+        shader.compileShaders()
 
         debug() // Debug printer for profiler.
 
@@ -69,7 +80,10 @@ class Game : WindowHandler {
             }
 
             begin("exampleRender")
+
+            shader.bind()
             doRender(bufferForRender)
+            shader.unbind()
 
             endAndBegin("endFrame")
             renderSystem.endFrame()
@@ -83,7 +97,7 @@ class Game : WindowHandler {
 
     private fun createBuffer(): DrawBuffer {
         val buffer = application.renderSystem.drawer.begin(
-            DrawerMode.TRIANGLE_STRIP,
+            DrawerMode.QUADS,
             quadFormat
         )
 
@@ -98,7 +112,7 @@ class Game : WindowHandler {
     }
 
     private fun doRender(buffer: DrawBuffer) {
-        application.renderSystem.rotate(1f, 0.5f, 0.5f, 0.5f)
+//        application.renderSystem.rotate(1f, 0.5f, 0.5f, 0.5f)
 
         // Draw this buffer via drawer.
         application.renderSystem.drawer.draw(buffer)

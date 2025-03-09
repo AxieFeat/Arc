@@ -49,7 +49,7 @@ internal class ArcWindow(
         glfwWindowHint(GLFW_VISIBLE, if(isHide) GLFW_FALSE else GLFW_TRUE)
         glfwWindowHint(GLFW_RESIZABLE, if(isResizable) GLFW_TRUE else GLFW_FALSE)
 
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2)
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4)
         glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1)
 
         handle = glfwCreateWindow(width, height, name, MemoryUtil.NULL, MemoryUtil.NULL)

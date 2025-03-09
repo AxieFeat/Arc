@@ -1,86 +1,61 @@
 package arc.gl.graphics
 
-import arc.gl.GlHelper
-import arc.graphics.vertex.VertexFormat
-import arc.graphics.vertex.VertexFormatElement
-import arc.graphics.vertex.VertexUsage
-import org.lwjgl.opengl.GL41
-import java.nio.ByteBuffer
+import arc.graphics.DrawerMode
+import arc.graphics.vertex.VertexType
+import org.lwjgl.opengl.GL11.GL_FLOAT
+import org.lwjgl.opengl.GL15.GL_ARRAY_BUFFER
+import org.lwjgl.opengl.GL15.glBindBuffer
+import org.lwjgl.opengl.GL20.glEnableVertexAttribArray
+import org.lwjgl.opengl.GL20.glVertexAttribPointer
+import org.lwjgl.opengl.GL30.*
 
 internal object GlVertexUploader {
 
+    private val vao = glGenVertexArrays()
+
     @JvmStatic
     @Throws(RuntimeException::class)
-    fun draw(buffer: GlDrawBuffer) {
-        if(!buffer.isEnded) throw RuntimeException("Can not draw buffer! End it before.")
+    fun draw(drawBuffer: GlDrawBuffer) {
+        if (!drawBuffer.isEnded || drawBuffer.vertexCount == 0) return
 
-        if (buffer.vertexCount > 0) {
-            val vertexFormat: VertexFormat = buffer.format
-            val nextIndex: Int = vertexFormat.nextOffset
-            val bytebuffer: ByteBuffer = buffer.byteBuffer
-            val list: List<VertexFormatElement> = vertexFormat.elements
+        glBindVertexArray(vao)
 
-            list.forEachIndexed { index, vertexFormatElement ->
-                val usage = vertexFormatElement.usage
-                val vertexType: Int = vertexFormatElement.type.id
-                val vertexIndex: Int = vertexFormatElement.index
-                bytebuffer.position(vertexFormat.getOffset(index))
+        glBindBuffer(GL_ARRAY_BUFFER, drawBuffer.vbo)
 
-                when (usage) {
-                    VertexUsage.POSITION -> {
-                        GL41.glVertexPointer(vertexFormatElement.count, vertexType, nextIndex, bytebuffer)
-                        GL41.glEnableClientState(GL41.GL_VERTEX_ARRAY)
-                    }
+        var offset = 0
+        for ((index, element) in drawBuffer.format.elements.withIndex()) {
+            glEnableVertexAttribArray(index)
 
-                    VertexUsage.UV -> {
-                        GlRenderSystem.bindTexture(GlHelper.DEFAULT_TEX + vertexIndex)
-                        GL41.glTexCoordPointer(vertexFormatElement.count, vertexType, nextIndex, bytebuffer)
-                        GL41.glEnableClientState(GL41.GL_TEXTURE_COORD_ARRAY)
-                        GlRenderSystem.bindTexture(GlHelper.DEFAULT_TEX)
-                    }
-
-                    VertexUsage.COLOR -> {
-                        GL41.glColorPointer(vertexFormatElement.count, vertexType, nextIndex, bytebuffer)
-                        GL41.glEnableClientState(GL41.GL_COLOR_ARRAY)
-                    }
-
-                    VertexUsage.NORMAL -> {
-                        GL41.glNormalPointer(vertexType, nextIndex, bytebuffer)
-                        GL41.glEnableClientState(GL41.GL_NORMAL_ARRAY)
-                    }
-
-                    else -> {}
-                }
+            when (element.type) {
+                VertexType.FLOAT -> glVertexAttribPointer(index, element.count, GL_FLOAT, false, drawBuffer.format.nextOffset, offset.toLong())
+                VertexType.UINT, VertexType.INT -> glVertexAttribIPointer(index, element.count, GL_INT, drawBuffer.format.nextOffset, offset.toLong())
+                VertexType.USHORT, VertexType.SHORT -> glVertexAttribPointer(index, element.count, GL_SHORT, false, drawBuffer.format.nextOffset, offset.toLong())
+                VertexType.UBYTE, VertexType.BYTE -> glVertexAttribPointer(index, element.count, GL_UNSIGNED_BYTE, true, drawBuffer.format.nextOffset, offset.toLong())
             }
 
-            GL41.glDrawArrays(buffer.mode.id, 0, buffer.vertexCount)
-
-            list.forEach { vertexFormatElement ->
-                val usage = vertexFormatElement.usage
-                val vertexIndex: Int = vertexFormatElement.index
-
-                when (usage) {
-                    VertexUsage.POSITION -> GL41.glDisableClientState(GL41.GL_VERTEX_ARRAY)
-                    VertexUsage.UV -> {
-                        GlRenderSystem.bindTexture(GlHelper.DEFAULT_TEX + vertexIndex)
-                        GL41.glDisableClientState(GL41.GL_TEXTURE_COORD_ARRAY)
-                        GlRenderSystem.bindTexture(GlHelper.DEFAULT_TEX)
-                    }
-
-                    VertexUsage.COLOR -> {
-                        GL41.glDisableClientState(GL41.GL_COLOR_ARRAY)
-
-                        GlRenderSystem.setShaderColor(
-                            -1.0f, -1.0f, -1.0f, -1.0f
-                        )
-                    }
-
-                    VertexUsage.NORMAL -> GL41.glDisableClientState(GL41.GL_NORMAL_ARRAY)
-
-                    else -> {}
-                }
-            }
+            offset += element.size
         }
+
+        val glMode = when (drawBuffer.mode) {
+            DrawerMode.TRIANGLES -> GL_TRIANGLES
+            DrawerMode.LINES -> GL_LINES
+            DrawerMode.TRIANGLE_STRIP -> GL_TRIANGLE_STRIP
+            DrawerMode.LINE_STRIP -> GL_LINE_STRIP
+            DrawerMode.TRIANGLE_FAN -> GL_TRIANGLE_FAN
+            DrawerMode.QUADS -> GL_QUADS
+
+            else -> GL_TRIANGLES
+        }
+
+        glDrawArrays(glMode, 0, drawBuffer.vertexCount)
+
+        for (i in drawBuffer.format.elements.indices) {
+            glDisableVertexAttribArray(i)
+        }
+
+        glBindVertexArray(0)
+
+        glDeleteVertexArrays(vao)
     }
 
 }

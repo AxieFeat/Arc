@@ -4,6 +4,7 @@ import arc.graphics.DrawBuffer
 import arc.graphics.Drawer
 import arc.graphics.DrawerMode
 import arc.graphics.vertex.VertexFormat
+import arc.shader.ShaderInstance
 
 internal object GlDrawer : Drawer {
 

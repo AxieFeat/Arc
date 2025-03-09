@@ -3,6 +3,7 @@ package arc.gl.shader
 import arc.assets.shader.FragmentShader
 import arc.assets.shader.ShaderData
 import arc.assets.shader.VertexShader
+import arc.gl.graphics.GlRenderSystem
 import arc.shader.ShaderInstance
 import org.lwjgl.opengl.GL41
 
@@ -26,6 +27,7 @@ internal data class GlShaderInstance(
 
     override fun bind() {
         GL41.glUseProgram(id)
+        GlRenderSystem.shader = this
     }
 
     override fun unbind() {

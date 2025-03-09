@@ -6,6 +6,8 @@ import arc.graphics.vertex.*
 import arc.util.Color
 import java.lang.Float.floatToRawIntBits
 import java.nio.*
+import org.lwjgl.opengl.GL41.*
+import org.lwjgl.system.MemoryUtil
 
 internal data class GlDrawBuffer(
     override var mode: DrawerMode,
@@ -13,7 +15,8 @@ internal data class GlDrawBuffer(
     override val bufferSize: Int,
 ) : DrawBuffer {
 
-    var byteBuffer: ByteBuffer = GLAllocation.createDirectByteBuffer(bufferSize * 4)
+    var vbo: Int = glGenBuffers()
+    private var byteBuffer: ByteBuffer = MemoryUtil.memAlloc(bufferSize * 4)
     private var rawIntBuffer: IntBuffer = byteBuffer.asIntBuffer()
     private var rawShortBuffer: ShortBuffer = byteBuffer.asShortBuffer()
     private var rawFloatBuffer: FloatBuffer = byteBuffer.asFloatBuffer()
@@ -29,17 +32,28 @@ internal data class GlDrawBuffer(
 
     override var isEnded: Boolean = false
 
+    init {
+        glBindBuffer(GL_ARRAY_BUFFER, vbo)
+        glBufferData(GL_ARRAY_BUFFER, bufferSize * 4L, GL_DYNAMIC_DRAW)
+        glBindBuffer(GL_ARRAY_BUFFER, 0)
+    }
+
     override fun end() {
         endVertex()
 
         byteBuffer.position(0)
         byteBuffer.limit(this.bufferSize * 4)
 
+        // Загружаем данные в VBO
+        glBindBuffer(GL_ARRAY_BUFFER, vbo)
+        glBufferSubData(GL_ARRAY_BUFFER, 0, byteBuffer)
+        glBindBuffer(GL_ARRAY_BUFFER, 0)
+
         isEnded = true
     }
 
     override fun addVertex(x: Float, y: Float, z: Float): GlDrawBuffer {
-        if(isEnded) return this
+        if (isEnded) return this
 
         endVertex()
 
@@ -77,7 +91,7 @@ internal data class GlDrawBuffer(
     }
 
     override fun setColor(red: Int, green: Int, blue: Int, alpha: Int): GlDrawBuffer {
-        if(isEnded) return this
+        if (isEnded) return this
         if (this.noColor) return this
 
         val i: Int =
@@ -91,41 +105,22 @@ internal data class GlDrawBuffer(
                 byteBuffer.putFloat(i + 12, alpha.toFloat() / 255.0f)
             }
 
-            VertexType.UINT, VertexType.INT -> {
-                byteBuffer.putFloat(i, red.toFloat())
-                byteBuffer.putFloat(i + 4, green.toFloat())
-                byteBuffer.putFloat(i + 8, blue.toFloat())
-                byteBuffer.putFloat(i + 12, alpha.toFloat())
+            VertexType.UBYTE, VertexType.BYTE -> {
+                byteBuffer.put(i, red.toByte())
+                byteBuffer.put(i + 1, green.toByte())
+                byteBuffer.put(i + 2, blue.toByte())
+                byteBuffer.put(i + 3, alpha.toByte())
             }
 
-            VertexType.USHORT, VertexType.SHORT -> {
-                byteBuffer.putShort(i, red.toShort())
-                byteBuffer.putShort(i + 2, green.toShort())
-                byteBuffer.putShort(i + 4, blue.toShort())
-                byteBuffer.putShort(i + 6, alpha.toShort())
-            }
-
-            VertexType.UBYTE, VertexType.BYTE ->
-                if (ByteOrder.nativeOrder() == ByteOrder.LITTLE_ENDIAN) {
-                    byteBuffer.put(i, red.toByte())
-                    byteBuffer.put(i + 1, green.toByte())
-                    byteBuffer.put(i + 2, blue.toByte())
-                    byteBuffer.put(i + 3, alpha.toByte())
-                } else {
-                    byteBuffer.put(i, alpha.toByte())
-                    byteBuffer.put(i + 1, blue.toByte())
-                    byteBuffer.put(i + 2, green.toByte())
-                    byteBuffer.put(i + 3, red.toByte())
-                }
+            else -> {}
         }
 
         this.nextVertexFormatIndex()
-
         return this
     }
 
     override fun setColor(color: Color): GlDrawBuffer {
-        if(isEnded) return this
+        if (isEnded) return this
 
         return setColor(
             color.red,
@@ -136,65 +131,25 @@ internal data class GlDrawBuffer(
     }
 
     override fun noColor(): VertexConsumer {
-        if(isEnded) return this
+        if (isEnded) return this
 
         noColor = true
         return this
     }
 
-    override fun setTexture(u: Int, v: Int): GlDrawBuffer {
-        if(isEnded) return this
-
-        val i: Int =
-            this.vertexCount * this.format.nextOffset + this.format.getOffset(this.vertexFormatIndex)
-
-        when (vertexFormatElement.type) {
-            VertexType.FLOAT -> {
-                byteBuffer.putFloat(i, u.toFloat())
-                byteBuffer.putFloat(i + 4, v.toFloat())
-            }
-
-            VertexType.UINT, VertexType.INT -> {
-                byteBuffer.putInt(i, u)
-                byteBuffer.putInt(i + 4, v)
-            }
-
-            VertexType.USHORT, VertexType.SHORT -> {
-                byteBuffer.putShort(i, (v).toShort())
-                byteBuffer.putShort(i + 2, (u).toShort())
-            }
-
-            VertexType.UBYTE, VertexType.BYTE -> {
-                byteBuffer.put(i, (v).toByte())
-                byteBuffer.put(i + 1, (u).toByte())
-            }
-        }
-
-        this.nextVertexFormatIndex()
+    override fun setTexture(u: Int, v: Int): VertexConsumer {
         return this
     }
 
-    override fun setNormal(x: Float, y: Float, z: Float): GlDrawBuffer {
-        if(isEnded) return this
-
-        val i = (x * 127.0f).toInt() and 255
-        val j = (y * 127.0f).toInt() and 255
-        val k = (z * 127.0f).toInt() and 255
-        val l = i or (j shl 8) or (k shl 16)
-
-        val i1: Int = this.format.nextOffset shr 2
-        val j1: Int = (this.vertexCount - 4) * i1 + this.format.normalElementOffset / 4
-
-        rawIntBuffer.put(j1, l)
-        rawIntBuffer.put(j1 + i1, l)
-        rawIntBuffer.put(j1 + i1 * 2, l)
-        rawIntBuffer.put(j1 + i1 * 3, l)
-
+    override fun setNormal(x: Float, y: Float, z: Float): VertexConsumer {
+        this.xOffset = x
+        this.yOffset = y
+        this.zOffset = z
         return this
     }
 
     override fun setTranslation(x: Float, y: Float, z: Float): GlDrawBuffer {
-        if(isEnded) return this
+        if (isEnded) return this
 
         this.xOffset = x
         this.yOffset = y
@@ -204,23 +159,23 @@ internal data class GlDrawBuffer(
     }
 
     private fun growBuffer(size: Int) {
-        if(isEnded) return
+        if (isEnded) return
 
         if (size > rawIntBuffer.remaining()) {
-            val i = byteBuffer.capacity()
-            val j = i % 2097152
-            val k = j + (((rawIntBuffer.position() + size) * 4 - j) / 2097152 + 1) * 2097152
-            val l = rawIntBuffer.position()
-            val bytebuffer = GLAllocation.createDirectByteBuffer(k)
+            val newCapacity = byteBuffer.capacity() * 2
+            val newBuffer = MemoryUtil.memAlloc(newCapacity)
             byteBuffer.position(0)
-            bytebuffer.put(this.byteBuffer)
-            bytebuffer.rewind()
-            this.byteBuffer = bytebuffer
-            this.rawFloatBuffer = byteBuffer.asFloatBuffer().asReadOnlyBuffer()
-            this.rawIntBuffer = byteBuffer.asIntBuffer()
-            rawIntBuffer.position(l)
-            this.rawShortBuffer = byteBuffer.asShortBuffer()
-            rawShortBuffer.position(l shl 1)
+            newBuffer.put(byteBuffer)
+            newBuffer.rewind()
+            byteBuffer = newBuffer
+            rawFloatBuffer = byteBuffer.asFloatBuffer()
+            rawIntBuffer = byteBuffer.asIntBuffer()
+            rawShortBuffer = byteBuffer.asShortBuffer()
+
+            glBindBuffer(GL_ARRAY_BUFFER, vbo)
+            glBufferData(GL_ARRAY_BUFFER, newCapacity.toLong(), GL_DYNAMIC_DRAW)
+            glBufferSubData(GL_ARRAY_BUFFER, 0, byteBuffer)
+            glBindBuffer(GL_ARRAY_BUFFER, 0)
         }
     }
 
@@ -231,14 +186,14 @@ internal data class GlDrawBuffer(
     }
 
     private fun endVertex() {
-        if(isEnded) return
+        if (isEnded) return
 
         vertexCount++
         growBuffer(this.format.nextOffset / 4)
     }
 
     private fun nextVertexFormatIndex() {
-        if(isEnded) return
+        if (isEnded) return
 
         this.vertexFormatIndex++
         this.vertexFormatIndex %= this.format.elements.size
