@@ -1,6 +1,5 @@
 package arc.gl.graphics
 
-import arc.graphics.DrawerMode
 import arc.graphics.vertex.VertexType
 import org.lwjgl.opengl.GL11.GL_FLOAT
 import org.lwjgl.opengl.GL15.GL_ARRAY_BUFFER
@@ -36,18 +35,7 @@ internal object GlVertexUploader {
             offset += element.size
         }
 
-        val glMode = when (drawBuffer.mode) {
-            DrawerMode.TRIANGLES -> GL_TRIANGLES
-            DrawerMode.LINES -> GL_LINES
-            DrawerMode.TRIANGLE_STRIP -> GL_TRIANGLE_STRIP
-            DrawerMode.LINE_STRIP -> GL_LINE_STRIP
-            DrawerMode.TRIANGLE_FAN -> GL_TRIANGLE_FAN
-            DrawerMode.QUADS -> GL_QUADS
-
-            else -> GL_TRIANGLES
-        }
-
-        glDrawArrays(glMode, 0, drawBuffer.vertexCount)
+        glDrawArrays(drawBuffer.mode.id, 0, drawBuffer.vertexCount)
 
         for (i in drawBuffer.format.elements.indices) {
             glDisableVertexAttribArray(i)
