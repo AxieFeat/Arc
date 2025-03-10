@@ -2,6 +2,7 @@ package arc.graphics
 
 import arc.Application
 import arc.OS
+import arc.util.Timer
 import org.lwjgl.glfw.GLFW
 
 @Suppress("LeakingThis")
@@ -39,7 +40,6 @@ abstract class AbstractScene(
             this.fps = this.fpsCounter
             this.debugUpdateTime += 1000L
             this.fpsCounter = 0
-            println("FPS: $fps")
         }
     }
 

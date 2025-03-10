@@ -1,4 +1,4 @@
-package arc.graphics
+package arc.util
 
 import arc.OS
 
