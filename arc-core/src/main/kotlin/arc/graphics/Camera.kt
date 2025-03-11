@@ -4,7 +4,6 @@ import arc.Arc
 import arc.annotations.MutableType
 import arc.annotations.TypeFactory
 import arc.math.Point3d
-import arc.math.Ray
 import org.jetbrains.annotations.ApiStatus
 import org.joml.Matrix4f
 import org.joml.Quaternionf

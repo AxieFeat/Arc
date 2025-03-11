@@ -30,7 +30,7 @@ abstract class AbstractScene(
             GLFW.glfwSetInputMode(
                 application.window.handle,
                 GLFW.GLFW_CURSOR,
-                if (field) GLFW.GLFW_CURSOR_NORMAL else GLFW.GLFW_CURSOR_HIDDEN
+                if (field) GLFW.GLFW_CURSOR_NORMAL else GLFW.GLFW_CURSOR_DISABLED
             )
         }
 

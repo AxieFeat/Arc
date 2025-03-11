@@ -1,8 +1,8 @@
 package arc.input.mouse
 
 import arc.input.*
-import arc.input.ArcBindingProcessor
 import arc.math.Point2d
+import arc.math.Vec2f
 import arc.window.Window
 import org.lwjgl.glfw.GLFW
 
@@ -10,7 +10,9 @@ internal object ArcMouseInput : MouseInput {
 
     lateinit var window: Window
     override val bindingProcessor: BindingProcessor = ArcBindingProcessor()
+    override var previousPosition: Point2d = Point2d.ZERO
     override var position: Point2d = Point2d.ZERO
+    override var displayVec: Vec2f = Vec2f.ZERO
 
     override fun isPressed(key: KeyCode): Boolean {
         if(key.keyType != KeyType.MOUSE) return false
@@ -34,6 +36,16 @@ internal object ArcMouseInput : MouseInput {
         }
 
         return false
+    }
+
+    fun positionUpdate(x: Double, y: Double) {
+        previousPosition = Point2d.of(position.x, position.y)
+
+        position.x = x
+        position.y = y
+
+        displayVec.y = (position.x - previousPosition.x).toFloat()
+        displayVec.x = (position.y - previousPosition.y).toFloat()
     }
 
     fun keyUpdate(key: KeyCode, pressed: Boolean) {

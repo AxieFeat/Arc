@@ -21,7 +21,7 @@ interface Vec2f : Vector<Vec2f> {
      * as part of operations involving the vector.
      */
     @get:JvmName("x")
-    val x: Float
+    var x: Float
 
     /**
      * The Y component of the 2D vector.
@@ -30,7 +30,7 @@ interface Vec2f : Vector<Vec2f> {
      * as part of operations involving the vector.
      */
     @get:JvmName("y")
-    val y: Float
+    var y: Float
 
     @TypeFactory
     @ApiStatus.Internal

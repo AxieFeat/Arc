@@ -1,13 +1,18 @@
 package arc.texture
 
+import arc.annotations.ImmutableType
+
 /**
  * This interface represents general texture.
  */
+@Suppress("INAPPLICABLE_JVM_NAME")
+@ImmutableType
 interface TextureLike {
 
     /**
      * ID of this texture in render system.
      */
+    @get:JvmName("id")
     val id: Int
 
     /**

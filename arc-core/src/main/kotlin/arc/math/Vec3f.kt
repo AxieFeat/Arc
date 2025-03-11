@@ -21,7 +21,7 @@ interface Vec3f : Vector<Vec3f> {
      * as part of operations involving the vector.
      */
     @get:JvmName("x")
-    val x: Float
+    var x: Float
 
     /**
      * The Y component of the 3D vector.
@@ -30,7 +30,7 @@ interface Vec3f : Vector<Vec3f> {
      * as part of operations involving the vector.
      */
     @get:JvmName("y")
-    val y: Float
+    var y: Float
 
     /**
      * The Z component of the 3D vector.
@@ -39,7 +39,7 @@ interface Vec3f : Vector<Vec3f> {
      * in operations involving 3D transformations or representations.
      */
     @get:JvmName("z")
-    val z: Float
+    var z: Float
 
     @TypeFactory
     @ApiStatus.Internal

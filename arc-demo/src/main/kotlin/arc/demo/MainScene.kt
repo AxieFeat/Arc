@@ -10,8 +10,9 @@ import arc.graphics.DrawBuffer
 import arc.graphics.DrawerMode
 import arc.graphics.vertex.VertexFormat
 import arc.graphics.vertex.VertexFormatElement
-import arc.math.Point3d
+import arc.input.KeyCode
 import arc.shader.ShaderInstance
+import org.joml.Vector3f
 
 class MainScene(
     private val application: Application
@@ -30,14 +31,13 @@ class MainScene(
 
     private val buffer: DrawBuffer = createCubeBuffer()
 
-    private var rotationAngle = 0f
+    private val sensitivity = 0.1f
+    private val speed = 0.02f
 
     init {
-        camera.fov = 40f
-        camera.position = Point3d.of(
-            1.5, 2.5, 2.0,
-        )
-        camera.lookAt(Point3d.ZERO)
+        showCursor = false
+
+        camera.fov = 65f
 
         camera.update()
     }
@@ -46,10 +46,7 @@ class MainScene(
         if(isSkipRender) return
         updateDelta()
         camera.updateAspect(application.window.height, application.window.width)
-
-        rotationAngle += delta * 0.001f
-        camera.rotate(-rotationAngle, rotationAngle, -rotationAngle)
-        camera.update()
+        handleInput()
 
 //        GL11.glPolygonMode(GL11.GL_FRONT_AND_BACK, GL11.GL_LINE)
 
@@ -65,6 +62,60 @@ class MainScene(
 
         calculateFps()
     }
+
+    private fun handleInput() {
+        val front = Vector3f(0f, 0f, -1f).rotate(camera.rotation).normalize()
+        val right = Vector3f(1f, 0f, 0f).rotate(camera.rotation).normalize()
+        val up = Vector3f(0f, 1f, 0f).rotate(camera.rotation).normalize()
+
+        var newX = camera.position.x
+        var newY = camera.position.y
+        var newZ = camera.position.z
+
+        if (application.keyboard.isPressed(KeyCode.KEY_W)) {
+            newX += front.x * speed
+            newY += front.y * speed
+            newZ += front.z * speed
+        }
+        if (application.keyboard.isPressed(KeyCode.KEY_S)) {
+            newX -= front.x * speed
+            newY -= front.y * speed
+            newZ -= front.z * speed
+        }
+        if (application.keyboard.isPressed(KeyCode.KEY_A)) {
+            newX -= right.x * speed
+            newY -= right.y * speed
+            newZ -= right.z * speed
+        }
+        if (application.keyboard.isPressed(KeyCode.KEY_D)) {
+            newX += right.x * speed
+            newY += right.y * speed
+            newZ += right.z * speed
+        }
+        if(application.keyboard.isPressed(KeyCode.KEY_SPACE)) {
+            newX += up.x * speed
+            newY += up.y * speed
+            newZ += up.z * speed
+        }
+        if(application.keyboard.isPressed(KeyCode.KEY_LSHIFT)) {
+            newX -= up.x * speed
+            newY -= up.y * speed
+            newZ -= up.z * speed
+        }
+
+        camera.position.x = newX
+        camera.position.y = newY
+        camera.position.z = newZ
+
+        camera.rotate(
+            -application.mouse.displayVec.x * sensitivity,
+            -application.mouse.displayVec.y * sensitivity,
+            0f
+        )
+
+        camera.update()
+    }
+
 
     private fun createCubeBuffer(): DrawBuffer {
         val buffer = drawer.begin(DrawerMode.TRIANGLES, positionColor)

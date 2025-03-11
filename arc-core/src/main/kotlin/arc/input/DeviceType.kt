@@ -5,6 +5,5 @@ package arc.input
  */
 enum class DeviceType {
     MOUSE,
-    KEYBOARD,
-    CONTROLLER
+    KEYBOARD
 }

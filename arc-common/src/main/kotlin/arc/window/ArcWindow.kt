@@ -116,8 +116,7 @@ internal class ArcWindow(
     private fun onCursorMove(handle: Long, x: Double, y: Double) {
         handler.cursorMove(x, y)
 
-        ArcMouseInput.position.x = x
-        ArcMouseInput.position.y = y
+        ArcMouseInput.positionUpdate(x, y)
     }
 
     private fun onScroll(handle: Long, xOffset: Double, yOffset: Double) {
