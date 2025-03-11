@@ -77,8 +77,6 @@ internal class ArcWindow(
         glfwGetFramebufferSize(handle, arrWidth, arrHeight)
         width = arrWidth[0]
         height = arrHeight[0]
-
-        glfwSwapInterval(0)
     }
 
     override fun close() {

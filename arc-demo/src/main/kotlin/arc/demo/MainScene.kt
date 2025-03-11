@@ -48,7 +48,7 @@ class MainScene(
         updateDelta()
         camera.updateAspect(application.window.height, application.window.width)
 
-        rotationAngle += delta * 0.000001f
+        rotationAngle += delta * 0.001f
         camera.rotate(rotationAngle, rotationAngle, rotationAngle)
         camera.update()
 
