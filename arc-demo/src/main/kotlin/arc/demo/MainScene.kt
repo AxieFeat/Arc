@@ -12,7 +12,6 @@ import arc.graphics.vertex.VertexFormat
 import arc.graphics.vertex.VertexFormatElement
 import arc.math.Point3d
 import arc.shader.ShaderInstance
-import org.lwjgl.opengl.GL11
 
 class MainScene(
     private val application: Application
@@ -49,10 +48,10 @@ class MainScene(
         camera.updateAspect(application.window.height, application.window.width)
 
         rotationAngle += delta * 0.001f
-        camera.rotate(rotationAngle, rotationAngle, rotationAngle)
+        camera.rotate(-rotationAngle, rotationAngle, -rotationAngle)
         camera.update()
 
-        GL11.glPolygonMode(GL11.GL_FRONT_AND_BACK, GL11.GL_LINE)
+//        GL11.glPolygonMode(GL11.GL_FRONT_AND_BACK, GL11.GL_LINE)
 
         shader.bind()
 
@@ -62,7 +61,7 @@ class MainScene(
 
         shader.unbind()
 
-        GL11.glPolygonMode(GL11.GL_FRONT_AND_BACK, GL11.GL_FILL)
+//        GL11.glPolygonMode(GL11.GL_FRONT_AND_BACK, GL11.GL_FILL)
 
         calculateFps()
     }

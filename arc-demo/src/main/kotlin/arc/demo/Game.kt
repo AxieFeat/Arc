@@ -71,7 +71,7 @@ class Game : WindowHandler {
 
             begin("scene")
 
-            scene.render() // Render our scene.
+            renderSystem.scene.render() // Render our scene.
 
             endAndBegin("endFrame")
             renderSystem.endFrame()
