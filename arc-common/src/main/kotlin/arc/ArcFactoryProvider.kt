@@ -9,6 +9,8 @@ import arc.assets.MutableAssetStack
 import arc.assets.SoundAsset
 import arc.assets.shader.FragmentShader
 import arc.assets.shader.VertexShader
+import arc.graphics.ArcCamera
+import arc.graphics.Camera
 import arc.graphics.vertex.ArcVertexFormat
 import arc.graphics.vertex.ArcVertexFormatElement
 import arc.graphics.vertex.VertexFormat
@@ -51,6 +53,7 @@ object ArcFactoryProvider : FactoryProvider {
         register<Point3d.Factory>(ArcPoint3d.Factory)
 
         register<AABB.Factory>(ArcAABB.Factory)
+        register<Ray.Factory>(ArcRay.Factory)
 
         // Vectors
         register<Vec2f.Factory>(ArcVec2f.Factory)
@@ -61,6 +64,7 @@ object ArcFactoryProvider : FactoryProvider {
         register<Window.Factory>(ArcWindow.Factory)
         register<Configuration.Factory>(ArcConfiguration.Factory)
         register<Profiler.Factory>(ArcProfiler.Factory)
+        register<Camera.Factory>(ArcCamera.Factory)
 
         register<VertexFormat.BuilderFactory>(ArcVertexFormat.BuilderFactory)
         register<VertexFormatElement.Factory>(ArcVertexFormatElement.Factory)

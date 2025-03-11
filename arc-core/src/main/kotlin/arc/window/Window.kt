@@ -106,6 +106,8 @@ interface Window {
      */
     var isHide: Boolean
 
+    var isVsync: Boolean
+
     /**
      * Resizes the window to the specified width and height.
      *

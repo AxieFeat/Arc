@@ -7,7 +7,6 @@ import arc.assets.shader.ShaderData
 import arc.gl.asset.GlTextureAsset
 import arc.gl.asset.GlShaderData
 import arc.gl.graphics.GlDrawBuffer
-import arc.gl.graphics.GlScene
 import arc.gl.shader.GlFrameBuffer
 import arc.gl.shader.GlShaderInstance
 import arc.gl.texture.GlTexture
@@ -34,7 +33,6 @@ internal object GlFactoryProvider {
         provider.register<DrawBuffer.Factory>(GlDrawBuffer.Factory)
         provider.register<ShaderData.Factory>(GlShaderData.Factory)
 
-        provider.register<Scene.Factory>(GlScene.Factory)
         provider.register<FrameBuffer.Factory>(GlFrameBuffer.Factory)
     }
 }

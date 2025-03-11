@@ -27,13 +27,20 @@ internal class ArcWindow(
     override var isResizable: Boolean = true
         set(value) {
             field = value
-            glfwWindowHint(GLFW_RESIZABLE, if(isResizable) GLFW_TRUE else GLFW_FALSE)
+            glfwWindowHint(GLFW_RESIZABLE, if (isResizable) GLFW_TRUE else GLFW_FALSE)
         }
 
     override var isHide: Boolean = false
         set(value) {
             field = value
-            glfwWindowHint(GLFW_VISIBLE, if(value) GLFW_FALSE else GLFW_TRUE)
+            glfwWindowHint(GLFW_VISIBLE, if (value) GLFW_FALSE else GLFW_TRUE)
+        }
+
+    override var isVsync: Boolean = true
+        set(value) {
+            field = value
+
+            glfwSwapInterval(if(value) GLFW_TRUE else GLFW_FALSE)
         }
 
     override fun resize(width: Int, height: Int) {
@@ -46,8 +53,8 @@ internal class ArcWindow(
         check(glfwInit()) { "Unable to initialize GLFW" }
 
         glfwDefaultWindowHints()
-        glfwWindowHint(GLFW_VISIBLE, if(isHide) GLFW_FALSE else GLFW_TRUE)
-        glfwWindowHint(GLFW_RESIZABLE, if(isResizable) GLFW_TRUE else GLFW_FALSE)
+        glfwWindowHint(GLFW_VISIBLE, if (isHide) GLFW_FALSE else GLFW_TRUE)
+        glfwWindowHint(GLFW_RESIZABLE, if (isResizable) GLFW_TRUE else GLFW_FALSE)
 
         glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4)
         glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1)
@@ -135,7 +142,7 @@ internal class ArcWindow(
     }
 
     private fun onEnter(handle: Long, entered: Boolean) {
-        if(entered) handler.cursorEntered() else handler.cursorLeaved()
+        if (entered) handler.cursorEntered() else handler.cursorLeaved()
     }
 
     object Factory : Window.Factory {

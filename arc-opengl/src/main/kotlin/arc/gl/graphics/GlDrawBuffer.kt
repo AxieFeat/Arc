@@ -55,8 +55,6 @@ internal data class GlDrawBuffer(
     override fun addVertex(x: Float, y: Float, z: Float): GlDrawBuffer {
         if (isEnded) return this
 
-        endVertex()
-
         val i: Int =
             this.vertexCount * this.format.nextOffset + this.format.getOffset(this.vertexFormatIndex)
 
@@ -87,6 +85,7 @@ internal data class GlDrawBuffer(
         }
 
         this.nextVertexFormatIndex()
+        endVertex()
         return this
     }
 
