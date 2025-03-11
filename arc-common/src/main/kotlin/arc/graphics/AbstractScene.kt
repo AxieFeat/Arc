@@ -5,7 +5,6 @@ import arc.OS
 import arc.util.Timer
 import org.lwjgl.glfw.GLFW
 
-@Suppress("LeakingThis")
 abstract class AbstractScene(
     private val application: Application,
     tps: Float,
@@ -19,7 +18,8 @@ abstract class AbstractScene(
     override val camera: Camera = Camera.create(45f, application.window.height.toFloat(), application.window.width.toFloat())
     override var fps: Int = 0
     override var delta: Float = 0f
-    override val inUse: Boolean = application.renderSystem.scene == this
+    override val inUse: Boolean
+        get() = application.renderSystem.scene == this
 
     override var isSkipRender: Boolean = false
 
