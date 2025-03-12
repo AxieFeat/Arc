@@ -5,6 +5,7 @@ import arc.assets.TextureAsset
 import arc.assets.shader.FragmentShader
 import arc.assets.shader.ShaderData
 import arc.assets.shader.VertexShader
+import arc.demo.shader.DefaultUniformProvider
 import arc.files.classpath
 import arc.graphics.AbstractScene
 import arc.graphics.DrawBuffer
@@ -15,7 +16,6 @@ import arc.input.KeyCode
 import arc.shader.ShaderInstance
 import arc.texture.Texture
 import org.joml.Vector3f
-import org.lwjgl.opengl.GL11
 
 class MainScene(
     private val application: Application
@@ -31,11 +31,23 @@ class MainScene(
         .add(VertexFormatElement.UV0)
         .build()
 
-    private val shader = ShaderInstance.of(
+    private val positionColorShader = ShaderInstance.of(
         VertexShader.from(classpath("arc/shader/position_color/position_color.vsh")),
         FragmentShader.from(classpath("arc/shader/position_color/position_color.fsh")),
         ShaderData.from(classpath("arc/shader/position_color/position_color.json")),
-    ).also { it.compileShaders() }
+    ).also {
+        it.compileShaders()
+        it.addProvider(DefaultUniformProvider)
+    }
+
+    private val positionTexShader = ShaderInstance.of(
+        VertexShader.from(classpath("arc/shader/position_tex/position_tex.vsh")),
+        FragmentShader.from(classpath("arc/shader/position_tex/position_tex.fsh")),
+        ShaderData.from(classpath("arc/shader/position_tex/position_tex.json")),
+    ).also {
+        it.compileShaders()
+        it.addProvider(DefaultUniformProvider)
+    }
 
     private val texture = Texture.from(
         TextureAsset.from(
@@ -43,7 +55,7 @@ class MainScene(
         )
     )
 
-    private val buffer: DrawBuffer = createCubeBuffer()
+    private val buffer: DrawBuffer = createTexturedCubeBuffer()
 
     private val sensitivity = 0.1f
     private val speed = 0.02f
@@ -64,15 +76,15 @@ class MainScene(
 
 //        GL11.glPolygonMode(GL11.GL_FRONT_AND_BACK, GL11.GL_LINE)
 
-        shader.bind()
         texture.bind()
+        positionTexShader.bind()
 
         application.renderSystem.enableDepthTest()
         drawer.draw(buffer)
         application.renderSystem.disableDepthTest()
 
         texture.unbind()
-        shader.unbind()
+        positionTexShader.unbind()
 
 //        GL11.glPolygonMode(GL11.GL_FRONT_AND_BACK, GL11.GL_FILL)
 
@@ -132,6 +144,60 @@ class MainScene(
         camera.update()
     }
 
+    private fun createTexturedCubeBuffer(): DrawBuffer {
+        val buffer = drawer.begin(DrawerMode.TRIANGLES, positionTex)
+
+        // UV-координаты для каждой грани
+        val uvSides = floatArrayOf(0f, 0f,  0.5f, 0f,  0.5f, 0.5f,  0f, 0.5f) // Боковые
+        val uvBottom = floatArrayOf(0.5f, 0f,  1f, 0f,  1f, 0.5f,  0.5f, 0.5f) // Нижняя
+        val uvTop = floatArrayOf(0f, 0.5f,  0.5f, 0.5f,  0.5f, 1f,  0f, 1f) // Верхняя
+
+        val positions = floatArrayOf(
+            // Передняя грань
+            -0.5f, -0.5f,  0.5f,   // 0
+            0.5f, -0.5f,  0.5f,   // 1
+            0.5f,  0.5f,  0.5f,   // 2
+            -0.5f,  0.5f,  0.5f,   // 3
+
+            // Задняя грань
+            -0.5f, -0.5f, -0.5f,   // 4
+            0.5f, -0.5f, -0.5f,   // 5
+            0.5f,  0.5f, -0.5f,   // 6
+            -0.5f,  0.5f, -0.5f    // 7
+        )
+
+        val indices = intArrayOf(
+            0, 1, 2, 2, 3, 0,  // Передняя (боковая)
+            5, 4, 7, 7, 6, 5,  // Задняя (боковая)
+            4, 0, 3, 3, 7, 4,  // Левая (боковая)
+            1, 5, 6, 6, 2, 1,  // Правая (боковая)
+            3, 2, 6, 6, 7, 3,  // Верх
+            4, 5, 1, 1, 0, 4   // Низ
+        )
+
+        for (i in indices.indices step 6) {
+            val uv = when (i / 6) {
+                0, 1, 2, 3 -> uvSides  // Боковые стороны
+                4 -> uvTop              // Верхняя
+                5 -> uvBottom           // Нижняя
+                else -> uvSides
+            }
+
+            for (j in 0 until 6) {
+                val index = indices[i + j]
+                val u = uv[(j % 4) * 2]
+                val v = uv[(j % 4) * 2 + 1]
+
+                buffer.addVertex(
+                    positions[index * 3], positions[index * 3 + 1], positions[index * 3 + 2]
+                )
+                    .setTexture(u, v)
+            }
+        }
+
+        buffer.end()
+        return buffer
+    }
 
     private fun createCubeBuffer(): DrawBuffer {
         val buffer = drawer.begin(DrawerMode.TRIANGLES, positionColor)
@@ -173,7 +239,6 @@ class MainScene(
                 buffer
                     .addVertex(positions[index * 3], positions[index * 3 + 1], positions[index * 3 + 2])
                     .setColor(color[0], color[1], color[2], color[3])
-//                    .setTexture(0, 0)
             }
         }
 

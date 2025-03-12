@@ -7,6 +7,10 @@ import arc.assets.shader.FragmentShader
 import arc.assets.shader.ShaderData
 import arc.assets.shader.VertexShader
 import org.jetbrains.annotations.ApiStatus
+import org.joml.Matrix4f
+import org.joml.Vector2f
+import org.joml.Vector3f
+import org.joml.Vector4f
 
 /**
  * Represents an instance of a shader program that combines a vertex shader and a fragment shader.
@@ -50,12 +54,19 @@ interface ShaderInstance {
     @get:JvmName("uniforms")
     val data: ShaderData
 
-    /**
-     * Configure this instance with uniform provider.
-     *
-     * @param provider Provider for configuring.
-     */
-    fun configure(provider: UniformProvider)
+    fun addProvider(provider: UniformProvider)
+
+    fun setUniform(name: String, value: Int)
+
+    fun setUniform(name: String, value: Float)
+
+    fun setUniform(name: String, value: Matrix4f)
+
+    fun setUniform(name: String, value: Vector4f)
+
+    fun setUniform(name: String, value: Vector3f)
+
+    fun setUniform(name: String, value: Vector2f)
 
     /**
      * Compiles the vertex and fragment shaders for this shader instance.

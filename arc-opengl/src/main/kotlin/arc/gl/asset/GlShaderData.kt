@@ -1,6 +1,7 @@
 package arc.gl.asset
 
 import arc.assets.shader.ShaderData
+import com.google.gson.JsonParser
 import java.io.File
 
 internal data class GlShaderData(
@@ -13,7 +14,15 @@ internal data class GlShaderData(
         }
     }
 
-    override val uniforms: List<String>
-        get() = TODO("Not yet implemented")
+    override val uniforms: List<String> = run {
+        if(!file.exists()) return@run emptyList()
+
+        val text = file.readText()
+
+        val jsonObject = JsonParser.parseString(text).asJsonObject
+
+        return@run jsonObject.getAsJsonArray("uniforms")
+            .map { it.asString }
+    }
 
 }

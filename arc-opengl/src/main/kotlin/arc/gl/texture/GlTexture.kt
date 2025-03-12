@@ -2,10 +2,12 @@ package arc.gl.texture
 
 import arc.assets.TextureAsset
 import arc.gl.graphics.GlRenderSystem
+import arc.texture.EmptyTexture
 import arc.texture.Texture
 import org.lwjgl.opengl.GL11
 import org.lwjgl.opengl.GL30
 import org.lwjgl.opengl.GL41
+import org.lwjgl.opengl.GL41.*
 import org.lwjgl.stb.STBImage
 import org.lwjgl.system.MemoryStack
 import java.nio.ByteBuffer
@@ -34,15 +36,17 @@ internal data class GlTexture(
     }
 
     override fun bind() {
-        GlRenderSystem.bindTexture(id)
+        glActiveTexture(GL_TEXTURE0)
+        glBindTexture(GL_TEXTURE_2D, id)
     }
 
     override fun unbind() {
-        GlRenderSystem.bindTexture(0)
+        glBindTexture(GL_TEXTURE_2D, 0)
+        GlRenderSystem.texture = EmptyTexture
     }
 
     override fun cleanup() {
-        GL41.glDeleteTextures(id)
+        glDeleteTextures(id)
     }
 
     object Factory : Texture.Factory {
@@ -55,8 +59,8 @@ internal data class GlTexture(
         private fun generateTexture(id: Int,width: Int, height: Int, buf: ByteBuffer) {
             GL11.glBindTexture(GL11.GL_TEXTURE_2D, id)
             GL11.glPixelStorei(GL11.GL_UNPACK_ALIGNMENT, 1)
-            GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_NEAREST)
-            GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_NEAREST)
+            GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR)
+            GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR)
             GL11.glTexImage2D(
                 GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA, width, height, 0,
                 GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, buf

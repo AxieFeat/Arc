@@ -16,7 +16,5 @@ fun main() {
         else -> GlApplication.preload()
     }
 
-    val game = Game()
-
-    game.start()
+    Game.start()
 }

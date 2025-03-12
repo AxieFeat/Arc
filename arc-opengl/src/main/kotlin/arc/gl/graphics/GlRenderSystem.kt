@@ -3,11 +3,14 @@ package arc.gl.graphics
 import arc.gl.GlApplication
 import arc.graphics.*
 import arc.shader.ShaderInstance
+import arc.texture.EmptyTexture
+import arc.texture.Texture
 import org.lwjgl.opengl.GL41.*
 
 internal object GlRenderSystem : RenderSystem {
 
     override var shader: ShaderInstance = EmptyShaderInstance
+    override var texture: Texture = EmptyTexture
 
     override var isDepthTestEnabled: Boolean = true
     override var isBlendEnabled: Boolean = true
@@ -21,8 +24,9 @@ internal object GlRenderSystem : RenderSystem {
         shader.bind()
     }
 
-    override fun bindTexture(id: Int) {
-        glBindTexture(GL_TEXTURE_2D, id)
+    override fun bindTexture(texture: Texture) {
+        texture.bind()
+        this.texture = texture
     }
 
     override fun beginFrame() {
@@ -35,6 +39,8 @@ internal object GlRenderSystem : RenderSystem {
     override fun endFrame() {
         shader.unbind()
         shader = EmptyShaderInstance
+        texture.unbind()
+        texture = EmptyTexture
         GlApplication.window.endFrame()
     }
 

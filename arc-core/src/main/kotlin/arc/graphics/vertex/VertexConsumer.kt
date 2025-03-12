@@ -58,7 +58,7 @@ interface VertexConsumer {
      *
      * @return Current instance of [VertexConsumer].
      */
-    fun setTexture(u: Int, v: Int): VertexConsumer
+    fun setTexture(u: Float, v: Float): VertexConsumer
 
     /**
      * Set offsets for current vertex.

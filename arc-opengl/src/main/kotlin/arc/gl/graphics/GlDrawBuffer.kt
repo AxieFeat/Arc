@@ -136,7 +136,7 @@ internal data class GlDrawBuffer(
         return this
     }
 
-    override fun setTexture(u: Int, v: Int): VertexConsumer {
+    override fun setTexture(u: Float, v: Float): VertexConsumer {
         if (isEnded) return this
 
         val i: Int =
@@ -144,23 +144,23 @@ internal data class GlDrawBuffer(
 
         when (vertexFormatElement.type) {
             VertexType.FLOAT -> {
-                byteBuffer.putFloat(i, u.toFloat())
-                byteBuffer.putFloat(i + 4, v.toFloat())
+                byteBuffer.putFloat(i, u)
+                byteBuffer.putFloat(i + 4, v)
             }
 
             VertexType.UINT, VertexType.INT -> {
-                byteBuffer.putInt(i, u)
-                byteBuffer.putInt(i + 4, v)
+                byteBuffer.putInt(i, u.toInt())
+                byteBuffer.putInt(i + 4, v.toInt())
             }
 
             VertexType.USHORT, VertexType.SHORT -> {
-                byteBuffer.putShort(i, v.toShort())
-                byteBuffer.putShort(i + 2, u.toShort())
+                byteBuffer.putShort(i, v.toInt().toShort())
+                byteBuffer.putShort(i + 2, u.toInt().toShort())
             }
 
             VertexType.UBYTE, VertexType.BYTE -> {
-                byteBuffer.put(i, v.toByte())
-                byteBuffer.put(i + 1, u.toByte())
+                byteBuffer.put(i, v.toInt().toByte())
+                byteBuffer.put(i + 1, u.toInt().toByte())
             }
         }
 

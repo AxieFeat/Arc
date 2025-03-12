@@ -30,6 +30,9 @@ interface RenderSystem {
     @get:JvmName("shader")
     val shader: ShaderInstance
 
+    @get:JvmName("texture")
+    val texture: Texture
+
     /**
      * Indicates whether depth testing is enabled in the rendering system.
      *
@@ -87,11 +90,8 @@ interface RenderSystem {
 
     /**
      * Binds the specified texture to the rendering system using the provided identifier.
-     *
-     * @param id The unique identifier to bind the texture to. This ID is used to reference
-     *           the texture in the rendering context.
      */
-    fun bindTexture(id: Int)
+    fun bindTexture(texture: Texture)
 
     /**
      * Initializes a new rendering frame by preparing the rendering system.

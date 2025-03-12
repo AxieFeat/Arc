@@ -25,9 +25,9 @@ import java.util.concurrent.TimeUnit
 /**
  * This own game main class.
  */
-class Game : WindowHandler {
+object Game : WindowHandler {
 
-    private val application: Application = Application.find()
+    val application: Application = Application.find()
     private val profiler: Profiler = Profiler.create().also { setProfilerContext(it) }
 
     fun start(configuration: Configuration = Configuration.create()) {
