@@ -12,7 +12,7 @@ import org.jetbrains.annotations.ApiStatus
  */
 @Suppress("INAPPLICABLE_JVM_NAME")
 @ImmutableType
-interface TextureAtlas {
+interface TextureAtlas : TextureLike {
 
     /**
      * Center of this texture.

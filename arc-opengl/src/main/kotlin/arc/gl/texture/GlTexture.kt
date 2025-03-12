@@ -15,7 +15,6 @@ internal data class GlTexture(
     override var id: Int = GL41.glGenTextures()
 
     init {
-        cleanup()
         val inputStream: InputStream = asset.file.inputStream()
 
         inputStream.use {

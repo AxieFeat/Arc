@@ -25,4 +25,9 @@ interface TextureLike {
      */
     fun unbind()
 
+    /**
+     * Clean resources of this texture.
+     */
+    fun cleanup()
+
 }
