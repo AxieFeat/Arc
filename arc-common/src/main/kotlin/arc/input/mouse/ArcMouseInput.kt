@@ -44,8 +44,8 @@ internal object ArcMouseInput : MouseInput {
         position.x = x
         position.y = y
 
-        displayVec.y = (position.x - previousPosition.x).toFloat()
         displayVec.x = (position.y - previousPosition.y).toFloat()
+        displayVec.y = (position.x - previousPosition.x).toFloat()
     }
 
     fun keyUpdate(key: KeyCode, pressed: Boolean) {

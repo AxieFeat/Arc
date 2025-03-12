@@ -4,10 +4,10 @@ import arc.graphics.DrawBuffer
 import arc.graphics.DrawerMode
 import arc.graphics.vertex.*
 import arc.util.Color
-import java.lang.Float.floatToRawIntBits
-import java.nio.*
 import org.lwjgl.opengl.GL41.*
 import org.lwjgl.system.MemoryUtil
+import java.lang.Float.floatToRawIntBits
+import java.nio.*
 
 internal data class GlDrawBuffer(
     override var mode: DrawerMode,
@@ -139,16 +139,78 @@ internal data class GlDrawBuffer(
     override fun setTexture(u: Int, v: Int): VertexConsumer {
         if (isEnded) return this
 
+        val i: Int =
+            this.vertexCount * this.format.nextOffset + this.format.getOffset(this.vertexFormatIndex)
+
+        when (vertexFormatElement.type) {
+            VertexType.FLOAT -> {
+                byteBuffer.putFloat(i, u.toFloat())
+                byteBuffer.putFloat(i + 4, v.toFloat())
+            }
+
+            VertexType.UINT, VertexType.INT -> {
+                byteBuffer.putInt(i, u)
+                byteBuffer.putInt(i + 4, v)
+            }
+
+            VertexType.USHORT, VertexType.SHORT -> {
+                byteBuffer.putShort(i, v.toShort())
+                byteBuffer.putShort(i + 2, u.toShort())
+            }
+
+            VertexType.UBYTE, VertexType.BYTE -> {
+                byteBuffer.put(i, v.toByte())
+                byteBuffer.put(i + 1, u.toByte())
+            }
+        }
+
+        this.nextVertexFormatIndex()
         return this
     }
 
-    override fun setTranslation(x: Float, y: Float, z: Float): GlDrawBuffer {
-        if (isEnded) return this
+    override fun setTranslation(x: Float, y: Float, z: Float): VertexConsumer {
+        if(isEnded) return this
 
         this.xOffset = x
         this.yOffset = y
         this.zOffset = z
 
+        return this
+    }
+
+    override fun setNormal(x: Float, y: Float, z: Float): GlDrawBuffer {
+        if (isEnded) return this
+
+        val i: Int =
+            this.vertexCount * this.format.nextOffset + this.format.getOffset(this.vertexFormatIndex)
+
+        when (vertexFormatElement.type) {
+            VertexType.FLOAT -> {
+                byteBuffer.putFloat(i, x)
+                byteBuffer.putFloat(i + 4, y)
+                byteBuffer.putFloat(i + 8, z)
+            }
+
+            VertexType.UINT, VertexType.INT -> {
+                byteBuffer.putInt(i, x.toInt())
+                byteBuffer.putInt(i + 4, y.toInt())
+                byteBuffer.putInt(i + 8, z.toInt())
+            }
+
+            VertexType.USHORT, VertexType.SHORT -> {
+                byteBuffer.putShort(i, (x.toInt() * Short.MAX_VALUE and UShort.MAX_VALUE.toInt()).toShort())
+                byteBuffer.putShort(i + 2, (y.toInt() * Short.MAX_VALUE and UShort.MAX_VALUE.toInt()).toShort())
+                byteBuffer.putShort(i + 4, (z.toInt() * Short.MAX_VALUE and UShort.MAX_VALUE.toInt()).toShort())
+            }
+
+            VertexType.UBYTE, VertexType.BYTE -> {
+                byteBuffer.put(i, (x.toInt() * Byte.MAX_VALUE and UByte.MAX_VALUE.toInt()).toByte())
+                byteBuffer.put(i + 1, (y.toInt() * Byte.MAX_VALUE and UByte.MAX_VALUE.toInt()).toByte())
+                byteBuffer.put(i + 2, (z.toInt() * Byte.MAX_VALUE and UByte.MAX_VALUE.toInt()).toByte())
+            }
+        }
+
+        this.nextVertexFormatIndex()
         return this
     }
 

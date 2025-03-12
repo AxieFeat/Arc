@@ -77,4 +77,6 @@ interface VertexConsumer {
      */
     fun setTranslation(x: Float, y: Float, z: Float): VertexConsumer
 
+    fun setNormal(x: Float, y: Float, z: Float): VertexConsumer
+
 }
