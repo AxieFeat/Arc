@@ -6,8 +6,7 @@ import arc.annotations.TypeFactory
 import org.jetbrains.annotations.ApiStatus
 
 /**
- * Represents a mutable stack of assets. This interface extends [AssetStack] to allow modification
- * of the asset collection, including adding and removing assets.
+ * Represents a mutable stack of assets.
  *
  * @param T The type of asset contained in the stack, which must implement the [Asset] interface.
  */

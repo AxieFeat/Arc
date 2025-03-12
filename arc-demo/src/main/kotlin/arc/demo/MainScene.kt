@@ -1,6 +1,7 @@
 package arc.demo
 
 import arc.Application
+import arc.assets.TextureAsset
 import arc.assets.shader.FragmentShader
 import arc.assets.shader.ShaderData
 import arc.assets.shader.VertexShader
@@ -12,7 +13,9 @@ import arc.graphics.vertex.VertexFormat
 import arc.graphics.vertex.VertexFormatElement
 import arc.input.KeyCode
 import arc.shader.ShaderInstance
+import arc.texture.Texture
 import org.joml.Vector3f
+import org.lwjgl.opengl.GL11
 
 class MainScene(
     private val application: Application
@@ -23,11 +26,22 @@ class MainScene(
         .add(VertexFormatElement.COLOR)
         .build()
 
+    private val positionTex = VertexFormat.builder()
+        .add(VertexFormatElement.POSITION)
+        .add(VertexFormatElement.UV0)
+        .build()
+
     private val shader = ShaderInstance.of(
         VertexShader.from(classpath("arc/shader/position_color/position_color.vsh")),
         FragmentShader.from(classpath("arc/shader/position_color/position_color.fsh")),
         ShaderData.from(classpath("arc/shader/position_color/position_color.json")),
     ).also { it.compileShaders() }
+
+    private val texture = Texture.from(
+        TextureAsset.from(
+            classpath("arc/texture/cube.png"),
+        )
+    )
 
     private val buffer: DrawBuffer = createCubeBuffer()
 
@@ -51,11 +65,13 @@ class MainScene(
 //        GL11.glPolygonMode(GL11.GL_FRONT_AND_BACK, GL11.GL_LINE)
 
         shader.bind()
+        texture.bind()
 
         application.renderSystem.enableDepthTest()
         drawer.draw(buffer)
         application.renderSystem.disableDepthTest()
 
+        texture.unbind()
         shader.unbind()
 
 //        GL11.glPolygonMode(GL11.GL_FRONT_AND_BACK, GL11.GL_FILL)
@@ -154,8 +170,10 @@ class MainScene(
             val color = colors[i / 6]
             for (j in 0 until 6) {
                 val index = indices[i + j]
-                buffer.addVertex(positions[index * 3], positions[index * 3 + 1], positions[index * 3 + 2])
+                buffer
+                    .addVertex(positions[index * 3], positions[index * 3 + 1], positions[index * 3 + 2])
                     .setColor(color[0], color[1], color[2], color[3])
+//                    .setTexture(0, 0)
             }
         }
 

@@ -78,6 +78,10 @@ internal data class ArcCamera(
         aspect = windowWidth / windowHeight
     }
 
+    override fun resetLookAt() {
+        lookAtTarget = null
+    }
+
     override fun reset() {
         view.identity()
         projection.identity()

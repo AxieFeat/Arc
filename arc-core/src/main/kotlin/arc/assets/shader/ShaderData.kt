@@ -3,7 +3,6 @@ package arc.assets.shader
 import arc.Arc
 import arc.annotations.ImmutableType
 import arc.annotations.TypeFactory
-import arc.assets.Asset
 import org.jetbrains.annotations.ApiStatus
 import java.io.File
 
@@ -12,7 +11,13 @@ import java.io.File
  */
 @Suppress("INAPPLICABLE_JVM_NAME")
 @ImmutableType
-interface ShaderData : Asset {
+interface ShaderData : ShaderAsset {
+
+    /**
+     * List of uniforms for this shader.
+     * You can use this list for providing uniforms to shader.
+     */
+    val uniforms: List<String>
 
     @ApiStatus.Internal
     @TypeFactory

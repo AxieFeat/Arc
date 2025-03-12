@@ -5,12 +5,6 @@ import arc.annotations.ImmutableType
 
 /**
  * Represents the characteristics and specifications of a device.
- *
- * This interface provides details about a device's hardware and software configuration
- * including its operating system, CPU, GPU(s), power sources, motherboard, RAM, and other
- * vital information such as manufacturer and unique identifiers.
- *
- * All data exposed through this interface is immutable.
  */
 @Suppress("INAPPLICABLE_JVM_NAME")
 @ImmutableType

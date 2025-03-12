@@ -5,6 +5,7 @@ import arc.assets.shader.ShaderData
 import arc.assets.shader.VertexShader
 import arc.gl.graphics.GlRenderSystem
 import arc.shader.ShaderInstance
+import arc.shader.UniformProvider
 import org.lwjgl.opengl.GL41
 
 internal data class GlShaderInstance(
@@ -32,6 +33,10 @@ internal data class GlShaderInstance(
 
     override fun unbind() {
         GL41.glUseProgram(0)
+    }
+
+    override fun configure(provider: UniformProvider) {
+
     }
 
     private fun createShader(shaderCode: String, shaderType: Int): Int {

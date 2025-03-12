@@ -13,4 +13,7 @@ internal data class GlShaderData(
         }
     }
 
+    override val uniforms: List<String>
+        get() = TODO("Not yet implemented")
+
 }

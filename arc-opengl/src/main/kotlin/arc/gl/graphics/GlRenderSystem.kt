@@ -101,32 +101,12 @@ internal object GlRenderSystem : RenderSystem {
         setViewport(0, 0, GlApplication.window.width, GlApplication.window.height)
     }
 
-    override fun translate(x: Float, y: Float, z: Float) {
-        glTranslatef(x, y, z)
-    }
-
-    override fun rotate(angle: Float, x: Float, y: Float, z: Float) {
-        glRotatef(angle, x, y, z)
-    }
-
-    override fun matrixMode(mode: Int) {
-        glMatrixMode(mode)
-    }
-
     override fun clearColor(red: Float, green: Float, blue: Float, alpha: Float) {
         glClearColor(red, green, blue, alpha)
     }
 
     override fun clear(mask: Int) {
         glClear(mask)
-    }
-
-    override fun loadIdentity() {
-        glLoadIdentity()
-    }
-
-    override fun ortho(left: Double, right: Double, bottom: Double, top: Double, zNear: Double, zFar: Double) {
-        glOrtho(left, right, bottom, top, zNear, zFar)
     }
 
     override fun enableTexture2D() {

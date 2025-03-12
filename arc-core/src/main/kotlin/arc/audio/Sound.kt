@@ -9,13 +9,6 @@ import org.jetbrains.annotations.ApiStatus
 
 /**
  * Represents a sound that can be played, stopped, and managed.
- *
- * This interface defines methods and properties for managing sound playback,
- * including querying if the sound is currently playing, and accessing its source asset.
- * It also provides controls for playing and stopping the sound with specific parameters.
- *
- * An implementation of this interface is immutable, ensuring thread safety and consistency
- * when handling sound objects.
  */
 @Suppress("INAPPLICABLE_JVM_NAME")
 @ImmutableType
@@ -27,18 +20,11 @@ interface Sound {
      * This property provides a boolean value:
      * - `true` if the sound is actively being played.
      * - `false` if the sound is stopped or has not started playing.
-     *
-     * Typically used to query the active playback status of a sound object,
-     * allowing for conditional operations based on whether the sound is playing.
      */
     val isPlaying: Boolean
 
     /**
      * Represents the sound asset associated with this sound instance.
-     *
-     * This property provides access to the underlying sound-related asset,
-     * which can be used for operations such as playing, stopping, or handling
-     * file-based assets linked to the sound.
      */
     @get:JvmName("asset")
     val asset: SoundAsset

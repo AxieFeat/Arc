@@ -7,23 +7,42 @@ import org.jetbrains.annotations.ApiStatus
 
 /**
  * Represents a format structure for defining vertex attributes and their properties.
+ *
+ * With VertexFormat you designate what parameters the shader accepts.
  */
 @MutableType
 @Suppress("INAPPLICABLE_JVM_NAME")
 interface VertexFormat {
 
+    /**
+     * Elements of this format.
+     */
     @get:JvmName("elements")
     val elements: List<VertexFormatElement>
 
+    /**
+     * Offsets list.
+     */
     @get:JvmName("offsets")
     val offsets: List<Int>
 
+    /**
+     * Offset of next element.
+     */
     @get:JvmName("nextOffset")
     val nextOffset: Int
 
+    /**
+     * Normalized element offset.
+     */
     @get:JvmName("normalElementOffset")
     val normalElementOffset: Int
 
+    /**
+     * Add [vertexFormatElement] element for this format.
+     *
+     * @param vertexFormatElement Some vertex format element.
+     */
     fun add(vertexFormatElement: VertexFormatElement)
 
     /**
@@ -51,6 +70,7 @@ interface VertexFormat {
     /**
      * Use this interface to build own [VertexFormat].
      */
+    @MutableType
     interface Builder : arc.util.Builder<VertexFormat> {
 
         /**

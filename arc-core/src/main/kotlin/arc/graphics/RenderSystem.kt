@@ -293,19 +293,9 @@ interface RenderSystem {
      */
     fun resetViewport()
 
-    fun translate(x: Float, y: Float, z: Float)
-
-    fun rotate(angle: Float, x: Float, y: Float, z: Float)
-
-    fun matrixMode(mode: Int)
-
     fun clearColor(red: Float, green: Float, blue: Float, alpha: Float)
 
     fun clear(mask: Int)
-
-    fun loadIdentity()
-
-    fun ortho(left: Double, right: Double, bottom: Double, top: Double, zNear: Double, zFar: Double)
 
     fun enableTexture2D()
 

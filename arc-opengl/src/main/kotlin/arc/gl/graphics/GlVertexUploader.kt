@@ -52,8 +52,10 @@ internal object GlVertexUploader {
         }
 
         glBindVertexArray(0)
+    }
 
-//        glDeleteVertexArrays(vao)
+    private fun applyTexture() {
+
     }
 
     private fun applyMatrices() {

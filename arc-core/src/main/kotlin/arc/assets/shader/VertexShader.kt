@@ -9,12 +9,8 @@ import java.io.File
 /**
  * Represents a vertex shader asset (.vsh file).
  *
- * Vertex shaders are utilized in the rendering pipeline to transform vertex data,
+ * Vertex shaders are utilized in the rendering to transform vertex data,
  * including position, color, and texture coordinates, and pass it to subsequent stages.
- * This interface extends [ShaderAsset], ensuring the asset type adheres to the system's
- * immutability requirements.
- *
- * Implementations of this interface must provide an immutable representation of a vertex shader file.
  */
 @ImmutableType
 interface VertexShader : ShaderAsset {

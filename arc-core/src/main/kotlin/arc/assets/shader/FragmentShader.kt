@@ -9,11 +9,8 @@ import java.io.File
 /**
  * Represents a fragment shader asset (.fsh file).
  *
- * Fragment shaders are used in the rendering pipeline to calculate the color and other attributes
- * of each pixel in a rendered image. This interface extends [ShaderAsset], ensuring the asset type
- * adheres to the system's immutability requirements.
- *
- * Implementations of this interface must provide an immutable representation of a fragment shader file.
+ * Fragment shaders are used in the rendering to calculate the color and other attributes
+ * of each pixel in a rendered image.
  */
 @ImmutableType
 interface FragmentShader : ShaderAsset {

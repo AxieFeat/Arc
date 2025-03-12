@@ -9,17 +9,15 @@ import arc.shader.ShaderInstance
 import org.jetbrains.annotations.ApiStatus
 
 /**
- * DrawBuffer is an interface that extends VertexConsumer and is used for rendering operations.
- * It provides functionality to store and manage vertex data for rendering,
- * and methods to handle drawing operations with specific settings including mode and format.
- *
- * DrawBuffer supports mutable operations and allows for the integration of shaders during the
- * drawing process.
+ * DrawBuffer is an interface that used for rendering operations.
  */
 @Suppress("INAPPLICABLE_JVM_NAME")
 @MutableType
 interface DrawBuffer : VertexConsumer {
 
+    /**
+     * Is writing to buffer ended.
+     */
     val isEnded: Boolean
 
     @get:JvmName("bufferSize")
@@ -27,24 +25,19 @@ interface DrawBuffer : VertexConsumer {
 
     /**
      * Represents the drawing mode used for rendering operations within the buffer.
-     *
-     * The mode determines the type of geometric primitives (e.g., triangles, lines, quads) used
-     * during rendering, as well as their connectivity and behavior. It is a critical configuration
-     * influencing how the vertex data is interpreted and rendered to the screen.
      */
     @get:JvmName("mode")
     val mode: DrawerMode
 
     /**
      * Represents the format structure of the vertices used in the `DrawBuffer`.
-     *
-     * This property defines the vertex format, which includes the attributes, their offsets, and
-     * other properties necessary for rendering operations. The format is critical for correctly
-     * interpreting vertex data and ensuring the `DrawBuffer` communicates properly with the rendering pipeline.
      */
     @get:JvmName("format")
     val format: VertexFormat
 
+    /**
+     * End writing to buffer.
+     */
     fun end()
 
     @ApiStatus.Internal

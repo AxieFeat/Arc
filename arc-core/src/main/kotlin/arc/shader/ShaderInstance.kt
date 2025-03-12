@@ -51,6 +51,13 @@ interface ShaderInstance {
     val data: ShaderData
 
     /**
+     * Configure this instance with uniform provider.
+     *
+     * @param provider Provider for configuring.
+     */
+    fun configure(provider: UniformProvider)
+
+    /**
      * Compiles the vertex and fragment shaders for this shader instance.
      *
      * This method processes the attached vertex and fragment shader code,

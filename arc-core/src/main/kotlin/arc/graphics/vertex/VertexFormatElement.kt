@@ -7,10 +7,6 @@ import org.jetbrains.annotations.ApiStatus
 
 /**
  * Represents an immutable element in a vertex format.
- *
- * A vertex format element describes a single component of a vertex format, such as its name, ID, type, usage, and
- * various other properties relevant for rendering systems. It defines the layout of vertex data in buffers, used in
- * rendering pipelines.
  */
 @ImmutableType
 @Suppress("INAPPLICABLE_JVM_NAME")
@@ -62,6 +58,10 @@ interface VertexFormatElement {
     @get:JvmName("count")
     val count: Int
 
+    /**
+     * Get size of this element.
+     */
+    @get:JvmName("size")
     val size: Int
         get() = type.size * this.count
 

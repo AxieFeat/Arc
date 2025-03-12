@@ -7,12 +7,6 @@ import arc.util.Color
 
 /**
  * Interface for creating and managing vertex data in a 3D space.
- *
- * A `VertexConsumer` defines a mutable structure for manipulating vertex attributes such as position,
- * color, texture coordinates, and normals. This interface is intended for real-time rendering systems
- * or other applications requiring precise control over vertex data. Multiple methods are provided
- * to modify the attributes of individual vertices in a customizable way. All methods in this interface
- * return the current instance, facilitating method chaining.
  */
 @MutableType
 interface VertexConsumer {

@@ -6,8 +6,7 @@ import arc.annotations.TypeFactory
 import org.jetbrains.annotations.ApiStatus
 
 /**
- * Represents a stack of immutable assets. This interface provides functionality for managing a collection of assets
- * that are part of a stack, ensuring immutability and type safety.
+ * Represents an immutable stack of assets.
  *
  * @param T The type of asset contained in the stack, which must implement the [Asset] interface.
  */
