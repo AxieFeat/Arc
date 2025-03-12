@@ -73,4 +73,6 @@ interface VertexConsumer {
 
     fun setNormal(x: Float, y: Float, z: Float): VertexConsumer
 
+    fun endVertex(): VertexConsumer
+
 }

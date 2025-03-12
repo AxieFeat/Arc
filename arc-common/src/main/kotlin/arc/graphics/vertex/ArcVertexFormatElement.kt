@@ -18,7 +18,5 @@ internal data class ArcVertexFormatElement(
                 index, type, usage, count
             )
         }
-
     }
-
 }

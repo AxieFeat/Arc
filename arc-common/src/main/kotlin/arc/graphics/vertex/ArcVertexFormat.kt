@@ -21,8 +21,13 @@ internal data class ArcVertexFormat(
         when (vertexFormatElement.usage) {
             VertexUsage.NORMAL -> this.normalElementOffset = this.nextOffset
             VertexUsage.COLOR -> this.colorElementOffset = this.nextOffset
-            VertexUsage.UV -> uvOffsetsById.add(vertexFormatElement.index, this.nextOffset)
-
+            VertexUsage.UV -> {
+                // Убедимся, что индекс существует в uvOffsetsById
+                while (uvOffsetsById.size <= vertexFormatElement.index) {
+                    uvOffsetsById.add(-1)
+                }
+                uvOffsetsById[vertexFormatElement.index] = this.nextOffset
+            }
             else -> {}
         }
 
@@ -60,7 +65,6 @@ internal data class ArcVertexFormat(
 
         override fun add(vertexFormat: VertexFormatElement): VertexFormat.Builder {
             elements.add(vertexFormat)
-
             return this
         }
 
@@ -69,15 +73,11 @@ internal data class ArcVertexFormat(
                 elements.forEach { vertex.add(it) }
             }
         }
-
     }
 
     object BuilderFactory : VertexFormat.BuilderFactory {
         override fun create(): VertexFormat.Builder {
             return Builder()
         }
-
     }
-
-
 }

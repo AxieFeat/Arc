@@ -39,12 +39,9 @@ internal data class GlDrawBuffer(
     }
 
     override fun end() {
-        endVertex()
-
         byteBuffer.position(0)
         byteBuffer.limit(this.bufferSize * 4)
 
-        // Загружаем данные в VBO
         glBindBuffer(GL_ARRAY_BUFFER, vbo)
         glBufferSubData(GL_ARRAY_BUFFER, 0, byteBuffer)
         glBindBuffer(GL_ARRAY_BUFFER, 0)
@@ -85,7 +82,6 @@ internal data class GlDrawBuffer(
         }
 
         this.nextVertexFormatIndex()
-        endVertex()
         return this
     }
 
@@ -154,13 +150,13 @@ internal data class GlDrawBuffer(
             }
 
             VertexType.USHORT, VertexType.SHORT -> {
-                byteBuffer.putShort(i, v.toInt().toShort())
-                byteBuffer.putShort(i + 2, u.toInt().toShort())
+                byteBuffer.putShort(i, u.toInt().toShort())
+                byteBuffer.putShort(i + 2, v.toInt().toShort())
             }
 
             VertexType.UBYTE, VertexType.BYTE -> {
-                byteBuffer.put(i, v.toInt().toByte())
-                byteBuffer.put(i + 1, u.toInt().toByte())
+                byteBuffer.put(i, u.toInt().toByte())
+                byteBuffer.put(i + 1, v.toInt().toByte())
             }
         }
 
@@ -169,7 +165,7 @@ internal data class GlDrawBuffer(
     }
 
     override fun setTranslation(x: Float, y: Float, z: Float): VertexConsumer {
-        if(isEnded) return this
+        if (isEnded) return this
 
         this.xOffset = x
         this.yOffset = y
@@ -241,11 +237,15 @@ internal data class GlDrawBuffer(
         this.vertexFormatElement = format.getElement(vertexFormatIndex)
     }
 
-    private fun endVertex() {
-        if (isEnded) return
+    override fun endVertex(): GlDrawBuffer {
+        if (isEnded) return this
 
         vertexCount++
+        vertexFormatIndex = 0
+        vertexFormatElement = format.getElement(vertexFormatIndex)
         growBuffer(this.format.nextOffset / 4)
+
+        return this
     }
 
     private fun nextVertexFormatIndex() {
