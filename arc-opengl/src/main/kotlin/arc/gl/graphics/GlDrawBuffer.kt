@@ -4,6 +4,8 @@ import arc.graphics.DrawBuffer
 import arc.graphics.DrawerMode
 import arc.graphics.vertex.*
 import arc.util.Color
+import org.joml.Matrix4f
+import org.joml.Vector3f
 import org.lwjgl.opengl.GL41.*
 import org.lwjgl.system.MemoryUtil
 import java.lang.Float.floatToRawIntBits
@@ -83,6 +85,12 @@ internal data class GlDrawBuffer(
 
         this.nextVertexFormatIndex()
         return this
+    }
+
+    override fun addVertex(matrix: Matrix4f, x: Float, y: Float, z: Float): VertexConsumer {
+        val vector3f: Vector3f = matrix.transformPosition(x, y, z, Vector3f())
+
+        return addVertex(vector3f.x, vector3f.y, vector3f.z)
     }
 
     override fun setColor(red: Int, green: Int, blue: Int, alpha: Int): GlDrawBuffer {

@@ -15,7 +15,9 @@ import arc.graphics.vertex.VertexFormatElement
 import arc.input.KeyCode
 import arc.shader.ShaderInstance
 import arc.texture.TextureAtlas
+import org.joml.Matrix4f
 import org.joml.Vector3f
+import org.joml.Math
 
 class MainScene(
     private val application: Application
@@ -43,7 +45,10 @@ class MainScene(
         columns = 2
     )
 
-    private val buffer: DrawBuffer = createTexturedCubeBuffer()
+    private var cubeMatrix = Matrix4f()
+    private var cubeRotation = 0f
+
+//    private val buffer: DrawBuffer = createTexturedCubeBuffer()
 
     private val sensitivity = 0.1f
     private var speed = 0.02f
@@ -61,11 +66,16 @@ class MainScene(
         camera.updateAspect(application.window.height, application.window.width)
         handleInput()
 
+        cubeRotation += 0.001f
+        cubeMatrix.rotate(
+            Math.toRadians(cubeRotation), 1f, 1f, 0f
+        )
+
         atlas.bind()
         positionTexShader.bind()
 
         application.renderSystem.enableDepthTest()
-        drawer.draw(buffer)
+        drawer.draw(createTexturedCubeBuffer())
         application.renderSystem.disableDepthTest()
 
         atlas.unbind()
@@ -167,7 +177,7 @@ class MainScene(
             val order = uvPattern[if (i / 6 < 4) 0 else 1]
 
             repeat(6) { j ->
-                buffer.addVertex(positions[indices[i + j] * 3], positions[indices[i + j] * 3 + 1], positions[indices[i + j] * 3 + 2])
+                buffer.addVertex(cubeMatrix, positions[indices[i + j] * 3], positions[indices[i + j] * 3 + 1], positions[indices[i + j] * 3 + 2])
                     .setTexture(uv[order[j] * 2], uv[order[j] * 2 + 1])
                     .endVertex()
             }

@@ -4,6 +4,7 @@ import arc.annotations.MutableType
 import arc.math.Point3d
 import arc.math.Point3i
 import arc.util.Color
+import org.joml.Matrix4f
 
 /**
  * Interface for creating and managing vertex data in a 3D space.
@@ -21,6 +22,18 @@ interface VertexConsumer {
      * @return Current instance of [VertexConsumer].
      */
     fun addVertex(x: Float, y: Float, z: Float): VertexConsumer
+
+    /**
+     * Add vertex.
+     *
+     * @param matrix Matrix for transformation vertex.
+     * @param x X position.
+     * @param y Y position.
+     * @param z Z position.
+     *
+     * @return Current instance of [VertexConsumer].
+     */
+    fun addVertex(matrix: Matrix4f, x: Float, y: Float, z: Float): VertexConsumer
 
     /**
      * Set color of current vertex.
