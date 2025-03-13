@@ -1,0 +1,83 @@
+package arc.gl.texture
+
+import arc.assets.TextureAsset
+import arc.gl.graphics.GlRenderSystem
+import arc.texture.EmptyTexture
+import arc.texture.TextureAtlas
+import org.lwjgl.opengl.GL41.*
+import org.lwjgl.stb.STBImage
+import org.lwjgl.system.MemoryStack
+import java.nio.ByteBuffer
+
+internal data class GlTextureAtlas(
+    override val asset: TextureAsset,
+    override val rows: Int = 10,
+    override val columns: Int = 10
+) : TextureAtlas {
+
+    override val id: Int = glGenTextures()
+
+    override val width: Int
+    override val height: Int
+
+    private val tileWidth: Int
+    private val tileHeight: Int
+
+    init {
+        MemoryStack.stackPush().use { stack ->
+            val w = stack.mallocInt(1)
+            val h = stack.mallocInt(1)
+            val channels = stack.mallocInt(1)
+
+            val buf: ByteBuffer = STBImage.stbi_load(asset.file.absolutePath, w, h, channels, 4)
+                ?: throw RuntimeException("Image file [${asset.file.absolutePath}] not loaded: " + STBImage.stbi_failure_reason())
+
+            this.width = w.get()
+            this.height = h.get()
+
+            require(width % columns == 0 && height % rows == 0) {
+                "Atlas dimensions (${width}x${height}) are not divisible by rows ($rows) and columns ($columns)"
+            }
+
+            tileWidth = width / columns
+            tileHeight = height / rows
+
+            TextureUtil.loadRGB(id, width, height, buf)
+            STBImage.stbi_image_free(buf)
+        }
+    }
+
+    override fun u(row: Int, column: Int): Float {
+        require(row in 0..rows) { "Row $row out of bounds (Max $rows)" }
+        require(column in 0..columns) { "Column $column out of bounds (Max $columns)" }
+
+        return column * tileWidth.toFloat() / width.toFloat()
+    }
+
+    override fun v(row: Int, column: Int): Float {
+        require(row in 0..rows) { "Row $row out of bounds (Max $rows)" }
+        require(column in 0..columns) { "Column $column out of bounds (Max $columns)" }
+
+        return row * tileHeight.toFloat() / height.toFloat()
+    }
+
+    override fun bind() {
+        glActiveTexture(GL_TEXTURE0)
+        glBindTexture(GL_TEXTURE_2D, id)
+    }
+
+    override fun unbind() {
+        glBindTexture(GL_TEXTURE_2D, 0)
+        GlRenderSystem.texture = EmptyTexture
+    }
+
+    override fun cleanup() {
+        glDeleteTextures(id)
+    }
+
+    object Factory : TextureAtlas.Factory {
+        override fun from(asset: TextureAsset, rows: Int, columns: Int): TextureAtlas {
+            return GlTextureAtlas(asset, rows, columns)
+        }
+    }
+}

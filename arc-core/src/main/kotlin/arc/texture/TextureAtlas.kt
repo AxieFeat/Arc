@@ -4,8 +4,8 @@ import arc.Arc
 import arc.annotations.ImmutableType
 import arc.annotations.TypeFactory
 import arc.assets.TextureAsset
-import arc.math.Point2i
 import org.jetbrains.annotations.ApiStatus
+import kotlin.jvm.Throws
 
 /**
  * This interface represents texture atlas.
@@ -13,12 +13,6 @@ import org.jetbrains.annotations.ApiStatus
 @Suppress("INAPPLICABLE_JVM_NAME")
 @ImmutableType
 interface TextureAtlas : TextureLike {
-
-    /**
-     * Center of this texture.
-     */
-    @get:JvmName("origin")
-    val origin: Point2i
 
     /**
      * Width of texture.
@@ -33,34 +27,44 @@ interface TextureAtlas : TextureLike {
     val height: Int
 
     /**
-     * Min U coordinate in this atlas.
+     * Count of rows for this atlas.
      */
-    @get:JvmName("minU")
-    val minU: Int
+    @get:JvmName("rows")
+    val rows: Int
 
     /**
-     * Max U coordinate in this atlas.
+     * Count of columns for this atlas.
      */
-    @get:JvmName("maxU")
-    val maxU: Int
-
-    /**
-     * Min V coordinate in this atlas.
-     */
-    @get:JvmName("minV")
-    val minV: Int
-
-    /**
-     * Max V coordinate in this atlas.
-     */
-    @get:JvmName("maxV")
-    val maxV: Int
+    @get:JvmName("columns")
+    val columns: Int
 
     /**
      * Asset of this atlas.
      */
     @get:JvmName("asset")
     val asset: TextureAsset
+
+    /**
+     * Get U coordinate for some position in this atlas.
+     *
+     * @param row Row number.
+     * @param column Column number.
+     *
+     * @throws IllegalArgumentException If U coordinate not found by this row and column.
+     */
+    @Throws(IllegalArgumentException::class)
+    fun u(row: Int, column: Int): Float
+
+    /**
+     * Get V coordinate for some position in this atlas.
+     *
+     * @param row Row number.
+     * @param column Column number.
+     *
+     * @throws IllegalArgumentException If U coordinate not found by this row and column.
+     */
+    @Throws(IllegalArgumentException::class)
+    fun v(row: Int, column: Int): Float
 
     @ApiStatus.Internal
     @TypeFactory
@@ -70,10 +74,12 @@ interface TextureAtlas : TextureLike {
          * Create [TextureAtlas] from [TextureAsset].
          *
          * @param asset Asset for Texture Atlas.
+         * @param rows Count of rows for Texture Atlas.
+         * @param columns Count of columns for Texture Atlas.
          *
          * @return New instance of [TextureAtlas].
          */
-        fun create(asset: TextureAsset): TextureAtlas
+        fun from(asset: TextureAsset, rows: Int, columns: Int): TextureAtlas
 
     }
 
@@ -83,12 +89,14 @@ interface TextureAtlas : TextureLike {
          * Create [TextureAtlas] from [TextureAsset].
          *
          * @param asset Asset for Texture Atlas.
+         * @param rows Count of rows for Texture Atlas.
+         * @param columns Count of columns for Texture Atlas.
          *
          * @return New instance of [TextureAtlas].
          */
         @JvmStatic
-        fun create(asset: TextureAsset): TextureAtlas {
-            return Arc.factory<Factory>().create(asset)
+        fun from(asset: TextureAsset, rows: Int, columns: Int): TextureAtlas {
+            return Arc.factory<Factory>().from(asset, rows, columns)
         }
 
     }

@@ -9,11 +9,13 @@ import arc.gl.asset.GlShaderData
 import arc.gl.graphics.GlDrawBuffer
 import arc.gl.shader.GlShaderInstance
 import arc.gl.texture.GlTexture
+import arc.gl.texture.GlTextureAtlas
 import arc.graphics.DrawBuffer
 import arc.graphics.Scene
 import arc.shader.ShaderInstance
 import arc.texture.Texture
 import arc.register
+import arc.texture.TextureAtlas
 import java.awt.Frame
 
 internal object GlFactoryProvider {
@@ -26,6 +28,7 @@ internal object GlFactoryProvider {
 
         provider.register<TextureAsset.Factory>(GlTextureAsset.Factory)
         provider.register<Texture.Factory>(GlTexture.Factory)
+        provider.register<TextureAtlas.Factory>(GlTextureAtlas.Factory)
 
         provider.register<ShaderInstance.Factory>(GlShaderInstance.Factory)
         provider.register<DrawBuffer.Factory>(GlDrawBuffer.Factory)

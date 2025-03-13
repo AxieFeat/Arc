@@ -14,7 +14,7 @@ import arc.graphics.vertex.VertexFormat
 import arc.graphics.vertex.VertexFormatElement
 import arc.input.KeyCode
 import arc.shader.ShaderInstance
-import arc.texture.Texture
+import arc.texture.TextureAtlas
 import org.joml.Vector3f
 
 class MainScene(
@@ -27,27 +27,30 @@ class MainScene(
         .build()
 
     private val positionTexShader = ShaderInstance.of(
-        VertexShader.from(classpath("arc/shader/position_tex/position_tex.vsh")),
-        FragmentShader.from(classpath("arc/shader/position_tex/position_tex.fsh")),
-        ShaderData.from(classpath("arc/shader/position_tex/position_tex.json")),
+        vertexShader =  VertexShader.from(classpath("arc/shader/position_tex/position_tex.vsh")),
+        fragmentShader =  FragmentShader.from(classpath("arc/shader/position_tex/position_tex.fsh")),
+        shaderData =  ShaderData.from(classpath("arc/shader/position_tex/position_tex.json")),
     ).also {
         it.compileShaders()
         it.addProvider(DefaultUniformProvider)
     }
 
-    private val texture = Texture.from(
-        TextureAsset.from(
+    private val atlas = TextureAtlas.from(
+        asset = TextureAsset.from(
             classpath("arc/texture/cube.png"),
-        )
+        ),
+        rows =  2,
+        columns =  2
     )
 
     private val buffer: DrawBuffer = createTexturedCubeBuffer()
 
     private val sensitivity = 0.1f
-    private val speed = 0.02f
+    private var speed = 0.02f
 
     init {
         camera.fov = 65f
+        camera.zNear = 0.0001f
 
         camera.update()
     }
@@ -58,14 +61,16 @@ class MainScene(
         camera.updateAspect(application.window.height, application.window.width)
         handleInput()
 
-        texture.bind()
+        atlas.bind()
         positionTexShader.bind()
 
+        application.renderSystem.disableBlend()
         application.renderSystem.enableDepthTest()
         drawer.draw(buffer)
         application.renderSystem.disableDepthTest()
+        application.renderSystem.disableBlend()
 
-        texture.unbind()
+        atlas.unbind()
         positionTexShader.unbind()
 
         calculateFps()
@@ -75,10 +80,15 @@ class MainScene(
         val front = Vector3f(0f, 0f, -1f).rotate(camera.rotation).normalize()
         val right = Vector3f(1f, 0f, 0f).rotate(camera.rotation).normalize()
         val up = Vector3f(0f, 1f, 0f).rotate(camera.rotation).normalize()
-
         var newX = camera.position.x
         var newY = camera.position.y
         var newZ = camera.position.z
+
+        speed = if(application.keyboard.isPressed(KeyCode.KEY_LCONTROL)) {
+            0.005f
+        } else {
+            0.02f
+        }
 
         if (application.keyboard.isPressed(KeyCode.KEY_W)) {
             newX += front.x * speed
@@ -129,74 +139,54 @@ class MainScene(
     private fun createTexturedCubeBuffer(): DrawBuffer {
         val buffer = drawer.begin(DrawerMode.TRIANGLES, positionTex)
 
-        // UV-координаты для каждой грани
-        val uvSide = floatArrayOf(0.5f, 0.5f,  0f, 0.5f,  0f, 0f,  0.5f, 0f) // Боковая (левая верхняя часть атласа)
-        val uvBottom = floatArrayOf(0.5f, 0f,  1f, 0f,  1f, 0.5f,  0.5f, 0.5f) // Нижняя (правая верхняя часть атласа)
-        val uvTop = floatArrayOf(0f, 0.5f,  0.5f, 0.5f,  0.5f, 1f,  0f, 1f) // Верхняя (левая нижняя часть атласа)
+        // Координаты текстур в атласе для каждой грани
+        val textureCoordinates = listOf(
+            Pair(1, 1), // Передняя
+            Pair(1, 1), // Задняя
+            Pair(1, 1), // Левая
+            Pair(1, 1), // Правая
+            Pair(2, 1), // Верхняя
+            Pair(1, 2)  // Нижняя
+        )
 
         val positions = floatArrayOf(
-            // Передняя грань
-            -0.5f, -0.5f,  0.5f,   // 0
-            0.5f, -0.5f,  0.5f,   // 1
-            0.5f,  0.5f,  0.5f,   // 2
-            -0.5f,  0.5f,  0.5f,   // 3
-
-            // Задняя грань
-            -0.5f, -0.5f, -0.5f,   // 4
-            0.5f, -0.5f, -0.5f,   // 5
-            0.5f,  0.5f, -0.5f,   // 6
-            -0.5f,  0.5f, -0.5f    // 7
+            -0.5f, -0.5f,  0.5f,   0.5f, -0.5f,  0.5f,   0.5f,  0.5f,  0.5f,   -0.5f,  0.5f,  0.5f, // Передняя
+            -0.5f, -0.5f, -0.5f,   0.5f, -0.5f, -0.5f,   0.5f,  0.5f, -0.5f,   -0.5f,  0.5f, -0.5f  // Задняя
         )
 
         val indices = intArrayOf(
-            // Передняя грань
-            0, 1, 2, 2, 3, 0,
-            // Задняя грань
-            5, 4, 7, 7, 6, 5,
-            // Левая грань
-            4, 0, 3, 3, 7, 4,
-            // Правая грань
-            1, 5, 6, 6, 2, 1,
-            // Верхняя грань
-            3, 2, 6, 6, 7, 3,
-            // Нижняя грань
-            4, 5, 1, 1, 0, 4
-        )
-
-        // UV-координаты для каждой грани
-        val uvList = listOf(
-            uvSide,   // Передняя
-            uvSide,   // Задняя
-            uvSide,   // Левая
-            uvSide,   // Правая
-            uvTop,    // Верхняя
-            uvBottom  // Нижняя
+            0, 1, 2, 2, 3, 0, // Передняя
+            5, 4, 7, 7, 6, 5, // Задняя
+            4, 0, 3, 3, 7, 4, // Левая
+            1, 5, 6, 6, 2, 1, // Правая
+            3, 2, 6, 6, 7, 3, // Верхняя
+            4, 5, 1, 1, 0, 4  // Нижняя
         )
 
         // Порядок UV-координат для каждой грани
         val uvOrder = listOf(
-            intArrayOf(0, 1, 2, 2, 3, 0), // Передняя
-            intArrayOf(1, 0, 3, 3, 2, 1), // Задняя (перевернута по горизонтали)
-            intArrayOf(1, 0, 3, 3, 2, 1), // Левая (перевернута по горизонтали)
-            intArrayOf(0, 1, 2, 2, 3, 0), // Правая
-            intArrayOf(3, 2, 1, 1, 0, 3), // Верхняя (перевернута по вертикали)
-            intArrayOf(0, 1, 2, 2, 3, 0)  // Нижняя
+            intArrayOf(3, 2, 1, 1, 0, 3), // Боковые
+            intArrayOf(0, 1, 2, 2, 3, 0)  // Верхняя и нижняя
         )
 
         for (i in indices.indices step 6) {
             val faceIndex = i / 6
-            val uv = uvList[faceIndex]
-            val order = uvOrder[faceIndex]
+            val (row, column) = textureCoordinates[faceIndex]
+            val order = uvOrder[if (faceIndex < 4) 0 else 1] // Боковые или верхняя/нижняя
+
+            val u1 = atlas.u(row - 1, column - 1)
+            val u2 = atlas.u(row - 1, column)
+            val v1 = atlas.v(row - 1, column - 1)
+            val v2 = atlas.v(row, column - 1)
+
+            val uv = floatArrayOf(u1, v1, u2, v1, u2, v2, u1, v2)
 
             for (j in 0 until 6) {
                 val index = indices[i + j]
                 val uvIndex = order[j]
-                val u = uv[uvIndex * 2]
-                val v = uv[uvIndex * 2 + 1]
-
                 buffer
                     .addVertex(positions[index * 3], positions[index * 3 + 1], positions[index * 3 + 2])
-                    .setTexture(u, v)
+                    .setTexture(uv[uvIndex * 2], uv[uvIndex * 2 + 1])
                     .endVertex()
             }
         }

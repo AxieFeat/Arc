@@ -6,7 +6,6 @@ import arc.texture.EmptyTexture
 import arc.texture.Texture
 import org.lwjgl.opengl.GL11
 import org.lwjgl.opengl.GL30
-import org.lwjgl.opengl.GL41
 import org.lwjgl.opengl.GL41.*
 import org.lwjgl.stb.STBImage
 import org.lwjgl.system.MemoryStack
@@ -16,7 +15,7 @@ internal data class GlTexture(
     override val asset: TextureAsset,
 ) : Texture {
 
-    override var id: Int = GL41.glGenTextures()
+    override val id: Int = glGenTextures()
 
     init {
         MemoryStack.stackPush().use { stack ->
@@ -30,7 +29,7 @@ internal data class GlTexture(
             val width = w.get()
             val height = h.get()
 
-            generateTexture(id, width, height, buf)
+            TextureUtil.loadRGB(id, width, height, buf)
             STBImage.stbi_image_free(buf)
         }
     }
@@ -54,19 +53,4 @@ internal data class GlTexture(
             return GlTexture(asset)
         }
     }
-
-    companion object {
-        private fun generateTexture(id: Int,width: Int, height: Int, buf: ByteBuffer) {
-            GL11.glBindTexture(GL11.GL_TEXTURE_2D, id)
-            GL11.glPixelStorei(GL11.GL_UNPACK_ALIGNMENT, 1)
-            GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR)
-            GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR)
-            GL11.glTexImage2D(
-                GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA, width, height, 0,
-                GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, buf
-            )
-            GL30.glGenerateMipmap(GL11.GL_TEXTURE_2D)
-        }
-    }
-
 }
