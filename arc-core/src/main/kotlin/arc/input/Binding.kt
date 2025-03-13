@@ -9,7 +9,6 @@ import arc.input.mouse.MouseBinding
  * For creation instance you need create own implementation of this interface.
  *
  * @see MouseBinding
- * @see ControllerBinding
  */
 @Suppress("INAPPLICABLE_JVM_NAME")
 @ImmutableType
@@ -30,11 +29,11 @@ interface Binding : BindingLike {
     /**
      * Calls when this key is pressed
      */
-    fun onPress(key: KeyCode)
+    fun onPress(key: KeyCode) {}
 
     /**
      * Calls when this key is released.
      */
-    fun onRelease(key: KeyCode)
+    fun onRelease(key: KeyCode) {}
 
 }

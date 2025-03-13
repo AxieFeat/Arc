@@ -27,9 +27,9 @@ class MainScene(
         .build()
 
     private val positionTexShader = ShaderInstance.of(
-        vertexShader =  VertexShader.from(classpath("arc/shader/position_tex/position_tex.vsh")),
-        fragmentShader =  FragmentShader.from(classpath("arc/shader/position_tex/position_tex.fsh")),
-        shaderData =  ShaderData.from(classpath("arc/shader/position_tex/position_tex.json")),
+        vertexShader = VertexShader.from(classpath("arc/shader/position_tex/position_tex.vsh")),
+        fragmentShader = FragmentShader.from(classpath("arc/shader/position_tex/position_tex.fsh")),
+        shaderData = ShaderData.from(classpath("arc/shader/position_tex/position_tex.json")),
     ).also {
         it.compileShaders()
         it.addProvider(DefaultUniformProvider)
@@ -39,8 +39,8 @@ class MainScene(
         asset = TextureAsset.from(
             classpath("arc/texture/cube.png"),
         ),
-        rows =  2,
-        columns =  2
+        rows = 2,
+        columns = 2
     )
 
     private val buffer: DrawBuffer = createTexturedCubeBuffer()
@@ -64,11 +64,9 @@ class MainScene(
         atlas.bind()
         positionTexShader.bind()
 
-        application.renderSystem.disableBlend()
         application.renderSystem.enableDepthTest()
         drawer.draw(buffer)
         application.renderSystem.disableDepthTest()
-        application.renderSystem.disableBlend()
 
         atlas.unbind()
         positionTexShader.unbind()
@@ -139,54 +137,38 @@ class MainScene(
     private fun createTexturedCubeBuffer(): DrawBuffer {
         val buffer = drawer.begin(DrawerMode.TRIANGLES, positionTex)
 
-        // Координаты текстур в атласе для каждой грани
-        val textureCoordinates = listOf(
-            Pair(1, 1), // Передняя
-            Pair(1, 1), // Задняя
-            Pair(1, 1), // Левая
-            Pair(1, 1), // Правая
-            Pair(2, 1), // Верхняя
-            Pair(1, 2)  // Нижняя
+        val texCoords = listOf(
+            Pair(1, 1),
+            Pair(1, 1),
+            Pair(1, 1),
+            Pair(1, 1),
+            Pair(2, 1),
+            Pair(1, 2)
         )
-
         val positions = floatArrayOf(
-            -0.5f, -0.5f,  0.5f,   0.5f, -0.5f,  0.5f,   0.5f,  0.5f,  0.5f,   -0.5f,  0.5f,  0.5f, // Передняя
-            -0.5f, -0.5f, -0.5f,   0.5f, -0.5f, -0.5f,   0.5f,  0.5f, -0.5f,   -0.5f,  0.5f, -0.5f  // Задняя
+            -0.5f, -0.5f,  0.5f,   0.5f, -0.5f,  0.5f,   0.5f,  0.5f,  0.5f,   -0.5f,  0.5f,  0.5f,
+            -0.5f, -0.5f, -0.5f,   0.5f, -0.5f, -0.5f,   0.5f,  0.5f, -0.5f,   -0.5f,  0.5f, -0.5f
         )
-
         val indices = intArrayOf(
-            0, 1, 2, 2, 3, 0, // Передняя
-            5, 4, 7, 7, 6, 5, // Задняя
-            4, 0, 3, 3, 7, 4, // Левая
-            1, 5, 6, 6, 2, 1, // Правая
-            3, 2, 6, 6, 7, 3, // Верхняя
-            4, 5, 1, 1, 0, 4  // Нижняя
+            0, 1, 2, 2, 3, 0,  5, 4, 7, 7, 6, 5,  4, 0, 3, 3, 7, 4,
+            1, 5, 6, 6, 2, 1,  3, 2, 6, 6, 7, 3,  4, 5, 1, 1, 0, 4
         )
-
-        // Порядок UV-координат для каждой грани
-        val uvOrder = listOf(
-            intArrayOf(3, 2, 1, 1, 0, 3), // Боковые
-            intArrayOf(0, 1, 2, 2, 3, 0)  // Верхняя и нижняя
+        val uvPattern = arrayOf(
+            intArrayOf(3, 2, 1, 1, 0, 3),
+            intArrayOf(0, 1, 2, 2, 3, 0)
         )
 
         for (i in indices.indices step 6) {
-            val faceIndex = i / 6
-            val (row, column) = textureCoordinates[faceIndex]
-            val order = uvOrder[if (faceIndex < 4) 0 else 1] // Боковые или верхняя/нижняя
+            val (row, col) = texCoords[i / 6]
+            val uv = floatArrayOf(atlas.u(row - 1, col - 1), atlas.v(row - 1, col - 1),
+                atlas.u(row - 1, col), atlas.v(row - 1, col - 1),
+                atlas.u(row - 1, col), atlas.v(row, col - 1),
+                atlas.u(row - 1, col - 1), atlas.v(row, col - 1))
+            val order = uvPattern[if (i / 6 < 4) 0 else 1]
 
-            val u1 = atlas.u(row - 1, column - 1)
-            val u2 = atlas.u(row - 1, column)
-            val v1 = atlas.v(row - 1, column - 1)
-            val v2 = atlas.v(row, column - 1)
-
-            val uv = floatArrayOf(u1, v1, u2, v1, u2, v2, u1, v2)
-
-            for (j in 0 until 6) {
-                val index = indices[i + j]
-                val uvIndex = order[j]
-                buffer
-                    .addVertex(positions[index * 3], positions[index * 3 + 1], positions[index * 3 + 2])
-                    .setTexture(uv[uvIndex * 2], uv[uvIndex * 2 + 1])
+            repeat(6) { j ->
+                buffer.addVertex(positions[indices[i + j] * 3], positions[indices[i + j] * 3 + 1], positions[indices[i + j] * 3 + 2])
+                    .setTexture(uv[order[j] * 2], uv[order[j] * 2 + 1])
                     .endVertex()
             }
         }

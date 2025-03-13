@@ -19,6 +19,6 @@ interface MouseBinding : Binding {
      * @param xOffset X offset of scrolling.
      * @param yOffset Y offset of scrolling.
      */
-    fun onScroll(xOffset: Double, yOffset: Double)
+    fun onScroll(xOffset: Double, yOffset: Double) {}
 
 }
