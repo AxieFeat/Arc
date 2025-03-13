@@ -12,3 +12,5 @@ include("arc-extensions")
 include("arc-extensions:arc-profiler")
 findProject(":arc-extensions:arc-profiler")?.name = "arc-profiler"
 include("arc-demo")
+include("arc-extensions:arc-font")
+findProject(":arc-extensions:arc-font")?.name = "arc-font"

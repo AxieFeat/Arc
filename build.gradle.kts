@@ -1,11 +1,13 @@
 plugins {
     kotlin("jvm") version "2.0.21"
     id("java-library")
+    id("maven-publish")
 }
 
 allprojects {
     apply(plugin = "org.jetbrains.kotlin.jvm")
     apply(plugin = "java-library")
+    apply(plugin = "maven-publish")
 
     group = "arc.engine"
     version = "1.0"
@@ -28,6 +30,16 @@ allprojects {
         useJUnitPlatform()
     }
 
+    publishing {
+        publications {
+            create<MavenPublication>("release") {
+                from(components["kotlin"])
+
+                groupId = project.group.toString()
+                artifactId = project.name
+            }
+        }
+    }
 }
 
 dependencies {

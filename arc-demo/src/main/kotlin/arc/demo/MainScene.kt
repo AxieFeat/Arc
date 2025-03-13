@@ -58,6 +58,8 @@ class MainScene(
         camera.zNear = 0.0001f
 
         camera.update()
+
+        application.window.isVsync = false
     }
 
     override fun render() {
@@ -82,6 +84,7 @@ class MainScene(
         positionTexShader.unbind()
 
         calculateFps()
+        println(fps)
     }
 
     private fun handleInput() {
@@ -144,29 +147,29 @@ class MainScene(
         camera.update()
     }
 
+    val texCoords = listOf(
+        Pair(1, 1),
+        Pair(1, 1),
+        Pair(1, 1),
+        Pair(1, 1),
+        Pair(2, 1),
+        Pair(1, 2)
+    )
+    val positions = floatArrayOf(
+        -0.5f, -0.5f,  0.5f,   0.5f, -0.5f,  0.5f,   0.5f,  0.5f,  0.5f,   -0.5f,  0.5f,  0.5f,
+        -0.5f, -0.5f, -0.5f,   0.5f, -0.5f, -0.5f,   0.5f,  0.5f, -0.5f,   -0.5f,  0.5f, -0.5f
+    )
+    val indices = intArrayOf(
+        0, 1, 2, 2, 3, 0,  5, 4, 7, 7, 6, 5,  4, 0, 3, 3, 7, 4,
+        1, 5, 6, 6, 2, 1,  3, 2, 6, 6, 7, 3,  4, 5, 1, 1, 0, 4
+    )
+    val uvPattern = arrayOf(
+        intArrayOf(3, 2, 1, 1, 0, 3),
+        intArrayOf(0, 1, 2, 2, 3, 0)
+    )
+
     private fun createTexturedCubeBuffer(): DrawBuffer {
         val buffer = drawer.begin(DrawerMode.TRIANGLES, positionTex)
-
-        val texCoords = listOf(
-            Pair(1, 1),
-            Pair(1, 1),
-            Pair(1, 1),
-            Pair(1, 1),
-            Pair(2, 1),
-            Pair(1, 2)
-        )
-        val positions = floatArrayOf(
-            -0.5f, -0.5f,  0.5f,   0.5f, -0.5f,  0.5f,   0.5f,  0.5f,  0.5f,   -0.5f,  0.5f,  0.5f,
-            -0.5f, -0.5f, -0.5f,   0.5f, -0.5f, -0.5f,   0.5f,  0.5f, -0.5f,   -0.5f,  0.5f, -0.5f
-        )
-        val indices = intArrayOf(
-            0, 1, 2, 2, 3, 0,  5, 4, 7, 7, 6, 5,  4, 0, 3, 3, 7, 4,
-            1, 5, 6, 6, 2, 1,  3, 2, 6, 6, 7, 3,  4, 5, 1, 1, 0, 4
-        )
-        val uvPattern = arrayOf(
-            intArrayOf(3, 2, 1, 1, 0, 3),
-            intArrayOf(0, 1, 2, 2, 3, 0)
-        )
 
         for (i in indices.indices step 6) {
             val (row, col) = texCoords[i / 6]
