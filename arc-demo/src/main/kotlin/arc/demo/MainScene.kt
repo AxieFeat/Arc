@@ -26,7 +26,6 @@ class MainScene(
         .add(VertexFormatElement.UV0)
         .build()
 
-
     private val positionTexShader = ShaderInstance.of(
         VertexShader.from(classpath("arc/shader/position_tex/position_tex.vsh")),
         FragmentShader.from(classpath("arc/shader/position_tex/position_tex.fsh")),
@@ -48,8 +47,6 @@ class MainScene(
     private val speed = 0.02f
 
     init {
-        showCursor = false
-
         camera.fov = 65f
 
         camera.update()
@@ -61,8 +58,6 @@ class MainScene(
         camera.updateAspect(application.window.height, application.window.width)
         handleInput()
 
-//        GL11.glPolygonMode(GL11.GL_FRONT_AND_BACK, GL11.GL_LINE)
-
         texture.bind()
         positionTexShader.bind()
 
@@ -72,8 +67,6 @@ class MainScene(
 
         texture.unbind()
         positionTexShader.unbind()
-
-//        GL11.glPolygonMode(GL11.GL_FRONT_AND_BACK, GL11.GL_FILL)
 
         calculateFps()
     }
@@ -122,11 +115,13 @@ class MainScene(
         camera.position.y = newY
         camera.position.z = newZ
 
-        camera.rotate(
-            -application.mouse.displayVec.x * sensitivity,
-            -application.mouse.displayVec.y * sensitivity,
-            0f
-        )
+        if(application.mouse.isPressed(KeyCode.MOUSE_LEFT)) {
+            camera.rotate(
+                -application.mouse.displayVec.x * sensitivity,
+                -application.mouse.displayVec.y * sensitivity,
+                0f
+            )
+        }
 
         camera.update()
     }

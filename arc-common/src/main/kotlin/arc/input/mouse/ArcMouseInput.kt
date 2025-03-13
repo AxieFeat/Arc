@@ -18,7 +18,8 @@ internal object ArcMouseInput : MouseInput {
         if(key.keyType != KeyType.MOUSE) return false
 
         try {
-            if(GLFW.glfwGetKey(window.handle, key.id) == GLFW.GLFW_PRESS) return true
+            if(GLFW.glfwGetMouseButton(window.handle, key.id) == GLFW.GLFW_PRESS ||
+                GLFW.glfwGetMouseButton(window.handle, key.id) == GLFW.GLFW_REPEAT) return true
         } catch (throwable: Throwable) {
             return false
         }
@@ -30,7 +31,8 @@ internal object ArcMouseInput : MouseInput {
         if(key.keyType != KeyType.MOUSE) return false
 
         try {
-            if(GLFW.glfwGetKey(window.handle, key.id) == GLFW.GLFW_RELEASE) return true
+            if(GLFW.glfwGetMouseButton(window.handle, key.id) == GLFW.GLFW_RELEASE ||
+                GLFW.glfwGetMouseButton(window.handle, key.id) == GLFW.GLFW_REPEAT) return true
         } catch (throwable: Throwable) {
             return false
         }
