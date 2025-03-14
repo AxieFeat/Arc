@@ -35,8 +35,10 @@ interface DrawBuffer : VertexConsumer {
 
     /**
      * End writing to buffer.
+     *
+     * @return Current instance of [DrawBuffer].
      */
-    fun end()
+    fun end(): DrawBuffer
 
     @ApiStatus.Internal
     @TypeFactory

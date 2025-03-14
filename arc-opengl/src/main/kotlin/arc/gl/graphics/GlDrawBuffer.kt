@@ -44,11 +44,13 @@ internal data class GlDrawBuffer(
         glBindBuffer(GL_ARRAY_BUFFER, 0)
     }
 
-    override fun end() {
+    override fun end(): GlDrawBuffer {
         byteBuffer.position(0)
         byteBuffer.limit(this.bufferSize * 4)
 
         upload()
+
+        return this
     }
 
     private fun upload() {
@@ -88,7 +90,7 @@ internal data class GlDrawBuffer(
         return this
     }
 
-    override fun addVertex(matrix: Matrix4f, x: Float, y: Float, z: Float): VertexConsumer {
+    override fun addVertex(matrix: Matrix4f, x: Float, y: Float, z: Float): GlDrawBuffer {
         val vector3f: Vector3f = matrix.transformPosition(x, y, z, Vector3f())
 
         return addVertex(vector3f.x, vector3f.y, vector3f.z)
@@ -116,7 +118,7 @@ internal data class GlDrawBuffer(
         )
     }
 
-    override fun setTexture(u: Float, v: Float): VertexConsumer {
+    override fun setTexture(u: Float, v: Float): GlDrawBuffer {
         val i: Int =
             this.vertexCount * this.format.nextOffset + this.format.getOffset(this.vertexFormatIndex)
 
@@ -146,7 +148,7 @@ internal data class GlDrawBuffer(
         return this
     }
 
-    override fun setTranslation(x: Float, y: Float, z: Float): VertexConsumer {
+    override fun setTranslation(x: Float, y: Float, z: Float): GlDrawBuffer {
         this.xOffset = x
         this.yOffset = y
         this.zOffset = z
@@ -200,12 +202,12 @@ internal data class GlDrawBuffer(
         return this
     }
 
-    override fun edit(id: Int): VertexConsumer {
+    override fun edit(id: Int): GlDrawBuffer {
         selectedVertex = id
         return this
     }
 
-    override fun editPosition(x: Float, y: Float, z: Float): VertexConsumer {
+    override fun editPosition(x: Float, y: Float, z: Float): GlDrawBuffer {
         if (vertexCount == 0) return this
 
         val i: Int = selectedVertex * 20
@@ -219,13 +221,13 @@ internal data class GlDrawBuffer(
         return this
     }
 
-    override fun editPosition(matrix: Matrix4f, x: Float, y: Float, z: Float): VertexConsumer {
+    override fun editPosition(matrix: Matrix4f, x: Float, y: Float, z: Float): GlDrawBuffer {
         val vector3f: Vector3f = matrix.transformPosition(x, y, z, Vector3f())
 
         return editPosition(vector3f.x, vector3f.y, vector3f.z)
     }
 
-    override fun editColor(red: Int, green: Int, blue: Int, alpha: Int): VertexConsumer {
+    override fun editColor(red: Int, green: Int, blue: Int, alpha: Int): GlDrawBuffer {
         if (vertexCount == 0) return this
 
         val i: Int = selectedVertex * 20
@@ -238,11 +240,11 @@ internal data class GlDrawBuffer(
         return this
     }
 
-    override fun editColor(color: Color): VertexConsumer {
+    override fun editColor(color: Color): GlDrawBuffer {
         return editColor(color.red, color.green, color.blue, (color.alpha * 255).toInt().coerceIn(0, 255))
     }
 
-    override fun editTexture(u: Float, v: Float): VertexConsumer {
+    override fun editTexture(u: Float, v: Float): GlDrawBuffer {
         if (vertexCount == 0) return this // Защита от выхода за границы
 
         val i: Int = selectedVertex * 20

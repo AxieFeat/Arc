@@ -15,12 +15,12 @@ import arc.graphics.vertex.VertexFormatElement
 import arc.input.KeyCode
 import arc.profiler.begin
 import arc.profiler.end
+import arc.shader.FrameBuffer
 import arc.shader.ShaderInstance
 import arc.texture.TextureAtlas
+import org.joml.Math
 import org.joml.Matrix4f
 import org.joml.Vector3f
-import org.joml.Math
-import java.util.concurrent.Executors
 
 class MainScene(
     private val application: Application
@@ -48,7 +48,7 @@ class MainScene(
         columns = 2
     )
 
-    val texCoords = listOf(
+    private val texCoords = listOf(
         Pair(1, 1),
         Pair(1, 1),
         Pair(1, 1),
@@ -56,15 +56,15 @@ class MainScene(
         Pair(2, 1),
         Pair(1, 2)
     )
-    val positions = floatArrayOf(
-        -0.5f, -0.5f,  0.5f,   0.5f, -0.5f,  0.5f,   0.5f,  0.5f,  0.5f,   -0.5f,  0.5f,  0.5f,
-        -0.5f, -0.5f, -0.5f,   0.5f, -0.5f, -0.5f,   0.5f,  0.5f, -0.5f,   -0.5f,  0.5f, -0.5f
+    private val positions = floatArrayOf(
+        -0.5f, -0.5f, 0.5f, 0.5f, -0.5f, 0.5f, 0.5f, 0.5f, 0.5f, -0.5f, 0.5f, 0.5f,
+        -0.5f, -0.5f, -0.5f, 0.5f, -0.5f, -0.5f, 0.5f, 0.5f, -0.5f, -0.5f, 0.5f, -0.5f
     )
-    val indices = intArrayOf(
-        0, 1, 2, 2, 3, 0,  5, 4, 7, 7, 6, 5,  4, 0, 3, 3, 7, 4,
-        1, 5, 6, 6, 2, 1,  3, 2, 6, 6, 7, 3,  4, 5, 1, 1, 0, 4
+    private val indices = intArrayOf(
+        0, 1, 2, 2, 3, 0, 5, 4, 7, 7, 6, 5, 4, 0, 3, 3, 7, 4,
+        1, 5, 6, 6, 2, 1, 3, 2, 6, 6, 7, 3, 4, 5, 1, 1, 0, 4
     )
-    val uvPattern = arrayOf(
+    private val uvPattern = arrayOf(
         intArrayOf(3, 2, 1, 1, 0, 3),
         intArrayOf(0, 1, 2, 2, 3, 0)
     )
@@ -74,8 +74,8 @@ class MainScene(
 
     private val buffer: DrawBuffer = createTexturedCubeBuffer()
 
-    private val sensitivity = 0.1f
-    private var speed = 0.02f
+    private val sensitivity = 0.01f
+    private var speed = 0.000002f
 
     init {
         camera.fov = 65f
@@ -83,11 +83,11 @@ class MainScene(
 
         camera.update()
 
-        application.window.isVsync = true
+        application.window.isVsync = false
     }
 
     override fun render() {
-        if(isSkipRender) return
+        if (isSkipRender) return
         updateDelta()
         camera.updateAspect(application.window.height, application.window.width)
         handleInput()
@@ -103,10 +103,12 @@ class MainScene(
         application.renderSystem.disableDepthTest()
 
         atlas.unbind()
+
         positionTexShader.unbind()
         end("draw")
 
         calculateFps()
+        println(fps)
     }
 
     private fun handleInput() {
@@ -118,10 +120,10 @@ class MainScene(
         var newY = camera.position.y
         var newZ = camera.position.z
 
-        speed = if(application.keyboard.isPressed(KeyCode.KEY_LCONTROL)) {
-            0.005f
+        speed = if (application.keyboard.isPressed(KeyCode.KEY_LCONTROL)) {
+            0.0005f
         } else {
-            0.02f
+            0.002f
         }
 
         if (application.keyboard.isPressed(KeyCode.KEY_W)) {
@@ -144,12 +146,12 @@ class MainScene(
             newY += right.y * speed
             newZ += right.z * speed
         }
-        if(application.keyboard.isPressed(KeyCode.KEY_SPACE)) {
+        if (application.keyboard.isPressed(KeyCode.KEY_SPACE)) {
             newX += up.x * speed
             newY += up.y * speed
             newZ += up.z * speed
         }
-        if(application.keyboard.isPressed(KeyCode.KEY_LSHIFT)) {
+        if (application.keyboard.isPressed(KeyCode.KEY_LSHIFT)) {
             newX -= up.x * speed
             newY -= up.y * speed
             newZ -= up.z * speed
@@ -159,7 +161,7 @@ class MainScene(
         camera.position.y = newY
         camera.position.z = newZ
 
-        if(application.mouse.isPressed(KeyCode.MOUSE_LEFT)) {
+        if (application.mouse.isPressed(KeyCode.MOUSE_LEFT)) {
             camera.rotate(
                 -application.mouse.displayVec.x * sensitivity,
                 -application.mouse.displayVec.y * sensitivity,
@@ -173,7 +175,7 @@ class MainScene(
 
     private fun rotateCube() {
         begin("cubeRotation")
-        cubeRotation += 0.001f
+        cubeRotation += 0.0000001f
         cubeMatrix.rotate(
             Math.toRadians(cubeRotation), 1f, 1f, 0f
         )
@@ -197,14 +199,21 @@ class MainScene(
 
         for (i in indices.indices step 6) {
             val (row, col) = texCoords[i / 6]
-            val uv = floatArrayOf(atlas.u(row - 1, col - 1), atlas.v(row - 1, col - 1),
+            val uv = floatArrayOf(
+                atlas.u(row - 1, col - 1), atlas.v(row - 1, col - 1),
                 atlas.u(row - 1, col), atlas.v(row - 1, col - 1),
                 atlas.u(row - 1, col), atlas.v(row, col - 1),
-                atlas.u(row - 1, col - 1), atlas.v(row, col - 1))
+                atlas.u(row - 1, col - 1), atlas.v(row, col - 1)
+            )
             val order = uvPattern[if (i / 6 < 4) 0 else 1]
 
             repeat(6) { j ->
-                buffer.addVertex(cubeMatrix, positions[indices[i + j] * 3], positions[indices[i + j] * 3 + 1], positions[indices[i + j] * 3 + 2])
+                buffer.addVertex(
+                    cubeMatrix,
+                    positions[indices[i + j] * 3],
+                    positions[indices[i + j] * 3 + 1],
+                    positions[indices[i + j] * 3 + 2]
+                )
                     .setTexture(uv[order[j] * 2], uv[order[j] * 2 + 1])
                     .endVertex()
             }
