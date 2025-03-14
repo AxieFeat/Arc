@@ -1,8 +1,6 @@
 package arc.graphics.vertex
 
 import arc.annotations.MutableType
-import arc.math.Point3d
-import arc.math.Point3i
 import arc.util.Color
 import org.joml.Matrix4f
 
@@ -57,13 +55,6 @@ interface VertexConsumer {
     fun setColor(color: Color): VertexConsumer
 
     /**
-     * Disable color for current vertex.
-     *
-     * @return Current instance of [VertexConsumer].
-     */
-    fun noColor(): VertexConsumer
-
-    /**
      * Set UV of current vertex.
      *
      * @param u Horizontal value.
@@ -86,6 +77,71 @@ interface VertexConsumer {
 
     fun setNormal(x: Float, y: Float, z: Float): VertexConsumer
 
+    /**
+     * End current vertex.
+     */
     fun endVertex(): VertexConsumer
 
+    /**
+     * Start editing some vertex.
+     *
+     * @param id Number of vertex. Use -1 for selecting all vertex in this buffer.
+     *
+     * @return Current instance of [VertexConsumer].
+     */
+    fun edit(id: Int): VertexConsumer
+
+    /**
+     * Update position in current selected vertex.
+     *
+     * @param x X position.
+     * @param y Y position.
+     * @param z Z position.
+     *
+     * @return Current instance of [VertexConsumer].
+     */
+    fun editPosition(x: Float, y: Float, z: Float): VertexConsumer
+
+    /**
+     * Update position in current selected vertex.
+     *
+     * @param matrix Matrix for transformation.
+     * @param x X position.
+     * @param y Y position.
+     * @param z Z position.
+     *
+     * @return Current instance of [VertexConsumer].
+     */
+    fun editPosition(matrix: Matrix4f, x: Float, y: Float, z: Float): VertexConsumer
+
+    /**
+     * Update color in current selected vertex.
+     *
+     * @param red Red value.
+     * @param green Green value.
+     * @param blue Blue value.
+     * @param alpha Alpha value (transparency).
+     *
+     * @return Current instance of [VertexConsumer].
+     */
+    fun editColor(red: Int, green: Int, blue: Int, alpha: Int): VertexConsumer
+
+    /**
+     * Update color in current selected vertex.
+     *
+     * @param color Color to set.
+     *
+     * @return Current instance of [VertexConsumer].
+     */
+    fun editColor(color: Color): VertexConsumer
+
+    /**
+     * Update texture coords in current selected vertex.
+     *
+     * @param u Horizontal value.
+     * @param v Vertical value.
+     *
+     * @return Current instance of [VertexConsumer].
+     */
+    fun editTexture(u: Float, v: Float): VertexConsumer
 }

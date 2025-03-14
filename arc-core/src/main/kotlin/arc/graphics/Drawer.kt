@@ -16,7 +16,7 @@ interface Drawer {
      *
      * @return New instance of [DrawBuffer].
      */
-    fun begin(mode: DrawerMode, format: VertexFormat, bufferSize: Int = 2097152): DrawBuffer
+    fun begin(mode: DrawerMode, format: VertexFormat, bufferSize: Int = 256): DrawBuffer
 
     /**
      * Render buffer.

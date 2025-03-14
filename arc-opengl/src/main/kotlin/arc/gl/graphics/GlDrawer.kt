@@ -14,7 +14,6 @@ internal object GlDrawer : Drawer {
 
     override fun draw(buffer: DrawBuffer) {
         if(buffer !is GlDrawBuffer) return
-        if(!buffer.isEnded) buffer.end()
 
         GlVertexUploader.draw(buffer)
     }

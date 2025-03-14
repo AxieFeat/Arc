@@ -63,6 +63,8 @@ interface VertexFormat {
      */
     fun getElement(index: Int): VertexFormatElement
 
+    fun getElementOffset(usage: VertexUsage): Int
+
     fun getOffset(index: Int): Int
 
     fun clear()

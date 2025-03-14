@@ -15,11 +15,11 @@ internal object GlVertexUploader {
     @JvmStatic
     @Throws(RuntimeException::class)
     fun draw(drawBuffer: GlDrawBuffer) {
-        if (!drawBuffer.isEnded || drawBuffer.vertexCount == 0) return
+        if (drawBuffer.vertexCount == 0) return
 
         glBindVertexArray(vao)
 
-        glBindBuffer(GL_ARRAY_BUFFER, drawBuffer.vbo)
+        glBindBuffer(GL_ARRAY_BUFFER, drawBuffer.getRenderVbo())
 
         var offset = 0
         for ((index, element) in drawBuffer.format.elements.withIndex()) {

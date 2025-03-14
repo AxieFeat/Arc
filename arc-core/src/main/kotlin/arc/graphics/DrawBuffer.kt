@@ -16,10 +16,8 @@ import org.jetbrains.annotations.ApiStatus
 interface DrawBuffer : VertexConsumer {
 
     /**
-     * Is writing to buffer ended.
+     * Size of buffer.
      */
-    val isEnded: Boolean
-
     @get:JvmName("bufferSize")
     val bufferSize: Int
 
@@ -69,7 +67,7 @@ interface DrawBuffer : VertexConsumer {
          * @return New instance of [DrawBuffer]
          */
         @JvmStatic
-        fun create(mode: DrawerMode, format: VertexFormat, bufferSize: Int = 2097152): DrawBuffer {
+        fun create(mode: DrawerMode, format: VertexFormat, bufferSize: Int = 256): DrawBuffer {
             return Arc.factory<Factory>().create(mode, format, bufferSize)
         }
 

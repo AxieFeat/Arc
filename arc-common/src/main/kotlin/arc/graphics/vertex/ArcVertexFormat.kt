@@ -46,6 +46,15 @@ internal data class ArcVertexFormat(
         return offsets[index]
     }
 
+   override fun getElementOffset(usage: VertexUsage): Int {
+        for (element in elements) {
+            if (element.usage == usage) {
+                return element.count
+            }
+        }
+        throw IllegalArgumentException("VertexUsage $usage not found in format")
+    }
+
     override fun clear() {
         elements.clear()
         offsets.clear()

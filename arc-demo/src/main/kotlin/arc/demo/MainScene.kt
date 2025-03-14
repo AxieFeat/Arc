@@ -13,11 +13,14 @@ import arc.graphics.DrawerMode
 import arc.graphics.vertex.VertexFormat
 import arc.graphics.vertex.VertexFormatElement
 import arc.input.KeyCode
+import arc.profiler.begin
+import arc.profiler.end
 import arc.shader.ShaderInstance
 import arc.texture.TextureAtlas
 import org.joml.Matrix4f
 import org.joml.Vector3f
 import org.joml.Math
+import java.util.concurrent.Executors
 
 class MainScene(
     private val application: Application
@@ -45,10 +48,31 @@ class MainScene(
         columns = 2
     )
 
+    val texCoords = listOf(
+        Pair(1, 1),
+        Pair(1, 1),
+        Pair(1, 1),
+        Pair(1, 1),
+        Pair(2, 1),
+        Pair(1, 2)
+    )
+    val positions = floatArrayOf(
+        -0.5f, -0.5f,  0.5f,   0.5f, -0.5f,  0.5f,   0.5f,  0.5f,  0.5f,   -0.5f,  0.5f,  0.5f,
+        -0.5f, -0.5f, -0.5f,   0.5f, -0.5f, -0.5f,   0.5f,  0.5f, -0.5f,   -0.5f,  0.5f, -0.5f
+    )
+    val indices = intArrayOf(
+        0, 1, 2, 2, 3, 0,  5, 4, 7, 7, 6, 5,  4, 0, 3, 3, 7, 4,
+        1, 5, 6, 6, 2, 1,  3, 2, 6, 6, 7, 3,  4, 5, 1, 1, 0, 4
+    )
+    val uvPattern = arrayOf(
+        intArrayOf(3, 2, 1, 1, 0, 3),
+        intArrayOf(0, 1, 2, 2, 3, 0)
+    )
+
     private var cubeMatrix = Matrix4f()
     private var cubeRotation = 0f
 
-//    private val buffer: DrawBuffer = createTexturedCubeBuffer()
+    private val buffer: DrawBuffer = createTexturedCubeBuffer()
 
     private val sensitivity = 0.1f
     private var speed = 0.02f
@@ -59,7 +83,7 @@ class MainScene(
 
         camera.update()
 
-        application.window.isVsync = false
+        application.window.isVsync = true
     }
 
     override fun render() {
@@ -68,26 +92,25 @@ class MainScene(
         camera.updateAspect(application.window.height, application.window.width)
         handleInput()
 
-        cubeRotation += 0.001f
-        cubeMatrix.rotate(
-            Math.toRadians(cubeRotation), 1f, 1f, 0f
-        )
+        rotateCube()
 
+        begin("draw")
         atlas.bind()
         positionTexShader.bind()
 
         application.renderSystem.enableDepthTest()
-        drawer.draw(createTexturedCubeBuffer())
+        drawer.draw(buffer)
         application.renderSystem.disableDepthTest()
 
         atlas.unbind()
         positionTexShader.unbind()
+        end("draw")
 
         calculateFps()
-        println(fps)
     }
 
     private fun handleInput() {
+        begin("inputHandler")
         val front = Vector3f(0f, 0f, -1f).rotate(camera.rotation).normalize()
         val right = Vector3f(1f, 0f, 0f).rotate(camera.rotation).normalize()
         val up = Vector3f(0f, 1f, 0f).rotate(camera.rotation).normalize()
@@ -145,28 +168,29 @@ class MainScene(
         }
 
         camera.update()
+        end("inputHandler")
     }
 
-    val texCoords = listOf(
-        Pair(1, 1),
-        Pair(1, 1),
-        Pair(1, 1),
-        Pair(1, 1),
-        Pair(2, 1),
-        Pair(1, 2)
-    )
-    val positions = floatArrayOf(
-        -0.5f, -0.5f,  0.5f,   0.5f, -0.5f,  0.5f,   0.5f,  0.5f,  0.5f,   -0.5f,  0.5f,  0.5f,
-        -0.5f, -0.5f, -0.5f,   0.5f, -0.5f, -0.5f,   0.5f,  0.5f, -0.5f,   -0.5f,  0.5f, -0.5f
-    )
-    val indices = intArrayOf(
-        0, 1, 2, 2, 3, 0,  5, 4, 7, 7, 6, 5,  4, 0, 3, 3, 7, 4,
-        1, 5, 6, 6, 2, 1,  3, 2, 6, 6, 7, 3,  4, 5, 1, 1, 0, 4
-    )
-    val uvPattern = arrayOf(
-        intArrayOf(3, 2, 1, 1, 0, 3),
-        intArrayOf(0, 1, 2, 2, 3, 0)
-    )
+    private fun rotateCube() {
+        begin("cubeRotation")
+        cubeRotation += 0.001f
+        cubeMatrix.rotate(
+            Math.toRadians(cubeRotation), 1f, 1f, 0f
+        )
+
+        for (i in indices.indices step 6) {
+            repeat(6) { j ->
+                buffer.edit(i + j)
+                    .editPosition(
+                        cubeMatrix,
+                        positions[indices[i + j] * 3],
+                        positions[indices[i + j] * 3 + 1],
+                        positions[indices[i + j] * 3 + 2]
+                    )
+            }
+        }
+        end("cubeRotation")
+    }
 
     private fun createTexturedCubeBuffer(): DrawBuffer {
         val buffer = drawer.begin(DrawerMode.TRIANGLES, positionTex)
