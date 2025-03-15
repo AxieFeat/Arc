@@ -5,6 +5,7 @@ import arc.assets.TextureAsset
 import arc.assets.shader.FragmentShader
 import arc.assets.shader.ShaderData
 import arc.assets.shader.VertexShader
+import arc.demo.bind.CubeRotationBind
 import arc.demo.shader.DefaultUniformProvider
 import arc.files.classpath
 import arc.graphics.AbstractScene
@@ -43,7 +44,9 @@ class MainScene(
         ),
         rows = 2,
         columns = 2
-    )
+    ).also {
+        it.bind()
+    }
 
     private val texCoords = listOf(
         Pair(1, 1),
@@ -68,6 +71,7 @@ class MainScene(
 
     private var cubeMatrix = Matrix4f()
     private var cubeRotation = 0f
+    private var rotateCubeBind = CubeRotationBind()
 
     private var sensitivity = 0f
     private var speed = 0f
@@ -80,7 +84,10 @@ class MainScene(
 
         camera.update()
 
+        application.renderSystem.enableDepthTest()
+
         application.window.isVsync = true
+        application.keyboard.bindingProcessor.bind(rotateCubeBind)
     }
 
     override fun render() {
@@ -91,14 +98,9 @@ class MainScene(
 
         rotateCube()
 
-        atlas.bind()
         positionTexShader.bind()
 
-        application.renderSystem.enableDepthTest()
         drawer.draw(buffer)
-        application.renderSystem.disableDepthTest()
-
-        atlas.unbind()
 
         positionTexShader.unbind()
 
@@ -167,6 +169,8 @@ class MainScene(
     }
 
     private fun rotateCube() {
+        if(!rotateCubeBind.state) return
+
         cubeRotation += (120f * delta)
         val rotation = Math.toRadians(cubeRotation)
         cubeMatrix.identity().rotateXYZ(
