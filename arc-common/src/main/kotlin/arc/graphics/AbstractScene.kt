@@ -7,10 +7,9 @@ import org.lwjgl.glfw.GLFW
 
 abstract class AbstractScene(
     private val application: Application,
-    tps: Float,
 ) : Scene {
 
-    private val timer = Timer(tps)
+    private val timer = Timer()
     private var fpsCounter = 0
     private var debugUpdateTime: Long = OS.getTime()
 
@@ -45,8 +44,8 @@ abstract class AbstractScene(
     }
 
     protected fun updateDelta() {
-        timer.updateTimer()
-        this.delta = timer.renderPartialTicks
+        timer.update()
+        this.delta = timer.deltaTime
     }
 
 }

@@ -40,6 +40,8 @@ interface DrawBuffer : VertexConsumer {
      */
     fun end(): DrawBuffer
 
+    fun cleanup()
+
     @ApiStatus.Internal
     @TypeFactory
     interface Factory {

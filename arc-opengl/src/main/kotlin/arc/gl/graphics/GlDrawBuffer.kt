@@ -53,6 +53,11 @@ internal data class GlDrawBuffer(
         return this
     }
 
+    override fun cleanup() {
+        reset()
+        glDeleteBuffers(vbo)
+    }
+
     private fun upload() {
         swapBuffers()
 

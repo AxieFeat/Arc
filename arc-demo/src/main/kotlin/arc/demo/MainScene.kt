@@ -13,9 +13,6 @@ import arc.graphics.DrawerMode
 import arc.graphics.vertex.VertexFormat
 import arc.graphics.vertex.VertexFormatElement
 import arc.input.KeyCode
-import arc.profiler.begin
-import arc.profiler.end
-import arc.shader.FrameBuffer
 import arc.shader.ShaderInstance
 import arc.texture.TextureAtlas
 import org.joml.Math
@@ -24,7 +21,7 @@ import org.joml.Vector3f
 
 class MainScene(
     private val application: Application
-) : AbstractScene(application, 100f) {
+) : AbstractScene(application) {
 
     private val positionTex = VertexFormat.builder()
         .add(VertexFormatElement.POSITION)
@@ -72,10 +69,10 @@ class MainScene(
     private var cubeMatrix = Matrix4f()
     private var cubeRotation = 0f
 
-    private val buffer: DrawBuffer = createTexturedCubeBuffer()
+    private var sensitivity = 0f
+    private var speed = 0f
 
-    private val sensitivity = 0.01f
-    private var speed = 0.000002f
+    private val buffer: DrawBuffer = createTexturedCubeBuffer()
 
     init {
         camera.fov = 65f
@@ -83,7 +80,7 @@ class MainScene(
 
         camera.update()
 
-        application.window.isVsync = false
+        application.window.isVsync = true
     }
 
     override fun render() {
@@ -94,7 +91,6 @@ class MainScene(
 
         rotateCube()
 
-        begin("draw")
         atlas.bind()
         positionTexShader.bind()
 
@@ -105,14 +101,11 @@ class MainScene(
         atlas.unbind()
 
         positionTexShader.unbind()
-        end("draw")
 
         calculateFps()
-        println(fps)
     }
 
     private fun handleInput() {
-        begin("inputHandler")
         val front = Vector3f(0f, 0f, -1f).rotate(camera.rotation).normalize()
         val right = Vector3f(1f, 0f, 0f).rotate(camera.rotation).normalize()
         val up = Vector3f(0f, 1f, 0f).rotate(camera.rotation).normalize()
@@ -121,9 +114,9 @@ class MainScene(
         var newZ = camera.position.z
 
         speed = if (application.keyboard.isPressed(KeyCode.KEY_LCONTROL)) {
-            0.0005f
+            1f * delta
         } else {
-            0.002f
+            5f * delta
         }
 
         if (application.keyboard.isPressed(KeyCode.KEY_W)) {
@@ -162,6 +155,7 @@ class MainScene(
         camera.position.z = newZ
 
         if (application.mouse.isPressed(KeyCode.MOUSE_LEFT)) {
+            this.sensitivity = 10f * delta
             camera.rotate(
                 -application.mouse.displayVec.x * sensitivity,
                 -application.mouse.displayVec.y * sensitivity,
@@ -170,15 +164,14 @@ class MainScene(
         }
 
         camera.update()
-        end("inputHandler")
     }
 
     private fun rotateCube() {
-        begin("cubeRotation")
-        cubeRotation += 0.0000001f
-        cubeMatrix.rotate(
-            Math.toRadians(cubeRotation), 1f, 1f, 0f
-        )
+        cubeRotation += (120f * delta)
+        val rotation = Math.toRadians(cubeRotation)
+        cubeMatrix.identity().rotateXYZ(
+            rotation, rotation, 0f
+        ).normal()
 
         for (i in indices.indices step 6) {
             repeat(6) { j ->
@@ -191,11 +184,10 @@ class MainScene(
                     )
             }
         }
-        end("cubeRotation")
     }
 
     private fun createTexturedCubeBuffer(): DrawBuffer {
-        val buffer = drawer.begin(DrawerMode.TRIANGLES, positionTex)
+        val buffer = drawer.begin(DrawerMode.TRIANGLES, positionTex, 200)
 
         for (i in indices.indices step 6) {
             val (row, col) = texCoords[i / 6]
