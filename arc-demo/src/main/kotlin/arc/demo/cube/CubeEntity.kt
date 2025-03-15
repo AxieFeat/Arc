@@ -76,9 +76,25 @@ class CubeEntity(
     }
 
     fun rotate(x: Float, y: Float, z: Float) {
-        cubeMatrix.identity().rotateXYZ(
+        cubeMatrix.setRotationXYZ(
             Math.toRadians(x), Math.toRadians(y), Math.toRadians(z)
         ).normal()
+
+        for (i in indices.indices step 6) {
+            repeat(6) { j ->
+                buffer.edit(i + j)
+                    .editPosition(
+                        cubeMatrix,
+                        positions[indices[i + j] * 3],
+                        positions[indices[i + j] * 3 + 1],
+                        positions[indices[i + j] * 3 + 2]
+                    )
+            }
+        }
+    }
+
+    fun setPosition(x: Float, y: Float, z: Float) {
+        cubeMatrix.translate(x, y, z)
 
         for (i in indices.indices step 6) {
             repeat(6) { j ->

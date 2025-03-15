@@ -46,6 +46,11 @@ class MainScene(
     }
 
     private val cube = CubeEntity(application, atlas, positionTex)
+    private val secondCube = CubeEntity(application, atlas, positionTex)
+
+    private val front = Vector3f()
+    private val right = Vector3f()
+    private val up = Vector3f()
 
     private var cubeRotation = 0f
     private var rotateCubeBind = CubeRotationBind()
@@ -57,6 +62,9 @@ class MainScene(
         camera.fov = 65f
         camera.zNear = 0.0001f
         camera.update()
+
+        cube.setPosition(0f, -1f, 0f)
+        secondCube.setPosition(1f, -2f, 0f)
 
         application.window.isVsync = true
         application.keyboard.bindingProcessor.bind(rotateCubeBind)
@@ -70,14 +78,16 @@ class MainScene(
 
         rotateCube()
         cube.render(positionTexShader)
+        secondCube.render(positionTexShader)
 
         calculateFps()
     }
 
     private fun handleInput() {
-        val front = Vector3f(0f, 0f, -1f).rotate(camera.rotation).normalize()
-        val right = Vector3f(1f, 0f, 0f).rotate(camera.rotation).normalize()
-        val up = Vector3f(0f, 1f, 0f).rotate(camera.rotation).normalize()
+        this.front.set(0f, 0f, -1f).rotate(camera.rotation).normalize()
+        this.right.set(1f, 0f, 0f).rotate(camera.rotation).normalize()
+        this.up.set(0f, 1f, 0f).rotate(camera.rotation).normalize()
+
         var newX = camera.position.x
         var newY = camera.position.y
         var newZ = camera.position.z
@@ -113,7 +123,7 @@ class MainScene(
             newY += up.y * speed
             newZ += up.z * speed
         }
-        if (application.keyboard.isPressed(KeyCode.KEY_LSHIFT)) {
+        if (application.keyboard.isPressed(KeyCode.KEY_RSHIFT)) {
             newX -= up.x * speed
             newY -= up.y * speed
             newZ -= up.z * speed
