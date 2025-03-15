@@ -80,22 +80,20 @@ class CubeEntity(
             Math.toRadians(x), Math.toRadians(y), Math.toRadians(z)
         ).normal()
 
-        for (i in indices.indices step 6) {
-            repeat(6) { j ->
-                buffer.edit(i + j)
-                    .editPosition(
-                        cubeMatrix,
-                        positions[indices[i + j] * 3],
-                        positions[indices[i + j] * 3 + 1],
-                        positions[indices[i + j] * 3 + 2]
-                    )
-            }
-        }
+        update()
     }
 
     fun setPosition(x: Float, y: Float, z: Float) {
         cubeMatrix.translate(x, y, z)
+        update()
+    }
 
+    fun setScale(x: Float, y: Float = x, z: Float = x) {
+        cubeMatrix.scale(x, y, z)
+        update()
+    }
+
+    private fun update() {
         for (i in indices.indices step 6) {
             repeat(6) { j ->
                 buffer.edit(i + j)

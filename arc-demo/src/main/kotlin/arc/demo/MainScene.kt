@@ -35,18 +35,24 @@ class MainScene(
         it.addProvider(DefaultUniformProvider)
     }
 
-    private val atlas = TextureAtlas.from(
+    private val grassAtlas = TextureAtlas.from(
         asset = TextureAsset.from(
-            classpath("arc/texture/cube.png"),
+            classpath("arc/texture/grass.png"),
         ),
         rows = 2,
         columns = 2
-    ).also {
-        it.bind()
-    }
+    )
 
-    private val cube = CubeEntity(application, atlas, positionTex)
-    private val secondCube = CubeEntity(application, atlas, positionTex)
+    private val stoneAtlas = TextureAtlas.from(
+        asset = TextureAsset.from(
+            classpath("arc/texture/stone.png"),
+        ),
+        rows = 2,
+        columns = 2
+    )
+
+    private val cube = CubeEntity(application, grassAtlas, positionTex)
+    private val secondCube = CubeEntity(application, stoneAtlas, positionTex)
 
     private val front = Vector3f()
     private val right = Vector3f()
@@ -64,7 +70,8 @@ class MainScene(
         camera.update()
 
         cube.setPosition(0f, -1f, 0f)
-        secondCube.setPosition(1f, -2f, 0f)
+        secondCube.setPosition(1f, -1.25f, 0f)
+        secondCube.setScale(0.75f)
 
         application.window.isVsync = true
         application.keyboard.bindingProcessor.bind(rotateCubeBind)
