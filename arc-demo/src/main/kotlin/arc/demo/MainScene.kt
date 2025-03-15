@@ -6,18 +6,15 @@ import arc.assets.shader.FragmentShader
 import arc.assets.shader.ShaderData
 import arc.assets.shader.VertexShader
 import arc.demo.bind.CubeRotationBind
+import arc.demo.cube.CubeEntity
 import arc.demo.shader.DefaultUniformProvider
 import arc.files.classpath
 import arc.graphics.AbstractScene
-import arc.graphics.DrawBuffer
-import arc.graphics.DrawerMode
 import arc.graphics.vertex.VertexFormat
 import arc.graphics.vertex.VertexFormatElement
 import arc.input.KeyCode
 import arc.shader.ShaderInstance
 import arc.texture.TextureAtlas
-import org.joml.Math
-import org.joml.Matrix4f
 import org.joml.Vector3f
 
 class MainScene(
@@ -48,43 +45,18 @@ class MainScene(
         it.bind()
     }
 
-    private val texCoords = listOf(
-        Pair(1, 1),
-        Pair(1, 1),
-        Pair(1, 1),
-        Pair(1, 1),
-        Pair(2, 1),
-        Pair(1, 2)
-    )
-    private val positions = floatArrayOf(
-        -0.5f, -0.5f, 0.5f, 0.5f, -0.5f, 0.5f, 0.5f, 0.5f, 0.5f, -0.5f, 0.5f, 0.5f,
-        -0.5f, -0.5f, -0.5f, 0.5f, -0.5f, -0.5f, 0.5f, 0.5f, -0.5f, -0.5f, 0.5f, -0.5f
-    )
-    private val indices = intArrayOf(
-        0, 1, 2, 2, 3, 0, 5, 4, 7, 7, 6, 5, 4, 0, 3, 3, 7, 4,
-        1, 5, 6, 6, 2, 1, 3, 2, 6, 6, 7, 3, 4, 5, 1, 1, 0, 4
-    )
-    private val uvPattern = arrayOf(
-        intArrayOf(3, 2, 1, 1, 0, 3),
-        intArrayOf(0, 1, 2, 2, 3, 0)
-    )
+    private val cube = CubeEntity(application, atlas, positionTex)
 
-    private var cubeMatrix = Matrix4f()
     private var cubeRotation = 0f
     private var rotateCubeBind = CubeRotationBind()
 
     private var sensitivity = 0f
     private var speed = 0f
 
-    private val buffer: DrawBuffer = createTexturedCubeBuffer()
-
     init {
         camera.fov = 65f
         camera.zNear = 0.0001f
-
         camera.update()
-
-        application.renderSystem.enableDepthTest()
 
         application.window.isVsync = true
         application.keyboard.bindingProcessor.bind(rotateCubeBind)
@@ -97,12 +69,7 @@ class MainScene(
         handleInput()
 
         rotateCube()
-
-        positionTexShader.bind()
-
-        drawer.draw(buffer)
-
-        positionTexShader.unbind()
+        cube.render(positionTexShader)
 
         calculateFps()
     }
@@ -172,50 +139,6 @@ class MainScene(
         if(!rotateCubeBind.state) return
 
         cubeRotation += (120f * delta)
-        val rotation = Math.toRadians(cubeRotation)
-        cubeMatrix.identity().rotateXYZ(
-            rotation, rotation, 0f
-        ).normal()
-
-        for (i in indices.indices step 6) {
-            repeat(6) { j ->
-                buffer.edit(i + j)
-                    .editPosition(
-                        cubeMatrix,
-                        positions[indices[i + j] * 3],
-                        positions[indices[i + j] * 3 + 1],
-                        positions[indices[i + j] * 3 + 2]
-                    )
-            }
-        }
-    }
-
-    private fun createTexturedCubeBuffer(): DrawBuffer {
-        val buffer = drawer.begin(DrawerMode.TRIANGLES, positionTex, 200)
-
-        for (i in indices.indices step 6) {
-            val (row, col) = texCoords[i / 6]
-            val uv = floatArrayOf(
-                atlas.u(row - 1, col - 1), atlas.v(row - 1, col - 1),
-                atlas.u(row - 1, col), atlas.v(row - 1, col - 1),
-                atlas.u(row - 1, col), atlas.v(row, col - 1),
-                atlas.u(row - 1, col - 1), atlas.v(row, col - 1)
-            )
-            val order = uvPattern[if (i / 6 < 4) 0 else 1]
-
-            repeat(6) { j ->
-                buffer.addVertex(
-                    cubeMatrix,
-                    positions[indices[i + j] * 3],
-                    positions[indices[i + j] * 3 + 1],
-                    positions[indices[i + j] * 3 + 2]
-                )
-                    .setTexture(uv[order[j] * 2], uv[order[j] * 2 + 1])
-                    .endVertex()
-            }
-        }
-
-        buffer.end()
-        return buffer
+        cube.rotate(cubeRotation, cubeRotation, 0f)
     }
 }
