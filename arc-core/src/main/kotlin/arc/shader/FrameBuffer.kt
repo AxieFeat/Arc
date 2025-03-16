@@ -36,6 +36,8 @@ interface FrameBuffer {
 
     fun render(width: Int = this.width, height: Int = this.height)
 
+    fun resize(width: Int, height: Int)
+
     fun clear()
 
     @ApiStatus.Internal

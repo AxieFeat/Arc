@@ -13,6 +13,7 @@ import arc.graphics.AbstractScene
 import arc.graphics.vertex.VertexFormat
 import arc.graphics.vertex.VertexFormatElement
 import arc.input.KeyCode
+import arc.shader.FrameBuffer
 import arc.shader.ShaderInstance
 import arc.texture.TextureAtlas
 import org.joml.Vector3f
@@ -30,6 +31,15 @@ class MainScene(
         vertexShader = VertexShader.from(classpath("arc/shader/position_tex/position_tex.vsh")),
         fragmentShader = FragmentShader.from(classpath("arc/shader/position_tex/position_tex.fsh")),
         shaderData = ShaderData.from(classpath("arc/shader/position_tex/position_tex.json")),
+    ).also {
+        it.compileShaders()
+        it.addProvider(DefaultUniformProvider)
+    }
+
+    private val blitShader = ShaderInstance.of(
+        vertexShader = VertexShader.from(classpath("arc/shader/blit_screen/blit_screen.vsh")),
+        fragmentShader = FragmentShader.from(classpath("arc/shader/blit_screen/blit_screen.fsh")),
+        shaderData = ShaderData.from(classpath("arc/shader/blit_screen/blit_screen.json")),
     ).also {
         it.compileShaders()
         it.addProvider(DefaultUniformProvider)
@@ -54,6 +64,8 @@ class MainScene(
     private val cube = CubeEntity(application, grassAtlas, positionTex)
     private val secondCube = CubeEntity(application, stoneAtlas, positionTex)
 
+    private val frameBuffer = FrameBuffer.create(application.window.width, application.window.height, true)
+
     private val front = Vector3f()
     private val right = Vector3f()
     private val up = Vector3f()
@@ -75,19 +87,31 @@ class MainScene(
 
         application.window.isVsync = true
         application.keyboard.bindingProcessor.bind(rotateCubeBind)
+
+        application.renderSystem.enableCull()
     }
 
     override fun render() {
         if (isSkipRender) return
         updateDelta()
-        camera.updateAspect(application.window.height, application.window.width)
+        camera.updateAspect(application.window.width, application.window.height)
+        frameBuffer.resize(application.window.width, application.window.height)
         handleInput()
 
         rotateCube()
+
+        frameBuffer.bind(true)
+        frameBuffer.clear()
         cube.render(positionTexShader)
         secondCube.render(positionTexShader)
+        frameBuffer.unbind()
+
+        blitShader.bind()
+        frameBuffer.render()
+        blitShader.unbind()
 
         calculateFps()
+        println(fps)
     }
 
     private fun handleInput() {
@@ -130,7 +154,7 @@ class MainScene(
             newY += up.y * speed
             newZ += up.z * speed
         }
-        if (application.keyboard.isPressed(KeyCode.KEY_RSHIFT)) {
+        if (application.keyboard.isPressed(KeyCode.KEY_LSHIFT)) {
             newX -= up.x * speed
             newY -= up.y * speed
             newZ -= up.z * speed

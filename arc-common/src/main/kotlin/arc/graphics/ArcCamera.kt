@@ -1,5 +1,7 @@
 package arc.graphics
 
+import arc.culling.ArcFrustum
+import arc.culling.Frustum
 import arc.math.Point3d
 import org.joml.Math
 import org.joml.Matrix4f
@@ -8,8 +10,8 @@ import org.joml.Vector3f
 
 internal data class ArcCamera(
     override var fov: Float,
-    override var windowHeight: Float,
     override var windowWidth: Float,
+    override var windowHeight: Float,
 ) : Camera {
 
     override var view: Matrix4f = Matrix4f()
@@ -22,6 +24,8 @@ internal data class ArcCamera(
 
     private var lookAtTarget: Point3d? = null
     private var aspect = windowWidth / windowHeight
+
+    override val frustum: Frustum = ArcFrustum(this)
 
     override fun lookAt(target: Point3d) {
         lookAtTarget = target
@@ -70,7 +74,7 @@ internal data class ArcCamera(
         }
     }
 
-    override fun updateAspect(height: Int, width: Int) {
+    override fun updateAspect(width: Int, height: Int) {
         if(windowHeight == height.toFloat() && windowWidth == width.toFloat()) return
 
         windowHeight = height.toFloat()

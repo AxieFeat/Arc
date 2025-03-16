@@ -14,7 +14,7 @@ abstract class AbstractScene(
     private var debugUpdateTime: Long = OS.getTime()
 
     override val drawer: Drawer = application.renderSystem.drawer
-    override val camera: Camera = Camera.create(45f, application.window.height.toFloat(), application.window.width.toFloat())
+    override val camera: Camera = Camera.create(45f, application.window.width.toFloat(), application.window.height.toFloat())
     override var fps: Int = 0
     override var delta: Float = 0f
     override val inUse: Boolean

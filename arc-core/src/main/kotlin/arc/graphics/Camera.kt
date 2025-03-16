@@ -3,6 +3,7 @@ package arc.graphics
 import arc.Arc
 import arc.annotations.MutableType
 import arc.annotations.TypeFactory
+import arc.culling.Frustum
 import arc.math.Point3d
 import org.jetbrains.annotations.ApiStatus
 import org.joml.Matrix4f
@@ -26,6 +27,12 @@ interface Camera {
      */
     @get:JvmName("windowWidth")
     val windowWidth: Float
+
+    /**
+     * Frustum culling for camera.
+     */
+    @get:JvmName("frustum")
+    val frustum: Frustum
 
     /**
      * View matrix. You can use it for advanced transformations.
@@ -92,7 +99,7 @@ interface Camera {
     /**
      * Update aspect in camera with new height and width.
      */
-    fun updateAspect(height: Int, width: Int)
+    fun updateAspect(width: Int, height: Int)
 
     /**
      * Reset [lookAt].
@@ -112,12 +119,12 @@ interface Camera {
          * Create new instance of [Camera].
          *
          * @param fov Field of view for camera.
-         * @param height Window height.
          * @param width Window width.
+         * @param height Window height.
          *
-         * @return New instance pf [Camera].
+         * @return New instance of [Camera].
          */
-        fun create(fov: Float, height: Float, width: Float): Camera
+        fun create(fov: Float, width: Float, height: Float): Camera
 
     }
 
@@ -127,13 +134,13 @@ interface Camera {
          * Create new instance of [Camera].
          *
          * @param fov Field of view for camera.
-         * @param height Window height.
          * @param width Window width.
+         * @param height Window height.
          *
-         * @return New instance pf [Camera].
+         * @return New instance of [Camera].
          */
         @JvmStatic
-        fun create(fov: Float, height: Float, width: Float): Camera {
+        fun create(fov: Float, width: Float, height: Float): Camera {
             return Arc.factory<Factory>().create(fov, height, width)
         }
 

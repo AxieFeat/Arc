@@ -7,48 +7,24 @@ import arc.graphics.DrawerMode
 import arc.graphics.vertex.VertexFormat
 import arc.graphics.vertex.VertexFormatElement
 import arc.shader.FrameBuffer
-import arc.util.Color
 import org.lwjgl.opengl.GL32.*
 import org.lwjgl.system.MemoryUtil
 
 internal class GlFrameBuffer(
-    override val width: Int,
-    override val height: Int,
+    override var width: Int,
+    override var height: Int,
     override var useDepth: Boolean
 ) : FrameBuffer {
 
-    private val fboId: Int = glGenFramebuffers()
-    private val textureId: Int
-    private val depthBufferId: Int
+    private var fboId: Int = 0
+    private var textureId: Int = 0
+    private var depthBufferId: Int = 0
 
     override val textureWidth: Int = width
     override val textureHeight: Int = height
 
     init {
-        glBindFramebuffer(GL_FRAMEBUFFER, fboId)
-
-        textureId = glGenTextures()
-        glBindTexture(GL_TEXTURE_2D, textureId)
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, MemoryUtil.NULL)
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR)
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR)
-        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, textureId, 0)
-
-        depthBufferId = if (useDepth) {
-            val rboId = glGenRenderbuffers()
-            glBindRenderbuffer(GL_RENDERBUFFER, rboId)
-            glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, width, height)
-            glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, rboId)
-            rboId
-        } else {
-            0
-        }
-
-        if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
-            throw RuntimeException("Framebuffer is not complete!")
-        }
-
-        glBindFramebuffer(GL_FRAMEBUFFER, 0)
+        createFramebuffer(width, height)
     }
 
     override fun bind(viewport: Boolean) {
@@ -93,8 +69,46 @@ internal class GlFrameBuffer(
         GlDrawer.draw(buffer)
     }
 
+    override fun resize(width: Int, height: Int) {
+        if (width != this.width || height != this.height) {
+            this.width = width
+            this.height = height
+            createFramebuffer(width, height)
+        }
+    }
+
     override fun clear() {
         glClear(GL_COLOR_BUFFER_BIT or (if (useDepth) GL_DEPTH_BUFFER_BIT else 0))
+    }
+
+    private fun createFramebuffer(width: Int, height: Int) {
+        delete()
+
+        fboId = glGenFramebuffers()
+        glBindFramebuffer(GL_FRAMEBUFFER, fboId)
+
+        textureId = glGenTextures()
+        glBindTexture(GL_TEXTURE_2D, textureId)
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, MemoryUtil.NULL)
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR)
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR)
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, textureId, 0)
+
+        depthBufferId = if (useDepth) {
+            val rbo = glGenRenderbuffers()
+            glBindRenderbuffer(GL_RENDERBUFFER, rbo)
+            glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, width, height)
+            glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, rbo)
+            rbo
+        } else {
+            0
+        }
+
+        if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
+            throw RuntimeException("Framebuffer is not complete!")
+        }
+
+        glBindFramebuffer(GL_FRAMEBUFFER, 0)
     }
 
     companion object {
@@ -121,5 +135,4 @@ internal class GlFrameBuffer(
             return GlFrameBuffer(width, height, useDepth)
         }
     }
-
 }
