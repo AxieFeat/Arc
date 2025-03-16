@@ -87,9 +87,7 @@ internal data class GlDrawBuffer(
     override fun addVertex(x: Float, y: Float, z: Float): GlDrawBuffer {
         val i: Int = this.vertexCount * this.format.nextOffset + this.format.getOffset(this.vertexFormatIndex)
 
-        byteBuffer.putFloat(i, (x + this.xOffset))
-        byteBuffer.putFloat(i + 4, (y + this.yOffset))
-        byteBuffer.putFloat(i + 8, (z + this.zOffset))
+        putPosition(i, x, y, z)
 
         this.nextVertexFormatIndex()
         return this
@@ -105,10 +103,7 @@ internal data class GlDrawBuffer(
         val i: Int =
             this.vertexCount * this.format.nextOffset + this.format.getOffset(this.vertexFormatIndex)
 
-        byteBuffer.put(i, red.toByte())
-        byteBuffer.put(i + 1, green.toByte())
-        byteBuffer.put(i + 2, blue.toByte())
-        byteBuffer.put(i + 3, alpha.toByte())
+        putColor(i, red, green, blue, alpha)
 
         this.nextVertexFormatIndex()
         return this
@@ -127,27 +122,7 @@ internal data class GlDrawBuffer(
         val i: Int =
             this.vertexCount * this.format.nextOffset + this.format.getOffset(this.vertexFormatIndex)
 
-        when (vertexFormatElement.type) {
-            VertexType.FLOAT -> {
-                byteBuffer.putFloat(i, u)
-                byteBuffer.putFloat(i + 4, v)
-            }
-
-            VertexType.UINT, VertexType.INT -> {
-                byteBuffer.putInt(i, u.toInt())
-                byteBuffer.putInt(i + 4, v.toInt())
-            }
-
-            VertexType.USHORT, VertexType.SHORT -> {
-                byteBuffer.putShort(i, u.toInt().toShort())
-                byteBuffer.putShort(i + 2, v.toInt().toShort())
-            }
-
-            VertexType.UBYTE, VertexType.BYTE -> {
-                byteBuffer.put(i, u.toInt().toByte())
-                byteBuffer.put(i + 1, v.toInt().toByte())
-            }
-        }
+        putTexture(i, vertexFormatElement, u, v)
 
         this.nextVertexFormatIndex()
         return this
@@ -165,12 +140,76 @@ internal data class GlDrawBuffer(
         val i: Int =
             this.vertexCount * this.format.nextOffset + this.format.getOffset(this.vertexFormatIndex)
 
-        byteBuffer.put(i, (x.toInt() * Byte.MAX_VALUE and UByte.MAX_VALUE.toInt()).toByte())
-        byteBuffer.put(i + 1, (y.toInt() * Byte.MAX_VALUE and UByte.MAX_VALUE.toInt()).toByte())
-        byteBuffer.put(i + 2, (z.toInt() * Byte.MAX_VALUE and UByte.MAX_VALUE.toInt()).toByte())
+        putNormal(i, x, y, z)
 
         this.nextVertexFormatIndex()
         return this
+    }
+
+    override fun endVertex(): GlDrawBuffer {
+        vertexCount++
+        vertexFormatIndex = 0
+        vertexFormatElement = format.getElement(vertexFormatIndex)
+//        growBuffer(this.format.nextOffset / 4)
+
+        return this
+    }
+
+    override fun edit(id: Int): GlDrawBuffer {
+        selectedVertex = id
+        return this
+    }
+
+    override fun editPosition(x: Float, y: Float, z: Float): GlDrawBuffer {
+        if (vertexCount == 0) return this
+
+        val i: Int = selectedVertex * 20
+
+        putPosition(i, x, y, z)
+
+        upload()
+
+        return this
+    }
+
+    override fun editPosition(matrix: Matrix4f, x: Float, y: Float, z: Float): GlDrawBuffer {
+        val vector3f: Vector3f = matrix.transformPosition(x, y, z, Vector3f())
+
+        return editPosition(vector3f.x, vector3f.y, vector3f.z)
+    }
+
+    override fun editColor(red: Int, green: Int, blue: Int, alpha: Int): GlDrawBuffer {
+        if (vertexCount == 0) return this
+
+        val i: Int = selectedVertex * 20
+
+        putColor(i, red, green, blue, alpha)
+
+        return this
+    }
+
+    override fun editColor(color: Color): GlDrawBuffer {
+        return editColor(color.red, color.green, color.blue, (color.alpha * 255).toInt().coerceIn(0, 255))
+    }
+
+    override fun editTexture(formatElement: VertexFormatElement, u: Float, v: Float): GlDrawBuffer {
+        if (vertexCount == 0) return this // Защита от выхода за границы
+
+        val i: Int = selectedVertex * 20
+
+        putTexture(i, formatElement, u, v)
+
+        return this
+    }
+
+    private fun nextVertexFormatIndex() {
+        this.vertexFormatIndex++
+        this.vertexFormatIndex %= this.format.elements.size
+        this.vertexFormatElement = this.format.getElement(this.vertexFormatIndex)
+
+        if (vertexFormatElement.usage === VertexUsage.PADDING) {
+            this.nextVertexFormatIndex()
+        }
     }
 
     private fun growBuffer(size: Int) {
@@ -192,69 +231,27 @@ internal data class GlDrawBuffer(
         }
     }
 
-    fun reset() {
+    private fun reset() {
         this.vertexCount = 0
         this.vertexFormatIndex = 0
         this.vertexFormatElement = format.getElement(vertexFormatIndex)
     }
 
-    override fun endVertex(): GlDrawBuffer {
-        vertexCount++
-        vertexFormatIndex = 0
-        vertexFormatElement = format.getElement(vertexFormatIndex)
-        growBuffer(this.format.nextOffset / 4)
-
-        return this
-    }
-
-    override fun edit(id: Int): GlDrawBuffer {
-        selectedVertex = id
-        return this
-    }
-
-    override fun editPosition(x: Float, y: Float, z: Float): GlDrawBuffer {
-        if (vertexCount == 0) return this
-
-        val i: Int = selectedVertex * 20
-
+    private fun putPosition(i: Int, x: Float, y: Float, z: Float) {
         byteBuffer.putFloat(i, (x + this.xOffset))
         byteBuffer.putFloat(i + 4, (y + this.yOffset))
         byteBuffer.putFloat(i + 8, (z + this.zOffset))
-
-        upload()
-
-        return this
     }
 
-    override fun editPosition(matrix: Matrix4f, x: Float, y: Float, z: Float): GlDrawBuffer {
-        val vector3f: Vector3f = matrix.transformPosition(x, y, z, Vector3f())
-
-        return editPosition(vector3f.x, vector3f.y, vector3f.z)
-    }
-
-    override fun editColor(red: Int, green: Int, blue: Int, alpha: Int): GlDrawBuffer {
-        if (vertexCount == 0) return this
-
-        val i: Int = selectedVertex * 20
-
+    private fun putColor(i: Int, red: Int, green: Int, blue: Int, alpha: Int) {
         byteBuffer.put(i, red.toByte())
         byteBuffer.put(i + 1, green.toByte())
         byteBuffer.put(i + 2, blue.toByte())
         byteBuffer.put(i + 3, alpha.toByte())
-
-        return this
     }
 
-    override fun editColor(color: Color): GlDrawBuffer {
-        return editColor(color.red, color.green, color.blue, (color.alpha * 255).toInt().coerceIn(0, 255))
-    }
-
-    override fun editTexture(u: Float, v: Float): GlDrawBuffer {
-        if (vertexCount == 0) return this // Защита от выхода за границы
-
-        val i: Int = selectedVertex * 20
-
-        when (vertexFormatElement.type) {
+    private fun putTexture(i: Int, element: VertexFormatElement, u: Float, v: Float) {
+        when (element.type) {
             VertexType.FLOAT -> {
                 byteBuffer.putFloat(i, u)
                 byteBuffer.putFloat(i + 4, v)
@@ -275,18 +272,12 @@ internal data class GlDrawBuffer(
                 byteBuffer.put(i + 1, v.toInt().toByte())
             }
         }
-
-        return this
     }
 
-    private fun nextVertexFormatIndex() {
-        this.vertexFormatIndex++
-        this.vertexFormatIndex %= this.format.elements.size
-        this.vertexFormatElement = this.format.getElement(this.vertexFormatIndex)
-
-        if (vertexFormatElement.usage === VertexUsage.PADDING) {
-            this.nextVertexFormatIndex()
-        }
+    private fun putNormal(i: Int, x: Float, y: Float, z: Float) {
+        byteBuffer.put(i, (x.toInt() * Byte.MAX_VALUE and UByte.MAX_VALUE.toInt()).toByte())
+        byteBuffer.put(i + 1, (y.toInt() * Byte.MAX_VALUE and UByte.MAX_VALUE.toInt()).toByte())
+        byteBuffer.put(i + 2, (z.toInt() * Byte.MAX_VALUE and UByte.MAX_VALUE.toInt()).toByte())
     }
 
     object Factory : DrawBuffer.Factory {

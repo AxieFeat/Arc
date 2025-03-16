@@ -138,10 +138,11 @@ interface VertexConsumer {
     /**
      * Update texture coords in current selected vertex.
      *
+     * @param formatElement Type of element.
      * @param u Horizontal value.
      * @param v Vertical value.
      *
      * @return Current instance of [VertexConsumer].
      */
-    fun editTexture(u: Float, v: Float): VertexConsumer
+    fun editTexture(formatElement: VertexFormatElement, u: Float, v: Float): VertexConsumer
 }
