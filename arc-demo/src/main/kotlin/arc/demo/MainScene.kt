@@ -42,7 +42,6 @@ class MainScene(
         shaderData = ShaderData.from(classpath("arc/shader/blit_screen/blit_screen.json")),
     ).also {
         it.compileShaders()
-        it.addProvider(DefaultUniformProvider)
     }
 
     private val grassAtlas = TextureAtlas.from(
@@ -85,7 +84,7 @@ class MainScene(
         secondCube.setPosition(1f, -1.25f, 0f)
         secondCube.setScale(0.75f)
 
-        application.window.isVsync = true
+        application.window.isVsync = false
         application.keyboard.bindingProcessor.bind(rotateCubeBind)
 
         application.renderSystem.enableCull()
