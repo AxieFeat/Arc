@@ -150,7 +150,7 @@ internal data class GlDrawBuffer(
         vertexCount++
         vertexFormatIndex = 0
         vertexFormatElement = format.getElement(vertexFormatIndex)
-//        growBuffer(this.format.nextOffset / 4)
+        growBuffer(this.format.nextOffset / 4)
 
         return this
     }
@@ -193,7 +193,7 @@ internal data class GlDrawBuffer(
     }
 
     override fun editTexture(formatElement: VertexFormatElement, u: Float, v: Float): GlDrawBuffer {
-        if (vertexCount == 0) return this // Защита от выхода за границы
+        if (vertexCount == 0) return this
 
         val i: Int = selectedVertex * 20
 

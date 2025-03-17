@@ -6,6 +6,7 @@ import arc.assets.shader.FragmentShader
 import arc.assets.shader.ShaderData
 import arc.assets.shader.VertexShader
 import arc.demo.bind.CubeRotationBind
+import arc.demo.cube.CubeArray
 import arc.demo.cube.CubeEntity
 import arc.demo.shader.DefaultUniformProvider
 import arc.files.classpath
@@ -63,6 +64,18 @@ class MainScene(
     private val cube = CubeEntity(application, grassAtlas, positionTex)
     private val secondCube = CubeEntity(application, stoneAtlas, positionTex)
 
+    private val terrain = CubeArray(application, grassAtlas, positionTex).also {
+        val size = 100
+
+        for(x in 0..size) {
+            for(z in 0..size) {
+                it.addCube(x.toFloat(), 0f, z.toFloat())
+            }
+        }
+
+        it.end()
+    }
+
     private val frameBuffer = FrameBuffer.create(application.window.width, application.window.height, true)
 
     private val front = Vector3f()
@@ -78,6 +91,7 @@ class MainScene(
     init {
         camera.fov = 65f
         camera.zNear = 0.0001f
+        camera.zFar = 10000000000000000000000000000000000f
         camera.update()
 
         cube.setPosition(0f, -1f, 0f)
@@ -99,15 +113,22 @@ class MainScene(
 
         rotateCube()
 
-        frameBuffer.bind(true)
-        frameBuffer.clear()
-        cube.render(positionTexShader)
-        secondCube.render(positionTexShader)
-        frameBuffer.unbind()
-
-        blitShader.bind()
-        frameBuffer.render()
-        blitShader.unbind()
+//        frameBuffer.bind(true)
+//        frameBuffer.clear()
+//        cube.render(positionTexShader)
+//        secondCube.render(positionTexShader)
+        positionTexShader.bind()
+        grassAtlas.bind()
+        application.renderSystem.enableDepthTest()
+        terrain.render()
+        application.renderSystem.disableDepthTest()
+        grassAtlas.unbind()
+        positionTexShader.unbind()
+//        frameBuffer.unbind()
+//
+//        blitShader.bind()
+//        frameBuffer.render()
+//        blitShader.unbind()
 
         calculateFps()
         println(fps)
