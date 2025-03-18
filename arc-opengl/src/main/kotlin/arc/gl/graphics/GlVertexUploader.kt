@@ -43,28 +43,5 @@ internal object GlVertexUploader {
 
         glBindVertexArray(0)
     }
-
-    @JvmStatic
-    @Throws(RuntimeException::class)
-    fun drawMultiple(vararg drawBuffers: GlDrawBuffer) {
-        if (drawBuffers.isEmpty()) return
-
-        glBindVertexArray(vao)
-
-        val firstBuffer = drawBuffers[0]
-        val mode = firstBuffer.mode.id
-        val offsets = IntArray(drawBuffers.size) { 0 }
-        val counts = IntArray(drawBuffers.size)
-
-        for (i in drawBuffers.indices) {
-            val buffer = drawBuffers[i]
-            glBindBuffer(GL_ARRAY_BUFFER, buffer.getRenderVbo())
-            counts[i] = buffer.vertexCount
-        }
-
-        glMultiDrawArrays(mode, offsets, counts)
-
-        glBindVertexArray(0)
-    }
 }
 

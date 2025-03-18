@@ -7,12 +7,14 @@ import arc.assets.shader.ShaderData
 import arc.gl.asset.GlShaderData
 import arc.gl.asset.GlTextureAsset
 import arc.gl.graphics.GlDrawBuffer
+import arc.gl.shader.GlBlendMode
 import arc.gl.shader.GlFrameBuffer
 import arc.gl.shader.GlShaderInstance
 import arc.gl.texture.GlTexture
 import arc.gl.texture.GlTextureAtlas
 import arc.graphics.DrawBuffer
 import arc.register
+import arc.shader.BlendMode
 import arc.shader.FrameBuffer
 import arc.shader.ShaderInstance
 import arc.texture.Texture
@@ -34,5 +36,6 @@ internal object GlFactoryProvider {
         provider.register<ShaderInstance.Factory>(GlShaderInstance.Factory)
         provider.register<DrawBuffer.Factory>(GlDrawBuffer.Factory)
         provider.register<ShaderData.Factory>(GlShaderData.Factory)
+        provider.register<BlendMode.Factory>(GlBlendMode.Factory)
     }
 }

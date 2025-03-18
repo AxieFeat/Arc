@@ -138,4 +138,16 @@ internal object GlRenderSystem : RenderSystem {
     override fun disableAlpha() {
         glDisable(GL_ALPHA)
     }
+
+    override fun blendEquation(mode: Int) {
+        glBlendEquation(mode)
+    }
+
+    override fun blendFuncSeparate(sourceFactor: Int, destFactor: Int, sourceFactorAlpha: Int, destFactorAlpha: Int) {
+        glBlendFuncSeparate(sourceFactor, destFactor, sourceFactorAlpha, destFactorAlpha)
+    }
+
+    override fun blendFunc(sourceFactor: Int, destFactor: Int) {
+        glBlendFunc(sourceFactor, destFactor)
+    }
 }

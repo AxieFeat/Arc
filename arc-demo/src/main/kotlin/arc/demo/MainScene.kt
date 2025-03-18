@@ -113,8 +113,8 @@ class MainScene(
 
         rotateCube()
 
-//        frameBuffer.bind(true)
-//        frameBuffer.clear()
+        frameBuffer.bind(true)
+        frameBuffer.clear()
 //        cube.render(positionTexShader)
 //        secondCube.render(positionTexShader)
         positionTexShader.bind()
@@ -124,11 +124,12 @@ class MainScene(
         application.renderSystem.disableDepthTest()
         grassAtlas.unbind()
         positionTexShader.unbind()
-//        frameBuffer.unbind()
-//
-//        blitShader.bind()
-//        frameBuffer.render()
-//        blitShader.unbind()
+        frameBuffer.unbind()
+
+        blitShader.bind()
+        blitShader.data.blendMode?.apply()
+        frameBuffer.render()
+        blitShader.unbind()
 
         calculateFps()
         println(fps)

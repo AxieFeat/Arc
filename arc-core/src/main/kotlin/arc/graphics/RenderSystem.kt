@@ -308,4 +308,10 @@ interface RenderSystem {
     fun enableAlpha()
 
     fun disableAlpha()
+
+    fun blendEquation(mode: Int)
+
+    fun blendFuncSeparate(sourceFactor: Int, destFactor: Int, sourceFactorAlpha: Int, destFactorAlpha: Int)
+
+    fun blendFunc(sourceFactor: Int, destFactor: Int)
 }

@@ -4,8 +4,6 @@ import arc.assets.TextureAsset
 import arc.gl.graphics.GlRenderSystem
 import arc.texture.EmptyTexture
 import arc.texture.Texture
-import org.lwjgl.opengl.GL11
-import org.lwjgl.opengl.GL30
 import org.lwjgl.opengl.GL41.*
 import org.lwjgl.stb.STBImage
 import org.lwjgl.system.MemoryStack
