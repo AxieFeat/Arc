@@ -1,6 +1,8 @@
 package arc
 
 import arc.OS.execSafe
+import arc.audio.ArcSoundEngine
+import arc.audio.SoundEngine
 import arc.input.keyboard.ArcKeyboardInput
 import arc.input.keyboard.KeyboardInput
 import arc.input.mouse.ArcMouseInput
@@ -18,6 +20,7 @@ abstract class AbstractApplication : Application {
             GLFW.glfwSetClipboardString(window.handle, value)
         }
 
+    override val soundEngine: SoundEngine = ArcSoundEngine
     override val mouse: MouseInput = ArcMouseInput
     override val keyboard: KeyboardInput = ArcKeyboardInput
 

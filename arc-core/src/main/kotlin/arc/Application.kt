@@ -2,6 +2,7 @@ package arc
 
 import arc.annotations.MutableType
 import arc.annotations.TypeFactory
+import arc.audio.SoundEngine
 import arc.files.LocationSpace
 import arc.graphics.RenderSystem
 import arc.input.keyboard.KeyboardInput
@@ -54,6 +55,12 @@ interface Application {
      */
     @get:JvmName("renderSystem")
     val renderSystem: RenderSystem
+
+    /**
+     * Represent the sound engine used by the application for managing sound.
+     */
+    @get:JvmName("soundEngine")
+    val soundEngine: SoundEngine
 
     /**
      * Represents the file location management system for the application.

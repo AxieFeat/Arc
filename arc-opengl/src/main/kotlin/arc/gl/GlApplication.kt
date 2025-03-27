@@ -35,6 +35,8 @@ object GlApplication : AbstractApplication() {
         window.create()
 
         GL.createCapabilities()
+
+        soundEngine.start()
     }
 
     override fun screenshot(folder: File, name: String) {

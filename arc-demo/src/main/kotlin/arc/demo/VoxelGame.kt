@@ -2,11 +2,16 @@ package arc.demo
 
 import arc.Application
 import arc.Configuration
+import arc.assets.SoundAsset
+import arc.audio.Sound
 import arc.demo.screen.MainMenuScreen
 import arc.demo.screen.Screen
 import arc.demo.shader.ShaderContainer
+import arc.files.classpath
 import arc.graphics.vertex.VertexFormat
 import arc.window.WindowHandler
+import java.lang.Thread.sleep
+import kotlin.math.truncate
 
 object VoxelGame : WindowHandler {
 
@@ -21,6 +26,16 @@ object VoxelGame : WindowHandler {
         application.window.handler = this
         application.window.isVsync = false
         setScreen(MainMenuScreen)
+
+        val asset = SoundAsset.from(classpath("arc/sound/pigstep.ogg"))
+        val sound = Sound.from(asset)
+
+        sound.play(loop = true)
+
+        Thread {
+            sleep(5000)
+            sound.pitch = 10f
+        }.start()
 
         loop()
 

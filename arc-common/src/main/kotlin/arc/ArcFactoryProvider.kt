@@ -9,6 +9,9 @@ import arc.assets.MutableAssetStack
 import arc.assets.SoundAsset
 import arc.assets.shader.FragmentShader
 import arc.assets.shader.VertexShader
+import arc.audio.AbstractSound
+import arc.audio.OggSound
+import arc.audio.Sound
 import arc.graphics.ArcCamera
 import arc.graphics.Camera
 import arc.graphics.vertex.ArcVertexFormat
@@ -65,6 +68,7 @@ object ArcFactoryProvider : FactoryProvider {
         register<Configuration.Factory>(ArcConfiguration.Factory)
         register<Profiler.Factory>(ArcProfiler.Factory)
         register<Camera.Factory>(ArcCamera.Factory)
+        register<Sound.Factory>(OggSound.Factory)
 
         register<VertexFormat.BuilderFactory>(ArcVertexFormat.BuilderFactory)
         register<VertexFormatElement.Factory>(ArcVertexFormatElement.Factory)
