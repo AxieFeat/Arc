@@ -1,39 +1,34 @@
 package arc.profiler.section
 
-import java.math.BigDecimal
-import java.math.RoundingMode
+import kotlin.math.roundToInt
 
 internal data class ArcTreeSectionResult(
-    override val name: String,
+    override var name: String,
     override var root: TreeSectionResult? = null,
-    override val startTime: Long,
-    override val endTime: Long = System.nanoTime(),
-    override val child: MutableList<TreeSectionResult> = mutableListOf(),
+    override var startTime: Long,
+    override var endTime: Long = System.nanoTime(),
+    override var child: MutableList<ArcTreeSectionResult> = mutableListOf(),
 ) : TreeSectionResult {
 
-    override val usage: Double = run {
-        val parent = root ?: return@run 100.0
-        val parentDuration = parent.duration
-
-        if (parentDuration == 0L || duration == 0L) return@run 0.0
-
-        val percentage = (duration.toDouble() / parentDuration) * 100
-        return@run BigDecimal(percentage).setScale(2, RoundingMode.HALF_UP).toDouble()
-    }
+    override var usage: Double = calculateUsage(root, duration)
 
     override val duration: Long
         get() = endTime - startTime
 
-    fun addResult(child: TreeSectionResult) {
+    fun addResult(child: ArcTreeSectionResult) {
         this.child.add(child)
+    }
+
+    fun getResult(child: String): ArcTreeSectionResult? {
+        return this.child.find { it.name == child }
     }
 
     override fun pretty(level: Int): String {
         val sectionInfo = if(level > 0) {
             val indent = "  ".repeat(level)
-            "$indent- $name: ${BigDecimal(duration / 1000000.0).setScale(2, RoundingMode.HALF_UP).toDouble()}ms, ${usage}%"
+            "$indent- $name: ${(duration / 1000000.0).round()}ms, ${usage}%"
         } else {
-            "${name.uppercase()}: ${BigDecimal(duration / 1000000.0).setScale(2, RoundingMode.HALF_UP).toDouble()}ms, ${usage}%"
+            "${name.uppercase()}: ${(duration / 1000000.0).round()}ms, ${usage}%"
         }
 
         if (child.isEmpty()) {
@@ -47,5 +42,21 @@ internal data class ArcTreeSectionResult(
 
     override fun toString(): String {
         return pretty()
+    }
+
+    companion object {
+        fun calculateUsage(root: TreeSectionResult?, duration: Long): Double {
+            val parent = root ?: return 100.0
+            val parentDuration = parent.duration
+
+            if (parentDuration == 0L || duration == 0L) return 0.0
+
+            val percentage = (duration.toDouble() / parentDuration) * 100
+            return percentage.round()
+        }
+
+        private fun Double.round(): Double {
+            return (this * 100).roundToInt() / 100.0
+        }
     }
 }

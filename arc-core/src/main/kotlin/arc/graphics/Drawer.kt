@@ -23,6 +23,6 @@ interface Drawer {
      *
      * @param buffer Buffer for rendering.
      */
-    fun draw(buffer: DrawBuffer)
+    fun draw(buffer: VertexBuffer)
 
 }

@@ -1,4 +1,4 @@
-package arc.demo.cube
+package arc.demo.entity
 
 import arc.Application
 import arc.graphics.DrawerMode
@@ -63,12 +63,14 @@ class CubeEntity(
         it.end()
     }
 
+    private val vertexBuffer = buffer.build()
+
     fun render(shader: ShaderInstance) {
         shader.bind()
         atlas.bind()
 
         application.renderSystem.enableDepthTest()
-        application.renderSystem.drawer.draw(buffer)
+        application.renderSystem.drawer.draw(vertexBuffer)
         application.renderSystem.disableDepthTest()
 
         atlas.unbind()

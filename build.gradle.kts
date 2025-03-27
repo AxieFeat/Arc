@@ -1,25 +1,38 @@
+import pw.qubique.infrastructure.build.feature.Feature
+
 plugins {
+    checkstyle
     kotlin("jvm") version "2.0.21"
-    id("java-library")
-    id("maven-publish")
+    id("pw.qubique.infrastructure.build-system") version ("0.0.2-snapshot")
 }
 
 allprojects {
+    apply(plugin = "checkstyle")
+    apply(plugin = "pw.qubique.infrastructure.build-system")
     apply(plugin = "org.jetbrains.kotlin.jvm")
-    apply(plugin = "java-library")
-    apply(plugin = "maven-publish")
 
     group = "arc.engine"
     version = "1.0"
 
-    repositories {
-        mavenCentral()
-        mavenLocal()
+    checkstyle {
+        configFile = file("${rootDir}/infrastructure/checkstyle/checkstyle.xml")
     }
 
-    kotlin {
-        jvmToolchain(21)
+    build {
+        features.set(
+            listOf(
+                Feature.SCM,
+                Feature.TEST,
+                Feature.CHECKSTYLE,
+                Feature.JACOCO,
+                Feature.JAVADOC,
+                Feature.REPOSITORIES,
+                Feature.PUBLISHING,
+            )
+        )
     }
+
+    repositories { mavenCentral() }
 
     dependencies {
         testImplementation("org.junit.jupiter:junit-jupiter-api:5.11.4")
@@ -30,15 +43,8 @@ allprojects {
         useJUnitPlatform()
     }
 
-    publishing {
-        publications {
-            create<MavenPublication>("release") {
-                from(components["kotlin"])
-
-                groupId = project.group.toString()
-                artifactId = project.name
-            }
-        }
+    kotlin {
+        jvmToolchain(21)
     }
 }
 

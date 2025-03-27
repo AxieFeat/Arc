@@ -6,7 +6,7 @@ internal data class ArcActiveSection(
     override val child: MutableList<ActiveSection> = mutableListOf()
 ) : ActiveSection {
 
-    override var result: SectionResult? = null
+    override var result: ArcSectionResult? = null
     private var endTime: Long = 0
 
     override fun start(name: String): ActiveSection {
@@ -30,16 +30,21 @@ internal data class ArcActiveSection(
 
         this.endTime = System.nanoTime()
 
-        val result = ArcSectionResult(
-            name = name,
-            child = child.mapNotNull { it.result },
-            startTime = startTime,
-            endTime = endTime
-        )
+        return this.result.also {
+            it?.name = this.name
+            it?.child = this.child.mapNotNull { it.result }
+            it?.startTime = this.startTime
+            it?.endTime = this.endTime
+        } ?: run {
+             this.result = ArcSectionResult(
+                name = name,
+                child = child.mapNotNull { it.result },
+                startTime = startTime,
+                endTime = endTime
+            )
 
-        this.result = result
-
-        return result
+            this.result!!
+        }
     }
 
     override fun reset() {

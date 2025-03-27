@@ -2,11 +2,11 @@ package arc.gl.graphics
 
 import arc.graphics.DrawBuffer
 import arc.graphics.DrawerMode
+import arc.graphics.VertexBuffer
 import arc.graphics.vertex.*
 import arc.util.Color
 import org.joml.Matrix4f
 import org.joml.Vector3f
-import org.lwjgl.opengl.GL41.*
 import org.lwjgl.system.MemoryUtil
 import java.nio.*
 
@@ -16,10 +16,7 @@ internal data class GlDrawBuffer(
     override val bufferSize: Int,
 ) : DrawBuffer {
 
-    private val vbo = IntArray(2)
-    private var currentVboIndex = 0
-
-    private var byteBuffer: ByteBuffer = MemoryUtil.memAlloc(bufferSize * 4)
+    var byteBuffer: ByteBuffer = MemoryUtil.memAlloc(bufferSize * 4)
     private var rawIntBuffer: IntBuffer = byteBuffer.asIntBuffer()
     private var rawShortBuffer: ShortBuffer = byteBuffer.asShortBuffer()
     private var rawFloatBuffer: FloatBuffer = byteBuffer.asFloatBuffer()
@@ -34,54 +31,19 @@ internal data class GlDrawBuffer(
 
     private var selectedVertex = 0
 
-    init {
-        glGenBuffers(vbo)
-
-        for (buffer in vbo) {
-            glBindBuffer(GL_ARRAY_BUFFER, buffer)
-            glBufferData(GL_ARRAY_BUFFER, bufferSize * 4L, GL_STREAM_DRAW)
-        }
-        glBindBuffer(GL_ARRAY_BUFFER, 0)
-    }
-
     override fun end(): GlDrawBuffer {
         byteBuffer.position(0)
         byteBuffer.limit(this.bufferSize * 4)
 
-        upload()
-
         return this
+    }
+
+    override fun build(): VertexBuffer {
+        return VertexBuffer.create(this)
     }
 
     override fun cleanup() {
         reset()
-        glDeleteBuffers(vbo)
-    }
-
-    private fun upload() {
-        swapBuffers()
-
-        val currentVbo = vbo[currentVboIndex]
-        glBindBuffer(GL_ARRAY_BUFFER, currentVbo)
-
-        val ptr = glMapBufferRange(GL_ARRAY_BUFFER, 0, byteBuffer.capacity().toLong(),
-            GL_MAP_WRITE_BIT or GL_MAP_UNSYNCHRONIZED_BIT)
-        if (ptr != null) {
-            MemoryUtil.memCopy(MemoryUtil.memAddress(byteBuffer), MemoryUtil.memAddress(ptr), byteBuffer.capacity().toLong())
-            glUnmapBuffer(GL_ARRAY_BUFFER)
-        }
-
-        glBindBuffer(GL_ARRAY_BUFFER, 0)
-
-        currentVboIndex = 1 - currentVboIndex
-    }
-
-    private fun swapBuffers() {
-        currentVboIndex = 1 - currentVboIndex
-    }
-
-    fun getRenderVbo(): Int {
-        return vbo[1 - currentVboIndex]
     }
 
     override fun addVertex(x: Float, y: Float, z: Float): GlDrawBuffer {
@@ -167,8 +129,6 @@ internal data class GlDrawBuffer(
 
         putPosition(i, x, y, z)
 
-        upload()
-
         return this
     }
 
@@ -223,11 +183,6 @@ internal data class GlDrawBuffer(
             rawFloatBuffer = byteBuffer.asFloatBuffer()
             rawIntBuffer = byteBuffer.asIntBuffer()
             rawShortBuffer = byteBuffer.asShortBuffer()
-
-            glBindBuffer(GL_ARRAY_BUFFER, vbo[currentVboIndex])
-            glBufferData(GL_ARRAY_BUFFER, newCapacity.toLong(), GL_DYNAMIC_DRAW)
-            glBufferSubData(GL_ARRAY_BUFFER, 0, byteBuffer)
-            glBindBuffer(GL_ARRAY_BUFFER, 0)
         }
     }
 

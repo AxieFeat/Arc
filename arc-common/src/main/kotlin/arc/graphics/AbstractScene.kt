@@ -6,7 +6,7 @@ import arc.util.Timer
 import org.lwjgl.glfw.GLFW
 
 abstract class AbstractScene(
-    private val application: Application,
+    val application: Application,
 ) : Scene {
 
     private val timer = Timer()
@@ -33,15 +33,18 @@ abstract class AbstractScene(
             )
         }
 
-    protected fun calculateFps() {
+    protected open fun calculateFps() {
         fpsCounter++
 
         while (OS.getTime() >= this.debugUpdateTime + 1000L) {
             this.fps = this.fpsCounter
             this.debugUpdateTime += 1000L
             this.fpsCounter = 0
+            onFpsUpdate(fps)
         }
     }
+
+    open fun onFpsUpdate(fps: Int) {}
 
     protected fun updateDelta() {
         timer.update()

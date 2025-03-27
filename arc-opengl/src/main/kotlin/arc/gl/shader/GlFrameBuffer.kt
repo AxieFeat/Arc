@@ -117,7 +117,7 @@ internal class GlFrameBuffer(
             .add(VertexFormatElement.UV0)
             .build()
 
-        private val buffer: DrawBuffer = GlDrawBuffer(DrawerMode.TRIANGLES, vertexFormat, 256).apply {
+        private val buffer = GlDrawBuffer(DrawerMode.TRIANGLES, vertexFormat, 256).apply {
             addVertex(-1f, 1f, 0f).setTexture(0f, 1f).endVertex()
             addVertex(-1f, -1f, 0f).setTexture(0f, 0f).endVertex()
             addVertex(1f, -1f, 0f).setTexture(1f, 0f).endVertex()
@@ -127,7 +127,7 @@ internal class GlFrameBuffer(
             addVertex(1f, 1f, 0f).setTexture(1f, 1f).endVertex()
 
             end()
-        }
+        }.build()
     }
 
     object Factory : FrameBuffer.Factory {

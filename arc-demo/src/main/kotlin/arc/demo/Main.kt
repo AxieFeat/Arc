@@ -11,10 +11,10 @@ fun main() {
     // Select implementation by property.
     when(System.getProperty("arc.application")) {
         "opengl" -> GlApplication.preload()
-        //"vulkan" -> VkApplication.preload()
+//        "vulkan" -> VkApplication.preload()
 
         else -> GlApplication.preload()
     }
 
-    Game.start()
+    VoxelGame.start()
 }

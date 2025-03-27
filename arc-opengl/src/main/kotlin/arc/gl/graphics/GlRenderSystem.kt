@@ -32,7 +32,7 @@ internal object GlRenderSystem : RenderSystem {
     override fun beginFrame() {
         GlApplication.window.beginFrame()
 
-        glClear(GL_COLOR_BUFFER_BIT or GL_DEPTH_BUFFER_BIT)
+        clear(GL_COLOR_BUFFER_BIT or GL_DEPTH_BUFFER_BIT)
         resetViewport()
     }
 

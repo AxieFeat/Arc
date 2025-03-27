@@ -6,7 +6,7 @@ internal data class ArcRootSection(
     override val child: MutableList<ActiveSection> = mutableListOf()
 ) : RootSection {
 
-    override var result: TreeSectionResult? = null
+    override var result: ArcTreeSectionResult? = null
     private var endTime: Long = 0
 
     override fun start(name: String): ActiveSection {
@@ -28,14 +28,17 @@ internal data class ArcRootSection(
     override fun end(): TreeSectionResult {
         this.endTime = System.nanoTime()
 
-        val root = ArcTreeSectionResult(
+        val root = result.also {
+            it?.startTime = endTime
+            it?.endTime = endTime
+        } ?: ArcTreeSectionResult(
             name = name,
             startTime = startTime,
             endTime = endTime,
         )
 
         this.child.forEach { child ->
-            child.result?.recurse(root)
+            (child.result as? ArcSectionResult)?.recurse(root)
         }
 
         this.result = root
@@ -51,16 +54,23 @@ internal data class ArcRootSection(
     }
 
     companion object {
-        private fun SectionResult.recurse(root: ArcTreeSectionResult) {
-            val startSection = ArcTreeSectionResult(
-                name = this.name,
-                startTime = this.startTime,
-                endTime = this.endTime,
-                root = root,
-            )
+        private fun ArcSectionResult.recurse(root: ArcTreeSectionResult) {
+            val startSection = root.getResult(this.name).also {
+                it?.name = this.name
+                it?.startTime = this.startTime
+                it?.endTime = this.endTime
+                it?.root = root
+                it?.usage = ArcTreeSectionResult.calculateUsage(it, it?.duration ?: 0)
+            } ?:
+                ArcTreeSectionResult(
+                    name = this.name,
+                    startTime = this.startTime,
+                    endTime = this.endTime,
+                    root = root,
+                )
 
             this.child.forEach { child ->
-                child.recurse(startSection)
+                (child as? ArcSectionResult)?.recurse(root)
             }
 
             root.addResult(startSection)

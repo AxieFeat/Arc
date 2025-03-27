@@ -14,30 +14,30 @@ internal object GlVertexUploader {
 
     @JvmStatic
     @Throws(RuntimeException::class)
-    fun draw(drawBuffer: GlDrawBuffer) {
-        if (drawBuffer.vertexCount == 0) return
+    fun draw(vertexBuffer: GlVertexBuffer) {
+        if (vertexBuffer.count == 0) return
 
         glBindVertexArray(vao)
 
-        glBindBuffer(GL_ARRAY_BUFFER, drawBuffer.getRenderVbo())
+        vertexBuffer.bind()
 
         var offset = 0
-        for ((index, element) in drawBuffer.format.elements.withIndex()) {
+        for ((index, element) in vertexBuffer.format.elements.withIndex()) {
             glEnableVertexAttribArray(index)
 
             when (element.type) {
-                VertexType.FLOAT -> glVertexAttribPointer(index, element.count, GL_FLOAT, false, drawBuffer.format.nextOffset, offset.toLong())
-                VertexType.UINT, VertexType.INT -> glVertexAttribIPointer(index, element.count, GL_INT, drawBuffer.format.nextOffset, offset.toLong())
-                VertexType.USHORT, VertexType.SHORT -> glVertexAttribPointer(index, element.count, GL_SHORT, false, drawBuffer.format.nextOffset, offset.toLong())
-                VertexType.UBYTE, VertexType.BYTE -> glVertexAttribPointer(index, element.count, GL_UNSIGNED_BYTE, true, drawBuffer.format.nextOffset, offset.toLong())
+                VertexType.FLOAT -> glVertexAttribPointer(index, element.count, GL_FLOAT, false, vertexBuffer.format.nextOffset, offset.toLong())
+                VertexType.UINT, VertexType.INT -> glVertexAttribIPointer(index, element.count, GL_INT, vertexBuffer.format.nextOffset, offset.toLong())
+                VertexType.USHORT, VertexType.SHORT -> glVertexAttribPointer(index, element.count, GL_SHORT, false, vertexBuffer.format.nextOffset, offset.toLong())
+                VertexType.UBYTE, VertexType.BYTE -> glVertexAttribPointer(index, element.count, GL_UNSIGNED_BYTE, true, vertexBuffer.format.nextOffset, offset.toLong())
             }
 
             offset += element.size
         }
 
-        glDrawArrays(drawBuffer.mode.id, 0, drawBuffer.vertexCount)
+        glDrawArrays(vertexBuffer.mode.id, 0, vertexBuffer.count)
 
-        for (i in drawBuffer.format.elements.indices) {
+        for (i in vertexBuffer.format.elements.indices) {
             glDisableVertexAttribArray(i)
         }
 

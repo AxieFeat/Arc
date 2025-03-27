@@ -12,7 +12,7 @@ import org.lwjgl.system.MemoryUtil
 
 @Suppress("UNUSED_PARAMETER")
 internal class ArcWindow(
-    override val name: String,
+    name: String,
     override var handler: WindowHandler,
     override var width: Int,
     override var height: Int
@@ -23,6 +23,13 @@ internal class ArcWindow(
     override var handle: Long = 0
     override val position: Point2i = Point2i.of(0, 0)
     override var isFocus: Boolean = true
+
+    override var name: String = name
+        set(value) {
+            field = value
+
+            glfwSetWindowTitle(handle, value)
+        }
 
     override var isResizable: Boolean = true
         set(value) {

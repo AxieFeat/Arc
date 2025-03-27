@@ -43,10 +43,9 @@ interface Window {
      * The name of the window.
      *
      * Represents the title or identifier associated with the window instance.
-     * This property is immutable and reflects the name assigned at the time of creation.
      */
     @get:JvmName("name")
-    val name: String
+    var name: String
 
     /**
      * Represents the current width of the window.
