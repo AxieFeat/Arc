@@ -15,11 +15,6 @@ dependencies {
     api(project(":arc-core"))
     implementation(project(":arc-extensions:arc-profiler"))
 
-    api("it.unimi.dsi:fastutil:8.5.15")
-
-    // GLFW api
-    api("org.lwjgl:lwjgl-glfw:$lwjglVersion")
-
     // Natives for every OS
     natives.forEach { name ->
         api("$name:$lwjglVersion")
@@ -29,16 +24,6 @@ dependencies {
         api("$name:$lwjglVersion:$macosArmNatives")
     }
 
-    // Input handle
-    api("net.java.jinput:jinput:2.0.10")
-    api("net.java.jinput:jinput:2.0.10:natives-all")
-    api("net.java.jinput:jinput-platform:2.0.7:natives-linux")
-    api("net.java.jinput:jinput-platform:2.0.7:natives-osx")
-    api("net.java.jinput:jinput-platform:2.0.7:natives-windows")
-
-    api("com.github.kwhat:jnativehook:2.2.2")
-
+    api("it.unimi.dsi:fastutil:8.5.15")
     api("com.github.oshi:oshi-core:6.6.6")
-
-
 }

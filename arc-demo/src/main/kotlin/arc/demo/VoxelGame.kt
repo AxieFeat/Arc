@@ -10,8 +10,6 @@ import arc.demo.shader.ShaderContainer
 import arc.files.classpath
 import arc.graphics.vertex.VertexFormat
 import arc.window.WindowHandler
-import java.lang.Thread.sleep
-import kotlin.math.truncate
 
 object VoxelGame : WindowHandler {
 
@@ -24,18 +22,13 @@ object VoxelGame : WindowHandler {
 
         // Set window handler to this instance.
         application.window.handler = this
-        application.window.isVsync = false
+        application.window.isVsync = true
         setScreen(MainMenuScreen)
 
         val asset = SoundAsset.from(classpath("arc/sound/pigstep.ogg"))
         val sound = Sound.from(asset)
 
-        sound.play(loop = true)
-
-        Thread {
-            sleep(5000)
-            sound.pitch = 10f
-        }.start()
+        sound.play(volume = 0.3f, loop = true)
 
         loop()
 

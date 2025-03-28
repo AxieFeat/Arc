@@ -1,4 +1,4 @@
 package arc.culling
 
-object ClippingHelper {
+internal object ClippingHelper {
 }

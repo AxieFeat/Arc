@@ -5,7 +5,7 @@ import java.io.File
 
 object EmptyTexture : Texture {
     override val asset: TextureAsset = TextureAsset.from(File(""))
-    override val id: Int = 0
+    override val id: Int = -1
 
     override fun bind() {
 
