@@ -1,4 +1,4 @@
-package arc.assets
+package arc.asset
 
 import arc.Arc
 import arc.annotations.ImmutableType
@@ -7,37 +7,38 @@ import org.jetbrains.annotations.ApiStatus
 import java.io.File
 
 /**
- * Represents a sound asset in the engine.
+ * Represents a model asset of LWAModel format (Lightweight Arc Model format).
  */
+@Suppress("INAPPLICABLE_JVM_NAME")
 @ImmutableType
-interface SoundAsset : Asset {
+interface LWAModelAsset : Asset {
 
     @ApiStatus.Internal
     @TypeFactory
     interface Factory {
 
         /**
-         * Create instance of [SoundAsset] from file.
+         * Create instance of [BBModelAsset] from file.
          *
          * @param file File of asset.
          *
-         * @return New instance of [SoundAsset].
+         * @return New instance of [BBModelAsset].
          */
-        fun create(file: File): SoundAsset
+        fun create(file: File): BBModelAsset
 
     }
 
     companion object {
 
         /**
-         * Create instance of [SoundAsset] from file.
+         * Create instance of [BBModelAsset] from file.
          *
          * @param file File of asset.
          *
-         * @return New instance of [SoundAsset].
+         * @return New instance of [BBModelAsset].
          */
         @JvmStatic
-        fun from(file: File): SoundAsset {
+        fun from(file: File): BBModelAsset {
             return Arc.factory<Factory>().create(file)
         }
 

@@ -1,4 +1,4 @@
-package arc.assets.shader
+package arc.asset.shader
 
 import arc.Arc
 import arc.annotations.ImmutableType

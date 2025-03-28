@@ -1,8 +1,8 @@
 package arc.demo.shader
 
-import arc.assets.shader.FragmentShader
-import arc.assets.shader.ShaderData
-import arc.assets.shader.VertexShader
+import arc.asset.shader.FragmentShader
+import arc.asset.shader.ShaderData
+import arc.asset.shader.VertexShader
 import arc.files.classpath
 import arc.shader.ShaderInstance
 

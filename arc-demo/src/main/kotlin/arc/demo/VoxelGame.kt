@@ -2,7 +2,7 @@ package arc.demo
 
 import arc.Application
 import arc.Configuration
-import arc.assets.SoundAsset
+import arc.asset.SoundAsset
 import arc.audio.Sound
 import arc.demo.screen.MainMenuScreen
 import arc.demo.screen.Screen

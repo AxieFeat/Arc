@@ -1,7 +1,7 @@
-package arc.assets.shader
+package arc.asset.shader
 
 import arc.annotations.ImmutableType
-import arc.assets.Asset
+import arc.asset.Asset
 
 /**
  * Represents a general asset of shader.

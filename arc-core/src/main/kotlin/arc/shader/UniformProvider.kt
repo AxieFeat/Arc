@@ -1,7 +1,7 @@
 package arc.shader
 
 import arc.annotations.MutableType
-import arc.assets.shader.ShaderData
+import arc.asset.shader.ShaderData
 
 /**
  * This interface represents provider for shader uniforms.

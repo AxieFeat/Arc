@@ -4,7 +4,6 @@ import arc.Arc
 import arc.annotations.MutableType
 import arc.annotations.TypeFactory
 import org.jetbrains.annotations.ApiStatus
-import java.math.BigInteger
 
 /**
  * Represents a 3D point with integer precision.
@@ -13,7 +12,6 @@ import java.math.BigInteger
  * is an integer value. It provides methods for packing the point into a single
  * integer and for creating and unpacking instances of [Point3i].
  */
-// TODO Fix packing.
 @Suppress("INAPPLICABLE_JVM_NAME")
 @MutableType
 interface Point3i {
@@ -46,21 +44,6 @@ interface Point3i {
     @get:JvmName("z")
     var z: Int
 
-    /**
-     * Packs the x, y, and z fields of the class into a single BigInteger.
-     * The fields are masked to 21 bits, with x occupying the least significant bits,
-     * y shifted left by 21 bits, and z shifted left by 42 bits.
-     *
-     * @return A BigInteger composed of the packed x, y, and z values.
-     */
-    fun pack(): BigInteger {
-        val xBits = BigInteger.valueOf(x.toLong() and 0x1FFFFFL)
-        val yBits = BigInteger.valueOf(y.toLong() and 0x1FFFFFL).shiftLeft(21)
-        val zBits = BigInteger.valueOf(z.toLong() and 0x1FFFFFL).shiftLeft(42)
-
-        return xBits.or(yBits).or(zBits)
-    }
-
     @TypeFactory
     @ApiStatus.Internal
     interface Factory {
@@ -80,9 +63,6 @@ interface Point3i {
 
     companion object {
 
-        @JvmField
-        val BIT_MASK_21: Long = 0b11111_11111_11111_11111_11111
-
         /**
          * [Point3i] with zero values.
          */
@@ -101,24 +81,6 @@ interface Point3i {
         @JvmStatic
         fun of(x: Int, y: Int, z: Int): Point3i {
             return Arc.factory<Factory>().create(x, y, z)
-        }
-
-        /**
-         * Unpack point.
-         *
-         * @param packed Packet point via [Point3i.pack].
-         *
-         * @return Unpacked instance of [Point3i].
-         */
-        @JvmStatic
-        fun unpack(packed: BigInteger): Point3i {
-            val mask = BigInteger.valueOf(BIT_MASK_21)
-
-            return of(
-                x = packed.and(mask).toInt(),
-                y = packed.shiftRight(21).and(mask).toInt(),
-                z = packed.shiftRight(42).and(mask).toInt()
-            )
         }
 
     }

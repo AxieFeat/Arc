@@ -1,6 +1,6 @@
 package arc.texture
 
-import arc.assets.TextureAsset
+import arc.asset.TextureAsset
 import java.io.File
 
 object EmptyTexture : Texture {

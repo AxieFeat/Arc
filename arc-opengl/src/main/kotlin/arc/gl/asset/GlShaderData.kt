@@ -1,8 +1,7 @@
 package arc.gl.asset
 
-import arc.assets.shader.ShaderData
+import arc.asset.shader.ShaderData
 import arc.shader.BlendMode
-import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 import java.io.File
@@ -23,6 +22,8 @@ internal data class GlShaderData(
         val text = file.readText()
 
         val jsonObject = JsonParser.parseString(text).asJsonObject
+
+        if(!jsonObject.has("uniforms")) return@run emptyList()
 
         return@run jsonObject.getAsJsonArray("uniforms")
             .map { it.asString }

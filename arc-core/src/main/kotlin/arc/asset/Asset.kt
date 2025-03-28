@@ -1,4 +1,4 @@
-package arc.assets
+package arc.asset
 
 import arc.annotations.ImmutableType
 import java.io.File

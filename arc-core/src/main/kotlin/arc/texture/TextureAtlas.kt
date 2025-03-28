@@ -3,7 +3,7 @@ package arc.texture
 import arc.Arc
 import arc.annotations.ImmutableType
 import arc.annotations.TypeFactory
-import arc.assets.TextureAsset
+import arc.asset.TextureAsset
 import org.jetbrains.annotations.ApiStatus
 import kotlin.jvm.Throws
 

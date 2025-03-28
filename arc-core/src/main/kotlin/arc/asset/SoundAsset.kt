@@ -1,4 +1,4 @@
-package arc.assets
+package arc.asset
 
 import arc.Arc
 import arc.annotations.ImmutableType
@@ -7,38 +7,37 @@ import org.jetbrains.annotations.ApiStatus
 import java.io.File
 
 /**
- * This interface represents texture asset in engine.
+ * Represents a sound asset in the engine.
  */
-@Suppress("INAPPLICABLE_JVM_NAME")
 @ImmutableType
-interface TextureAsset : Asset {
+interface SoundAsset : Asset {
 
     @ApiStatus.Internal
     @TypeFactory
     interface Factory {
 
         /**
-         * Create instance of [TextureAsset] from file.
+         * Create instance of [SoundAsset] from file.
          *
          * @param file File of asset.
          *
-         * @return New instance of [TextureAsset].
+         * @return New instance of [SoundAsset].
          */
-        fun create(file: File): TextureAsset
+        fun create(file: File): SoundAsset
 
     }
 
     companion object {
 
         /**
-         * Create instance of [TextureAsset] from file.
+         * Create instance of [SoundAsset] from file.
          *
          * @param file File of asset.
          *
-         * @return New instance of [TextureAsset].
+         * @return New instance of [SoundAsset].
          */
         @JvmStatic
-        fun from(file: File): TextureAsset {
+        fun from(file: File): SoundAsset {
             return Arc.factory<Factory>().create(file)
         }
 

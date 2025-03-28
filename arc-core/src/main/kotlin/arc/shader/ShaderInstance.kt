@@ -3,9 +3,9 @@ package arc.shader
 import arc.Arc
 import arc.annotations.ImmutableType
 import arc.annotations.TypeFactory
-import arc.assets.shader.FragmentShader
-import arc.assets.shader.ShaderData
-import arc.assets.shader.VertexShader
+import arc.asset.shader.FragmentShader
+import arc.asset.shader.ShaderData
+import arc.asset.shader.VertexShader
 import org.jetbrains.annotations.ApiStatus
 import org.joml.Matrix4f
 import org.joml.Vector2f

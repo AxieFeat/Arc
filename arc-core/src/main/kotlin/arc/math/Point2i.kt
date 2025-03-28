@@ -35,16 +35,6 @@ interface Point2i {
     @get:JvmName("y")
     var y: Int
 
-    /**
-     * Packs the x and y integer fields into a single long value.
-     * The x value occupies the higher 32 bits, while the y value occupies the lower 32 bits.
-     *
-     * @return A long value combining the x and y values.
-     */
-    fun pack(): Long {
-        return (x.toLong() shl 32) or ((y.toLong() and 0xFFFFFFFFL))
-    }
-
     @TypeFactory
     @ApiStatus.Internal
     interface Factory {
@@ -80,21 +70,6 @@ interface Point2i {
         @JvmStatic
         fun of(x: Int, y: Int): Point2i {
             return Arc.factory<Factory>().create(x, y)
-        }
-
-        /**
-         * Unpack point.
-         *
-         * @param packed Packet point via [Point2i.pack].
-         *
-         * @return Unpacked instance of [Point2i].
-         */
-        @JvmStatic
-        fun unpack(packed: Long): Point2i {
-            return of(
-                (packed shr 32).toInt(),
-                (packed and 0xFFFFFFFFL).toInt()
-            )
         }
 
     }

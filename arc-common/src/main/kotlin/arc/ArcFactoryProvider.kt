@@ -4,12 +4,11 @@ import arc.asset.ArcAssetStack
 import arc.asset.ArcSoundAsset
 import arc.asset.shader.ArcFragmentShader
 import arc.asset.shader.ArcVertexShader
-import arc.assets.AssetStack
-import arc.assets.MutableAssetStack
-import arc.assets.SoundAsset
-import arc.assets.shader.FragmentShader
-import arc.assets.shader.VertexShader
-import arc.audio.AbstractSound
+import arc.asset.AssetStack
+import arc.asset.MutableAssetStack
+import arc.asset.SoundAsset
+import arc.asset.shader.FragmentShader
+import arc.asset.shader.VertexShader
 import arc.audio.OggSound
 import arc.audio.Sound
 import arc.graphics.ArcCamera

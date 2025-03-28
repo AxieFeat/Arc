@@ -1,7 +1,6 @@
 package arc.gl.asset
 
-import arc.assets.TextureAsset
-import arc.texture.Texture
+import arc.asset.TextureAsset
 import java.io.File
 
 internal data class GlTextureAsset(

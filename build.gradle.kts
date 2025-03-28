@@ -32,15 +32,8 @@ allprojects {
         )
     }
 
-    repositories { mavenCentral() }
-
-    dependencies {
-        testImplementation("org.junit.jupiter:junit-jupiter-api:5.11.4")
-        testImplementation("org.junit.jupiter:junit-jupiter-engine:5.11.4")
-    }
-
-    tasks.test {
-        useJUnitPlatform()
+    repositories {
+        mavenCentral()
     }
 
     kotlin {

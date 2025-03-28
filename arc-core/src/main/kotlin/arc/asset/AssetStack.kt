@@ -1,31 +1,24 @@
-package arc.assets
+package arc.asset
 
 import arc.Arc
-import arc.annotations.MutableType
+import arc.annotations.ImmutableType
 import arc.annotations.TypeFactory
 import org.jetbrains.annotations.ApiStatus
 
 /**
- * Represents a mutable stack of assets.
+ * Represents an immutable stack of assets.
  *
  * @param T The type of asset contained in the stack, which must implement the [Asset] interface.
  */
-@MutableType
-interface MutableAssetStack<T : Asset> : AssetStack<T> {
+@Suppress("INAPPLICABLE_JVM_NAME")
+@ImmutableType
+interface AssetStack<T : Asset> : Iterable<T> {
 
     /**
-     * Add new asset to stack.
-     *
-     * @param asset Asset to add.
+     * Set of all assets in this stack.
      */
-    fun add(asset: T)
-
-    /**
-     * Remove asset from stack.
-     *
-     * @param asset Asset to remove.
-     */
-    fun remove(asset: T)
+    @get:JvmName("assets")
+    val assets: Set<T>
 
     @ApiStatus.Internal
     @TypeFactory
@@ -36,16 +29,16 @@ interface MutableAssetStack<T : Asset> : AssetStack<T> {
          *
          * @param assets Assets of stack.
          *
-         * @return New instance of [MutableAssetStack].
+         * @return New instance of [AssetStack].
          */
-        fun <T : Asset> create(assets: Set<T>): MutableAssetStack<T>
+        fun <T : Asset> create(assets: Set<T>): AssetStack<T>
 
     }
 
     companion object {
 
         /**
-         * Empty [MutableAssetStack].
+         * Empty [AssetStack].
          */
         @JvmField
         val EMPTY = of(emptySet())
@@ -55,10 +48,10 @@ interface MutableAssetStack<T : Asset> : AssetStack<T> {
          *
          * @param assets Assets of stack.
          *
-         * @return New instance of [MutableAssetStack].
+         * @return New instance of [AssetStack].
          */
         @JvmStatic
-        fun <T : Asset> of(assets: Set<T> = setOf()): MutableAssetStack<T> {
+        fun <T : Asset> of(assets: Set<T> = setOf()): AssetStack<T> {
             return Arc.factory<Factory>().create(assets)
         }
 

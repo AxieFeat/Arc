@@ -22,14 +22,35 @@
 Простейший пример использования Arc:
 
 ```kotlin
+import arc.Application
+import arc.ArcFactoryProvider
+import arc.Configuration
+import arc.asset.shader.FragmentShader
+import arc.asset.shader.ShaderData
+import arc.asset.shader.VertexShader
+import arc.files.classpath
+import arc.gl.GlApplication
+import arc.graphics.DrawBuffer
+import arc.graphics.DrawerMode
+import arc.graphics.RenderSystem
+import arc.graphics.VertexBuffer
+import arc.graphics.vertex.VertexFormat
+import arc.graphics.vertex.VertexFormatElement
+import arc.shader.ShaderInstance
+import arc.util.Color
+import java.io.File
+
 fun main() {
-    
+    // Предзагружаем базовые классы.
+    ArcFactoryProvider.install()
+    ArcFactoryProvider.bootstrap()
+
     // Предзагружаем OpenGL.
     GlApplication.preload()
-    
+
     // Находим приложение в текущем контексте (Это будет OpenGL реализация)
     val application: Application = Application.find()
-    application.init() // Инициализируем все системы. Это так же создаст окно.
+    application.init(Configuration.create()) // Инициализируем все системы. Это так же создаст окно.
 
     // Получаем шейдер и компилируем его
     val shader: ShaderInstance = getShaderInstance()
@@ -38,15 +59,15 @@ fun main() {
     val renderSystem: RenderSystem = application.renderSystem
 
     // Создадим буфер с нашими вершинами.
-    val buffer: DrawBuffer = createBuffer(application)
+    val buffer: VertexBuffer = createBuffer(application)
 
-    while (true) {
+    while (!application.window.shouldClose()) {
         // Начинаем кадр рендера
         renderSystem.beginFrame()
 
         shader.bind() // Устанавливаем шейдер в текущем контексте
-        
-        application.renderSystem.drawer.draw(buffer) // Рисуем наш треугольник
+
+        renderSystem.drawer.draw(buffer) // Рисуем наш треугольник
 
         shader.unbind()
 
@@ -67,8 +88,8 @@ private fun getShaderInstance(): ShaderInstance {
     )
 }
 
-private fun createBuffer(application: Application): DrawBuffer {
-    val buffer: DrawBuffer = application.drawer.begin(
+private fun createBuffer(application: Application): VertexBuffer {
+    val buffer: DrawBuffer = application.renderSystem.drawer.begin(
         DrawerMode.TRIANGLES,
         VertexFormat.builder()
             .add(VertexFormatElement.POSITION)
@@ -76,13 +97,49 @@ private fun createBuffer(application: Application): DrawBuffer {
             .build()
     )
 
-    buffer.addVertex(x0, y0, z).setColor(Color.RED)
-    buffer.addVertex(x0, y1, z).setColor(Color.YELLOW)
-    buffer.addVertex(x1, y1, z).setColor(Color.GREEN)
+    buffer.addVertex(0f, 0.5f, 0f).setColor(Color.BLUE).endVertex()
+    buffer.addVertex(-0.5f, -0.5f, 0f).setColor(Color.RED).endVertex()
+    buffer.addVertex(0.5f, -0.5f, 0f).setColor(Color.GREEN).endVertex()
     buffer.end()
 
-    return buffer
+    return buffer.build()
 }
+```
+Так же нам нужны простейшие шейдеры
+
+example.vsh
+```glsl
+#version 410
+
+layout (location = 0) in vec3 Position;
+layout (location = 1) in vec4 Color;
+
+out vec4 vertexColor;
+
+void main()
+{
+    gl_Position = vec4(Position, 1.0);
+
+    vertexColor = Color;
+}
+```
+
+example.fsh
+```glsl
+#version 410
+
+in vec4 vertexColor;
+out vec4 FragColor;
+
+void main()
+{
+    FragColor = vertexColor;
+}
+```
+
+example.json
+```json
+{}
 ```
 
 ## Что следует знать

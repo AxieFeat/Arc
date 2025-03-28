@@ -2,8 +2,8 @@ package arc.gl
 
 import arc.Application
 import arc.ArcFactoryProvider
-import arc.assets.TextureAsset
-import arc.assets.shader.ShaderData
+import arc.asset.TextureAsset
+import arc.asset.shader.ShaderData
 import arc.gl.asset.GlShaderData
 import arc.gl.asset.GlTextureAsset
 import arc.gl.graphics.GlDrawBuffer

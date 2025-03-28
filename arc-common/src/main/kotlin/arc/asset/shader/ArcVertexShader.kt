@@ -1,6 +1,5 @@
 package arc.asset.shader
 
-import arc.assets.shader.VertexShader
 import java.io.File
 
 internal data class ArcVertexShader(

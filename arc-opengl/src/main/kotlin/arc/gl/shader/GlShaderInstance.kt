@@ -1,10 +1,9 @@
 package arc.gl.shader
 
-import arc.assets.shader.FragmentShader
-import arc.assets.shader.ShaderData
-import arc.assets.shader.VertexShader
+import arc.asset.shader.FragmentShader
+import arc.asset.shader.ShaderData
+import arc.asset.shader.VertexShader
 import arc.gl.graphics.GlRenderSystem
-import arc.graphics.EmptyScene
 import arc.graphics.EmptyShaderInstance
 import arc.shader.ShaderInstance
 import arc.shader.UniformProvider
@@ -12,7 +11,6 @@ import org.joml.Matrix4f
 import org.joml.Vector2f
 import org.joml.Vector3f
 import org.joml.Vector4f
-import org.lwjgl.opengl.GL20
 import org.lwjgl.opengl.GL20.*
 import org.lwjgl.opengl.GL30.glGetUniformLocation
 import org.lwjgl.opengl.GL41

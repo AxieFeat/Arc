@@ -1,24 +1,31 @@
-package arc.assets
+package arc.asset
 
 import arc.Arc
-import arc.annotations.ImmutableType
+import arc.annotations.MutableType
 import arc.annotations.TypeFactory
 import org.jetbrains.annotations.ApiStatus
 
 /**
- * Represents an immutable stack of assets.
+ * Represents a mutable stack of assets.
  *
  * @param T The type of asset contained in the stack, which must implement the [Asset] interface.
  */
-@Suppress("INAPPLICABLE_JVM_NAME")
-@ImmutableType
-interface AssetStack<T : Asset> : Iterable<T> {
+@MutableType
+interface MutableAssetStack<T : Asset> : AssetStack<T> {
 
     /**
-     * Set of all assets in this stack.
+     * Add new asset to stack.
+     *
+     * @param asset Asset to add.
      */
-    @get:JvmName("assets")
-    val assets: Set<T>
+    fun add(asset: T)
+
+    /**
+     * Remove asset from stack.
+     *
+     * @param asset Asset to remove.
+     */
+    fun remove(asset: T)
 
     @ApiStatus.Internal
     @TypeFactory
@@ -29,16 +36,16 @@ interface AssetStack<T : Asset> : Iterable<T> {
          *
          * @param assets Assets of stack.
          *
-         * @return New instance of [AssetStack].
+         * @return New instance of [MutableAssetStack].
          */
-        fun <T : Asset> create(assets: Set<T>): AssetStack<T>
+        fun <T : Asset> create(assets: Set<T>): MutableAssetStack<T>
 
     }
 
     companion object {
 
         /**
-         * Empty [AssetStack].
+         * Empty [MutableAssetStack].
          */
         @JvmField
         val EMPTY = of(emptySet())
@@ -48,10 +55,10 @@ interface AssetStack<T : Asset> : Iterable<T> {
          *
          * @param assets Assets of stack.
          *
-         * @return New instance of [AssetStack].
+         * @return New instance of [MutableAssetStack].
          */
         @JvmStatic
-        fun <T : Asset> of(assets: Set<T> = setOf()): AssetStack<T> {
+        fun <T : Asset> of(assets: Set<T> = setOf()): MutableAssetStack<T> {
             return Arc.factory<Factory>().create(assets)
         }
 

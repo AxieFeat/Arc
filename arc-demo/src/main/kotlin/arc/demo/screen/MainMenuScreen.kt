@@ -1,6 +1,6 @@
 package arc.demo.screen
 
-import arc.assets.TextureAsset
+import arc.asset.TextureAsset
 import arc.demo.entity.CubeEntity
 import arc.demo.shader.ShaderContainer
 import arc.demo.shader.VertexFormatContainer

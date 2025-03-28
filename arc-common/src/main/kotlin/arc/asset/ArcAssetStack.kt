@@ -1,9 +1,5 @@
 package arc.asset
 
-import arc.assets.Asset
-import arc.assets.AssetStack
-import arc.assets.MutableAssetStack
-
 internal data class ArcAssetStack<T : Asset>(
      override val assets: MutableSet<T>
 ) : MutableAssetStack<T> {

@@ -14,6 +14,7 @@ private val natives = listOf(
 dependencies {
     api(project(":arc-core"))
     implementation(project(":arc-extensions:arc-profiler"))
+    implementation(project(":arc-extensions:arc-model"))
 
     // Natives for every OS
     natives.forEach { name ->

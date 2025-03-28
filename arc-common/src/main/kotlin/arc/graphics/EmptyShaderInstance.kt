@@ -1,8 +1,8 @@
 package arc.graphics
 
-import arc.assets.shader.FragmentShader
-import arc.assets.shader.ShaderData
-import arc.assets.shader.VertexShader
+import arc.asset.shader.FragmentShader
+import arc.asset.shader.ShaderData
+import arc.asset.shader.VertexShader
 import arc.shader.ShaderInstance
 import arc.shader.UniformProvider
 import org.joml.Matrix4f

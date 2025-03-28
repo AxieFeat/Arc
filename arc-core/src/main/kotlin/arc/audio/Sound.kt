@@ -3,7 +3,7 @@ package arc.audio
 import arc.Arc
 import arc.annotations.MutableType
 import arc.annotations.TypeFactory
-import arc.assets.SoundAsset
+import arc.asset.SoundAsset
 import arc.math.Point3d
 import org.jetbrains.annotations.ApiStatus
 

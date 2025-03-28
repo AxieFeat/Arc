@@ -1,6 +1,6 @@
 package arc.gl.texture
 
-import arc.assets.TextureAsset
+import arc.asset.TextureAsset
 import arc.gl.graphics.GlRenderSystem
 import arc.texture.EmptyTexture
 import arc.texture.TextureAtlas

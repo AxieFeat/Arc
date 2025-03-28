@@ -1,6 +1,6 @@
 package arc.audio
 
-import arc.assets.SoundAsset
+import arc.asset.SoundAsset
 import org.lwjgl.openal.AL10.*
 import org.lwjgl.stb.STBVorbis
 import org.lwjgl.stb.STBVorbisInfo
