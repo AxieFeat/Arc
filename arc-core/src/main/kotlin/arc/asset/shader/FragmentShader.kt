@@ -19,13 +19,6 @@ interface FragmentShader : ShaderAsset {
     @TypeFactory
     interface Factory {
 
-        /**
-         * Create instance of [FragmentShader] from file.
-         *
-         * @param file File of asset.
-         *
-         * @return New instance of [FragmentShader].
-         */
         fun create(file: File): FragmentShader
 
     }

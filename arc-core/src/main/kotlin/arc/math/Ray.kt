@@ -8,29 +8,19 @@ import org.jetbrains.annotations.ApiStatus
 
 /**
  * Represents a 3D ray defined by an origin and a direction.
- *
- * A ray is a mathematical construct commonly used in graphics and physics calculations
- * to represent an infinite line, starting from an origin point and extending in
- * the specified direction.
  */
 @Suppress("INAPPLICABLE_JVM_NAME")
 @MutableType
 interface Ray : Copyable<Ray> {
 
     /**
-     * The origin point of the ray in 3D space.
-     *
-     * Represents the starting position of the ray, defined as a 3D vector.
-     * This property can be modified to update the ray's origin.
+     * The origin point of the ray.
      */
     @get:JvmName("origin")
     var origin: Vec3f
 
     /**
-     * The direction vector of the ray in 3D space.
-     *
-     * Represents the orientation of the ray, typically used in conjunction with the origin
-     * to determine the ray's path. This can be altered to change the direction of the ray.
+     * The direction vector of the ray.
      */
     @get:JvmName("direction")
     var direction: Vec3f
@@ -56,14 +46,6 @@ interface Ray : Copyable<Ray> {
     @TypeFactory
     interface Factory {
 
-        /**
-         * Create new instance of [Ray].
-         *
-         * @param origin Origin of vector (Starting position).
-         * @param direction Direction of vector.
-         *
-         * @return New instance of [Ray].
-         */
         fun create(origin: Vec3f, direction: Vec3f): Ray
 
     }

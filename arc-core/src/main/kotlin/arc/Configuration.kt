@@ -51,18 +51,6 @@ interface Configuration {
     @TypeFactory
     interface Factory {
 
-        /**
-         * Create new instance of [Configuration].
-         *
-         * @param windowName Name of window.
-         * @param windowWidth Width of window.
-         * @param windowHeight Height of window.
-         * @param windowBitDepth Bit depth of window.
-         * @param windowRefreshRate Limit of refresh rate for window.
-         * @param windowFullScreen Is window in fullscreen.
-         *
-         * @return New instance of [Configuration].
-         */
         fun create(
             windowName: String,
             windowWidth: Int,

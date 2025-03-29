@@ -1,6 +1,5 @@
 package arc.input.mouse
 
-import arc.annotations.MutableType
 import arc.input.DeviceType
 import arc.input.InputDevice
 import arc.math.Point2d
@@ -11,7 +10,6 @@ import arc.math.Vec2f
  *
  * @see InputDevice
  */
-@MutableType
 @Suppress("INAPPLICABLE_JVM_NAME")
 interface MouseInput : InputDevice {
 

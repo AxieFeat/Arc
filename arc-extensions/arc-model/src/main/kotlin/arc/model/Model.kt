@@ -9,7 +9,7 @@ import arc.model.texture.ModelTexture
  */
 @Suppress("INAPPLICABLE_JVM_NAME")
 @ImmutableType
-interface Model : Element {
+interface Model {
 
     /**
      * All elements in this model.

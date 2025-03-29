@@ -1,12 +1,9 @@
 package arc.graphics
 
-import arc.annotations.MutableType
-
 /**
  * This interface represents renderable scene of engine.
  */
 @Suppress("INAPPLICABLE_JVM_NAME")
-@MutableType
 interface Scene {
 
     /**

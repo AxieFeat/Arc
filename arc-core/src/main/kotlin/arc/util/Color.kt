@@ -80,18 +80,7 @@ interface Color : Copyable<Color> {
     @ApiStatus.Internal
     interface Factory {
 
-        /**
-         * Create instance of [Color].
-         *
-         * @param red Red value.
-         * @param green Green value.
-         * @param blue Blue value.
-         * @param alpha Alpha value.
-         *
-         * @return New instance of [Color].
-         *
-         * @throws IllegalArgumentException If some value is not in it range.
-         */
+
         @Throws(IllegalArgumentException::class)
         fun create(
             red: @Range(from = 0, to = 255) Int,

@@ -1,7 +1,6 @@
 package arc.graphics
 
 import arc.Arc
-import arc.annotations.MutableType
 import arc.annotations.TypeFactory
 import arc.culling.Frustum
 import arc.math.Point3d
@@ -13,7 +12,6 @@ import org.joml.Quaternionf
  * This interface represents a camera in 3d space.
  */
 @Suppress("INAPPLICABLE_JVM_NAME")
-@MutableType
 interface Camera {
 
     /**
@@ -115,15 +113,6 @@ interface Camera {
     @TypeFactory
     interface Factory {
 
-        /**
-         * Create new instance of [Camera].
-         *
-         * @param fov Field of view for camera.
-         * @param width Window width.
-         * @param height Window height.
-         *
-         * @return New instance of [Camera].
-         */
         fun create(fov: Float, width: Float, height: Float): Camera
 
     }

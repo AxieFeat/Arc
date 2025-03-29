@@ -1,6 +1,5 @@
 package arc.culling
 
-import arc.annotations.MutableType
 import arc.graphics.Camera
 import arc.math.AABB
 
@@ -8,7 +7,6 @@ import arc.math.AABB
  * This interface represents frustum culling in render.
  */
 @Suppress("INAPPLICABLE_JVM_NAME")
-@MutableType
 interface Frustum {
 
     /**

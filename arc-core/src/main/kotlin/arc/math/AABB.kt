@@ -59,14 +59,6 @@ interface AABB {
     @TypeFactory
     interface Factory {
 
-        /**
-         * Creates a new instance of an axis-aligned bounding box (AABB) using the given minimum and maximum points.
-         *
-         * @param min The minimum point of the bounding box, representing the lower corner in 3D space.
-         * @param max The maximum point of the bounding box, representing the upper corner in 3D space.
-         *
-         * @return A new instance of [AABB] defined by the specified minimum and maximum points.
-         */
         fun create(min: Vec3f, max: Vec3f): AABB
 
     }

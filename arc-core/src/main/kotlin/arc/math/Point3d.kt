@@ -34,15 +34,6 @@ interface Point3d {
     @ApiStatus.Internal
     interface Factory {
 
-        /**
-         * Create new instance of [Point3d]
-         *
-         * @param x X position
-         * @param y Y position
-         * @param z Z position
-         *
-         * @return New instance of [Point3d].
-         */
         fun create(x: Double, y: Double, z: Double): Point3d
 
     }

@@ -1,6 +1,7 @@
 package arc.lwamodel
 
 import arc.Arc
+import arc.annotations.ImmutableType
 import arc.annotations.TypeFactory
 import arc.asset.BBModelAsset
 import arc.asset.LWAModelAsset
@@ -19,6 +20,7 @@ import org.jetbrains.annotations.ApiStatus
  * Due to its advantages over BB Model, this format is more preferable for use,
  * and it is also very good for transferring over the network.
  */
+@ImmutableType
 interface LWAModel : Model {
 
     /**
@@ -30,14 +32,7 @@ interface LWAModel : Model {
     @TypeFactory
     interface Factory {
 
-        /**
-         * Create [LWAModel] from [LWAModelAsset].
-         *
-         * @param asset Asset for Model.
-         *
-         * @return New instance of [LWAModel].
-         */
-        fun create(asset: LWAModelAsset): LWAModel
+        fun create(bytes: ByteArray): LWAModel
 
     }
 
@@ -52,7 +47,7 @@ interface LWAModel : Model {
          */
         @JvmStatic
         fun from(asset: LWAModelAsset): LWAModel {
-            return Arc.factory<Factory>().create(asset)
+            return Arc.factory<Factory>().create(asset.file.readBytes())
         }
 
     }

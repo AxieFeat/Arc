@@ -28,13 +28,6 @@ interface ShaderData : ShaderAsset {
     @TypeFactory
     interface Factory {
 
-        /**
-         * Create instance of [ShaderData] from file.
-         *
-         * @param file File of asset.
-         *
-         * @return New instance of [ShaderData].
-         */
         fun create(file: File): ShaderData
 
     }

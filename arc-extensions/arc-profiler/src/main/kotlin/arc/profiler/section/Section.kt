@@ -1,11 +1,11 @@
 package arc.profiler.section
 
-import arc.annotations.MutableType
+import arc.annotations.ImmutableType
 
 /**
  * This interface represents general section of profiler.
  */
-@MutableType
+@ImmutableType
 @Suppress("INAPPLICABLE_JVM_NAME")
 interface Section {
 

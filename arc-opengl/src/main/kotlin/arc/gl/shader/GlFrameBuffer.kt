@@ -2,7 +2,6 @@ package arc.gl.shader
 
 import arc.gl.graphics.GlDrawBuffer
 import arc.gl.graphics.GlDrawer
-import arc.graphics.DrawBuffer
 import arc.graphics.DrawerMode
 import arc.graphics.vertex.VertexFormat
 import arc.graphics.vertex.VertexFormatElement
@@ -13,7 +12,7 @@ import org.lwjgl.system.MemoryUtil
 internal class GlFrameBuffer(
     override var width: Int,
     override var height: Int,
-    override var useDepth: Boolean
+    override val useDepth: Boolean
 ) : FrameBuffer {
 
     private var fboId: Int = 0
@@ -51,7 +50,7 @@ internal class GlFrameBuffer(
         glClearColor(red, green, blue, alpha)
     }
 
-    override fun delete() {
+    override fun cleanup() {
         glDeleteFramebuffers(fboId)
         glDeleteTextures(textureId)
         if (useDepth) {
@@ -82,7 +81,7 @@ internal class GlFrameBuffer(
     }
 
     private fun createFramebuffer(width: Int, height: Int) {
-        delete()
+        cleanup()
 
         fboId = glGenFramebuffers()
         glBindFramebuffer(GL_FRAMEBUFFER, fboId)

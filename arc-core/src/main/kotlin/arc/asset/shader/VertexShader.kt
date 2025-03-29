@@ -19,13 +19,6 @@ interface VertexShader : ShaderAsset {
     @TypeFactory
     interface Factory {
 
-        /**
-         * Create instance of [VertexShader] from file.
-         *
-         * @param file File of asset.
-         *
-         * @return New instance of [VertexShader].
-         */
         fun create(file: File): VertexShader
 
     }

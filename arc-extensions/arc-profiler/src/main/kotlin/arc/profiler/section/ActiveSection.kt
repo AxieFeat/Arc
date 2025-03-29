@@ -1,12 +1,12 @@
 package arc.profiler.section
 
-import arc.annotations.MutableType
+import arc.annotations.ImmutableType
 import kotlin.jvm.Throws
 
 /**
  * This interface represents not completed section of profiler.
  */
-@MutableType
+@ImmutableType
 @Suppress("INAPPLICABLE_JVM_NAME")
 interface ActiveSection : Section {
 

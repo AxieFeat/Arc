@@ -1,6 +1,5 @@
 package arc.input.mouse
 
-import arc.annotations.ImmutableType
 import arc.input.Binding
 import arc.input.KeyCode
 
@@ -10,7 +9,6 @@ import arc.input.KeyCode
  * @see Binding
  * @see MouseInput
  */
-@ImmutableType
 interface MouseBinding : Binding {
 
     /**

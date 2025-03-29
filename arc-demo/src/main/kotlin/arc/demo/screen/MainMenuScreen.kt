@@ -6,6 +6,7 @@ import arc.demo.shader.ShaderContainer
 import arc.demo.shader.VertexFormatContainer
 import arc.files.classpath
 import arc.input.KeyCode
+import arc.math.Point3d
 import arc.texture.TextureAtlas
 import org.joml.Vector3f
 
@@ -32,7 +33,10 @@ object MainMenuScreen : Screen("main-menu") {
         camera.fov = 65f
         camera.zNear = 0.0001f
         camera.zFar = 10000000000000000000000000000000000f
+        camera.position = Point3d.of(0.0, 1000.0, 0.0)
         camera.update()
+
+        cube.setPosition(0f, 1000f, 0f)
 
         application.renderSystem.enableCull()
     }

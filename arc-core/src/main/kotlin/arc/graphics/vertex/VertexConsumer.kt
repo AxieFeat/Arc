@@ -75,6 +75,15 @@ interface VertexConsumer {
      */
     fun setTranslation(x: Float, y: Float, z: Float): VertexConsumer
 
+    /**
+     * Set normal coords for current vertex.
+     *
+     * @param x X value.
+     * @param y Y value.
+     * @param z Z value.
+     *
+     * @return Current instance of [VertexConsumer].
+     */
     fun setNormal(x: Float, y: Float, z: Float): VertexConsumer
 
     /**

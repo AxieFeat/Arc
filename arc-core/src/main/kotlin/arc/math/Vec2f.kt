@@ -1,33 +1,25 @@
 package arc.math
 
 import arc.Arc
-import arc.annotations.ImmutableType
 import arc.annotations.MutableType
 import arc.annotations.TypeFactory
 import org.jetbrains.annotations.ApiStatus
 
 /**
- * Represents a 2D vector with floating-point components.
- * This class is mutable and allows modifications.
+ * This interface represents a 2D vector with float values.
  */
 @Suppress("INAPPLICABLE_JVM_NAME")
 @MutableType
 interface Vec2f : Vector<Vec2f> {
 
     /**
-     * The X component of the 2D vector.
-     *
-     * Represents the horizontal axis value in 2D space. This value can be accessed or modified
-     * as part of operations involving the vector.
+     * The X-coordinate of the 2D vector.
      */
     @get:JvmName("x")
     var x: Float
 
     /**
-     * The Y component of the 2D vector.
-     *
-     * Represents the vertical axis value in 2D space. This value can be used or modified
-     * as part of operations involving the vector.
+     * The Y-coordinate of the 2D vector.
      */
     @get:JvmName("y")
     var y: Float
@@ -36,14 +28,6 @@ interface Vec2f : Vector<Vec2f> {
     @ApiStatus.Internal
     interface Factory {
 
-        /**
-         * Create new instance of [Vec2f]
-         *
-         * @param x X position
-         * @param y Y position
-         *
-         * @return New instance of [Vec2f].
-         */
         fun create(x: Float, y: Float): Vec2f
 
     }

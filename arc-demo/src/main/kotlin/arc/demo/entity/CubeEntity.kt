@@ -63,7 +63,7 @@ class CubeEntity(
         it.end()
     }
 
-    private val vertexBuffer = buffer.build()
+    private var vertexBuffer = buffer.build()
 
     fun render(shader: ShaderInstance) {
         shader.bind()
@@ -107,5 +107,7 @@ class CubeEntity(
                     )
             }
         }
+        vertexBuffer.cleanup()
+        this.vertexBuffer = buffer.build()
     }
 }

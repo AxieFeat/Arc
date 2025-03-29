@@ -1,5 +1,8 @@
 package arc.math
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 internal data class ArcAABB(
     override val min: Vec3f,
     override val max: Vec3f

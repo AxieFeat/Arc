@@ -17,13 +17,6 @@ interface BBModelAsset : Asset {
     @TypeFactory
     interface Factory {
 
-        /**
-         * Create instance of [BBModelAsset] from file.
-         *
-         * @param file File of asset.
-         *
-         * @return New instance of [BBModelAsset].
-         */
         fun create(file: File): BBModelAsset
 
     }

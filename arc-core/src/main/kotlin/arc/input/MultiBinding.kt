@@ -1,7 +1,5 @@
 package arc.input
 
-import arc.annotations.ImmutableType
-
 /**
  * This interface represents multi-binding.
  *
@@ -9,7 +7,6 @@ import arc.annotations.ImmutableType
  */
 // TODO Add release for multibinding.
 @Suppress("INAPPLICABLE_JVM_NAME")
-@ImmutableType
 interface MultiBinding : BindingLike {
 
     /**

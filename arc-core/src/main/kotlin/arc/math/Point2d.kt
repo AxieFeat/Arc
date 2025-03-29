@@ -28,14 +28,6 @@ interface Point2d {
     @ApiStatus.Internal
     interface Factory {
 
-        /**
-         * Create new instance of [Point2d]
-         *
-         * @param x X position
-         * @param y Y position
-         *
-         * @return New instance of [Point2d].
-         */
         fun create(x: Double, y: Double): Point2d
 
     }

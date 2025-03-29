@@ -1,6 +1,5 @@
 package arc.input.keyboard
 
-import arc.annotations.ImmutableType
 import arc.input.DeviceType
 import arc.input.InputDevice
 
@@ -9,7 +8,6 @@ import arc.input.InputDevice
  *
  * @see InputDevice
  */
-@ImmutableType
 interface KeyboardInput : InputDevice {
 
     override val type: DeviceType

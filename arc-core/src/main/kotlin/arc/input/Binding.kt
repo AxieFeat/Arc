@@ -1,6 +1,5 @@
 package arc.input
 
-import arc.annotations.ImmutableType
 import arc.input.mouse.MouseBinding
 
 /**
@@ -11,7 +10,6 @@ import arc.input.mouse.MouseBinding
  * @see MouseBinding
  */
 @Suppress("INAPPLICABLE_JVM_NAME")
-@ImmutableType
 interface Binding : BindingLike {
 
     /**

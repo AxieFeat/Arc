@@ -63,16 +63,32 @@ interface VertexFormat {
      */
     fun getElement(index: Int): VertexFormatElement
 
+    /**
+     * Get offset for some type.
+     *
+     * @param usage Type of usage.
+     *
+     * @return Value of offset for this [usage].
+     */
     fun getElementOffset(usage: VertexUsage): Int
 
+    /**
+     * Get offset by index.
+     *
+     * @param index Index in list.
+     *
+     * @return Value from list by index.
+     */
     fun getOffset(index: Int): Int
 
+    /**
+     * Clear current instance.
+     */
     fun clear()
 
     /**
      * Use this interface to build own [VertexFormat].
      */
-    @MutableType
     interface Builder : arc.util.Builder<VertexFormat> {
 
         /**
@@ -97,9 +113,6 @@ interface VertexFormat {
     @TypeFactory
     interface BuilderFactory {
 
-        /**
-         * Create new instance of [Builder].
-         */
         fun create(): Builder
 
     }

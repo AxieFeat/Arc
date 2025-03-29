@@ -1,7 +1,5 @@
 package arc.input
 
-import arc.annotations.MutableType
-
 /**
  * This interface represents processor for binding keys.
  *
@@ -12,7 +10,6 @@ import arc.annotations.MutableType
  * @see Binding
  */
 @Suppress("INAPPLICABLE_JVM_NAME")
-@MutableType
 interface BindingProcessor {
 
     /**

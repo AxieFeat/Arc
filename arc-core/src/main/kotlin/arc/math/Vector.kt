@@ -3,8 +3,7 @@ package arc.math
 import arc.util.Copyable
 
 /**
- * Encapsulates a general vector. Allows chaining operations by returning a reference to itself in all modification methods. See
- * [Vec2f] and [Vec3f] for specific implementations.
+ * Encapsulates a general vector.
  */
 @Suppress("INAPPLICABLE_JVM_NAME")
 interface Vector<T : Vector<T>> : Copyable<T> {

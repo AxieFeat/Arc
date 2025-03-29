@@ -17,13 +17,6 @@ interface TextureAsset : Asset {
     @TypeFactory
     interface Factory {
 
-        /**
-         * Create instance of [TextureAsset] from file.
-         *
-         * @param file File of asset.
-         *
-         * @return New instance of [TextureAsset].
-         */
         fun create(file: File): TextureAsset
 
     }

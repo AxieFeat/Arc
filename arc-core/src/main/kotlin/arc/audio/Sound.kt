@@ -83,13 +83,6 @@ interface Sound {
     @TypeFactory
     interface Factory {
 
-        /**
-         * Create the sound from some asset.
-         *
-         * @param asset Asset for sound.
-         *
-         * @return New instance of [Sound].
-         */
         fun create(asset: SoundAsset): Sound
 
     }

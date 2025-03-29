@@ -1,9 +1,7 @@
 package arc.graphics
 
-import arc.annotations.MutableType
 import arc.shader.ShaderInstance
 import arc.texture.Texture
-import arc.texture.TextureLike
 import org.jetbrains.annotations.Range
 
 /**
@@ -15,7 +13,6 @@ import org.jetbrains.annotations.Range
  * supports modern rendering techniques like shaders, blending, and depth testing.
  */
 @Suppress("INAPPLICABLE_JVM_NAME")
-@MutableType
 interface RenderSystem {
 
     /**

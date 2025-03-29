@@ -7,36 +7,26 @@ import arc.annotations.TypeFactory
 import org.jetbrains.annotations.ApiStatus
 
 /**
- * Represents a 3D vector with float components (x, y, z).
- * This class is mutable and allows modifications.
+ * Represents a 3D vector with float values.
  */
 @Suppress("INAPPLICABLE_JVM_NAME")
 @MutableType
 interface Vec3f : Vector<Vec3f> {
 
     /**
-     * The X component of the 3D vector.
-     *
-     * Represents the horizontal axis value in 3D space. This value can be used or modified
-     * as part of operations involving the vector.
+     * The X-coordinate of the 3D vector.
      */
     @get:JvmName("x")
     var x: Float
 
     /**
-     * The Y component of the 3D vector.
-     *
-     * Represents the vertical axis value in 3D space. This value can be used or modified
-     * as part of operations involving the vector.
+     * The Y-coordinate of the 3D vector.
      */
     @get:JvmName("y")
     var y: Float
 
     /**
-     * The Z component of the 3D vector.
-     *
-     * Represents the depth axis value in 3D space. This value is commonly used or modified
-     * in operations involving 3D transformations or representations.
+     * The Z-coordinate of the 3D vector.
      */
     @get:JvmName("z")
     var z: Float
@@ -45,15 +35,6 @@ interface Vec3f : Vector<Vec3f> {
     @ApiStatus.Internal
     interface Factory {
 
-        /**
-         * Create new instance of [Vec3f]
-         *
-         * @param x X position
-         * @param y Y position
-         * @param z Z position
-         *
-         * @return New instance of [Vec3f].
-         */
         fun create(x: Float, y: Float, z: Float): Vec3f
 
     }

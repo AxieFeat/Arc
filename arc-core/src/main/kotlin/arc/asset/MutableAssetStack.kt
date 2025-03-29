@@ -31,13 +31,6 @@ interface MutableAssetStack<T : Asset> : AssetStack<T> {
     @TypeFactory
     interface Factory {
 
-        /**
-         * Create new stack of assets.
-         *
-         * @param assets Assets of stack.
-         *
-         * @return New instance of [MutableAssetStack].
-         */
         fun <T : Asset> create(assets: Set<T>): MutableAssetStack<T>
 
     }

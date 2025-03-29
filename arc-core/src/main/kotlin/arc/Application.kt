@@ -13,11 +13,7 @@ import org.jetbrains.annotations.ApiStatus
 import java.io.File
 
 /**
- * Represents an application interface. This interface provides access to various components
- * and functionalities such as the platform, window, input devices, rendering system, and more.
- *
- * It defines methods for initializing, interacting with external resources, and controlling
- * the application lifecycle.
+ * This interface represents Application of game engine.
  */
 @Suppress("INAPPLICABLE_JVM_NAME")
 @MutableType
@@ -31,11 +27,7 @@ interface Application {
     val platform: Platform
 
     /**
-     * Provides access to the main application window.
-     *
-     * This property represents an instance of the `Window` interface, which contains methods and properties
-     * for interacting with the application's window, such as resizing, setting handlers for window events,
-     * and querying window attributes (e.g., position, size, and visibility).
+     * Window of this application.
      *
      * @throws WindowException If window is not initialized yet.
      */
@@ -44,28 +36,19 @@ interface Application {
     val window: Window
 
     /**
-     * Represents the rendering system used by the application for managing
-     * all rendering operations. Provides functionality such as binding shaders,
-     * textures, managing frame lifecycle, enabling/disabling rendering options
-     * like depth testing, culling, and blending, as well as viewport and color
-     * settings.
-     *
-     * This property is a part of the application's major systems and allows
-     * direct interaction with rendering capabilities.
+     * Render system of application.
      */
     @get:JvmName("renderSystem")
     val renderSystem: RenderSystem
 
     /**
-     * Represent the sound engine used by the application for managing sound.
+     * Sound engine of application.
      */
     @get:JvmName("soundEngine")
     val soundEngine: SoundEngine
 
     /**
-     * Represents the file location management system for the application.
-     * Provides utility functions to access files based on specific location contexts such as local, absolute, or classpath.
-     * Used to manage and retrieve file paths relative to the application's directory or other predefined contexts.
+     * Location space of application.
      */
     @get:JvmName("locationSpace")
     val locationSpace: LocationSpace
@@ -84,9 +67,6 @@ interface Application {
 
     /**
      * Represents the current text stored in the system clipboard.
-     *
-     * This variable allows reading and modifying the clipboard content.
-     * Modifying this property changes the clipboard text to the provided value.
      */
     @get:JvmName("clipboardText")
     var clipboardText: String
@@ -94,8 +74,7 @@ interface Application {
     /**
      * Initializes the application with the given configuration.
      *
-     * @param configuration The configuration object that defines properties for the application's setup,
-     * including window dimensions, title, refresh rate, and fullscreen mode.
+     * @param configuration The configuration object that defines properties for the application's setup.
      */
     fun init(configuration: Configuration)
 
@@ -126,11 +105,6 @@ interface Application {
 
     /**
      * Terminates the application and releases all associated resources.
-     *
-     * This method is responsible for shutting down the application, ensuring that
-     * all systems, such as input devices, rendering, and window management, are
-     * properly closed. After calling this method, the application should no
-     * longer be used. This operation cannot be undone.
      */
     fun close()
 
@@ -138,12 +112,7 @@ interface Application {
     @TypeFactory
     interface Factory {
 
-        /**
-         * Find specific implementation of [Application] in current context.
-         *
-         * @return Instance of [Application].
-         */
-        fun find(): Application
+        fun create(): Application
 
     }
 
@@ -156,7 +125,7 @@ interface Application {
          */
         @JvmStatic
         fun find(): Application {
-            return Arc.factory<Factory>().find()
+            return Arc.factory<Factory>().create()
         }
 
     }

@@ -1,3 +1,7 @@
+plugins {
+    kotlin("plugin.serialization") version "2.0.0"
+}
+
 val lwjglVersion = "3.3.6"
 val winNatives = "natives-windows"
 val linuxNatives = "natives-linux"
@@ -27,4 +31,6 @@ dependencies {
 
     api("it.unimi.dsi:fastutil:8.5.15")
     api("com.github.oshi:oshi-core:6.6.6")
+    api("org.jetbrains.kotlinx:kotlinx-serialization-core-jvm:1.8.0")
+    api("org.jetbrains.kotlinx:kotlinx-serialization-protobuf:1.8.0")
 }

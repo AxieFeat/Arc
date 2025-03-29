@@ -1,8 +1,11 @@
 package arc.profiler.section
 
+import arc.annotations.ImmutableType
+
 /**
  * This interface represents general section of profiler.
  */
+@ImmutableType
 interface RootSection : ActiveSection {
 
     /**

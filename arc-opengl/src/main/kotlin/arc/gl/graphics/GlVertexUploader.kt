@@ -2,8 +2,6 @@ package arc.gl.graphics
 
 import arc.graphics.vertex.VertexType
 import org.lwjgl.opengl.GL11.GL_FLOAT
-import org.lwjgl.opengl.GL15.GL_ARRAY_BUFFER
-import org.lwjgl.opengl.GL15.glBindBuffer
 import org.lwjgl.opengl.GL20.glEnableVertexAttribArray
 import org.lwjgl.opengl.GL20.glVertexAttribPointer
 import org.lwjgl.opengl.GL30.*

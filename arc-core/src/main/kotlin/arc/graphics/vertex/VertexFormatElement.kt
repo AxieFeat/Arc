@@ -69,16 +69,6 @@ interface VertexFormatElement {
     @TypeFactory
     interface Factory {
 
-        /**
-         * Creates a new instance of [VertexFormatElement] with the specified properties.
-         *
-         * @param index The position of the vertex element in the format.
-         * @param type The data type of the vertex element, defined by [VertexType].
-         * @param usage The usage type of the vertex element, defined by [VertexUsage].
-         * @param count The number of components in this vertex element.
-         *
-         * @return A newly created [VertexFormatElement] with the defined properties.
-         */
         fun create(
             index: Int,
             type: VertexType,

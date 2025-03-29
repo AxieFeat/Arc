@@ -24,13 +24,6 @@ interface AssetStack<T : Asset> : Iterable<T> {
     @TypeFactory
     interface Factory {
 
-        /**
-         * Create new stack of assets.
-         *
-         * @param assets Assets of stack.
-         *
-         * @return New instance of [AssetStack].
-         */
         fun <T : Asset> create(assets: Set<T>): AssetStack<T>
 
     }

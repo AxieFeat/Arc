@@ -11,6 +11,5 @@ internal data class GlTextureAsset(
         override fun create(file: File): TextureAsset {
             return GlTextureAsset(file)
         }
-
     }
 }

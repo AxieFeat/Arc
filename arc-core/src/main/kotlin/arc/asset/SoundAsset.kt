@@ -16,13 +16,6 @@ interface SoundAsset : Asset {
     @TypeFactory
     interface Factory {
 
-        /**
-         * Create instance of [SoundAsset] from file.
-         *
-         * @param file File of asset.
-         *
-         * @return New instance of [SoundAsset].
-         */
         fun create(file: File): SoundAsset
 
     }

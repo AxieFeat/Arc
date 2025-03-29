@@ -56,7 +56,7 @@ object GlApplication : AbstractApplication() {
     }
 
     internal object Factory : Application.Factory {
-        override fun find(): Application {
+        override fun create(): Application {
             return GlApplication
         }
 

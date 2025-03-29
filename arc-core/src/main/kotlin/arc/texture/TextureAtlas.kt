@@ -61,7 +61,7 @@ interface TextureAtlas : TextureLike {
      * @param row Row number.
      * @param column Column number.
      *
-     * @throws IllegalArgumentException If U coordinate not found by this row and column.
+     * @throws IllegalArgumentException If V coordinate not found by this row and column.
      */
     @Throws(IllegalArgumentException::class)
     fun v(row: Int, column: Int): Float
@@ -70,15 +70,6 @@ interface TextureAtlas : TextureLike {
     @TypeFactory
     interface Factory {
 
-        /**
-         * Create [TextureAtlas] from [TextureAsset].
-         *
-         * @param asset Asset for Texture Atlas.
-         * @param rows Count of rows for Texture Atlas.
-         * @param columns Count of columns for Texture Atlas.
-         *
-         * @return New instance of [TextureAtlas].
-         */
         fun from(asset: TextureAsset, rows: Int, columns: Int): TextureAtlas
 
     }

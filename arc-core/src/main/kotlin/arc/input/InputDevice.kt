@@ -1,6 +1,5 @@
 package arc.input
 
-import arc.annotations.ImmutableType
 import arc.input.mouse.MouseInput
 import arc.input.keyboard.KeyboardInput
 
@@ -10,7 +9,6 @@ import arc.input.keyboard.KeyboardInput
  * @see MouseInput
  * @see KeyboardInput
  */
-@ImmutableType
 @Suppress("INAPPLICABLE_JVM_NAME")
 interface InputDevice {
 

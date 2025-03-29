@@ -6,31 +6,20 @@ import arc.annotations.TypeFactory
 import org.jetbrains.annotations.ApiStatus
 
 /**
- * Represents a 2D point with integer coordinates.
- *
- * This interface defines a mutable type for storing and manipulating
- * a point in a 2D space using `x` and `y` integer coordinates.
- * The point can be packed into a single long value for efficient storage
- * or transmission and can be unpacked back into its individual components.
+ * This interface represents a 2D point with integer values.
  */
 @Suppress("INAPPLICABLE_JVM_NAME")
 @MutableType
 interface Point2i {
 
     /**
-     * The X coordinate of the 2D point.
-     *
-     * Represents the horizontal position of the point in a 2D space. This property can be
-     * accessed or modified to change the X coordinate of the point.
+     * The X-coordinate of the 2D point.
      */
     @get:JvmName("x")
     var x: Int
 
     /**
-     * The Y coordinate of the 2D point.
-     *
-     * Represents the vertical axis value of this point. This property can be used to get or modify
-     * the Y position in a 2D space.
+     * The Y-coordinate of the 2D point.
      */
     @get:JvmName("y")
     var y: Int
@@ -39,14 +28,6 @@ interface Point2i {
     @ApiStatus.Internal
     interface Factory {
 
-        /**
-         * Create new instance of [Point2i]
-         *
-         * @param x X position
-         * @param y Y position
-         *
-         * @return New instance of [Point2i].
-         */
         fun create(x: Int, y: Int): Point2i
 
     }

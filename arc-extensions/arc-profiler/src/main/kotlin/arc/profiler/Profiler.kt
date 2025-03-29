@@ -1,7 +1,6 @@
 package arc.profiler
 
 import arc.Arc
-import arc.annotations.ImmutableType
 import arc.annotations.TypeFactory
 import arc.profiler.section.ActiveSection
 import arc.profiler.section.RootSection
@@ -11,7 +10,6 @@ import org.jetbrains.annotations.ApiStatus
 /**
  * This interface represents profiler for collecting debug info.
  */
-@ImmutableType
 @Suppress("INAPPLICABLE_JVM_NAME")
 interface Profiler {
 

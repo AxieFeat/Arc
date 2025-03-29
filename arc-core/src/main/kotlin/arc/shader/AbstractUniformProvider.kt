@@ -1,5 +1,8 @@
 package arc.shader
 
+/**
+ * This class represents basic [UniformProvider]. Use it for creation own providers.
+ */
 abstract class AbstractUniformProvider : UniformProvider {
 
     override val uniforms: MutableMap<String, Uniform> = mutableMapOf()

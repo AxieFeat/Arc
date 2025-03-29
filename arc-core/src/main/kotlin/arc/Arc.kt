@@ -4,14 +4,6 @@ import arc.util.factory.FactoryProvider
 
 /**
  * Provides static utility for accessing factories through a configured [FactoryProvider].
- *
- * This object acts as a central point for registering and accessing factory objects,
- * enabling dependency injection or service locator patterns. The actual provision
- * of factories is handled by an internal [FactoryProvider] instance, which must
- * be initialized before use.
- *
- * Note: The [FactoryProvider] must be appropriately set prior to calling any methods
- * on this object.
  */
 object Arc {
 
