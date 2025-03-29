@@ -1,11 +1,11 @@
 package arc.gl.graphics
 
+import arc.gl.graphics.vertex.GlVertexBuffer
 import arc.graphics.DrawBuffer
 import arc.graphics.Drawer
 import arc.graphics.DrawerMode
-import arc.graphics.VertexBuffer
+import arc.graphics.vertex.VertexBuffer
 import arc.graphics.vertex.VertexFormat
-import arc.shader.ShaderInstance
 
 internal object GlDrawer : Drawer {
 

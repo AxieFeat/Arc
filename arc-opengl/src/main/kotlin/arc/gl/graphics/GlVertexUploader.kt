@@ -1,5 +1,6 @@
 package arc.gl.graphics
 
+import arc.gl.graphics.vertex.GlVertexBuffer
 import arc.graphics.vertex.VertexType
 import org.lwjgl.opengl.GL11.GL_FLOAT
 import org.lwjgl.opengl.GL20.glEnableVertexAttribArray

@@ -1,9 +1,9 @@
-package arc.graphics
+package arc.graphics.vertex
 
 import arc.Arc
-import arc.annotations.MutableType
 import arc.annotations.TypeFactory
-import arc.graphics.vertex.VertexFormat
+import arc.graphics.DrawBuffer
+import arc.graphics.DrawerMode
 import org.jetbrains.annotations.ApiStatus
 
 /**

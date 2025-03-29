@@ -1,8 +1,9 @@
-package arc.gl.graphics
+package arc.gl.graphics.vertex
 
+import arc.gl.graphics.GlDrawBuffer
 import arc.graphics.DrawBuffer
 import arc.graphics.DrawerMode
-import arc.graphics.VertexBuffer
+import arc.graphics.vertex.VertexBuffer
 import arc.graphics.vertex.VertexFormat
 import org.lwjgl.opengl.GL41.*
 import org.lwjgl.system.MemoryUtil

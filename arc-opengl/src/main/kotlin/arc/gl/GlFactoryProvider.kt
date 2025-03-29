@@ -7,14 +7,14 @@ import arc.asset.shader.ShaderData
 import arc.gl.asset.GlShaderData
 import arc.gl.asset.GlTextureAsset
 import arc.gl.graphics.GlDrawBuffer
-import arc.gl.graphics.GlVertexBuffer
+import arc.gl.graphics.vertex.GlVertexBuffer
 import arc.gl.shader.GlBlendMode
 import arc.gl.shader.GlFrameBuffer
 import arc.gl.shader.GlShaderInstance
 import arc.gl.texture.GlTexture
 import arc.gl.texture.GlTextureAtlas
 import arc.graphics.DrawBuffer
-import arc.graphics.VertexBuffer
+import arc.graphics.vertex.VertexBuffer
 import arc.register
 import arc.shader.BlendMode
 import arc.shader.FrameBuffer
