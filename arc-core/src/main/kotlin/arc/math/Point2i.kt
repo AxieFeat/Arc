@@ -24,6 +24,9 @@ interface Point2i {
     @get:JvmName("y")
     var y: Int
 
+    operator fun component1(): Int = x
+    operator fun component2(): Int = y
+
     @TypeFactory
     @ApiStatus.Internal
     interface Factory {

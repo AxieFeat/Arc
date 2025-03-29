@@ -17,6 +17,14 @@ import arc.graphics.vertex.ArcVertexFormat
 import arc.graphics.vertex.ArcVertexFormatElement
 import arc.graphics.vertex.VertexFormat
 import arc.graphics.vertex.VertexFormatElement
+import arc.lwamodel.ArcLWAModel
+import arc.lwamodel.LWAModel
+import arc.lwamodel.cube.ArcLWAModelCube
+import arc.lwamodel.cube.ArcLWAModelCubeFace
+import arc.lwamodel.cube.LWAModelCube
+import arc.lwamodel.cube.LWAModelCubeFace
+import arc.lwamodel.texture.ArcLWAModelTexture
+import arc.lwamodel.texture.LWAModelTexture
 import arc.math.*
 import arc.profiler.ArcProfiler
 import arc.profiler.Profiler
@@ -65,7 +73,6 @@ object ArcFactoryProvider : FactoryProvider {
         register<Color.Factory>(ArcColor.Factory)
         register<Window.Factory>(ArcWindow.Factory)
         register<Configuration.Factory>(ArcConfiguration.Factory)
-        register<Profiler.Factory>(ArcProfiler.Factory)
         register<Camera.Factory>(ArcCamera.Factory)
         register<Sound.Factory>(OggSound.Factory)
 
@@ -78,6 +85,18 @@ object ArcFactoryProvider : FactoryProvider {
         register<VertexShader.Factory>(ArcVertexShader.Factory)
         register<AssetStack.Factory>(ArcAssetStack.Factory)
         register<MutableAssetStack.Factory>(ArcAssetStack.MutableFactory)
+
+
+        // Extensions
+
+        // Profiler
+        register<Profiler.Factory>(ArcProfiler.Factory)
+
+        // Model
+        register<LWAModel.Factory>(ArcLWAModel.Factory)
+        register<LWAModelCube.Factory>(ArcLWAModelCube.Factory)
+        register<LWAModelCubeFace.Factory>(ArcLWAModelCubeFace.Factory)
+        register<LWAModelTexture.Factory>(ArcLWAModelTexture.Factory)
     }
 
     private fun modifyField(clazz: Class<*>, name: String, value: Any) {

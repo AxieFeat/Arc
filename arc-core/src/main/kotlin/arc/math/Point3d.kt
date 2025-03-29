@@ -30,6 +30,10 @@ interface Point3d {
     @get:JvmName("z")
     var z: Double
 
+    operator fun component1(): Double = x
+    operator fun component2(): Double = y
+    operator fun component3(): Double = z
+
     @TypeFactory
     @ApiStatus.Internal
     interface Factory {

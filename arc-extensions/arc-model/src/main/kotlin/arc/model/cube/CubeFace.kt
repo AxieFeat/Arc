@@ -14,19 +14,27 @@ import arc.model.texture.ModelTexture
 interface CubeFace {
 
     /**
-     * Represents the UV coordinates for a cube face's texture mapping.
+     * Represents the min UV coordinates for a cube face's texture mapping.
      *
      * @see CubeFace
      */
-    @get:JvmName("uv")
-    val uv: Point2i
+    @get:JvmName("uvMin")
+    val uvMin: Point2i
 
     /**
-     * Represents the texture associated with a specific cube face.
+     * Represents the max UV coordinates for a cube face's texture mapping.
+     *
+     * @see CubeFace
+     */
+    @get:JvmName("uvMax")
+    val uvMax: Point2i
+
+    /**
+     * Represents the texture ID associated with a specific cube face.
      *
      * @see ModelTexture
      */
     @get:JvmName("texture")
-    val texture: ModelTexture
+    val texture: Int
 
 }

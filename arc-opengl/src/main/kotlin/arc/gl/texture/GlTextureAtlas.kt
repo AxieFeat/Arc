@@ -2,6 +2,7 @@ package arc.gl.texture
 
 import arc.asset.TextureAsset
 import arc.gl.graphics.GlRenderSystem
+import arc.gl.texture.TextureUtil.createDirectByteBuffer
 import arc.texture.EmptyTexture
 import arc.texture.TextureAtlas
 import org.lwjgl.opengl.GL41.*
@@ -9,8 +10,9 @@ import org.lwjgl.stb.STBImage
 import org.lwjgl.system.MemoryStack
 import java.nio.ByteBuffer
 
-internal data class GlTextureAtlas(
-    override val asset: TextureAsset,
+internal class GlTextureAtlas(
+    override val asset: TextureAsset? = null,
+    private val bytes: ByteArray? = null,
     override val rows: Int = 10,
     override val columns: Int = 10
 ) : TextureAtlas {
@@ -29,8 +31,13 @@ internal data class GlTextureAtlas(
             val h = stack.mallocInt(1)
             val channels = stack.mallocInt(1)
 
-            val buf: ByteBuffer = STBImage.stbi_load(asset.file.absolutePath, w, h, channels, 4)
-                ?: throw RuntimeException("Image file [${asset.file.absolutePath}] not loaded: " + STBImage.stbi_failure_reason())
+            val buf: ByteBuffer = if(asset != null) {
+                STBImage.stbi_load(asset.file.absolutePath, w, h, channels, 4)
+                    ?: throw RuntimeException("Image file [${asset.file.absolutePath}] not loaded: " + STBImage.stbi_failure_reason())
+            } else {
+                STBImage.stbi_load_from_memory(bytes!!.createDirectByteBuffer(), w, h, channels, 4)
+                    ?: throw RuntimeException("Image file not loaded: " + STBImage.stbi_failure_reason())
+            }
 
             this.width = w.get()
             this.height = h.get()
@@ -64,6 +71,8 @@ internal data class GlTextureAtlas(
     override fun bind() {
         glActiveTexture(GL_TEXTURE0)
         glBindTexture(GL_TEXTURE_2D, id)
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST)
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST)
     }
 
     override fun unbind() {
@@ -76,8 +85,12 @@ internal data class GlTextureAtlas(
     }
 
     object Factory : TextureAtlas.Factory {
-        override fun from(asset: TextureAsset, rows: Int, columns: Int): TextureAtlas {
-            return GlTextureAtlas(asset, rows, columns)
+        override fun create(asset: TextureAsset, rows: Int, columns: Int): TextureAtlas {
+            return GlTextureAtlas(asset, null, rows, columns)
+        }
+
+        override fun create(bytes: ByteArray, rows: Int, columns: Int): TextureAtlas {
+            return GlTextureAtlas(null, bytes, rows, columns)
         }
     }
 }

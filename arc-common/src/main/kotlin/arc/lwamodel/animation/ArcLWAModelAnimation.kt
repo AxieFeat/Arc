@@ -1,6 +1,5 @@
 package arc.lwamodel.animation
 
-import arc.model.animation.Animation
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
 import java.util.*
@@ -11,4 +10,4 @@ internal data class ArcLWAModelAnimation(
     override val uuid: UUID,
     override val isLoop: Boolean,
     override val length: Long
-) : Animation
+) : LWAModelAnimation

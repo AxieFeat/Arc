@@ -14,16 +14,17 @@ import org.jetbrains.annotations.ApiStatus
 interface Texture : TextureLike {
 
     /**
-     * Asset of this texture.
+     * Asset of this texture. If null - texture available only in runtime.
      */
     @get:JvmName("asset")
-    val asset: TextureAsset
+    val asset: TextureAsset?
 
     @ApiStatus.Internal
-    @TypeFactory
     interface Factory {
 
         fun create(asset: TextureAsset): Texture
+
+        fun create(bytes: ByteArray): Texture
 
     }
 
@@ -39,6 +40,18 @@ interface Texture : TextureLike {
         @JvmStatic
         fun from(asset: TextureAsset): Texture {
             return Arc.factory<Factory>().create(asset)
+        }
+
+        /**
+         * Create [Texture] from byte array.
+         *
+         * @param bytes Bytes of texture.
+         *
+         * @return New instance of [Texture].
+         */
+        @JvmStatic
+        fun from(bytes: ByteArray): Texture {
+            return Arc.factory<Factory>().create(bytes)
         }
 
     }

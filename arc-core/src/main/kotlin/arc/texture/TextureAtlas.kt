@@ -2,7 +2,6 @@ package arc.texture
 
 import arc.Arc
 import arc.annotations.ImmutableType
-import arc.annotations.TypeFactory
 import arc.asset.TextureAsset
 import org.jetbrains.annotations.ApiStatus
 import kotlin.jvm.Throws
@@ -39,10 +38,10 @@ interface TextureAtlas : TextureLike {
     val columns: Int
 
     /**
-     * Asset of this atlas.
+     * Asset of this atlas. If null - texture available only in runtime.
      */
     @get:JvmName("asset")
-    val asset: TextureAsset
+    val asset: TextureAsset?
 
     /**
      * Get U coordinate for some position in this atlas.
@@ -67,10 +66,11 @@ interface TextureAtlas : TextureLike {
     fun v(row: Int, column: Int): Float
 
     @ApiStatus.Internal
-    @TypeFactory
     interface Factory {
 
-        fun from(asset: TextureAsset, rows: Int, columns: Int): TextureAtlas
+        fun create(asset: TextureAsset, rows: Int, columns: Int): TextureAtlas
+
+        fun create(bytes: ByteArray, rows: Int, columns: Int): TextureAtlas
 
     }
 
@@ -87,7 +87,21 @@ interface TextureAtlas : TextureLike {
          */
         @JvmStatic
         fun from(asset: TextureAsset, rows: Int, columns: Int): TextureAtlas {
-            return Arc.factory<Factory>().from(asset, rows, columns)
+            return Arc.factory<Factory>().create(asset, rows, columns)
+        }
+
+        /**
+         * Create [TextureAtlas] from [TextureAsset].
+         *
+         * @param bytes Bytes of texture.
+         * @param rows Count of rows for Texture Atlas.
+         * @param columns Count of columns for Texture Atlas.
+         *
+         * @return New instance of [TextureAtlas].
+         */
+        @JvmStatic
+        fun from(bytes: ByteArray, rows: Int, columns: Int): TextureAtlas {
+            return Arc.factory<Factory>().create(bytes, rows, columns)
         }
 
     }

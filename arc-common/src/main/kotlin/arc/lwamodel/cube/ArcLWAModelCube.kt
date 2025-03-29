@@ -14,7 +14,29 @@ internal data class ArcLWAModelCube(
     override val from: Point3d = Point3d.ZERO,
     override val to: Point3d = Point3d.ZERO,
     override val faces: Map<Face, CubeFace> = mapOf(),
-    override val origin: Point3d = Point3d.ZERO,
     override val lightLevel: Byte = 0,
     override val lightColor: Int = 0
-) : LWAModelCube
+) : LWAModelCube {
+
+    override val origin: Point3d =
+        Point3d.of(
+            (from.x + to.x) * 0.5f,
+            (from.y + to.y) * 0.5f,
+            (from.z + to.z) * 0.5f
+        )
+
+    object Factory : LWAModelCube.Factory {
+        override fun create(
+            uuid: UUID,
+            from: Point3d,
+            to: Point3d,
+            faces: Map<Face, CubeFace>,
+            lightLevel: Byte,
+            lightColor: Int
+        ): LWAModelCube {
+            return ArcLWAModelCube(uuid, from, to, faces, lightLevel, lightColor)
+        }
+
+    }
+
+}

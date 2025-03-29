@@ -6,7 +6,11 @@ import arc.annotations.TypeFactory
 import arc.asset.BBModelAsset
 import arc.asset.LWAModelAsset
 import arc.bbmodel.BBModel
+import arc.lwamodel.animation.LWAModelAnimation
+import arc.lwamodel.texture.LWAModelTexture
 import arc.model.Model
+import arc.model.animation.Animation
+import arc.model.texture.ModelTexture
 import org.jetbrains.annotations.ApiStatus
 
 /**
@@ -28,11 +32,24 @@ interface LWAModel : Model {
      */
     override val elements: List<LWAModelElement>
 
+    /**
+     * All LWA Model textures in this model.
+     */
+    override val textures: List<LWAModelTexture>
+
+    /**
+     * All LWA Model animations in this model.
+     */
+    override val animations: List<LWAModelAnimation>
+
+    fun serialize(): ByteArray
+
     @ApiStatus.Internal
-    @TypeFactory
     interface Factory {
 
         fun create(bytes: ByteArray): LWAModel
+
+        fun create(elements: List<LWAModelElement>, textures: List<LWAModelTexture>, animations: List<LWAModelAnimation>): LWAModel
 
     }
 
@@ -48,6 +65,24 @@ interface LWAModel : Model {
         @JvmStatic
         fun from(asset: LWAModelAsset): LWAModel {
             return Arc.factory<Factory>().create(asset.file.readBytes())
+        }
+
+        /**
+         * Create new instance of [LWAModel].
+         *
+         * @param elements Elements of model.
+         * @param textures Textures of model.
+         * @param animations Animations of model.
+         *
+         * @return New instance of [LWAModel].
+         */
+        @JvmStatic
+        fun of(
+            elements: List<LWAModelElement> = listOf(),
+            textures: List<LWAModelTexture> = listOf(),
+            animations: List<LWAModelAnimation> = listOf()
+        ): LWAModel {
+            return Arc.factory<Factory>().create(elements, textures, animations)
         }
 
     }

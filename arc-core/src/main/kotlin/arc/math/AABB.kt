@@ -55,6 +55,10 @@ interface AABB {
      */
     fun intersects(other: AABB): Boolean
 
+    operator fun component1(): Vec3f = min
+    operator fun component2(): Vec3f = max
+    operator fun component3(): Vec3f = center
+
     @ApiStatus.Internal
     @TypeFactory
     interface Factory {

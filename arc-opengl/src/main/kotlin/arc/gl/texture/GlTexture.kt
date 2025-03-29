@@ -2,6 +2,7 @@ package arc.gl.texture
 
 import arc.asset.TextureAsset
 import arc.gl.graphics.GlRenderSystem
+import arc.gl.texture.TextureUtil.createDirectByteBuffer
 import arc.texture.EmptyTexture
 import arc.texture.Texture
 import org.lwjgl.opengl.GL41.*
@@ -9,8 +10,9 @@ import org.lwjgl.stb.STBImage
 import org.lwjgl.system.MemoryStack
 import java.nio.ByteBuffer
 
-internal data class GlTexture(
-    override val asset: TextureAsset,
+internal class GlTexture(
+    override val asset: TextureAsset? = null,
+    private val bytes: ByteArray? = null,
 ) : Texture {
 
     override val id: Int = glGenTextures()
@@ -21,8 +23,13 @@ internal data class GlTexture(
             val h = stack.mallocInt(1)
             val channels = stack.mallocInt(1)
 
-            val buf: ByteBuffer = STBImage.stbi_load(asset.file.absolutePath, w, h, channels, 4)
-                ?: throw RuntimeException("Image file [${asset.file.absolutePath}] not loaded: " + STBImage.stbi_failure_reason())
+            val buf: ByteBuffer = if(asset != null) {
+                STBImage.stbi_load(asset.file.absolutePath, w, h, channels, 4)
+                    ?: throw RuntimeException("Image file [${asset.file.absolutePath}] not loaded: " + STBImage.stbi_failure_reason())
+            } else {
+                STBImage.stbi_load_from_memory(bytes!!.createDirectByteBuffer(), w, h, channels, 4)
+                    ?: throw RuntimeException("Image file not loaded: " + STBImage.stbi_failure_reason())
+            }
 
             val width = w.get()
             val height = h.get()
@@ -35,6 +42,8 @@ internal data class GlTexture(
     override fun bind() {
         glActiveTexture(GL_TEXTURE0)
         glBindTexture(GL_TEXTURE_2D, id)
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST)
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST)
     }
 
     override fun unbind() {
@@ -49,6 +58,10 @@ internal data class GlTexture(
     object Factory : Texture.Factory {
         override fun create(asset: TextureAsset): Texture {
             return GlTexture(asset)
+        }
+
+        override fun create(bytes: ByteArray): Texture {
+            return GlTexture(null, bytes)
         }
     }
 }

@@ -30,6 +30,10 @@ interface Point3i {
     @get:JvmName("z")
     var z: Int
 
+    operator fun component1(): Int = x
+    operator fun component2(): Int = y
+    operator fun component3(): Int = z
+
     @TypeFactory
     @ApiStatus.Internal
     interface Factory {

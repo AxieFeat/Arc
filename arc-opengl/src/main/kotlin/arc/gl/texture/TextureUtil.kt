@@ -4,7 +4,7 @@ import org.lwjgl.opengl.GL11
 import org.lwjgl.opengl.GL30
 import java.nio.ByteBuffer
 
-object TextureUtil {
+internal object TextureUtil {
 
     @JvmStatic
     fun loadRGB(id: Int, width: Int, height: Int, buf: ByteBuffer) {
@@ -17,6 +17,14 @@ object TextureUtil {
             GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, buf
         )
         GL30.glGenerateMipmap(GL11.GL_TEXTURE_2D)
+    }
+
+    @JvmStatic
+    fun ByteArray.createDirectByteBuffer(): ByteBuffer {
+        val buffer = ByteBuffer.allocateDirect(this.size)
+        buffer.put(this)
+        buffer.flip()
+        return buffer
     }
 
 }

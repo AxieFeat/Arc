@@ -4,7 +4,7 @@ import arc.Application
 import arc.Configuration
 import arc.asset.SoundAsset
 import arc.audio.Sound
-import arc.demo.screen.MainMenuScreen
+import arc.demo.screen.ModelRenderScene
 import arc.demo.screen.Screen
 import arc.demo.shader.ShaderContainer
 import arc.files.classpath
@@ -23,7 +23,7 @@ object VoxelGame : WindowHandler {
         // Set window handler to this instance.
         application.window.handler = this
         application.window.isVsync = true
-        setScreen(MainMenuScreen)
+        setScreen(ModelRenderScene)
 
         val asset = SoundAsset.from(classpath("arc/sound/pigstep.ogg"))
         val sound = Sound.from(asset)

@@ -24,6 +24,9 @@ interface Vec2f : Vector<Vec2f> {
     @get:JvmName("y")
     var y: Float
 
+    operator fun component1(): Float = x
+    operator fun component2(): Float = y
+
     @TypeFactory
     @ApiStatus.Internal
     interface Factory {

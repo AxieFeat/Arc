@@ -31,6 +31,10 @@ interface Vec3f : Vector<Vec3f> {
     @get:JvmName("z")
     var z: Float
 
+    operator fun component1(): Float = x
+    operator fun component2(): Float = y
+    operator fun component3(): Float = z
+
     @TypeFactory
     @ApiStatus.Internal
     interface Factory {

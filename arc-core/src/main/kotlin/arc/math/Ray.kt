@@ -42,6 +42,9 @@ interface Ray : Copyable<Ray> {
      */
     override fun copy(): Ray
 
+    operator fun component1(): Vec3f = origin
+    operator fun component2(): Vec3f = direction
+
     @ApiStatus.Internal
     @TypeFactory
     interface Factory {
