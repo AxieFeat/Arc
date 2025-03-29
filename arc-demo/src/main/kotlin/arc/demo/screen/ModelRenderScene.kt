@@ -3,7 +3,7 @@ package arc.demo.screen
 import arc.demo.shader.ShaderContainer
 import arc.demo.shader.VertexFormatContainer
 import arc.graphics.DrawerMode
-import arc.graphics.VertexBuffer
+import arc.graphics.vertex.VertexBuffer
 import arc.input.KeyCode
 import arc.lwamodel.LWAModel
 import arc.lwamodel.cube.LWAModelCube

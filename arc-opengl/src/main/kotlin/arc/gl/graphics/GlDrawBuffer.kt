@@ -2,7 +2,6 @@ package arc.gl.graphics
 
 import arc.graphics.DrawBuffer
 import arc.graphics.DrawerMode
-import arc.graphics.VertexBuffer
 import arc.graphics.vertex.*
 import arc.util.Color
 import org.joml.Matrix4f
