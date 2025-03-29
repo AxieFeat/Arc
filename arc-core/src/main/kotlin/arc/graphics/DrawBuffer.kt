@@ -3,6 +3,7 @@ package arc.graphics
 import arc.Arc
 import arc.annotations.MutableType
 import arc.annotations.TypeFactory
+import arc.graphics.vertex.VertexBuffer
 import arc.graphics.vertex.VertexConsumer
 import arc.graphics.vertex.VertexFormat
 import arc.util.Builder

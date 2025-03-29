@@ -1,5 +1,6 @@
 package arc.graphics
 
+import arc.graphics.vertex.VertexBuffer
 import arc.graphics.vertex.VertexFormat
 
 /**
