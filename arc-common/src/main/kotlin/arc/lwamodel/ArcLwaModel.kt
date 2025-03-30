@@ -1,7 +1,8 @@
 package arc.lwamodel
 
-import arc.lwamodel.animation.LWAModelAnimation
-import arc.lwamodel.texture.LWAModelTexture
+import arc.lwamodel.animation.LwamAnimation
+import arc.lwamodel.group.LwamElementGroup
+import arc.lwamodel.texture.LwamTexture
 import arc.util.UUIDSerializer
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.Serializable
@@ -13,17 +14,18 @@ import java.util.*
 
 @Serializable
 @OptIn(ExperimentalSerializationApi::class)
-internal data class ArcLWAModel(
-    override val elements: List<LWAModelElement> = listOf(),
-    override val textures: List<LWAModelTexture> = listOf(),
-    override val animations: List<LWAModelAnimation> = listOf()
-) : LWAModel {
+internal data class ArcLwaModel(
+    override val elements: List<LwamElement> = listOf(),
+    override val groups: List<LwamElementGroup> = listOf(),
+    override val animations: List<LwamAnimation> = listOf(),
+    override val textures: List<LwamTexture> = listOf(),
+) : LwaModel {
 
     override fun serialize(): ByteArray {
         return proto.encodeToByteArray(this)
     }
 
-    object Factory : LWAModel.Factory {
+    object Factory : LwaModel.Factory {
 
         private val proto = ProtoBuf(ProtoBuf.Default) {
             serializersModule = SerializersModule {
@@ -31,16 +33,17 @@ internal data class ArcLWAModel(
             }
         }
 
-        override fun create(bytes: ByteArray): LWAModel {
-            return proto.decodeFromByteArray<ArcLWAModel>(bytes)
+        override fun create(bytes: ByteArray): LwaModel {
+            return proto.decodeFromByteArray<ArcLwaModel>(bytes)
         }
 
         override fun create(
-            elements: List<LWAModelElement>,
-            textures: List<LWAModelTexture>,
-            animations: List<LWAModelAnimation>
-        ): LWAModel {
-            return ArcLWAModel(elements, textures, animations)
+            elements: List<LwamElement>,
+            groups: List<LwamElementGroup>,
+            animations: List<LwamAnimation>,
+            textures: List<LwamTexture>,
+        ): LwaModel {
+            return ArcLwaModel(elements, groups, animations, textures)
         }
 
     }

@@ -4,7 +4,6 @@ import arc.annotations.ImmutableType
 import arc.model.Element
 import arc.math.Point3d
 import arc.model.Face
-import arc.util.Identifiable
 
 /**
  * Represents a cube element in a 3D model.
@@ -15,7 +14,7 @@ import arc.util.Identifiable
  */
 @Suppress("INAPPLICABLE_JVM_NAME")
 @ImmutableType
-interface Cube : Element, Identifiable {
+interface Cube : Element {
 
     /**
      * Defines the starting point of the cube within a 3D space.

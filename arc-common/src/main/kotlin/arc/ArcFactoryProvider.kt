@@ -17,14 +17,18 @@ import arc.graphics.vertex.ArcVertexFormat
 import arc.graphics.vertex.ArcVertexFormatElement
 import arc.graphics.vertex.VertexFormat
 import arc.graphics.vertex.VertexFormatElement
-import arc.lwamodel.ArcLWAModel
-import arc.lwamodel.LWAModel
-import arc.lwamodel.cube.ArcLWAModelCube
-import arc.lwamodel.cube.ArcLWAModelCubeFace
-import arc.lwamodel.cube.LWAModelCube
-import arc.lwamodel.cube.LWAModelCubeFace
-import arc.lwamodel.texture.ArcLWAModelTexture
-import arc.lwamodel.texture.LWAModelTexture
+import arc.lwamodel.ArcLwaModel
+import arc.lwamodel.LwaModel
+import arc.lwamodel.animation.*
+import arc.lwamodel.animation.ArcLwamAnimation
+import arc.lwamodel.cube.ArcLwamCube
+import arc.lwamodel.cube.ArcLwamCubeFace
+import arc.lwamodel.cube.LwamCube
+import arc.lwamodel.cube.LwamCubeFace
+import arc.lwamodel.group.ArcLwamElementGroup
+import arc.lwamodel.group.LwamElementGroup
+import arc.lwamodel.texture.ArcLwamTexture
+import arc.lwamodel.texture.LwamTexture
 import arc.math.*
 import arc.profiler.ArcProfiler
 import arc.profiler.Profiler
@@ -93,10 +97,14 @@ object ArcFactoryProvider : FactoryProvider {
         register<Profiler.Factory>(ArcProfiler.Factory)
 
         // Model
-        register<LWAModel.Factory>(ArcLWAModel.Factory)
-        register<LWAModelCube.Factory>(ArcLWAModelCube.Factory)
-        register<LWAModelCubeFace.Factory>(ArcLWAModelCubeFace.Factory)
-        register<LWAModelTexture.Factory>(ArcLWAModelTexture.Factory)
+        register<LwaModel.Factory>(ArcLwaModel.Factory)
+        register<LwamCube.Factory>(ArcLwamCube.Factory)
+        register<LwamCubeFace.Factory>(ArcLwamCubeFace.Factory)
+        register<LwamTexture.Factory>(ArcLwamTexture.Factory)
+        register<LwamElementGroup.Factory>(ArcLwamElementGroup.Factory)
+        register<LwamAnimation.Factory>(ArcLwamAnimation.Factory)
+        register<LwamAnimator.Factory>(ArcLwamAnimator.Factory)
+        register<LwamKeyframe.Factory>(ArcLwamKeyframe.Factory)
     }
 
     private fun modifyField(clazz: Class<*>, name: String, value: Any) {

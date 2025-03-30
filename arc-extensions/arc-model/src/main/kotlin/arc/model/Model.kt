@@ -2,6 +2,7 @@ package arc.model
 
 import arc.annotations.ImmutableType
 import arc.model.animation.Animation
+import arc.model.group.ElementGroup
 import arc.model.texture.ModelTexture
 
 /**
@@ -18,15 +19,21 @@ interface Model {
     val elements: List<Element>
 
     /**
-     * All textures in this model.
+     * All groups in this model.
      */
-    @get:JvmName("textures")
-    val textures: List<ModelTexture>
+    @get:JvmName("groups")
+    val groups: List<ElementGroup>
 
     /**
      * All animations in this model.
      */
     @get:JvmName("animations")
     val animations: List<Animation>
+
+    /**
+     * All textures in this model.
+     */
+    @get:JvmName("textures")
+    val textures: List<ModelTexture>
 
 }

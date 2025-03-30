@@ -4,11 +4,11 @@ import arc.annotations.ImmutableType
 import arc.model.Element
 
 /**
- * This interface represents element in LWA model format (It supports lighting).
+ * This interface represents element in LWAM format (It supports lighting).
  */
 @Suppress("INAPPLICABLE_JVM_NAME")
 @ImmutableType
-interface LWAModelElement : Element {
+interface LwamElement : Element {
 
     /**
      * The light emission level of an element.

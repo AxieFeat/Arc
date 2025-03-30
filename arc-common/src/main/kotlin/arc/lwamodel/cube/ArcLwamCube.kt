@@ -8,7 +8,7 @@ import kotlinx.serialization.Serializable
 import java.util.*
 
 @Serializable
-internal data class ArcLWAModelCube(
+internal data class ArcLwamCube(
     @Contextual
     override val uuid: UUID = UUID.randomUUID(),
     override val from: Point3d = Point3d.ZERO,
@@ -16,7 +16,7 @@ internal data class ArcLWAModelCube(
     override val faces: Map<Face, CubeFace> = mapOf(),
     override val lightLevel: Byte = 0,
     override val lightColor: Int = 0
-) : LWAModelCube {
+) : LwamCube {
 
     override val origin: Point3d =
         Point3d.of(
@@ -25,7 +25,7 @@ internal data class ArcLWAModelCube(
             (from.z + to.z) * 0.5f
         )
 
-    object Factory : LWAModelCube.Factory {
+    object Factory : LwamCube.Factory {
         override fun create(
             uuid: UUID,
             from: Point3d,
@@ -33,8 +33,8 @@ internal data class ArcLWAModelCube(
             faces: Map<Face, CubeFace>,
             lightLevel: Byte,
             lightColor: Int
-        ): LWAModelCube {
-            return ArcLWAModelCube(uuid, from, to, faces, lightLevel, lightColor)
+        ): LwamCube {
+            return ArcLwamCube(uuid, from, to, faces, lightLevel, lightColor)
         }
 
     }

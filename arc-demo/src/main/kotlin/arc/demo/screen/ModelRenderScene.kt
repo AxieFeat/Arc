@@ -5,83 +5,93 @@ import arc.demo.shader.VertexFormatContainer
 import arc.graphics.DrawerMode
 import arc.graphics.vertex.VertexBuffer
 import arc.input.KeyCode
-import arc.lwamodel.LWAModel
-import arc.lwamodel.cube.LWAModelCube
-import arc.lwamodel.cube.LWAModelCubeFace
-import arc.lwamodel.texture.LWAModelTexture
+import arc.lwamodel.LwaModel
+import arc.lwamodel.LwamElement
+import arc.lwamodel.animation.LwamAnimation
+import arc.lwamodel.animation.LwamAnimator
+import arc.lwamodel.animation.LwamKeyframe
+import arc.lwamodel.cube.LwamCube
+import arc.lwamodel.cube.LwamCubeFace
+import arc.lwamodel.group.LwamElementGroup
+import arc.lwamodel.texture.LwamTexture
 import arc.math.Point2i
 import arc.math.Point3d
 import arc.model.Face
+import arc.model.animation.AnimationChannel
+import arc.model.animation.AnimationLoopMode
 import arc.shader.ShaderInstance
 import arc.texture.Texture
+import arc.util.InterpolationMode
 import org.joml.Vector3f
 import java.util.*
 
 object ModelRenderScene : Screen("main-menu") {
 
-    private val model = LWAModel.of(
+    private val model = LwaModel.of(
         elements = listOf(
-            LWAModelCube.of(
+            LwamCube.of(
+                uuid = UUID.nameUUIDFromBytes("1".toByteArray()),
                 from = Point3d.of(-8.0, 0.0, -8.0),
                 to = Point3d.of(-3.0, 5.0, 7.0),
                 faces = mapOf(
-                    Face.NORTH to LWAModelCubeFace.of(
+                    Face.NORTH to LwamCubeFace.of(
                         uvMin = Point2i.of(10, 24),
                         uvMax = Point2i.of(15, 29),
                         texture = 0
                     ),
-                    Face.EAST to LWAModelCubeFace.of(
+                    Face.EAST to LwamCubeFace.of(
                         uvMin = Point2i.of(0, 0),
                         uvMax = Point2i.of(15, 5),
                         texture = 0
                     ),
-                    Face.SOUTH to LWAModelCubeFace.of(
+                    Face.SOUTH to LwamCubeFace.of(
                         uvMin = Point2i.of(20, 24),
                         uvMax = Point2i.of(25, 29),
                         texture = 0
                     ),
-                    Face.WEST to LWAModelCubeFace.of(
+                    Face.WEST to LwamCubeFace.of(
                         uvMin = Point2i.of(0, 5),
                         uvMax = Point2i.of(15, 10),
                         texture = 0
                     ),
-                    Face.UP to LWAModelCubeFace.of(
+                    Face.UP to LwamCubeFace.of(
                         uvMin = Point2i.of(0, 10),
                         uvMax = Point2i.of(5, 25),
                         texture = 0
                     ),
-                    Face.DOWN to LWAModelCubeFace.of(
+                    Face.DOWN to LwamCubeFace.of(
                         uvMin = Point2i.of(5, 10),
                         uvMax = Point2i.of(10, 25),
                         texture = 0
                     )
                 )
             ),
-            LWAModelCube.of(
+            LwamCube.of(
+                uuid = UUID.nameUUIDFromBytes("2".toByteArray()),
                 from = Point3d.of(-8.0, 5.0, -3.0),
                 to = Point3d.of(-3.0, 19.0, 2.0),
                 faces = mapOf(
-                    Face.NORTH to LWAModelCubeFace.of(
+                    Face.NORTH to LwamCubeFace.of(
                         uvMin = Point2i.of(10, 10),
                         uvMax = Point2i.of(15, 24),
                         texture = 0
                     ),
-                    Face.EAST to LWAModelCubeFace.of(
+                    Face.EAST to LwamCubeFace.of(
                         uvMin = Point2i.of(15, 0),
                         uvMax = Point2i.of(20, 14),
                         texture = 0
                     ),
-                    Face.SOUTH to LWAModelCubeFace.of(
+                    Face.SOUTH to LwamCubeFace.of(
                         uvMin = Point2i.of(15, 14),
                         uvMax = Point2i.of(20, 28),
                         texture = 0
                     ),
-                    Face.WEST to LWAModelCubeFace.of(
+                    Face.WEST to LwamCubeFace.of(
                         uvMin = Point2i.of(20, 0),
                         uvMax = Point2i.of(25, 14),
                         texture = 0
                     ),
-                    Face.UP to LWAModelCubeFace.of(
+                    Face.UP to LwamCubeFace.of(
                         uvMin = Point2i.of(20, 14),
                         uvMax = Point2i.of(25, 19),
                         texture = 0
@@ -89,14 +99,84 @@ object ModelRenderScene : Screen("main-menu") {
                 )
             )
         ),
+        groups = listOf(
+            LwamElementGroup.of(
+                name = "main",
+                elements = setOf(
+                    UUID.nameUUIDFromBytes("1".toByteArray()),
+                    UUID.nameUUIDFromBytes("2".toByteArray())
+                )
+            )
+        ),
+        animations = listOf(
+            LwamAnimation.of(
+                loop = AnimationLoopMode.LOOP,
+                duration = 1000,
+                animators = setOf(
+                    LwamAnimator.of(
+                        target = "main",
+                        keyframes = setOf(
+                            LwamKeyframe.of(
+                                interpolation = InterpolationMode.LINEAR,
+                                channel = AnimationChannel.ROTATION,
+                                time = 0,
+                                dataPoints = Point3d.of(0.0, 0.0, -30.0)
+                            ),
+                            LwamKeyframe.of(
+                                interpolation = InterpolationMode.LINEAR,
+                                channel = AnimationChannel.ROTATION,
+                                time = 500,
+                                dataPoints = Point3d.of(0.0, 0.0, 0.0)
+                            ),
+                            LwamKeyframe.of(
+                                interpolation = InterpolationMode.LINEAR,
+                                channel = AnimationChannel.POSITION,
+                                time = 500,
+                                dataPoints = Point3d.of(-11.0, 0.0, 0.0)
+                            ),
+                            LwamKeyframe.of(
+                                interpolation = InterpolationMode.LINEAR,
+                                channel = AnimationChannel.POSITION,
+                                time = 0,
+                                dataPoints = Point3d.of(0.0, 0.0, 0.0)
+                            ),
+                            LwamKeyframe.of(
+                                interpolation = InterpolationMode.LINEAR,
+                                channel = AnimationChannel.POSITION,
+                                time = 1000,
+                                dataPoints = Point3d.of(0.0, 0.0, 0.0)
+                            ),
+                            LwamKeyframe.of(
+                                interpolation = InterpolationMode.LINEAR,
+                                channel = AnimationChannel.SCALE,
+                                time = 250,
+                                dataPoints = Point3d.of(1.0, 0.7, 1.0)
+                            ),
+                            LwamKeyframe.of(
+                                interpolation = InterpolationMode.LINEAR,
+                                channel = AnimationChannel.SCALE,
+                                time = 0,
+                                dataPoints = Point3d.of(1.0, 1.0, 1.0)
+                            ),
+                            LwamKeyframe.of(
+                                interpolation = InterpolationMode.LINEAR,
+                                channel = AnimationChannel.SCALE,
+                                time = 750,
+                                dataPoints = Point3d.of(1.0, 1.0, 1.0)
+                            ),
+                        )
+                    )
+                )
+            )
+        ),
         textures = listOf(
-            LWAModelTexture.of(
+            LwamTexture.of(
                 id = 0,
                 width = 32,
                 height = 32,
                 base64Image = "iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAUVJREFUWEdjdH7R+5+BimDjvJ8YpvFUVTHisoIR5AALcTGSnXDi5SuwHmS9IDGQA7gV5eDmfb3/iGHUAQRDgOTwR9JAcRR8aWsjOxH6J7FTngZADkBONMSGBihxjTqAaiFAbLCjq6OKA7ZceYiRCOf3TsZwE0d0A4bYC52ZlCdCkAMsVGTghp+484QB5ABpcQm42NOXLxhADlCQ4IaLPXjxlWHUAaAQQAckV0aURMFcxToMB+z5no8h5qMjj7s2pNQB7NLqcAt/Pr3JAHIAepoadQDdQwA9EdDVAdEtTBiJcO38HvolQpAD0AuxUQdQLQTQIxdUEKGXA2SlAXSDia0NsTkAW9XOodyHOxES2xaI3vPlP3ptiMsB6KEyvB2ALQRpFgLoli114cGI2x93izBaWFSJAmLTCqnqcKZOUg0iV/2AOwAAjj4EPxsEA/UAAAAASUVORK5CYII="
             )
-        )
+        ),
     )
 
     private val modelTexture = model.textures.first().toTexture()
@@ -201,7 +281,7 @@ object ModelRenderScene : Screen("main-menu") {
         val buffer = application.renderSystem.drawer.begin(DrawerMode.TRIANGLES, VertexFormatContainer.positionTex, model.elements.size * 6 * 30)
 
         model.elements.forEach { cube ->
-            if (cube is LWAModelCube) {
+            if (cube is LwamCube) {
 
                 val x1 = cube.from.x.toFloat()
                 val y1 = cube.from.y.toFloat()
@@ -290,7 +370,7 @@ object ModelRenderScene : Screen("main-menu") {
     }
 
 
-    private fun LWAModelTexture.toTexture(): Texture {
+    private fun LwamTexture.toTexture(): Texture {
         val image = Base64.getDecoder().decode(base64Image)
 
         return Texture.from(

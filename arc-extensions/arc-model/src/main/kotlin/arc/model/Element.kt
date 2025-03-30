@@ -3,6 +3,7 @@ package arc.model
 import arc.annotations.ImmutableType
 import arc.math.Point3d
 import arc.model.cube.Cube
+import arc.util.Identifiable
 
 /**
  * Represents a structural or functional component in 3D space.
@@ -12,7 +13,7 @@ import arc.model.cube.Cube
  */
 @Suppress("INAPPLICABLE_JVM_NAME")
 @ImmutableType
-interface Element {
+interface Element : Identifiable {
 
     /**
      * The origin point of the 3D element in space.
