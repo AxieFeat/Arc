@@ -11,7 +11,13 @@ import arc.util.Identifiable
 interface Animation : Identifiable {
 
     /**
-     * Mode of animation looping
+     * Name of animation. It used for control it.
+     */
+    @get:JvmName("name")
+    val name: String
+
+    /**
+     * Mode of animation looping.
      */
     @get:JvmName("loop")
     val loop: AnimationLoopMode

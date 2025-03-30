@@ -8,6 +8,7 @@ import java.util.*
 
 @Serializable
 internal data class ArcLwamAnimation(
+    override val name: String,
     @Contextual
     override val uuid: UUID = UUID.randomUUID(),
     override val loop: AnimationLoopMode = AnimationLoopMode.PLAY_ONCE,
@@ -19,6 +20,7 @@ internal data class ArcLwamAnimation(
 
     object Factory : LwamAnimation.Factory {
         override fun create(
+            name: String,
             uuid: UUID,
             loop: AnimationLoopMode,
             startDelay: Long,
@@ -26,7 +28,7 @@ internal data class ArcLwamAnimation(
             duration: Long,
             animators: Set<Animator>
         ): LwamAnimation {
-            return ArcLwamAnimation(uuid, loop, startDelay, loopDelay, duration, animators)
+            return ArcLwamAnimation(name, uuid, loop, startDelay, loopDelay, duration, animators)
         }
 
     }

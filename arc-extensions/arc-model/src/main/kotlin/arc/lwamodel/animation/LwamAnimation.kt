@@ -18,6 +18,7 @@ interface LwamAnimation : Animation {
     interface Factory {
 
         fun create(
+            name: String,
             uuid: UUID,
             loop: AnimationLoopMode,
             startDelay: Long,
@@ -33,6 +34,7 @@ interface LwamAnimation : Animation {
         /**
          * Create new instance of [LwamAnimation].
          *
+         * @param name Name of animation.
          * @param uuid Unique id of animation.
          * @param loop Loop mode of animation.
          * @param startDelay Start delay of animation in milliseconds.
@@ -42,6 +44,7 @@ interface LwamAnimation : Animation {
          */
         @JvmStatic
         fun of(
+            name: String = "",
             uuid: UUID = UUID.randomUUID(),
             loop: AnimationLoopMode = AnimationLoopMode.PLAY_ONCE,
             startDelay: Long = 0,
@@ -49,7 +52,7 @@ interface LwamAnimation : Animation {
             duration: Long = 0,
             animators: Set<Animator> = setOf(),
         ): LwamAnimation {
-            return Arc.factory<Factory>().create(uuid, loop, startDelay, loopDelay, duration, animators)
+            return Arc.factory<Factory>().create(name, uuid, loop, startDelay, loopDelay, duration, animators)
         }
 
     }

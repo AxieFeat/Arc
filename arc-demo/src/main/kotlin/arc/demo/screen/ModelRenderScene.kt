@@ -3,6 +3,7 @@ package arc.demo.screen
 import arc.demo.shader.ShaderContainer
 import arc.demo.shader.VertexFormatContainer
 import arc.graphics.DrawerMode
+import arc.graphics.ModelRender
 import arc.graphics.vertex.VertexBuffer
 import arc.input.KeyCode
 import arc.lwamodel.LwaModel
@@ -21,6 +22,7 @@ import arc.model.animation.AnimationLoopMode
 import arc.shader.ShaderInstance
 import arc.texture.Texture
 import arc.util.InterpolationMode
+import org.joml.Quaternionf
 import org.joml.Vector3f
 import java.util.*
 
@@ -109,6 +111,7 @@ object ModelRenderScene : Screen("main-menu") {
         ),
         animations = listOf(
             LwamAnimation.of(
+                name = "animation",
                 loop = AnimationLoopMode.LOOP,
                 duration = 1000,
                 animators = setOf(
@@ -178,9 +181,7 @@ object ModelRenderScene : Screen("main-menu") {
         ),
     )
 
-    private val modelTexture = model.textures.first().toTexture()
-
-    private val buffer = generateBuffer()
+    private val modelRender = ModelRender.of(model)
 
     private val front = Vector3f()
     private val right = Vector3f()
@@ -198,12 +199,18 @@ object ModelRenderScene : Screen("main-menu") {
 
         application.renderSystem.enableCull()
         application.renderSystem.enableDepthTest()
+
+        application.window.isVsync = false
+
+        modelRender.scale = 0.005f
     }
 
     override fun doRender() {
         handleInput()
 
-        renderModel(ShaderContainer.positionTex)
+        modelRender.rotate(15f * delta)
+
+        modelRender.render(ShaderContainer.positionTex)
     }
 
     private fun handleInput() {
@@ -268,114 +275,6 @@ object ModelRenderScene : Screen("main-menu") {
         camera.update()
     }
 
-    private fun renderModel(shader: ShaderInstance) {
-        shader.bind()
-        modelTexture.bind()
-        application.renderSystem.drawer.draw(buffer)
-        modelTexture.unbind()
-        shader.unbind()
-    }
-
-    private fun generateBuffer(): VertexBuffer {
-        val buffer = application.renderSystem.drawer.begin(DrawerMode.TRIANGLES, VertexFormatContainer.positionTex, model.elements.size * 6 * 30)
-
-        model.elements.forEach { cube ->
-            if (cube is LwamCube) {
-
-                val x1 = cube.from.x.toFloat()
-                val y1 = cube.from.y.toFloat()
-                val z1 = cube.from.z.toFloat()
-
-                val x2 = cube.to.x.toFloat()
-                val y2 = cube.to.y.toFloat()
-                val z2 = cube.to.z.toFloat()
-
-                cube.faces.forEach { (face, cubeFace) ->
-                    val tex = model.textures.find { it.id == cubeFace.texture }!!
-
-                    val uMin = cubeFace.uvMin.x.toFloat() / tex.width
-                    val vMin = cubeFace.uvMin.y.toFloat() / tex.height
-                    val uMax = cubeFace.uvMax.x.toFloat() / tex.width
-                    val vMax = cubeFace.uvMax.y.toFloat() / tex.height
-
-                    val vertices = when (face) {
-                        Face.UP -> arrayOf(
-                            Triple(x1, y2, z1),
-                            Triple(x1, y2, z2),
-                            Triple(x2, y2, z2),
-                            Triple(x2, y2, z1)
-                        )
-                        Face.DOWN -> arrayOf(
-                            Triple(x1, y1, z2),
-                            Triple(x1, y1, z1),
-                            Triple(x2, y1, z1),
-                            Triple(x2, y1, z2)
-                        )
-                        Face.NORTH -> arrayOf(
-                            Triple(x1, y1, z1),
-                            Triple(x1, y2, z1),
-                            Triple(x2, y2, z1),
-                            Triple(x2, y1, z1)
-                        )
-                        Face.SOUTH -> arrayOf(
-                            Triple(x2, y1, z2),
-                            Triple(x2, y2, z2),
-                            Triple(x1, y2, z2),
-                            Triple(x1, y1, z2)
-                        )
-                        Face.WEST -> arrayOf(
-                            Triple(x1, y1, z2),
-                            Triple(x1, y2, z2),
-                            Triple(x1, y2, z1),
-                            Triple(x1, y1, z1)
-                        )
-                        Face.EAST -> arrayOf(
-                            Triple(x2, y1, z1),
-                            Triple(x2, y2, z1),
-                            Triple(x2, y2, z2),
-                            Triple(x2, y1, z2)
-                        )
-                    }
-
-                    buffer.addVertex(vertices[0].first, vertices[0].second, vertices[0].third)
-                        .setTexture(uMin, vMax)
-                        .endVertex()
-
-                    buffer.addVertex(vertices[1].first, vertices[1].second, vertices[1].third)
-                        .setTexture(uMin, vMin)
-                        .endVertex()
-
-                    buffer.addVertex(vertices[2].first, vertices[2].second, vertices[2].third)
-                        .setTexture(uMax, vMin)
-                        .endVertex()
-
-                    buffer.addVertex(vertices[2].first, vertices[2].second, vertices[2].third)
-                        .setTexture(uMax, vMin)
-                        .endVertex()
-
-                    buffer.addVertex(vertices[3].first, vertices[3].second, vertices[3].third)
-                        .setTexture(uMax, vMax)
-                        .endVertex()
-
-                    buffer.addVertex(vertices[0].first, vertices[0].second, vertices[0].third)
-                        .setTexture(uMin, vMax)
-                        .endVertex()
-                }
-            }
-        }
-
-        buffer.end()
-        return buffer.build()
-    }
-
-
-    private fun LwamTexture.toTexture(): Texture {
-        val image = Base64.getDecoder().decode(base64Image)
-
-        return Texture.from(
-            bytes = image
-        )
-    }
 
     override fun onFpsUpdate(fps: Int) {
         name = "FPS: $fps"
