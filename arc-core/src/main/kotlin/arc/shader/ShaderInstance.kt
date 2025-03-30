@@ -13,6 +13,8 @@ import org.joml.Vector4f
 
 /**
  * Represents an instance of a shader program that combines a vertex shader and a fragment shader.
+ *
+ * @sample arc.sample.shaderInstanceSample
  */
 @Suppress("INAPPLICABLE_JVM_NAME")
 interface ShaderInstance {

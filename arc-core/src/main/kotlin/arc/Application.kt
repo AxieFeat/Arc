@@ -14,6 +14,29 @@ import java.io.File
 
 /**
  * This interface represents Application of game engine.
+ *
+ * Sample of initializing application:
+ * ```kotlin
+ * // Preload factories.
+ * ArcFactoryProvider.install()
+ * ArcFactoryProvider.bootstrap()
+ *
+ * // Select implementation by property.
+ * when(System.getProperty("arc.application")) {
+ *     "opengl" -> GlApplication.preload()
+ *     "vulkan" -> VkApplication.preload()
+ *
+ *     else -> GlApplication.preload() // Fallback to GL if value not correct.
+ * }
+ *
+ * // Now we can find our application.
+ * val application = Application.find()
+ *
+ * // Before any operations we need init all system via init().
+ * application.init(
+ *     Configuration.create() // Here you can set configuration of application.
+ * )
+ * ```
  */
 @Suppress("INAPPLICABLE_JVM_NAME")
 @MutableType

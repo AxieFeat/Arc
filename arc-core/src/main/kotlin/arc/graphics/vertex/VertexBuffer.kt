@@ -8,6 +8,8 @@ import org.jetbrains.annotations.ApiStatus
 
 /**
  * This interface represents buffer of vertices.
+ *
+ * @sample arc.sample.vertexBufferSample
  */
 @Suppress("INAPPLICABLE_JVM_NAME")
 interface VertexBuffer {

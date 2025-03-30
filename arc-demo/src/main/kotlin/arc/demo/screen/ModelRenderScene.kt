@@ -6,7 +6,6 @@ import arc.graphics.DrawerMode
 import arc.graphics.vertex.VertexBuffer
 import arc.input.KeyCode
 import arc.lwamodel.LwaModel
-import arc.lwamodel.LwamElement
 import arc.lwamodel.animation.LwamAnimation
 import arc.lwamodel.animation.LwamAnimator
 import arc.lwamodel.animation.LwamKeyframe

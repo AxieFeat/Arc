@@ -23,6 +23,8 @@ enum class DrawerMode(
     TRIANGLES(4, 3, 3, false),
     TRIANGLE_STRIP(5, 3, 1, true),
     TRIANGLE_FAN(6, 3, 1, true),
+
+    @Deprecated("In OpenGL 4.1 QUADS are deprecated drawing mode")
     QUADS(7, 4, 4, false);
 
 }

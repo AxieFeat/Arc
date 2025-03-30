@@ -10,7 +10,10 @@ import arc.util.Builder
 import org.jetbrains.annotations.ApiStatus
 
 /**
- * DrawBuffer is an interface that used for rendering operations.
+ * DrawBuffer is an interface that used for setting vertex data.
+ * With this buffer you can render any polygon.
+ *
+ * @sample arc.sample.drawBufferSample
  */
 @Suppress("INAPPLICABLE_JVM_NAME")
 @MutableType

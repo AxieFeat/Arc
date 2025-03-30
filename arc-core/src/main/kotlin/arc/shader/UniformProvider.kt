@@ -5,6 +5,9 @@ import arc.asset.shader.ShaderData
 
 /**
  * This interface represents provider for shader uniforms.
+ *
+ * @sample arc.sample.UniformProviderSample
+ * @sample arc.sample.uniformProviderSample
  */
 @Suppress("INAPPLICABLE_JVM_NAME")
 @MutableType
