@@ -200,7 +200,7 @@ object ModelRenderScene : Screen("main-menu") {
         application.renderSystem.enableCull()
         application.renderSystem.enableDepthTest()
 
-        application.window.isVsync = false
+        application.window.isVsync = true
 
         modelRender.scale = 0.005f
     }

@@ -4,7 +4,6 @@ import arc.Arc
 import arc.annotations.ImmutableType
 import arc.asset.TextureAsset
 import org.jetbrains.annotations.ApiStatus
-import kotlin.jvm.Throws
 
 /**
  * This interface represents texture atlas.
@@ -26,51 +25,27 @@ interface TextureAtlas : TextureLike {
     val height: Int
 
     /**
-     * Count of rows for this atlas.
-     */
-    @get:JvmName("rows")
-    val rows: Int
-
-    /**
-     * Count of columns for this atlas.
-     */
-    @get:JvmName("columns")
-    val columns: Int
-
-    /**
      * Asset of this atlas. If null - texture available only in runtime.
      */
     @get:JvmName("asset")
     val asset: TextureAsset?
 
     /**
-     * Get U coordinate for some position in this atlas.
+     * Get UV coordinates for some position in this atlas.
      *
-     * @param row Row number.
-     * @param column Column number.
+     * @param x X count of pixels.
+     * @param y Y count of pixels.
      *
-     * @throws IllegalArgumentException If U coordinate not found by this row and column.
+     * @return Pair of U and V coords.
      */
-    @Throws(IllegalArgumentException::class)
-    fun u(row: Int, column: Int): Float
-
-    /**
-     * Get V coordinate for some position in this atlas.
-     *
-     * @param row Row number.
-     * @param column Column number.
-     *
-     * @throws IllegalArgumentException If V coordinate not found by this row and column.
-     */
-    @Throws(IllegalArgumentException::class)
-    fun v(row: Int, column: Int): Float
+    fun uv(x: Int, y: Int): Pair<Float, Float>
 
     @ApiStatus.Internal
     interface Factory {
 
-        fun create(asset: TextureAsset, rows: Int, columns: Int): TextureAtlas
+        fun create(asset: TextureAsset): TextureAtlas
 
-        fun create(bytes: ByteArray, rows: Int, columns: Int): TextureAtlas
+        fun create(bytes: ByteArray): TextureAtlas
 
     }
 
@@ -80,28 +55,24 @@ interface TextureAtlas : TextureLike {
          * Create [TextureAtlas] from [TextureAsset].
          *
          * @param asset Asset for Texture Atlas.
-         * @param rows Count of rows for Texture Atlas.
-         * @param columns Count of columns for Texture Atlas.
          *
          * @return New instance of [TextureAtlas].
          */
         @JvmStatic
-        fun from(asset: TextureAsset, rows: Int, columns: Int): TextureAtlas {
-            return Arc.factory<Factory>().create(asset, rows, columns)
+        fun from(asset: TextureAsset): TextureAtlas {
+            return Arc.factory<Factory>().create(asset)
         }
 
         /**
          * Create [TextureAtlas] from [TextureAsset].
          *
          * @param bytes Bytes of texture.
-         * @param rows Count of rows for Texture Atlas.
-         * @param columns Count of columns for Texture Atlas.
          *
          * @return New instance of [TextureAtlas].
          */
         @JvmStatic
-        fun from(bytes: ByteArray, rows: Int, columns: Int): TextureAtlas {
-            return Arc.factory<Factory>().create(bytes, rows, columns)
+        fun from(bytes: ByteArray): TextureAtlas {
+            return Arc.factory<Factory>().create(bytes)
         }
 
     }

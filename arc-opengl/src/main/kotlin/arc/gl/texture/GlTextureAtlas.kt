@@ -13,17 +13,12 @@ import java.nio.ByteBuffer
 internal class GlTextureAtlas(
     override val asset: TextureAsset? = null,
     private val bytes: ByteArray? = null,
-    override val rows: Int = 10,
-    override val columns: Int = 10
 ) : TextureAtlas {
 
     override val id: Int = glGenTextures()
 
     override val width: Int
     override val height: Int
-
-    private val tileWidth: Int
-    private val tileHeight: Int
 
     init {
         MemoryStack.stackPush().use { stack ->
@@ -42,30 +37,13 @@ internal class GlTextureAtlas(
             this.width = w.get()
             this.height = h.get()
 
-            require(width % columns == 0 && height % rows == 0) {
-                "Atlas dimensions (${width}x${height}) are not divisible by rows ($rows) and columns ($columns)"
-            }
-
-            tileWidth = width / columns
-            tileHeight = height / rows
-
             TextureUtil.loadRGB(id, width, height, buf)
             STBImage.stbi_image_free(buf)
         }
     }
 
-    override fun u(row: Int, column: Int): Float {
-        require(row in 0..rows) { "Row $row out of bounds (Max $rows)" }
-        require(column in 0..columns) { "Column $column out of bounds (Max $columns)" }
-
-        return column * tileWidth.toFloat() / width.toFloat()
-    }
-
-    override fun v(row: Int, column: Int): Float {
-        require(row in 0..rows) { "Row $row out of bounds (Max $rows)" }
-        require(column in 0..columns) { "Column $column out of bounds (Max $columns)" }
-
-        return row * tileHeight.toFloat() / height.toFloat()
+    override fun uv(x: Int, y: Int): Pair<Float, Float> {
+        return x / width.toFloat() to y / height.toFloat()
     }
 
     override fun bind() {
@@ -85,12 +63,12 @@ internal class GlTextureAtlas(
     }
 
     object Factory : TextureAtlas.Factory {
-        override fun create(asset: TextureAsset, rows: Int, columns: Int): TextureAtlas {
-            return GlTextureAtlas(asset, null, rows, columns)
+        override fun create(asset: TextureAsset): TextureAtlas {
+            return GlTextureAtlas(asset, null)
         }
 
-        override fun create(bytes: ByteArray, rows: Int, columns: Int): TextureAtlas {
-            return GlTextureAtlas(null, bytes, rows, columns)
+        override fun create(bytes: ByteArray): TextureAtlas {
+            return GlTextureAtlas(null, bytes)
         }
     }
 }

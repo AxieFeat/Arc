@@ -15,9 +15,7 @@ object MainMenuScreen : Screen("main-menu") {
     private val grassAtlas = TextureAtlas.from(
         asset = TextureAsset.from(
             classpath("arc/texture/grass.png"),
-        ),
-        rows = 2,
-        columns = 2
+        )
     )
 
     private val cube = CubeEntity(application, grassAtlas, VertexFormatContainer.positionTex)

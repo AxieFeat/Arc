@@ -40,12 +40,14 @@ class CubeEntity(
     private val buffer = application.renderSystem.drawer.begin(DrawerMode.TRIANGLES, vertexFormat, 200).also {
         for (i in indices.indices step 6) {
             val (row, col) = texCoords[i / 6]
-            val uv = floatArrayOf(
-                atlas.u(row - 1, col - 1), atlas.v(row - 1, col - 1),
-                atlas.u(row - 1, col), atlas.v(row - 1, col - 1),
-                atlas.u(row - 1, col), atlas.v(row, col - 1),
-                atlas.u(row - 1, col - 1), atlas.v(row, col - 1)
-            )
+
+            // TODO fix for new atlas.
+//            val uv = floatArrayOf(
+//                atlas.u(row - 1, col - 1), atlas.v(row - 1, col - 1),
+//                atlas.u(row - 1, col), atlas.v(row - 1, col - 1),
+//                atlas.u(row - 1, col), atlas.v(row, col - 1),
+//                atlas.u(row - 1, col - 1), atlas.v(row, col - 1)
+//            )
             val order = uvPattern[if (i / 6 < 4) 0 else 1]
 
             repeat(6) { j ->
@@ -55,7 +57,7 @@ class CubeEntity(
                     positions[indices[i + j] * 3 + 1],
                     positions[indices[i + j] * 3 + 2]
                 )
-                    .setTexture(uv[order[j] * 2], uv[order[j] * 2 + 1])
+//                    .setTexture(uv[order[j] * 2], uv[order[j] * 2 + 1]) // TODO
                     .endVertex()
             }
         }
