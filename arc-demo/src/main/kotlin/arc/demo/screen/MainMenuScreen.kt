@@ -53,9 +53,9 @@ object MainMenuScreen : Screen("main-menu") {
         var newZ = camera.position.z
 
         speed = if (application.keyboard.isPressed(KeyCode.KEY_LCONTROL)) {
-            1f * delta
+            1f * 0.01f
         } else {
-            5f * delta
+            5f * 0.01f
         }
 
         if (application.keyboard.isPressed(KeyCode.KEY_W)) {
@@ -94,7 +94,7 @@ object MainMenuScreen : Screen("main-menu") {
         camera.position.z = newZ
 
         if (application.mouse.isPressed(KeyCode.MOUSE_LEFT)) {
-            this.sensitivity = 65f * delta
+            this.sensitivity = 65f * 0.01f
             camera.rotate(
                 -application.mouse.displayVec.x * sensitivity,
                 -application.mouse.displayVec.y * sensitivity,

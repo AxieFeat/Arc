@@ -7,7 +7,7 @@ import arc.asset.shader.ShaderData
 import arc.gl.asset.GlShaderData
 import arc.gl.asset.GlTextureAsset
 import arc.gl.graphics.GlDrawBuffer
-import arc.gl.graphics.GlModelRender
+import arc.gl.model.GlModelRender
 import arc.gl.graphics.vertex.GlVertexBuffer
 import arc.gl.shader.GlBlendMode
 import arc.gl.shader.GlFrameBuffer

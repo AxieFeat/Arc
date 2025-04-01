@@ -15,7 +15,7 @@ import kotlin.jvm.Throws
  */
 @Suppress("INAPPLICABLE_JVM_NAME")
 @MutableType
-interface Color : Copyable<Color> {
+interface Color : Copyable<Color>, Interpolatable<Color> {
 
     /**
      * Represents the red component of a color.
@@ -75,6 +75,19 @@ interface Color : Copyable<Color> {
      * @return New instance of [Color].
      */
     override fun copy(): Color
+
+    /**
+     * Interpolate with other color.
+     *
+     * @param other Color for interpolation.
+     * @param progress Progress of interpolation in ``0.0..1.0`` range.
+     *
+     * @return Current instance of [Color] with new values.
+     *
+     * @throws IllegalArgumentException If [progress] is not in ``0.0..1.0`` range.
+     */
+    @Throws(IllegalArgumentException::class)
+    override fun interpolate(other: Color, progress: @Range(from = 0, to = 1) Float): Color
 
     @TypeFactory
     @ApiStatus.Internal

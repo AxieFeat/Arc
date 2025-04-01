@@ -25,10 +25,10 @@ interface Scene {
     val fps: Int
 
     /**
-     * Delta tick of this scene.
+     * Partial tick of this scene.
      */
-    @get:JvmName("delta")
-    val delta: Float
+    @get:JvmName("partial")
+    val partial: Float
 
     /**
      * Is this scene using now.

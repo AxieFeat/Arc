@@ -259,6 +259,15 @@ internal data class ArcVec3f(
         return ArcVec3f(x, y, z)
     }
 
+    override fun interpolate(other: Vec3f, progress: Float): Vec3f {
+        require(progress in 0.0..1.0) { "Progress value is not in 0.0..1.0 range!" }
+
+        this.x += (other.x - x) * progress
+        this.y += (other.y - y) * progress
+
+        return this
+    }
+
     companion object {
 
         /**

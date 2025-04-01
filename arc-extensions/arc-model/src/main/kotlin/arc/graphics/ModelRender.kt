@@ -2,11 +2,10 @@ package arc.graphics
 
 import arc.Arc
 import arc.annotations.TypeFactory
-import arc.math.Point3d
 import arc.model.Model
 import arc.shader.ShaderInstance
 import org.jetbrains.annotations.ApiStatus
-import org.joml.Quaternionf
+import org.jetbrains.annotations.Range
 
 /**
  * This interface represents renderer of models.
@@ -21,29 +20,11 @@ interface ModelRender {
     val model: Model
 
     /**
-     * Position of model in 3D space.
-     */
-    @get:JvmName("position")
-    var position: Point3d
-
-    /**
-     * Rotation of model in 3D space.
-     */
-    @get:JvmName("rotation")
-    var rotation: Quaternionf
-
-    /**
-     * Scale of model.
-     */
-    @get:JvmName("scale")
-    var scale: Float
-
-    /**
      * Tick animation. Call it before [render].
      *
-     * @param delta Delta for animation.
+     * @param partialTick Partial tick for animating.
      */
-    fun tick(delta: Float)
+    fun tick(partialTick: Float)
 
     /**
      * Render this model via specific shader.
@@ -74,6 +55,28 @@ interface ModelRender {
      * @param z Z degrees.
      */
     fun rotate(x: Float = 0f, y: Float = 0f, z: Float = 0f)
+
+    /**
+     * Set scaling of model.
+     *
+     * @param x X scale.
+     * @param y Y scale.
+     * @param z Z scale.
+     */
+    fun scale(
+        x: @Range(from = 0, to = 1) Float = 1f,
+        y: @Range(from = 0, to = 1) Float = 1f,
+        z: @Range(from = 0, to = 1) Float = 1f
+    )
+
+    /**
+     * Set position of model in 3D space.
+     *
+     * @param x X position.
+     * @param y Y position.
+     * @param z Z position.
+     */
+    fun position(x: Float, y: Float, z: Float)
 
     @TypeFactory
     @ApiStatus.Internal

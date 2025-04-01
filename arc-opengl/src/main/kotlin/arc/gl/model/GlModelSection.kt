@@ -1,76 +1,60 @@
-package arc.gl.graphics
+package arc.gl.model
 
+import arc.gl.graphics.GlDrawer
 import arc.graphics.DrawerMode
-import arc.graphics.ModelRender
 import arc.graphics.vertex.VertexBuffer
 import arc.graphics.vertex.VertexFormat
 import arc.graphics.vertex.VertexFormatElement
-import arc.lwamodel.cube.LwamCube
-import arc.math.Point3d
+import arc.model.Element
 import arc.model.Face
 import arc.model.Model
-import arc.model.texture.ModelTexture
-import arc.shader.ShaderInstance
-import arc.texture.Texture
+import arc.model.animation.Animation
+import arc.model.cube.Cube
 import org.joml.Math
 import org.joml.Matrix4f
 import org.joml.Quaternionf
-import java.util.*
 
-data class GlModelRender(
-    override val model: Model
-) : ModelRender {
+internal data class GlModelSection(
+    val groupName: String,
+    private val model: Model,
+    private val section: Set<Element>
+) {
 
     private val matrix = Matrix4f()
+    private val rotation = Quaternionf()
+
     private val vertexFormat = VertexFormat.builder()
         .add(VertexFormatElement.POSITION)
         .add(VertexFormatElement.UV0)
         .build()
 
-    override var position: Point3d = Point3d.ZERO
-        set(value) {
-            field = value
+    private var currentAnimation: Animation? = null
 
-            matrix.translate(value.x.toFloat(), value.y.toFloat(), value.z.toFloat())
+    fun tick(partial: Float) {
+        currentAnimation?.animators?.forEach { animator ->
+            animator.keyframes.forEach { keyframe ->
+                // TODO
+            }
         }
-    override var rotation: Quaternionf = Quaternionf()
-        set(value) {
-            field = value
-
-            matrix.rotation(value)
-        }
-    override var scale: Float = 1f
-        set(value) {
-            field = value
-
-            matrix.scale(value)
-        }
-
-    private val textures = model.textures.map { it.toTexture() }
-
-    override fun tick(delta: Float) {
-
     }
 
-    override fun render(shader: ShaderInstance) {
-        shader.bind()
-        textures.forEach { it.bind() }
+
+    fun render(rootMatrix: Matrix4f) {
+        matrix.identity().mul(rootMatrix)
         val buffer = generateBuffer()
         GlDrawer.draw(buffer)
         buffer.cleanup()
-        textures.forEach { it.unbind() }
-        shader.unbind()
     }
 
-    override fun playAnimation(name: String) {
-
+    fun playAnimation(animation: Animation) {
+        currentAnimation = animation
     }
 
-    override fun stopAnimation(name: String) {
-
+    fun stopAnimation() {
+        currentAnimation = null
     }
 
-    override fun rotate(x: Float, y: Float, z: Float) {
+    fun rotate(x: Float, y: Float, z: Float) {
         rotation.rotateXYZ(
             Math.toRadians(x),
             Math.toRadians(y),
@@ -80,11 +64,19 @@ data class GlModelRender(
         matrix.rotation(rotation)
     }
 
+    fun scale(x: Float, y: Float, z: Float) {
+        matrix.scale(x, y, z)
+    }
+
+    fun position(x: Float, y: Float, z: Float) {
+        matrix.translate(x, y, z)
+    }
+
     private fun generateBuffer(): VertexBuffer {
         val buffer = GlDrawer.begin(DrawerMode.TRIANGLES, vertexFormat, model.elements.size * 6 * 30)
 
-        model.elements.forEach { cube ->
-            if (cube is LwamCube) {
+        section.forEach { cube ->
+            if (cube is Cube) {
 
                 val x1 = cube.from.x.toFloat()
                 val y1 = cube.from.y.toFloat()
@@ -170,20 +162,6 @@ data class GlModelRender(
 
         buffer.end()
         return buffer.build()
-    }
-
-    private fun ModelTexture.toTexture(): Texture {
-        val image = Base64.getDecoder().decode(base64Image)
-
-        return Texture.from(
-            bytes = image
-        )
-    }
-
-    object Factory : ModelRender.Factory {
-        override fun create(model: Model): ModelRender {
-            return GlModelRender(model)
-        }
     }
 
 }

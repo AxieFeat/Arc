@@ -3,14 +3,19 @@ package arc.math
 import arc.Arc
 import arc.annotations.MutableType
 import arc.annotations.TypeFactory
+import arc.util.Color
+import arc.util.Copyable
+import arc.util.Interpolatable
 import org.jetbrains.annotations.ApiStatus
+import org.jetbrains.annotations.Range
+import kotlin.jvm.Throws
 
 /**
  * A point in a 2D grid, with integer x and y coordinates
  */
 @Suppress("INAPPLICABLE_JVM_NAME")
 @MutableType
-interface Point2d {
+interface Point2d : Copyable<Point2d>, Interpolatable<Point2d> {
 
     /**
      * X position.
@@ -23,6 +28,19 @@ interface Point2d {
      */
     @get:JvmName("y")
     var y: Double
+
+    /**
+     * Interpolate with other point.
+     *
+     * @param other Point for interpolation.
+     * @param progress Progress of interpolation in ``0.0..1.0`` range.
+     *
+     * @return Current instance of [Point2d] with new values.
+     *
+     * @throws IllegalArgumentException If [progress] is not in ``0.0..1.0`` range.
+     */
+    @Throws(IllegalArgumentException::class)
+    override fun interpolate(other: Point2d, progress: @Range(from = 0, to = 1) Float): Point2d
 
     operator fun component1(): Double = x
     operator fun component2(): Double = y

@@ -1,10 +1,7 @@
 package arc.demo.screen
 
 import arc.demo.shader.ShaderContainer
-import arc.demo.shader.VertexFormatContainer
-import arc.graphics.DrawerMode
 import arc.graphics.ModelRender
-import arc.graphics.vertex.VertexBuffer
 import arc.input.KeyCode
 import arc.lwamodel.LwaModel
 import arc.lwamodel.animation.LwamAnimation
@@ -19,10 +16,7 @@ import arc.math.Point3d
 import arc.model.Face
 import arc.model.animation.AnimationChannel
 import arc.model.animation.AnimationLoopMode
-import arc.shader.ShaderInstance
-import arc.texture.Texture
 import arc.util.InterpolationMode
-import org.joml.Quaternionf
 import org.joml.Vector3f
 import java.util.*
 
@@ -193,7 +187,7 @@ object ModelRenderScene : Screen("main-menu") {
     init {
         camera.fov = 65f
         camera.zNear = 0.0001f
-        camera.zFar = 10000000000000000000000000000000000f
+        camera.zFar = 1000f
         camera.position = Point3d.of(0.0, 0.0, 0.0)
         camera.update()
 
@@ -202,13 +196,18 @@ object ModelRenderScene : Screen("main-menu") {
 
         application.window.isVsync = true
 
-        modelRender.scale = 0.005f
+        modelRender.scale(
+            x = 0.25f,
+            y = 0.25f,
+            z = 0.25f
+        )
+        modelRender.playAnimation("animation")
     }
 
     override fun doRender() {
         handleInput()
 
-        modelRender.rotate(15f * delta)
+        modelRender.tick(partial)
 
         modelRender.render(ShaderContainer.positionTex)
     }
@@ -223,9 +222,9 @@ object ModelRenderScene : Screen("main-menu") {
         var newZ = camera.position.z
 
         speed = if (application.keyboard.isPressed(KeyCode.KEY_LCONTROL)) {
-            1f * delta
+            1f * 0.01f
         } else {
-            5f * delta
+            5f * 0.01f
         }
 
         if (application.keyboard.isPressed(KeyCode.KEY_W)) {
@@ -264,7 +263,7 @@ object ModelRenderScene : Screen("main-menu") {
         camera.position.z = newZ
 
         if (application.mouse.isPressed(KeyCode.MOUSE_LEFT)) {
-            this.sensitivity = 65f * delta
+            this.sensitivity = 65f * 0.01f
             camera.rotate(
                 -application.mouse.displayVec.x * sensitivity,
                 -application.mouse.displayVec.y * sensitivity,
@@ -277,6 +276,6 @@ object ModelRenderScene : Screen("main-menu") {
 
 
     override fun onFpsUpdate(fps: Int) {
-        name = "FPS: $fps"
+        name = "FPS: $fps, Frame time: $frameTime ms"
     }
 }

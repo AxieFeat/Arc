@@ -221,6 +221,15 @@ internal data class ArcVec2f(
         return ArcVec2f(x, y)
     }
 
+    override fun interpolate(other: Vec2f, progress: Float): Vec2f {
+        require(progress in 0.0..1.0) { "Progress value is not in 0.0..1.0 range!" }
+
+        this.x += (other.x - x) * progress
+        this.y += (other.y - y) * progress
+
+        return this
+    }
+
     companion object {
 
         private const val PI2 = 3.1415927f * 2f

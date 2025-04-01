@@ -1,6 +1,7 @@
 package arc.util
 
 import kotlinx.serialization.Serializable
+import kotlin.math.roundToInt
 
 @Serializable
 internal data class ArcColor(
@@ -31,6 +32,17 @@ internal data class ArcColor(
 
     override fun copy(): Color {
         return ArcColor(this.red, this.green, this.blue, this.alpha)
+    }
+
+    override fun interpolate(other: Color, progress: Float): Color {
+        require(progress in 0.0..1.0) { "Progress value is not in 0.0..1.0 range!" }
+
+        this.red = (red + (other.red - red) * progress).roundToInt()
+        this.green = (green + (other.green - green) * progress).roundToInt()
+        this.blue = (blue + (other.blue - blue) * progress).roundToInt()
+        this.alpha += (other.alpha - alpha) * progress
+
+        return this
     }
 
     object Factory : Color.Factory {

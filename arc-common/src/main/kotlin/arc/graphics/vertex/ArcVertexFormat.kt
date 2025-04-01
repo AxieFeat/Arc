@@ -22,7 +22,6 @@ internal data class ArcVertexFormat(
             VertexUsage.NORMAL -> this.normalElementOffset = this.nextOffset
             VertexUsage.COLOR -> this.colorElementOffset = this.nextOffset
             VertexUsage.UV -> {
-                // Убедимся, что индекс существует в uvOffsetsById
                 while (uvOffsetsById.size <= vertexFormatElement.index) {
                     uvOffsetsById.add(-1)
                 }

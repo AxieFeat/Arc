@@ -7,7 +7,7 @@ object EmptyScene : Scene {
         get() = Camera.create(60f, 0f, 0f)
     override val fps: Int
         get() = 0
-    override val delta: Float
+    override val partial: Float
         get() = 0f
     override val inUse: Boolean
         get() = false
