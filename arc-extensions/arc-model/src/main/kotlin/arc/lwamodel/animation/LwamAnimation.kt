@@ -21,9 +21,9 @@ interface LwamAnimation : Animation {
             name: String,
             uuid: UUID,
             loop: AnimationLoopMode,
-            startDelay: Long,
-            loopDelay: Long,
-            duration: Long,
+            startDelay: Double,
+            loopDelay: Double,
+            duration: Double,
             animators: Set<Animator>,
         ): LwamAnimation
 
@@ -47,9 +47,9 @@ interface LwamAnimation : Animation {
             name: String = "",
             uuid: UUID = UUID.randomUUID(),
             loop: AnimationLoopMode = AnimationLoopMode.PLAY_ONCE,
-            startDelay: Long = 0,
-            loopDelay: Long = 0,
-            duration: Long = 0,
+            startDelay: Double = 0.0,
+            loopDelay: Double = 0.0,
+            duration: Double = 0.0,
             animators: Set<Animator> = setOf(),
         ): LwamAnimation {
             return Arc.factory<Factory>().create(name, uuid, loop, startDelay, loopDelay, duration, animators)

@@ -9,7 +9,6 @@ import java.io.File
 /**
  * This interface represents texture asset in engine.
  */
-@Suppress("INAPPLICABLE_JVM_NAME")
 @ImmutableType
 interface TextureAsset : Asset {
 

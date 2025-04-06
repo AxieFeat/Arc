@@ -23,22 +23,22 @@ interface Animation : Identifiable {
     val loop: AnimationLoopMode
 
     /**
-     * Delay for starting this animation in milliseconds.
+     * Delay for starting this animation in seconds.
      */
     @get:JvmName("startDelay")
-    val startDelay: Long
+    val startDelay: Double
 
     /**
-     * Delay for looping this animation in milliseconds.
+     * Delay for looping this animation in seconds.
      */
     @get:JvmName("loopDelay")
-    val loopDelay: Long
+    val loopDelay: Double
 
     /**
-     * Duration of this animation in milliseconds.
+     * Duration of this animation in seconds.
      */
     @get:JvmName("duration")
-    val duration: Long
+    val duration: Double
 
     /**
      * All animators of this animation.

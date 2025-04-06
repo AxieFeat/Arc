@@ -28,26 +28,26 @@ internal data class GlModelSection(
         .add(VertexFormatElement.UV0)
         .build()
 
-    private var currentAnimation: Animation? = null
+    private var currentAnimation: GlAnimationProcessor? = null
 
     fun tick(partial: Float) {
-        currentAnimation?.animators?.forEach { animator ->
-            animator.keyframes.forEach { keyframe ->
-                // TODO
-            }
+        if(currentAnimation?.update(partial) == true) {
+            currentAnimation = null
         }
     }
 
-
     fun render(rootMatrix: Matrix4f) {
-        matrix.identity().mul(rootMatrix)
+        matrix.mul(rootMatrix)
         val buffer = generateBuffer()
         GlDrawer.draw(buffer)
         buffer.cleanup()
     }
 
     fun playAnimation(animation: Animation) {
-        currentAnimation = animation
+        currentAnimation = GlAnimationProcessor(
+            matrix = matrix,
+            animation = animation,
+        )
     }
 
     fun stopAnimation() {

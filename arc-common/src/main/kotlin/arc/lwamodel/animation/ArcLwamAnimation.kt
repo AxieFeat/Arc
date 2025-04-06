@@ -12,9 +12,9 @@ internal data class ArcLwamAnimation(
     @Contextual
     override val uuid: UUID = UUID.randomUUID(),
     override val loop: AnimationLoopMode = AnimationLoopMode.PLAY_ONCE,
-    override val startDelay: Long = 0,
-    override val loopDelay: Long = 0,
-    override val duration: Long = 0,
+    override val startDelay: Double = 0.0,
+    override val loopDelay: Double = 0.0,
+    override val duration: Double = 0.0,
     override val animators: Set<Animator> = setOf(),
 ) : LwamAnimation {
 
@@ -23,9 +23,9 @@ internal data class ArcLwamAnimation(
             name: String,
             uuid: UUID,
             loop: AnimationLoopMode,
-            startDelay: Long,
-            loopDelay: Long,
-            duration: Long,
+            startDelay: Double,
+            loopDelay: Double,
+            duration: Double,
             animators: Set<Animator>
         ): LwamAnimation {
             return ArcLwamAnimation(name, uuid, loop, startDelay, loopDelay, duration, animators)

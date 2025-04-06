@@ -107,59 +107,29 @@ object ModelRenderScene : Screen("main-menu") {
             LwamAnimation.of(
                 name = "animation",
                 loop = AnimationLoopMode.LOOP,
-                duration = 1000,
+                duration = 1000.0,
                 animators = setOf(
                     LwamAnimator.of(
                         target = "main",
                         keyframes = setOf(
-                            LwamKeyframe.of(
-                                interpolation = InterpolationMode.LINEAR,
-                                channel = AnimationChannel.ROTATION,
-                                time = 0,
-                                dataPoints = Point3d.of(0.0, 0.0, -30.0)
-                            ),
-                            LwamKeyframe.of(
-                                interpolation = InterpolationMode.LINEAR,
-                                channel = AnimationChannel.ROTATION,
-                                time = 500,
-                                dataPoints = Point3d.of(0.0, 0.0, 0.0)
-                            ),
+//                            LwamKeyframe.of(
+//                                interpolation = InterpolationMode.LINEAR,
+//                                channel = AnimationChannel.ROTATION,
+//                                time = 500.0,
+//                                dataPoints = Point3d.of(0.0, 0.0, -30.0)
+//                            ),
                             LwamKeyframe.of(
                                 interpolation = InterpolationMode.LINEAR,
                                 channel = AnimationChannel.POSITION,
-                                time = 500,
+                                time = 250.0,
                                 dataPoints = Point3d.of(-11.0, 0.0, 0.0)
                             ),
                             LwamKeyframe.of(
                                 interpolation = InterpolationMode.LINEAR,
-                                channel = AnimationChannel.POSITION,
-                                time = 0,
-                                dataPoints = Point3d.of(0.0, 0.0, 0.0)
-                            ),
-                            LwamKeyframe.of(
-                                interpolation = InterpolationMode.LINEAR,
-                                channel = AnimationChannel.POSITION,
-                                time = 1000,
-                                dataPoints = Point3d.of(0.0, 0.0, 0.0)
-                            ),
-                            LwamKeyframe.of(
-                                interpolation = InterpolationMode.LINEAR,
                                 channel = AnimationChannel.SCALE,
-                                time = 250,
+                                time = 500.0,
                                 dataPoints = Point3d.of(1.0, 0.7, 1.0)
-                            ),
-                            LwamKeyframe.of(
-                                interpolation = InterpolationMode.LINEAR,
-                                channel = AnimationChannel.SCALE,
-                                time = 0,
-                                dataPoints = Point3d.of(1.0, 1.0, 1.0)
-                            ),
-                            LwamKeyframe.of(
-                                interpolation = InterpolationMode.LINEAR,
-                                channel = AnimationChannel.SCALE,
-                                time = 750,
-                                dataPoints = Point3d.of(1.0, 1.0, 1.0)
-                            ),
+                            )
                         )
                     )
                 )
@@ -188,7 +158,8 @@ object ModelRenderScene : Screen("main-menu") {
         camera.fov = 65f
         camera.zNear = 0.0001f
         camera.zFar = 1000f
-        camera.position = Point3d.of(0.0, 0.0, 0.0)
+        camera.rotate(0f, 90f, 0f)
+        camera.position = Point3d.of(15.0, 10.0, 0.0)
         camera.update()
 
         application.renderSystem.enableCull()
@@ -196,11 +167,6 @@ object ModelRenderScene : Screen("main-menu") {
 
         application.window.isVsync = true
 
-        modelRender.scale(
-            x = 0.25f,
-            y = 0.25f,
-            z = 0.25f
-        )
         modelRender.playAnimation("animation")
     }
 

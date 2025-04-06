@@ -19,10 +19,10 @@ interface Keyframe : Identifiable {
     val channel: AnimationChannel
 
     /**
-     * Time after animation start when this frame will be executed in milliseconds.
+     * Time after animation start when this frame will be executed in seconds.
      */
     @get:JvmName("duration")
-    val time: Long
+    val time: Double
 
     /**
      * Points for changing elements.

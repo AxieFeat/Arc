@@ -21,7 +21,7 @@ interface LwamKeyframe : Keyframe {
         fun create(
             uuid: UUID,
             channel: AnimationChannel,
-            time: Long,
+            time: Double,
             dataPoints: Point3d,
             interpolation: InterpolationMode
         ): LwamKeyframe
@@ -45,7 +45,7 @@ interface LwamKeyframe : Keyframe {
         fun of(
             uuid: UUID = UUID.randomUUID(),
             channel: AnimationChannel = AnimationChannel.SCALE,
-            time: Long = 0,
+            time: Double = 0.0,
             dataPoints: Point3d = Point3d.ZERO,
             interpolation: InterpolationMode = InterpolationMode.LINEAR
         ): LwamKeyframe {

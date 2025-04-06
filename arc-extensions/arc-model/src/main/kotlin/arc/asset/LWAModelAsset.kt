@@ -9,7 +9,6 @@ import java.io.File
 /**
  * Represents a model asset of LWAModel format (Lightweight Arc Model format).
  */
-@Suppress("INAPPLICABLE_JVM_NAME")
 @ImmutableType
 interface LWAModelAsset : Asset {
 
@@ -17,21 +16,21 @@ interface LWAModelAsset : Asset {
     @TypeFactory
     interface Factory {
 
-        fun create(file: File): BBModelAsset
+        fun create(file: File): LWAModelAsset
 
     }
 
     companion object {
 
         /**
-         * Create instance of [BBModelAsset] from file.
+         * Create instance of [LWAModelAsset] from file.
          *
          * @param file File of asset.
          *
-         * @return New instance of [BBModelAsset].
+         * @return New instance of [LWAModelAsset].
          */
         @JvmStatic
-        fun from(file: File): BBModelAsset {
+        fun from(file: File): LWAModelAsset {
             return Arc.factory<Factory>().create(file)
         }
 

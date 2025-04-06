@@ -12,7 +12,7 @@ data class ArcLwamKeyframe(
     @Contextual
     override val uuid: UUID = UUID.randomUUID(),
     override val channel: AnimationChannel = AnimationChannel.SCALE,
-    override val time: Long = 0,
+    override val time: Double = 0.0,
     override val dataPoints: Point3d = Point3d.ZERO,
     override val interpolation: InterpolationMode = InterpolationMode.LINEAR
 ) : LwamKeyframe {
@@ -21,7 +21,7 @@ data class ArcLwamKeyframe(
         override fun create(
             uuid: UUID,
             channel: AnimationChannel,
-            time: Long,
+            time: Double,
             dataPoints: Point3d,
             interpolation: InterpolationMode
         ): LwamKeyframe {
