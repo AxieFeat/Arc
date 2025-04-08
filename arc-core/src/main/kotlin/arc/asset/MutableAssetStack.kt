@@ -8,10 +8,10 @@ import org.jetbrains.annotations.ApiStatus
 /**
  * Represents a mutable stack of assets.
  *
- * @param T The type of asset contained in the stack, which must implement the [Asset] interface.
+ * @param T The type of asset contained in the stack, which must implement the [AssetLike] interface.
  */
 @MutableType
-interface MutableAssetStack<T : Asset> : AssetStack<T> {
+interface MutableAssetStack<T : AssetLike> : AssetStack<T> {
 
     /**
      * Add new asset to stack.
@@ -31,7 +31,7 @@ interface MutableAssetStack<T : Asset> : AssetStack<T> {
     @TypeFactory
     interface Factory {
 
-        fun <T : Asset> create(assets: Set<T>): MutableAssetStack<T>
+        fun <T : AssetLike> create(assets: Set<T>): MutableAssetStack<T>
 
     }
 
@@ -51,7 +51,7 @@ interface MutableAssetStack<T : Asset> : AssetStack<T> {
          * @return New instance of [MutableAssetStack].
          */
         @JvmStatic
-        fun <T : Asset> of(assets: Set<T> = setOf()): MutableAssetStack<T> {
+        fun <T : AssetLike> of(assets: Set<T> = setOf()): MutableAssetStack<T> {
             return Arc.factory<Factory>().create(assets)
         }
 

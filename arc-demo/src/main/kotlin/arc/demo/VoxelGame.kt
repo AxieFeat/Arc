@@ -2,7 +2,7 @@ package arc.demo
 
 import arc.Application
 import arc.Configuration
-import arc.asset.SoundAsset
+import arc.asset.asFileAsset
 import arc.audio.Sound
 import arc.demo.screen.ModelRenderScene
 import arc.demo.screen.Screen
@@ -25,7 +25,7 @@ object VoxelGame : WindowHandler {
         application.window.isVsync = true
         setScreen(ModelRenderScene)
 
-        val asset = SoundAsset.from(classpath("arc/sound/pigstep.ogg"))
+        val asset = classpath("arc/sound/pigstep.ogg").asFileAsset()
         val sound = Sound.from(asset)
 
         sound.play(volume = 0.3f, loop = true)
@@ -56,8 +56,11 @@ object VoxelGame : WindowHandler {
     private fun loadShaders() {
         application.window.name = "Loading shaders..."
 
+        val start = System.currentTimeMillis()
         ShaderContainer
         VertexFormat
+
+        application.window.name = "Shaders loaded in ${System.currentTimeMillis() - start} ms"
     }
 
 }

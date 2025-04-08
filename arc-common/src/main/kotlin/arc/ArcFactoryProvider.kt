@@ -1,18 +1,12 @@
 package arc
 
+import arc.asset.*
 import arc.asset.ArcAssetStack
-import arc.asset.ArcSoundAsset
-import arc.asset.shader.ArcFragmentShader
-import arc.asset.shader.ArcVertexShader
-import arc.asset.AssetStack
-import arc.asset.MutableAssetStack
-import arc.asset.SoundAsset
-import arc.asset.shader.FragmentShader
-import arc.asset.shader.VertexShader
+import arc.asset.ArcRuntimeAsset
 import arc.audio.OggSound
 import arc.audio.Sound
+import arc.graphics.*
 import arc.graphics.ArcCamera
-import arc.graphics.Camera
 import arc.graphics.vertex.ArcVertexFormat
 import arc.graphics.vertex.ArcVertexFormatElement
 import arc.graphics.vertex.VertexFormat
@@ -32,6 +26,8 @@ import arc.lwamodel.texture.LwamTexture
 import arc.math.*
 import arc.profiler.ArcProfiler
 import arc.profiler.Profiler
+import arc.shader.ArcShaderSettings
+import arc.shader.ShaderSettings
 import arc.util.ArcColor
 import arc.util.Color
 import arc.util.factory.FactoryProvider
@@ -82,11 +78,11 @@ object ArcFactoryProvider : FactoryProvider {
 
         register<VertexFormat.BuilderFactory>(ArcVertexFormat.BuilderFactory)
         register<VertexFormatElement.Factory>(ArcVertexFormatElement.Factory)
+        register<ShaderSettings.Factory>(ArcShaderSettings.Factory)
 
         // Assets
-        register<SoundAsset.Factory>(ArcSoundAsset.Factory)
-        register<FragmentShader.Factory>(ArcFragmentShader.Factory)
-        register<VertexShader.Factory>(ArcVertexShader.Factory)
+        register<RuntimeAsset.Factory>(ArcRuntimeAsset.Factory)
+        register<FileAsset.Factory>(ArcFileAsset.Factory)
         register<AssetStack.Factory>(ArcAssetStack.Factory)
         register<MutableAssetStack.Factory>(ArcAssetStack.MutableFactory)
 
@@ -107,6 +103,7 @@ object ArcFactoryProvider : FactoryProvider {
         register<LwamKeyframe.Factory>(ArcLwamKeyframe.Factory)
     }
 
+    @Suppress("SameParameterValue")
     private fun modifyField(clazz: Class<*>, name: String, value: Any) {
         try {
             getField(clazz, name).set(null, value)

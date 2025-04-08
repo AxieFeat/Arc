@@ -1,7 +1,7 @@
 package arc.model.animation
 
 import arc.annotations.ImmutableType
-import arc.util.Identifiable
+import arc.util.pattern.Identifiable
 
 /**
  * This interface represents animation of some model.

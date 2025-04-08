@@ -1,4 +1,4 @@
-package arc.util
+package arc.util.pattern
 
 import org.jetbrains.annotations.Range
 import kotlin.jvm.Throws

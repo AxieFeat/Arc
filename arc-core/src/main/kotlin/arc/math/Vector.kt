@@ -1,6 +1,6 @@
 package arc.math
 
-import arc.util.Copyable
+import arc.util.pattern.Copyable
 
 /**
  * Encapsulates a general vector.

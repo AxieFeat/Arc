@@ -95,8 +95,8 @@ internal data class ArcCamera(
     }
 
     object Factory : Camera.Factory {
-        override fun create(fov: Float, height: Float, width: Float): Camera {
-            return ArcCamera(fov, height, width)
+        override fun create(fov: Float, width: Float, height: Float): Camera {
+            return ArcCamera(fov, width, height)
         }
     }
 }

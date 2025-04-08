@@ -1,18 +1,17 @@
 package arc.demo.shader
 
-import arc.asset.shader.FragmentShader
-import arc.asset.shader.ShaderData
-import arc.asset.shader.VertexShader
+import arc.asset.asFileAsset
 import arc.files.classpath
 import arc.shader.ShaderInstance
+import arc.shader.ShaderSettings
 
 object ShaderContainer {
 
     @JvmField
     val positionTex = ShaderInstance.of(
-        vertexShader = VertexShader.from(classpath("arc/shader/position_tex/position_tex.vsh")),
-        fragmentShader = FragmentShader.from(classpath("arc/shader/position_tex/position_tex.fsh")),
-        shaderData = ShaderData.from(classpath("arc/shader/position_tex/position_tex.json")),
+        vertexShader = classpath("arc/shader/position_tex/position_tex.vsh").asFileAsset(),
+        fragmentShader = classpath("arc/shader/position_tex/position_tex.fsh").asFileAsset(),
+        shaderSettings = ShaderSettings.of(classpath("arc/shader/position_tex/position_tex.json").asFileAsset()),
     ).also {
         it.compileShaders()
         it.addProvider(DefaultUniformProvider)
@@ -20,9 +19,9 @@ object ShaderContainer {
 
     @JvmField
     val positionColor = ShaderInstance.of(
-        vertexShader = VertexShader.from(classpath("arc/shader/position_color/position_color.vsh")),
-        fragmentShader = FragmentShader.from(classpath("arc/shader/position_color/position_color.fsh")),
-        shaderData = ShaderData.from(classpath("arc/shader/position_color/position_color.json")),
+        vertexShader = classpath("arc/shader/position_color/position_color.vsh").asFileAsset(),
+        fragmentShader = classpath("arc/shader/position_color/position_color.fsh").asFileAsset(),
+        shaderSettings = ShaderSettings.of(classpath("arc/shader/position_color/position_color.json").asFileAsset()),
     ).also {
         it.compileShaders()
         it.addProvider(DefaultUniformProvider)
@@ -30,9 +29,9 @@ object ShaderContainer {
 
     @JvmField
     val blitScreen = ShaderInstance.of(
-        vertexShader = VertexShader.from(classpath("arc/shader/blit_screen/blit_screen.vsh")),
-        fragmentShader = FragmentShader.from(classpath("arc/shader/blit_screen/blit_screen.fsh")),
-        shaderData = ShaderData.from(classpath("arc/shader/blit_screen/blit_screen.json")),
+        vertexShader = classpath("arc/shader/blit_screen/blit_screen.vsh").asFileAsset(),
+        fragmentShader = classpath("arc/shader/blit_screen/blit_screen.fsh").asFileAsset(),
+        shaderSettings = ShaderSettings.of(classpath("arc/shader/blit_screen/blit_screen.json").asFileAsset()),
     ).also {
         it.compileShaders()
         it.addProvider(DefaultUniformProvider)

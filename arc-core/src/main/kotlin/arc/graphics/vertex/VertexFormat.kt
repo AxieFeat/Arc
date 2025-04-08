@@ -89,7 +89,7 @@ interface VertexFormat {
     /**
      * Use this interface to build own [VertexFormat].
      */
-    interface Builder : arc.util.Builder<VertexFormat> {
+    interface Builder : arc.util.pattern.Builder<VertexFormat> {
 
         /**
          * Add vertex parameter.

@@ -3,7 +3,7 @@ package arc.audio
 import arc.Arc
 import arc.annotations.MutableType
 import arc.annotations.TypeFactory
-import arc.asset.SoundAsset
+import arc.asset.AssetLike
 import arc.math.Point3d
 import org.jetbrains.annotations.ApiStatus
 
@@ -27,12 +27,6 @@ interface Sound {
      * Indicates whether the sound is currently paused.
      */
     val isPaused: Boolean
-
-    /**
-     * Represents the sound asset associated with this sound instance.
-     */
-    @get:JvmName("asset")
-    val asset: SoundAsset
 
     /**
      * Volume value of this sound.
@@ -83,7 +77,7 @@ interface Sound {
     @TypeFactory
     interface Factory {
 
-        fun create(asset: SoundAsset): Sound
+        fun create(bytes: ByteArray): Sound
 
     }
 
@@ -97,8 +91,17 @@ interface Sound {
          * @return New instance of [Sound].
          */
         @JvmStatic
-        fun from(asset: SoundAsset): Sound {
-            return Arc.factory<Factory>().create(asset)
+        fun from(asset: AssetLike): Sound = from(asset.bytes)
+
+        /**
+         * Create the sound from array of bytes.
+         *
+         * @param bytes Bytes of sound.
+         *
+         * @return New instance of [Sound].
+         */
+        fun from(bytes: ByteArray): Sound {
+            return Arc.factory<Factory>().create(bytes)
         }
 
     }

@@ -2,10 +2,6 @@ package arc.gl
 
 import arc.Application
 import arc.ArcFactoryProvider
-import arc.asset.TextureAsset
-import arc.asset.shader.ShaderData
-import arc.gl.asset.GlShaderData
-import arc.gl.asset.GlTextureAsset
 import arc.gl.graphics.GlDrawBuffer
 import arc.gl.model.GlModelRender
 import arc.gl.graphics.vertex.GlVertexBuffer
@@ -32,7 +28,6 @@ internal object GlFactoryProvider {
     fun bootstrap() {
         provider.register<Application.Factory>(GlApplication.Factory)
 
-        provider.register<TextureAsset.Factory>(GlTextureAsset.Factory)
         provider.register<Texture.Factory>(GlTexture.Factory)
         provider.register<TextureAtlas.Factory>(GlTextureAtlas.Factory)
 
@@ -40,7 +35,6 @@ internal object GlFactoryProvider {
         provider.register<ShaderInstance.Factory>(GlShaderInstance.Factory)
         provider.register<VertexBuffer.Factory>(GlVertexBuffer.Factory)
         provider.register<DrawBuffer.Factory>(GlDrawBuffer.Factory)
-        provider.register<ShaderData.Factory>(GlShaderData.Factory)
         provider.register<BlendMode.Factory>(GlBlendMode.Factory)
 
         provider.register<ModelRender.Factory>(GlModelRender.Factory)

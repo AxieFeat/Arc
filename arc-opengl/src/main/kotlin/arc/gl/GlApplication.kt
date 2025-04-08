@@ -40,7 +40,7 @@ object GlApplication : AbstractApplication() {
     }
 
     override fun screenshot(folder: File, name: String) {
-
+        // TODO
     }
 
     override fun close() {

@@ -1,12 +1,11 @@
-@file:Suppress("DuplicatedCode", "UNUSED_EXPRESSION")
+@file:Suppress("DuplicatedCode")
 package arc.sample
 
 import arc.Application
-import arc.asset.shader.FragmentShader
-import arc.asset.shader.ShaderData
-import arc.asset.shader.VertexShader
+import arc.asset.FileAsset
 import arc.shader.AbstractUniformProvider
 import arc.shader.ShaderInstance
+import arc.shader.ShaderSettings
 import java.io.File
 
 /**
@@ -42,25 +41,17 @@ internal fun uniformProviderSample() {
 
     // Creation simple shader as example.
     val shader = ShaderInstance.of(
-        VertexShader.from(File("example.vsh")),
-        FragmentShader.from(File("example.fsh")),
-        ShaderData.from(File("example.json"))
+        FileAsset.from(File("example.vsh")),
+        FileAsset.from(File("example.fsh")),
+
+        // It's very important part of providing uniforms shaders.
+        // Is ShaderSettings your need put names of uniforms, that's this shader will use.
+        ShaderSettings.of(
+            uniforms = listOf("projectionMatrix", "viewMatrix"),
+        )
     ).also { it.compileShaders() }
 
     // Now we can add provider to our shader.
     // Please note that the number of providers can be any, but we do not recommend using too many.
     shader.addProvider(provider)
-
-    // That's it, the provider is set up. Now every time you bind the shader, the uniforms will be automatically transferred to the shader. However, you probably have a question: how to specify which uniforms the shader accepts?
-    // The answer to this question is very simple, that's what ShaderData is for.
-
-    // Just add name of uniform to uniforms list in .json file of ShaderData.
-    """
-    {
-        "uniforms": [
-            "projectionMatrix",
-            "viewMatrix"
-        ]
-    }
-    """
 }

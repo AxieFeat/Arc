@@ -1,38 +1,35 @@
 package arc.audio
 
-import arc.asset.SoundAsset
 import org.lwjgl.openal.AL10.*
 import org.lwjgl.stb.STBVorbis
 import org.lwjgl.stb.STBVorbisInfo
 import org.lwjgl.system.MemoryStack
 import org.lwjgl.system.MemoryUtil
-import java.io.File
 import java.nio.ByteBuffer
 import java.nio.IntBuffer
 import java.nio.ShortBuffer
-import java.nio.file.Files
 
 internal class OggSound(
-    asset: SoundAsset,
-) : AbstractSound(asset) {
+    bytes: ByteArray,
+) : AbstractSound() {
 
     private val buffer = alGenBuffers()
 
     init {
-        val (pcm, format, sampleRate) = loadOgg(asset.file)
+        val (pcm, format, sampleRate) = loadOgg(bytes)
         alBufferData(buffer, format, pcm, sampleRate)
         alSourcei(source, AL_BUFFER, buffer)
     }
 
     object Factory : Sound.Factory {
-        override fun create(asset: SoundAsset): Sound {
-            return OggSound(asset)
+        override fun create(bytes: ByteArray): Sound {
+            return OggSound(bytes)
         }
     }
 
     companion object {
-        private fun loadOgg(file: File): Triple<ShortBuffer, Int, Int> {
-            val bytes: ByteBuffer = MemoryUtil.memAlloc(file.length().toInt()).put(Files.readAllBytes(file.toPath()))
+        private fun loadOgg(data: ByteArray): Triple<ShortBuffer, Int, Int> {
+            val bytes: ByteBuffer = MemoryUtil.memAlloc(data.size).put(data)
             bytes.flip()
 
             MemoryStack.stackPush().use { stack ->
@@ -55,5 +52,6 @@ internal class OggSound(
                 return Triple(pcm, format, sampleRate)
             }
         }
+
     }
 }

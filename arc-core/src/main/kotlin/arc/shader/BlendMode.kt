@@ -62,7 +62,7 @@ interface BlendMode {
          * @return New instance of [BlendMode].
          */
         @JvmStatic
-        fun create(
+        fun of(
             separateBlend: Boolean = false,
             opaque: Boolean = true,
             srcColorFactor: Int = 1,

@@ -8,10 +8,10 @@ import arc.graphics.vertex.VertexFormat
 import org.lwjgl.opengl.GL41.*
 import org.lwjgl.system.MemoryUtil
 
-data class GlVertexBuffer(
+internal data class GlVertexBuffer(
     override val size: Int,
     override val mode: DrawerMode,
-    override val format: VertexFormat
+    override val format: VertexFormat,
 ) : VertexBuffer {
 
     override var id: Int = glGenBuffers()
@@ -32,7 +32,7 @@ data class GlVertexBuffer(
         unbind()
     }
 
-    override fun bufferData(drawBuffer: DrawBuffer) {
+    override fun write(drawBuffer: DrawBuffer) {
         if(drawBuffer !is GlDrawBuffer) return
 
         count = drawBuffer.vertexCount
@@ -64,8 +64,10 @@ data class GlVertexBuffer(
     }
 
     object Factory : VertexBuffer.Factory {
-        override fun create(buffer: DrawBuffer): VertexBuffer {
-            return GlVertexBuffer(buffer.bufferSize, buffer.mode, buffer.format).also { it.bufferData(buffer) }
+        override fun create(drawBuffer: DrawBuffer): VertexBuffer {
+            return GlVertexBuffer(drawBuffer.bufferSize, drawBuffer.mode, drawBuffer.format).also {
+                it.write(drawBuffer)
+            }
         }
 
     }

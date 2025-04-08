@@ -1,6 +1,6 @@
 package arc.demo.screen
 
-import arc.asset.TextureAsset
+import arc.asset.FileAsset
 import arc.demo.entity.CubeEntity
 import arc.demo.shader.ShaderContainer
 import arc.demo.shader.VertexFormatContainer
@@ -13,7 +13,7 @@ import org.joml.Vector3f
 object MainMenuScreen : Screen("main-menu") {
 
     private val grassAtlas = TextureAtlas.from(
-        asset = TextureAsset.from(
+        asset = FileAsset.from(
             classpath("arc/texture/grass.png"),
         )
     )

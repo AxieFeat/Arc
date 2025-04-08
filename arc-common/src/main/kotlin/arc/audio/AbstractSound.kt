@@ -1,12 +1,9 @@
 package arc.audio
 
-import arc.asset.SoundAsset
 import arc.math.Point3d
 import org.lwjgl.openal.AL10.*
 
-internal abstract class AbstractSound(
-    override val asset: SoundAsset
-) : Sound {
+internal abstract class AbstractSound : Sound {
 
     override var isPaused: Boolean = false
     override var isPlaying: Boolean = false

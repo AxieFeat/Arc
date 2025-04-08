@@ -8,11 +8,11 @@ import org.jetbrains.annotations.ApiStatus
 /**
  * Represents an immutable stack of assets.
  *
- * @param T The type of asset contained in the stack, which must implement the [Asset] interface.
+ * @param T The type of asset contained in the stack, which must implement the [AssetLike] interface.
  */
 @Suppress("INAPPLICABLE_JVM_NAME")
 @ImmutableType
-interface AssetStack<T : Asset> : Iterable<T> {
+interface AssetStack<T : AssetLike> : Iterable<T> {
 
     /**
      * Set of all assets in this stack.
@@ -24,7 +24,7 @@ interface AssetStack<T : Asset> : Iterable<T> {
     @TypeFactory
     interface Factory {
 
-        fun <T : Asset> create(assets: Set<T>): AssetStack<T>
+        fun <T : AssetLike> create(assets: Set<T>): AssetStack<T>
 
     }
 
@@ -44,7 +44,7 @@ interface AssetStack<T : Asset> : Iterable<T> {
          * @return New instance of [AssetStack].
          */
         @JvmStatic
-        fun <T : Asset> of(assets: Set<T> = setOf()): AssetStack<T> {
+        fun <T : AssetLike> of(assets: Set<T> = setOf()): AssetStack<T> {
             return Arc.factory<Factory>().create(assets)
         }
 

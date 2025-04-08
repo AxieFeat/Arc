@@ -1,7 +1,6 @@
 package arc.shader
 
 import arc.annotations.MutableType
-import arc.asset.shader.ShaderData
 
 /**
  * This interface represents provider for shader uniforms.
@@ -30,7 +29,7 @@ interface UniformProvider {
     /**
      * Provide required uniforms in this shader.
      *
-     * For providing used information for [ShaderData.uniforms].
+     * For providing used information for [ShaderSettings.uniforms].
      */
     fun provide(shader: ShaderInstance)
 

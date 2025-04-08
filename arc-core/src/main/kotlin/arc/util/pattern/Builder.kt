@@ -1,4 +1,4 @@
-package arc.util
+package arc.util.pattern
 
 /**
  * This interface represents a builder pattern for creating objects of type [T].

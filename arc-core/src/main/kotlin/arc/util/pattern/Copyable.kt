@@ -1,4 +1,4 @@
-package arc.util
+package arc.util.pattern
 
 /**
  * Represents a general contract for copying objects of type [T].

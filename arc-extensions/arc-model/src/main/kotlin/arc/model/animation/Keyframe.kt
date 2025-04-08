@@ -2,7 +2,7 @@ package arc.model.animation
 
 import arc.annotations.ImmutableType
 import arc.math.Point3d
-import arc.util.Identifiable
+import arc.util.pattern.Identifiable
 import arc.util.InterpolationMode
 
 /**

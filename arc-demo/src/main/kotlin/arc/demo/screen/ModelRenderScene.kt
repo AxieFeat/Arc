@@ -167,13 +167,13 @@ object ModelRenderScene : Screen("main-menu") {
 
         application.window.isVsync = true
 
-        modelRender.playAnimation("animation")
+//        modelRender.playAnimation("animation")
     }
 
     override fun doRender() {
         handleInput()
 
-        modelRender.tick(partial)
+//        modelRender.tick(partial)
 
         modelRender.render(ShaderContainer.positionTex)
     }
@@ -239,7 +239,6 @@ object ModelRenderScene : Screen("main-menu") {
 
         camera.update()
     }
-
 
     override fun onFpsUpdate(fps: Int) {
         name = "FPS: $fps, Frame time: $frameTime ms"

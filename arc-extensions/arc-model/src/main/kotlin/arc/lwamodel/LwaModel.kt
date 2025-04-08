@@ -2,7 +2,7 @@ package arc.lwamodel
 
 import arc.Arc
 import arc.annotations.ImmutableType
-import arc.asset.LWAModelAsset
+import arc.asset.StringAsset
 import arc.lwamodel.animation.LwamAnimation
 import arc.lwamodel.group.LwamElementGroup
 import arc.lwamodel.texture.LwamTexture
@@ -43,15 +43,8 @@ interface LwaModel : Model {
      */
     override val textures: List<LwamTexture>
 
-    /**
-     * Serialize model to bytes.
-     */
-    fun serialize(): ByteArray
-
     @ApiStatus.Internal
     interface Factory {
-
-        fun create(bytes: ByteArray): LwaModel
 
         fun create(elements: List<LwamElement>, groups: List<LwamElementGroup>, animations: List<LwamAnimation>, textures: List<LwamTexture>): LwaModel
 
@@ -60,15 +53,15 @@ interface LwaModel : Model {
     companion object {
 
         /**
-         * Create [LwaModel] from [LWAModelAsset].
+         * Create [LwaModel] from [StringAsset].
          *
          * @param asset Asset for Model.
          *
          * @return New instance of [LwaModel].
          */
         @JvmStatic
-        fun from(asset: LWAModelAsset): LwaModel {
-            return Arc.factory<Factory>().create(asset.file.readBytes())
+        fun from(asset: StringAsset): LwaModel {
+            TODO()
         }
 
         /**

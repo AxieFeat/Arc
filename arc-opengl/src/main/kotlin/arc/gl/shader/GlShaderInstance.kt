@@ -1,11 +1,10 @@
 package arc.gl.shader
 
-import arc.asset.shader.FragmentShader
-import arc.asset.shader.ShaderData
-import arc.asset.shader.VertexShader
+import arc.asset.StringAsset
 import arc.gl.graphics.GlRenderSystem
 import arc.graphics.EmptyShaderInstance
 import arc.shader.ShaderInstance
+import arc.shader.ShaderSettings
 import arc.shader.UniformProvider
 import org.joml.Matrix4f
 import org.joml.Vector2f
@@ -17,9 +16,9 @@ import org.lwjgl.opengl.GL41
 import org.lwjgl.system.MemoryStack
 
 internal data class GlShaderInstance(
-    override val vertex: VertexShader,
-    override val fragment: FragmentShader,
-    override val data: ShaderData
+    override val vertex: String,
+    override val fragment: String,
+    override val settings: ShaderSettings
 ) : ShaderInstance {
 
     override var id = 0
@@ -30,8 +29,9 @@ internal data class GlShaderInstance(
 
     override fun compileShaders() {
         id = GL41.glCreateProgram()
-        vertexShaderId = createShader(vertex.file.readText(), GL41.GL_VERTEX_SHADER)
-        fragmentShaderId = createShader(fragment.file.readText(), GL41.GL_FRAGMENT_SHADER)
+
+        vertexShaderId = createShader(vertex, GL41.GL_VERTEX_SHADER)
+        fragmentShaderId = createShader(fragment, GL41.GL_FRAGMENT_SHADER)
 
         link()
     }
@@ -47,6 +47,10 @@ internal data class GlShaderInstance(
         GL41.glUseProgram(0)
 
         GlRenderSystem.shader = EmptyShaderInstance
+    }
+
+    override fun cleanup() {
+        GL41.glDeleteProgram(id)
     }
 
     override fun addProvider(provider: UniformProvider) {
@@ -145,11 +149,11 @@ internal data class GlShaderInstance(
 
     object Factory : ShaderInstance.Factory {
         override fun create(
-            vertexShader: VertexShader,
-            fragmentShader: FragmentShader,
-            shaderData: ShaderData
+            vertexShader: StringAsset,
+            fragmentShader: StringAsset,
+            shaderSettings: ShaderSettings
         ): ShaderInstance {
-            return GlShaderInstance(vertexShader, fragmentShader, shaderData)
+            return GlShaderInstance(vertexShader.text, fragmentShader.text, shaderSettings)
         }
     }
 

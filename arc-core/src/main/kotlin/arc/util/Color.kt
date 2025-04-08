@@ -3,6 +3,8 @@ package arc.util
 import arc.Arc
 import arc.annotations.MutableType
 import arc.annotations.TypeFactory
+import arc.util.pattern.Copyable
+import arc.util.pattern.Interpolatable
 import org.jetbrains.annotations.ApiStatus
 import org.jetbrains.annotations.Range
 import kotlin.jvm.Throws

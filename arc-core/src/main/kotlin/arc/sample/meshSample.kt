@@ -2,9 +2,7 @@
 package arc.sample
 
 import arc.Application
-import arc.asset.shader.FragmentShader
-import arc.asset.shader.ShaderData
-import arc.asset.shader.VertexShader
+import arc.asset.FileAsset
 import arc.graphics.DrawBuffer
 import arc.graphics.DrawerMode
 import arc.graphics.vertex.VertexFormat
@@ -12,7 +10,7 @@ import arc.graphics.vertex.VertexFormatElement
 import arc.shader.ShaderInstance
 import arc.util.Color
 
-internal fun vertexBufferSample() {
+internal fun meshSample() {
     // Find our application.
     // (Don't forget preload factories, implementation and start application)
     val application = Application.find()
@@ -36,17 +34,15 @@ internal fun vertexBufferSample() {
     // Also don't forget end writing to buffer.
     buffer.end()
 
-
-    // After writing vertex data we can build our buffer to VertexBuffer.
+    // After writing vertex data we can build it to vertex buffer.
     val vertexBuffer = buffer.build()
 
-    // For rendering you need Vertex and Fragment shaders (This assumes you have them in files, but you can view sample for shaders).
+    // For rendering you need Vertex and Fragment shaders (This assumes you have them in files/runtime, but you can view sample for shaders).
 
     val space = application.locationSpace // We can use classpath(), absolute() and local() functions without instance, but in this example we use instance.
     val shader = ShaderInstance.of(
-        VertexShader.from(space.classpath("arc/shader/example.vsh")),
-        FragmentShader.from(space.classpath("arc/shader/example.fsh")),
-        ShaderData.from(space.classpath("arc/shader/example.json")),
+        FileAsset.from(space.classpath("arc/shader/example.vsh")),
+        FileAsset.from(space.classpath("arc/shader/example.fsh")),
     )
     shader.compileShaders() // Don't forget compile shaders.
 

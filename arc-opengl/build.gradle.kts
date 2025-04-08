@@ -22,6 +22,5 @@ dependencies {
     }
 
     implementation("commons-io:commons-io:2.18.0")
-    implementation("com.google.code.gson:gson:2.12.1")
     implementation(project(":arc-extensions:arc-model"))
 }

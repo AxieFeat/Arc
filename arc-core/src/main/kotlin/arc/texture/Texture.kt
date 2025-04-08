@@ -3,7 +3,7 @@ package arc.texture
 import arc.Arc
 import arc.annotations.ImmutableType
 import arc.annotations.TypeFactory
-import arc.asset.TextureAsset
+import arc.asset.AssetLike
 import org.jetbrains.annotations.ApiStatus
 
 /**
@@ -13,16 +13,9 @@ import org.jetbrains.annotations.ApiStatus
 @ImmutableType
 interface Texture : TextureLike {
 
-    /**
-     * Asset of this texture. If null - texture available only in runtime.
-     */
-    @get:JvmName("asset")
-    val asset: TextureAsset?
-
+    @TypeFactory
     @ApiStatus.Internal
     interface Factory {
-
-        fun create(asset: TextureAsset): Texture
 
         fun create(bytes: ByteArray): Texture
 
@@ -31,19 +24,17 @@ interface Texture : TextureLike {
     companion object {
 
         /**
-         * Create [Texture] from [TextureAsset].
+         * Create [Texture] from [AssetLike] object.
          *
          * @param asset Asset for Texture.
          *
          * @return New instance of [Texture].
          */
         @JvmStatic
-        fun from(asset: TextureAsset): Texture {
-            return Arc.factory<Factory>().create(asset)
-        }
+        fun from(asset: AssetLike): Texture = from(asset.bytes)
 
         /**
-         * Create [Texture] from byte array.
+         * Create [Texture] from [AssetLike] object.
          *
          * @param bytes Bytes of texture.
          *

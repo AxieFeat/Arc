@@ -3,7 +3,7 @@ package arc.model.group
 import arc.annotations.ImmutableType
 import arc.math.Point3d
 import arc.model.animation.Animator
-import arc.util.Identifiable
+import arc.util.pattern.Identifiable
 import java.util.UUID
 
 /**

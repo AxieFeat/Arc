@@ -1,0 +1,49 @@
+package arc.asset
+
+import arc.Arc
+import arc.annotations.ImmutableType
+import arc.annotations.TypeFactory
+import org.jetbrains.annotations.ApiStatus
+import java.io.File
+
+/**
+ * This interface represents asset, that can be stored in file system.
+ *
+ * Although this interface is marked as immutable,
+ * in fact the getters can return different values if the file contents have been changed.
+ */
+@Suppress("INAPPLICABLE_JVM_NAME")
+@ImmutableType
+interface FileAsset : StringAsset {
+
+    /**
+     * File of this asset.
+     */
+    @get:JvmName("file")
+    val file: File
+
+    @ApiStatus.Internal
+    @TypeFactory
+    interface Factory {
+
+        fun create(file: File): FileAsset
+
+    }
+
+    companion object {
+
+        /**
+         * Create instance of [FileAsset] from file.
+         *
+         * @param file File of asset.
+         *
+         * @return New instance of [FileAsset].
+         */
+        @JvmStatic
+        fun from(file: File): FileAsset {
+            return Arc.factory<Factory>().create(file)
+        }
+
+    }
+
+}

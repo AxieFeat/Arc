@@ -1,6 +1,5 @@
 package arc.gl.texture
 
-import arc.asset.TextureAsset
 import arc.gl.graphics.GlRenderSystem
 import arc.gl.texture.TextureUtil.createDirectByteBuffer
 import arc.texture.EmptyTexture
@@ -11,8 +10,7 @@ import org.lwjgl.system.MemoryStack
 import java.nio.ByteBuffer
 
 internal class GlTexture(
-    override val asset: TextureAsset? = null,
-    private val bytes: ByteArray? = null,
+    bytes: ByteArray,
 ) : Texture {
 
     override val id: Int = glGenTextures()
@@ -23,13 +21,8 @@ internal class GlTexture(
             val h = stack.mallocInt(1)
             val channels = stack.mallocInt(1)
 
-            val buf: ByteBuffer = if(asset != null) {
-                STBImage.stbi_load(asset.file.absolutePath, w, h, channels, 4)
-                    ?: throw RuntimeException("Image file [${asset.file.absolutePath}] not loaded: " + STBImage.stbi_failure_reason())
-            } else {
-                STBImage.stbi_load_from_memory(bytes!!.createDirectByteBuffer(), w, h, channels, 4)
+            val buf: ByteBuffer = STBImage.stbi_load_from_memory(bytes.createDirectByteBuffer(), w, h, channels, 4)
                     ?: throw RuntimeException("Image file not loaded: " + STBImage.stbi_failure_reason())
-            }
 
             val width = w.get()
             val height = h.get()
@@ -56,12 +49,8 @@ internal class GlTexture(
     }
 
     object Factory : Texture.Factory {
-        override fun create(asset: TextureAsset): Texture {
-            return GlTexture(asset)
-        }
-
         override fun create(bytes: ByteArray): Texture {
-            return GlTexture(null, bytes)
+            return GlTexture(bytes)
         }
     }
 }

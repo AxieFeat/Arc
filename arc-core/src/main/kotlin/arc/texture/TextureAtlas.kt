@@ -2,7 +2,8 @@ package arc.texture
 
 import arc.Arc
 import arc.annotations.ImmutableType
-import arc.asset.TextureAsset
+import arc.annotations.TypeFactory
+import arc.asset.AssetLike
 import org.jetbrains.annotations.ApiStatus
 
 /**
@@ -25,12 +26,6 @@ interface TextureAtlas : TextureLike {
     val height: Int
 
     /**
-     * Asset of this atlas. If null - texture available only in runtime.
-     */
-    @get:JvmName("asset")
-    val asset: TextureAsset?
-
-    /**
      * Get UV coordinates for some position in this atlas.
      *
      * @param x X count of pixels.
@@ -40,10 +35,9 @@ interface TextureAtlas : TextureLike {
      */
     fun uv(x: Int, y: Int): Pair<Float, Float>
 
+    @TypeFactory
     @ApiStatus.Internal
     interface Factory {
-
-        fun create(asset: TextureAsset): TextureAtlas
 
         fun create(bytes: ByteArray): TextureAtlas
 
@@ -52,19 +46,17 @@ interface TextureAtlas : TextureLike {
     companion object {
 
         /**
-         * Create [TextureAtlas] from [TextureAsset].
+         * Create [TextureAtlas] from [AssetLike] object.
          *
          * @param asset Asset for Texture Atlas.
          *
          * @return New instance of [TextureAtlas].
          */
         @JvmStatic
-        fun from(asset: TextureAsset): TextureAtlas {
-            return Arc.factory<Factory>().create(asset)
-        }
+        fun from(asset: AssetLike): TextureAtlas = from(asset.bytes)
 
         /**
-         * Create [TextureAtlas] from [TextureAsset].
+         * Create [TextureAtlas] from [AssetLike] object.
          *
          * @param bytes Bytes of texture.
          *

@@ -1,22 +1,20 @@
 package arc.graphics
 
-import arc.asset.shader.FragmentShader
-import arc.asset.shader.ShaderData
-import arc.asset.shader.VertexShader
 import arc.shader.ShaderInstance
+import arc.shader.ShaderSettings
 import arc.shader.UniformProvider
 import org.joml.Matrix4f
 import org.joml.Vector2f
 import org.joml.Vector3f
 import org.joml.Vector4f
-import java.io.File
 
 object EmptyShaderInstance : ShaderInstance {
 
     override val id: Int = 0
-    override val vertex: VertexShader = VertexShader.from(File(""))
-    override val fragment: FragmentShader = FragmentShader.from(File(""))
-    override val data: ShaderData = ShaderData.from(File(""))
+    override val vertex: String = ""
+    override val fragment: String = ""
+
+    override val settings: ShaderSettings = ShaderSettings.of()
 
     override fun addProvider(provider: UniformProvider) {}
 
@@ -31,4 +29,6 @@ object EmptyShaderInstance : ShaderInstance {
 
     override fun bind() {}
     override fun unbind() {}
+    override fun cleanup() {}
+
 }

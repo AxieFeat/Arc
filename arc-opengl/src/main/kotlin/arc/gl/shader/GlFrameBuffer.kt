@@ -126,7 +126,7 @@ internal class GlFrameBuffer(
             addVertex(1f, 1f, 0f).setTexture(1f, 1f).endVertex()
 
             end()
-        }.build()
+        }.use { it.build() }
     }
 
     object Factory : FrameBuffer.Factory {

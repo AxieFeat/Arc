@@ -30,7 +30,7 @@ class World {
     }
 
     fun render() {
-        VoxelGame.application.renderSystem.drawer.draw(buffer.build())
+//        VoxelGame.application.renderSystem.drawer.draw(buffer.build())
     }
 
 }

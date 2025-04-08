@@ -12,7 +12,7 @@ abstract class AbstractUniformProvider : UniformProvider {
     }
 
     override fun provide(shader: ShaderInstance) {
-        uniforms.filter { shader.data.uniforms.contains(it.key) }.forEach {
+        uniforms.filter { shader.settings.uniforms.contains(it.key) }.forEach {
             it.value.provide(shader)
         }
     }

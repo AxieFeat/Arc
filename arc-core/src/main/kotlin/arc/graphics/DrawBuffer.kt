@@ -6,7 +6,8 @@ import arc.annotations.TypeFactory
 import arc.graphics.vertex.VertexBuffer
 import arc.graphics.vertex.VertexConsumer
 import arc.graphics.vertex.VertexFormat
-import arc.util.Builder
+import arc.util.pattern.Builder
+import arc.util.pattern.Cleanable
 import org.jetbrains.annotations.ApiStatus
 
 /**
@@ -17,7 +18,7 @@ import org.jetbrains.annotations.ApiStatus
  */
 @Suppress("INAPPLICABLE_JVM_NAME")
 @MutableType
-interface DrawBuffer : VertexConsumer, Builder<VertexBuffer> {
+interface DrawBuffer : VertexConsumer, Builder<VertexBuffer>, Cleanable {
 
     /**
      * Size of buffer.
@@ -48,11 +49,6 @@ interface DrawBuffer : VertexConsumer, Builder<VertexBuffer> {
      * Build current buffer in vertex buffer.
      */
     override fun build(): VertexBuffer
-
-    /**
-     * Clean resources of this buffer.
-     */
-    fun cleanup()
 
     @ApiStatus.Internal
     @TypeFactory

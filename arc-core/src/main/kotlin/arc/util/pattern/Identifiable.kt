@@ -1,4 +1,4 @@
-package arc.util
+package arc.util.pattern
 
 import arc.annotations.ImmutableType
 import java.util.*
