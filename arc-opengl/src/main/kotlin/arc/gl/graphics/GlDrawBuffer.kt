@@ -21,20 +21,16 @@ internal data class GlDrawBuffer(
     var vertexCount = 0
     private var vertexFormatIndex = 0
     private var vertexFormatElement: VertexFormatElement = format.getElement(vertexFormatIndex)
+    private var needEnding = false
 
     private var xOffset = 0.0f
     private var yOffset = 0.0f
     private var zOffset = 0.0f
 
-    override fun end(): GlDrawBuffer {
-        byteBuffer.position(0)
-        byteBuffer.limit(this.bufferSize * 4)
-
-        return this
-    }
-
     override fun build(): VertexBuffer {
-       return VertexBuffer.of(this)
+        endWriting()
+
+        return VertexBuffer.of(this)
     }
 
     override fun cleanup() {
@@ -42,6 +38,8 @@ internal data class GlDrawBuffer(
     }
 
     override fun addVertex(x: Float, y: Float, z: Float): GlDrawBuffer {
+        if (needEnding) endVertex() else needEnding = true
+
         val i = vertexCount * format.nextOffset + format.getOffset(vertexFormatIndex)
         putPosition(i, x, y, z)
         nextVertexFormatIndex()
@@ -71,7 +69,7 @@ internal data class GlDrawBuffer(
 
     override fun setTexture(u: Float, v: Float): GlDrawBuffer {
         val i = vertexCount * format.nextOffset + format.getOffset(vertexFormatIndex)
-        putTexture(i, vertexFormatElement, u, v)
+        putUV(i, vertexFormatElement, u, v)
         nextVertexFormatIndex()
         return this
     }
@@ -90,7 +88,23 @@ internal data class GlDrawBuffer(
         return this
     }
 
-    override fun endVertex(): GlDrawBuffer {
+    override fun setLight(u: Float, v: Float): VertexConsumer {
+        val i = vertexCount * format.nextOffset + format.getOffset(vertexFormatIndex)
+        putUV(i, vertexFormatElement, u, v)
+        nextVertexFormatIndex()
+        return this
+    }
+
+    private fun endWriting(): GlDrawBuffer {
+        endVertex()
+
+        byteBuffer.position(0)
+        byteBuffer.limit(this.bufferSize * 4)
+
+        return this
+    }
+
+    private fun endVertex(): GlDrawBuffer {
         vertexCount++
         vertexFormatIndex = 0
         vertexFormatElement = format.getElement(vertexFormatIndex)
@@ -123,6 +137,7 @@ internal data class GlDrawBuffer(
     fun reset() {
         byteBuffer.clear()
 
+        needEnding = false
         vertexCount = 0
         vertexFormatIndex = 0
         vertexFormatElement = format.getElement(vertexFormatIndex)
@@ -143,7 +158,7 @@ internal data class GlDrawBuffer(
         MemoryUtil.memPutByte(addr + 3, alpha.toByte())
     }
 
-    private fun putTexture(i: Int, element: VertexFormatElement, u: Float, v: Float) {
+    private fun putUV(i: Int, element: VertexFormatElement, u: Float, v: Float) {
         val addr = baseAddress + i
         when (element.type) {
             VertexType.FLOAT -> {

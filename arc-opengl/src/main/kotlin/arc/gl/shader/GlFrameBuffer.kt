@@ -117,15 +117,13 @@ internal class GlFrameBuffer(
             .build()
 
         private val buffer = GlDrawBuffer(DrawerMode.TRIANGLES, vertexFormat, 256).apply {
-            addVertex(-1f, 1f, 0f).setTexture(0f, 1f).endVertex()
-            addVertex(-1f, -1f, 0f).setTexture(0f, 0f).endVertex()
-            addVertex(1f, -1f, 0f).setTexture(1f, 0f).endVertex()
+            addVertex(-1f, 1f, 0f).setTexture(0f, 1f)
+            addVertex(-1f, -1f, 0f).setTexture(0f, 0f)
+            addVertex(1f, -1f, 0f).setTexture(1f, 0f)
 
-            addVertex(-1f, 1f, 0f).setTexture(0f, 1f).endVertex()
-            addVertex(1f, -1f, 0f).setTexture(1f, 0f).endVertex()
-            addVertex(1f, 1f, 0f).setTexture(1f, 1f).endVertex()
-
-            end()
+            addVertex(-1f, 1f, 0f).setTexture(0f, 1f)
+            addVertex(1f, -1f, 0f).setTexture(1f, 0f)
+            addVertex(1f, 1f, 0f).setTexture(1f, 1f)
         }.use { it.build() }
     }
 

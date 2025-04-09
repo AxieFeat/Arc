@@ -138,28 +138,20 @@ internal data class GlModelSection(
 
                     buffer.addVertex(matrix, tempVertices[0], tempVertices[1], tempVertices[2])
                         .setTexture(uMin, vMax)
-                        .endVertex()
                     buffer.addVertex(matrix, tempVertices[3], tempVertices[4], tempVertices[5])
                         .setTexture(uMin, vMin)
-                        .endVertex()
                     buffer.addVertex(matrix, tempVertices[6], tempVertices[7], tempVertices[8])
                         .setTexture(uMax, vMin)
-                        .endVertex()
 
                     buffer.addVertex(matrix, tempVertices[6], tempVertices[7], tempVertices[8])
                         .setTexture(uMax, vMin)
-                        .endVertex()
                     buffer.addVertex(matrix, tempVertices[9], tempVertices[10], tempVertices[11])
                         .setTexture(uMax, vMax)
-                        .endVertex()
                     buffer.addVertex(matrix, tempVertices[0], tempVertices[1], tempVertices[2])
                         .setTexture(uMin, vMax)
-                        .endVertex()
                 }
             }
         }
-
-        buffer.end()
 
         return buffer
     }

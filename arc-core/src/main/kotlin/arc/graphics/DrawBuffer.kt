@@ -39,13 +39,6 @@ interface DrawBuffer : VertexConsumer, Builder<VertexBuffer>, Cleanable {
     val format: VertexFormat
 
     /**
-     * End writing to buffer.
-     *
-     * @return Current instance of [DrawBuffer].
-     */
-    fun end(): DrawBuffer
-
-    /**
      * Build current buffer in vertex buffer.
      */
     override fun build(): VertexBuffer

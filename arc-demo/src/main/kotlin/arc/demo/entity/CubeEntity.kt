@@ -58,11 +58,8 @@ class CubeEntity(
                     positions[indices[i + j] * 3 + 2]
                 )
 //                    .setTexture(uv[order[j] * 2], uv[order[j] * 2 + 1]) // TODO
-                    .endVertex()
             }
         }
-
-        it.end()
     }
 
     private var vertexBuffer = buffer.build()

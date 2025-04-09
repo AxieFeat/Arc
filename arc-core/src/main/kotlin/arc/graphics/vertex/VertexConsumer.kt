@@ -86,9 +86,6 @@ interface VertexConsumer {
      */
     fun setNormal(x: Float, y: Float, z: Float): VertexConsumer
 
-    /**
-     * End current vertex.
-     */
-    fun endVertex(): VertexConsumer
+    fun setLight(u: Float, v: Float): VertexConsumer
 
 }

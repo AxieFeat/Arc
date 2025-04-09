@@ -25,11 +25,8 @@ internal fun drawBufferSample() {
         bufferSize = 256 // Its size of buffer. DO NOT use large values unless necessary.
     )
 
-    // Add vertex info to our buffer. Not forget end vertex via endVertex()
-    buffer.addVertex(0f, 0.5f, 0f).setColor(Color.BLUE).endVertex()
-    buffer.addVertex(-0.5f, -0.5f, 0f).setColor(Color.RED).endVertex()
-    buffer.addVertex(0.5f, -0.5f, 0f).setColor(Color.GREEN).endVertex()
-
-    // Also don't forget end writing to buffer.
-    buffer.end()
+    // Add vertex info to our buffer.
+    buffer.addVertex(0f, 0.5f, 0f).setColor(Color.BLUE)
+    buffer.addVertex(-0.5f, -0.5f, 0f).setColor(Color.RED)
+    buffer.addVertex(0.5f, -0.5f, 0f).setColor(Color.GREEN)
 }
