@@ -88,13 +88,6 @@ internal data class GlDrawBuffer(
         return this
     }
 
-    override fun setLight(u: Float, v: Float): VertexConsumer {
-        val i = vertexCount * format.nextOffset + format.getOffset(vertexFormatIndex)
-        putUV(i, vertexFormatElement, u, v)
-        nextVertexFormatIndex()
-        return this
-    }
-
     private fun endWriting(): GlDrawBuffer {
         endVertex()
 
@@ -134,7 +127,7 @@ internal data class GlDrawBuffer(
         }
     }
 
-    fun reset() {
+    override fun clear() {
         byteBuffer.clear()
 
         needEnding = false

@@ -39,6 +39,11 @@ interface DrawBuffer : VertexConsumer, Builder<VertexBuffer>, Cleanable {
     val format: VertexFormat
 
     /**
+     * Clear current vertex info in buffer.
+     */
+    fun clear()
+
+    /**
      * Build current buffer in vertex buffer.
      */
     override fun build(): VertexBuffer

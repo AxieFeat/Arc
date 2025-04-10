@@ -1,6 +1,8 @@
 package arc.demo.world.block
 
 import arc.demo.world.chunk.ChunkSection
+import arc.graphics.DrawBuffer
+import arc.model.Face
 import arc.texture.TextureAtlas
 
 class Block(
@@ -11,11 +13,10 @@ class Block(
     val z: Int,
 ) {
 
-    var faces = mutableListOf<BlockFace>()
+    var viewableFaces = mutableListOf<Face>()
 
-    fun update() {
-        faces.clear()
-        faces.addAll(section.chunk.world.facesForRender(this))
+    fun update(buffer: DrawBuffer) {
+        viewableFaces.clear()
     }
 
 }

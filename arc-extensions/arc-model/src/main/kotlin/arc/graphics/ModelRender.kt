@@ -14,7 +14,7 @@ import org.jetbrains.annotations.Range
 interface ModelRender {
 
     /**
-     * Model, that this renderer render.
+     * Model, that this renderer will render.
      */
     @get:JvmName("model")
     val model: Model

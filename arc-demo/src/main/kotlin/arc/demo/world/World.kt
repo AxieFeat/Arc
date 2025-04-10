@@ -1,15 +1,9 @@
 package arc.demo.world
 
-import arc.demo.VoxelGame
-import arc.demo.shader.VertexFormatContainer
 import arc.demo.world.block.Block
-import arc.demo.world.block.BlockFace
 import arc.demo.world.chunk.Chunk
-import arc.graphics.DrawerMode
 
 class World {
-
-    val buffer = VoxelGame.application.renderSystem.drawer.begin(DrawerMode.TRIANGLES, VertexFormatContainer.positionTex, 1024)
 
     val chunks = mutableListOf<Chunk>()
 
@@ -25,12 +19,16 @@ class World {
         return chunks.find { it.x == x && it.z == z }
     }
 
-    fun facesForRender(block: Block): List<BlockFace> {
-        return listOf()
-    }
+    fun getBlock(x: Int, y: Int, z: Int): Block? {
+        chunks.forEach { chunk ->
+            chunk.sections.forEach {
+                val block = it.getBlock(x, y, z)
 
-    fun render() {
-//        VoxelGame.application.renderSystem.drawer.draw(buffer.build())
+                if(block != null) return block
+            }
+        }
+
+        return null
     }
 
 }

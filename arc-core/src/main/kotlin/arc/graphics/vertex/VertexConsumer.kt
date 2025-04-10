@@ -65,7 +65,7 @@ interface VertexConsumer {
     fun setTexture(u: Float, v: Float): VertexConsumer
 
     /**
-     * Set offsets for current vertex.
+     * Set offsets for all next vertices.
      *
      * @param x X value.
      * @param y Y value.
@@ -85,7 +85,5 @@ interface VertexConsumer {
      * @return Current instance of [VertexConsumer].
      */
     fun setNormal(x: Float, y: Float, z: Float): VertexConsumer
-
-    fun setLight(u: Float, v: Float): VertexConsumer
 
 }
