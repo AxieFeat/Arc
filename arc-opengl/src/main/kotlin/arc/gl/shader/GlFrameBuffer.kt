@@ -1,6 +1,5 @@
 package arc.gl.shader
 
-import arc.gl.graphics.GlDrawBuffer
 import arc.gl.graphics.GlDrawer
 import arc.graphics.DrawerMode
 import arc.graphics.vertex.VertexFormat
@@ -116,7 +115,7 @@ internal class GlFrameBuffer(
             .add(VertexFormatElement.UV0)
             .build()
 
-        private val buffer = GlDrawBuffer(DrawerMode.TRIANGLES, vertexFormat, 256).apply {
+        private val buffer = GlDrawer.begin(DrawerMode.TRIANGLES, vertexFormat, 256).apply {
             addVertex(-1f, 1f, 0f).setTexture(0f, 1f)
             addVertex(-1f, -1f, 0f).setTexture(0f, 0f)
             addVertex(1f, -1f, 0f).setTexture(1f, 0f)

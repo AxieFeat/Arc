@@ -9,6 +9,7 @@ import arc.graphics.vertex.VertexFormat
 import arc.util.pattern.Builder
 import arc.util.pattern.Cleanable
 import org.jetbrains.annotations.ApiStatus
+import java.nio.ByteBuffer
 
 /**
  * DrawBuffer is an interface that used for setting vertex data.
@@ -25,6 +26,18 @@ interface DrawBuffer : VertexConsumer, Builder<VertexBuffer>, Cleanable {
      */
     @get:JvmName("bufferSize")
     val bufferSize: Int
+
+    /**
+     * Byte buffer, where stored all vertex data. Use it only if known, what a do.
+     */
+    @get:JvmName("byteBuffer")
+    val byteBuffer: ByteBuffer
+
+    /**
+     * Count of vertices in this buffer.
+     */
+    @get:JvmName("vertexCount")
+    val vertexCount: Int
 
     /**
      * Represents the drawing mode used for rendering operations within the buffer.

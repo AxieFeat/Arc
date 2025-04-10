@@ -13,47 +13,31 @@ import org.jetbrains.annotations.ApiStatus
 interface VertexFormatElement {
 
     /**
+     * Name of element. Used just for debugging.
+     */
+    @get:JvmName("name")
+    val name: String
+
+    /**
      * Represents the index of a vertex format element within a [VertexFormat].
-     *
-     * The value of `index` is primarily used to identify the position of the element
-     * within a sequence of vertex attributes, allowing for precise data interpretation
-     * and processing during rendering or storage operations.
      */
     @get:JvmName("index")
     val index: Int
 
     /**
      * Represents the data type of the vertex attribute in the [VertexFormatElement].
-     *
-     * This property defines the type of data used for a vertex format element,
-     * corresponding to a specific [VertexType] enumeration value. The type determines
-     * the structure, size, and rendering behavior of the vertex attribute.
-     *
-     * @see VertexType
-     * @see VertexFormatElement
      */
     @get:JvmName("type")
     val type: VertexType
 
     /**
      * Represents the usage type of a vertex attribute in the [VertexFormatElement].
-     *
-     * This property provides access to the specific [VertexUsage] associated with the vertex format
-     * element, defining how the data within the element is intended to be used (e.g., position, color,
-     * normal, UV, etc.).
-     *
-     * @see VertexUsage
      */
     @get:JvmName("usage")
     val usage: VertexUsage
 
     /**
      * Represents the count of elements in this vertex format element.
-     *
-     * The `count` property indicates the number of individual elements that this
-     * vertex format element contains. This is often used in the context of describing
-     * the quantity of components (e.g., coordinates, colors, normals) tied to a
-     * specific vertex attribute within a rendering pipeline.
      */
     @get:JvmName("count")
     val count: Int
@@ -70,6 +54,7 @@ interface VertexFormatElement {
     interface Factory {
 
         fun create(
+            name: String,
             index: Int,
             type: VertexType,
             usage: VertexUsage,
@@ -80,17 +65,18 @@ interface VertexFormatElement {
 
     companion object {
 
-        @JvmField val POSITION = create(0, VertexType.FLOAT, VertexUsage.POSITION, 3)
-        @JvmField val COLOR = create(0, VertexType.UBYTE, VertexUsage.COLOR, 4)
-        @JvmField val UV0 = create(0, VertexType.FLOAT, VertexUsage.UV, 2)
-        @JvmField val UV1 = create(1, VertexType.SHORT, VertexUsage.UV, 2)
-        @JvmField val UV2 = create(2, VertexType.SHORT, VertexUsage.UV, 2)
-        @JvmField val NORMAL = create(0, VertexType.BYTE, VertexUsage.NORMAL, 3)
-        @JvmField val PADDING = create(0, VertexType.BYTE, VertexUsage.PADDING, 1)
+        @JvmField val POSITION = create("POSITION", 0, VertexType.FLOAT, VertexUsage.POSITION, 3)
+        @JvmField val COLOR = create("COLOR", 0, VertexType.UBYTE, VertexUsage.COLOR, 4)
+        @JvmField val UV0 = create("UV0", 0, VertexType.FLOAT, VertexUsage.UV, 2)
+        @JvmField val UV1 = create("UV1", 1, VertexType.SHORT, VertexUsage.UV, 2)
+        @JvmField val UV2 = create("UV2", 2, VertexType.SHORT, VertexUsage.UV, 2)
+        @JvmField val NORMAL = create("NORMAL", 0, VertexType.BYTE, VertexUsage.NORMAL, 3)
+        @JvmField val PADDING = create("PADDING", 0, VertexType.BYTE, VertexUsage.PADDING, 1)
 
         /**
          * Creates a new instance of [VertexFormatElement] with the specified properties.
          *
+         * @param name The name of the vertex element in the format.
          * @param index The position of the vertex element in the format.
          * @param type The data type of the vertex element, defined by [VertexType].
          * @param usage The usage type of the vertex element, defined by [VertexUsage].
@@ -100,12 +86,13 @@ interface VertexFormatElement {
          */
         @JvmStatic
         fun create(
+            name: String,
             index: Int,
             type: VertexType,
             usage: VertexUsage,
             count: Int,
         ): VertexFormatElement {
-            return Arc.factory<Factory>().create(index, type, usage, count)
+            return Arc.factory<Factory>().create(name, index, type, usage, count)
         }
 
     }

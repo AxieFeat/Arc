@@ -1,6 +1,7 @@
 package arc.graphics.vertex
 
 internal data class ArcVertexFormatElement(
+    override val name: String,
     override val index: Int,
     override val type: VertexType,
     override val usage: VertexUsage,
@@ -9,13 +10,14 @@ internal data class ArcVertexFormatElement(
 
     object Factory : VertexFormatElement.Factory {
         override fun create(
+            name: String,
             index: Int,
             type: VertexType,
             usage: VertexUsage,
             count: Int,
         ): VertexFormatElement {
             return ArcVertexFormatElement(
-                index, type, usage, count
+                name, index, type, usage, count
             )
         }
     }

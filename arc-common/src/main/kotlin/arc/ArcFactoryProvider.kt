@@ -78,6 +78,7 @@ object ArcFactoryProvider : FactoryProvider {
 
         register<VertexFormat.BuilderFactory>(ArcVertexFormat.BuilderFactory)
         register<VertexFormatElement.Factory>(ArcVertexFormatElement.Factory)
+        register<DrawBuffer.Factory>(ArcDrawBuffer.Factory)
         register<ShaderSettings.Factory>(ArcShaderSettings.Factory)
 
         // Assets

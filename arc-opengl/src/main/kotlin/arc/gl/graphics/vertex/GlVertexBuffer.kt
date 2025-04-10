@@ -1,6 +1,5 @@
 package arc.gl.graphics.vertex
 
-import arc.gl.graphics.GlDrawBuffer
 import arc.graphics.DrawBuffer
 import arc.graphics.DrawerMode
 import arc.graphics.vertex.VertexBuffer
@@ -33,8 +32,6 @@ internal data class GlVertexBuffer(
     }
 
     override fun write(drawBuffer: DrawBuffer) {
-        if(drawBuffer !is GlDrawBuffer) return
-
         count = drawBuffer.vertexCount
 
         bind()

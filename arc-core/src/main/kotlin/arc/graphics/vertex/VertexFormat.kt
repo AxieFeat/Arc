@@ -39,6 +39,13 @@ interface VertexFormat {
     val normalElementOffset: Int
 
     /**
+     * Count of elements in this format
+     */
+    @get:JvmName("count")
+    val count: Int
+        get() = elements.size
+
+    /**
      * Add [vertexFormatElement] element for this format.
      *
      * @param vertexFormatElement Some vertex format element.
