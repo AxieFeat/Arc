@@ -76,7 +76,7 @@ internal data class ArcDrawBuffer(
     }
 
     override fun setTexture(u: Float, v: Float): ArcDrawBuffer {
-        val address = beginElement(VertexFormatElement.UV0)
+        val address = beginElement(VertexFormatElement.UV)
         putTexture(address, u, v)
 
         return this
@@ -93,6 +93,13 @@ internal data class ArcDrawBuffer(
     override fun setNormal(x: Float, y: Float, z: Float): ArcDrawBuffer {
         val address = beginElement(VertexFormatElement.NORMAL)
         putNormal(address, x, y, z)
+
+        return this
+    }
+
+    override fun setLight(packedLight: Int): VertexConsumer {
+        val address = beginElement(VertexFormatElement.LIGHT)
+        putLight(address, packedLight)
 
         return this
     }
@@ -196,9 +203,17 @@ internal data class ArcDrawBuffer(
         MemoryUtil.memPutByte(addr + 3, alpha.toByte())
     }
 
+    private fun putLight(i: Int, packedLight: Int) {
+        val addr = baseAddress + i
+
+        MemoryUtil.memPutShort(addr, (packedLight and 65535).toShort())
+        MemoryUtil.memPutShort(addr + 2L, (packedLight shr 16 and 65535).toShort())
+    }
+
     private fun putTexture(i: Int, u: Float, v: Float) {
         val addr = baseAddress + i
-//
+// TODO
+
 //        when (element.type) {
 //            VertexType.FLOAT -> {
         MemoryUtil.memPutFloat(addr, u)

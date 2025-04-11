@@ -1,0 +1,7 @@
+{
+  "uniforms": [
+    "projectionMatrix",
+    "viewMatrix",
+    "Sampler"
+  ]
+}

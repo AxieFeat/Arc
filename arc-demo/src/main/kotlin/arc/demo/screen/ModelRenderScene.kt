@@ -175,7 +175,7 @@ object ModelRenderScene : Screen("main-menu") {
 
 //        modelRender.tick(partial)
 
-        modelRender.render(ShaderContainer.positionTex)
+        modelRender.render(ShaderContainer.positionTexLight)
     }
 
     private fun handleInput() {

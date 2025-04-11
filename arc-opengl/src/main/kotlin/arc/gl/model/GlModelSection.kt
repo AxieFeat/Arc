@@ -25,7 +25,8 @@ internal data class GlModelSection(
 
     private val vertexFormat = VertexFormat.builder()
         .add(VertexFormatElement.POSITION)
-        .add(VertexFormatElement.UV0)
+        .add(VertexFormatElement.UV)
+        .add(VertexFormatElement.LIGHT)
         .build()
 
     private var currentAnimation: GlAnimationProcessor? = null
@@ -75,7 +76,7 @@ internal data class GlModelSection(
     }
 
     private fun generateBuffer(): DrawBuffer {
-        val buffer = GlDrawer.begin(DrawerMode.TRIANGLES, vertexFormat, model.elements.size * 6 * 30)
+        val buffer = GlDrawer.begin(DrawerMode.TRIANGLES, vertexFormat, model.elements.size * 6 * 35)
 
         val tempVertices = FloatArray(12)
 
@@ -138,22 +139,32 @@ internal data class GlModelSection(
 
                     buffer.addVertex(matrix, tempVertices[0], tempVertices[1], tempVertices[2])
                         .setTexture(uMin, vMax)
+                        .setLight(packLight(1, 15))
                     buffer.addVertex(matrix, tempVertices[3], tempVertices[4], tempVertices[5])
                         .setTexture(uMin, vMin)
+                        .setLight(packLight(7, 15))
                     buffer.addVertex(matrix, tempVertices[6], tempVertices[7], tempVertices[8])
                         .setTexture(uMax, vMin)
+                        .setLight(packLight(10, 15))
 
                     buffer.addVertex(matrix, tempVertices[6], tempVertices[7], tempVertices[8])
                         .setTexture(uMax, vMin)
+                        .setLight(packLight(10, 15))
                     buffer.addVertex(matrix, tempVertices[9], tempVertices[10], tempVertices[11])
                         .setTexture(uMax, vMax)
+                        .setLight(packLight(7, 15))
                     buffer.addVertex(matrix, tempVertices[0], tempVertices[1], tempVertices[2])
                         .setTexture(uMin, vMax)
+                        .setLight(packLight(1, 15))
                 }
             }
         }
 
         return buffer
+    }
+
+    private fun packLight(blockLight: Int, skyLight: Int): Int {
+        return ((skyLight and 0xF) shl 16) or (blockLight and 0xF)
     }
 
 }

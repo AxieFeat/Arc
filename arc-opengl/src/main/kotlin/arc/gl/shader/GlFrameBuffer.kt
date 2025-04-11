@@ -112,7 +112,7 @@ internal class GlFrameBuffer(
     companion object {
         private val vertexFormat = VertexFormat.builder()
             .add(VertexFormatElement.POSITION)
-            .add(VertexFormatElement.UV0)
+            .add(VertexFormatElement.UV)
             .build()
 
         private val buffer = GlDrawer.begin(DrawerMode.TRIANGLES, vertexFormat, 256).apply {
