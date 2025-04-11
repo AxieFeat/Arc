@@ -1,7 +1,6 @@
 package arc.math
 
 import arc.Arc
-import arc.annotations.ImmutableType
 import arc.annotations.TypeFactory
 import org.jetbrains.annotations.ApiStatus
 
@@ -12,7 +11,6 @@ import org.jetbrains.annotations.ApiStatus
  * These points describe the boundaries of the box in 3D space.
  */
 @Suppress("INAPPLICABLE_JVM_NAME")
-@ImmutableType
 interface AABB {
 
     /**
@@ -21,7 +19,7 @@ interface AABB {
      * Represents the lower corner of the box in 3D space, defined by its smallest x, y, and z values.
      */
     @get:JvmName("min")
-    val min: Vec3f
+    var min: Vec3f
 
     /**
      * The maximum point of this axis-aligned bounding box.
@@ -29,7 +27,7 @@ interface AABB {
      * Represents the upper corner of the box in 3D space, defined by its largest x, y, and z values.
      */
     @get:JvmName("max")
-    val max: Vec3f
+    var max: Vec3f
 
     /**
      * The center point of this axis-aligned bounding box.
@@ -77,6 +75,7 @@ interface AABB {
          *
          * @return A new instance of [AABB] defined by the specified minimum and maximum points.
          */
+        @JvmStatic
         fun of(min: Vec3f, max: Vec3f): AABB = Arc.factory<Factory>().create(min, max)
 
     }

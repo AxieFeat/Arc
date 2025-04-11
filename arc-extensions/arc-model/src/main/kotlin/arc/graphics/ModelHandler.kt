@@ -2,6 +2,7 @@ package arc.graphics
 
 import arc.Arc
 import arc.annotations.TypeFactory
+import arc.math.AABB
 import arc.model.Model
 import arc.shader.ShaderInstance
 import org.jetbrains.annotations.ApiStatus
@@ -11,13 +12,19 @@ import org.jetbrains.annotations.Range
  * This interface represents renderer of models.
  */
 @Suppress("INAPPLICABLE_JVM_NAME")
-interface ModelRender {
+interface ModelHandler {
 
     /**
-     * Model, that this renderer will render.
+     * Model, that this handler will render.
      */
     @get:JvmName("model")
     val model: Model
+
+    /**
+     * Bounding box of this model.
+     */
+    @get:JvmName("aabb")
+    val aabb: AABB
 
     /**
      * Tick animation. Call it before [render].
@@ -65,8 +72,8 @@ interface ModelRender {
      */
     fun scale(
         x: @Range(from = 0, to = 1) Float = 1f,
-        y: @Range(from = 0, to = 1) Float = 1f,
-        z: @Range(from = 0, to = 1) Float = 1f
+        y: @Range(from = 0, to = 1) Float = x,
+        z: @Range(from = 0, to = 1) Float = y
     )
 
     /**
@@ -82,7 +89,7 @@ interface ModelRender {
     @ApiStatus.Internal
     interface Factory {
 
-        fun create(model: Model): ModelRender
+        fun create(model: Model): ModelHandler
 
     }
 
@@ -93,10 +100,10 @@ interface ModelRender {
          *
          * @param model Model to wrap.
          *
-         * @return New instance of [ModelRender].
+         * @return New instance of [ModelHandler].
          */
         @JvmStatic
-        fun of(model: Model): ModelRender {
+        fun of(model: Model): ModelHandler {
             return Arc.factory<Factory>().create(model)
         }
 

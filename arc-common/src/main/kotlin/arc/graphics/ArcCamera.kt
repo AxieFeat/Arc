@@ -16,6 +16,7 @@ internal data class ArcCamera(
 
     override var view: Matrix4f = Matrix4f()
     override var projection: Matrix4f = Matrix4f()
+    override val combined: Matrix4f = Matrix4f()
 
     override var position: Point3d = Point3d.ZERO
     override var rotation: Quaternionf = Quaternionf()
@@ -72,6 +73,8 @@ internal data class ArcCamera(
                 up
             )
         }
+
+        combined.set(projection).mul(view)
     }
 
     override fun updateAspect(width: Int, height: Int) {
@@ -89,6 +92,7 @@ internal data class ArcCamera(
     override fun reset() {
         view.identity()
         projection.identity()
+        combined.set(projection).mul(view)
         lookAtTarget = null
         rotation.identity()
         position = Point3d.ZERO

@@ -45,6 +45,12 @@ interface Camera {
     var projection: Matrix4f
 
     /**
+     * Combined view and projection matrices.
+     */
+    @get:JvmName("combined")
+    val combined: Matrix4f
+
+    /**
      * Position of camera in 3d space.
      */
     @get:JvmName("position")

@@ -2,14 +2,14 @@ package arc.gl
 
 import arc.Application
 import arc.ArcFactoryProvider
-import arc.gl.model.GlModelRender
+import arc.gl.model.GlModelHandler
 import arc.gl.graphics.vertex.GlVertexBuffer
 import arc.gl.shader.GlBlendMode
 import arc.gl.shader.GlFrameBuffer
 import arc.gl.shader.GlShaderInstance
 import arc.gl.texture.GlTexture
 import arc.gl.texture.GlTextureAtlas
-import arc.graphics.ModelRender
+import arc.graphics.ModelHandler
 import arc.graphics.vertex.VertexBuffer
 import arc.register
 import arc.shader.BlendMode
@@ -34,6 +34,6 @@ internal object GlFactoryProvider {
         provider.register<VertexBuffer.Factory>(GlVertexBuffer.Factory)
         provider.register<BlendMode.Factory>(GlBlendMode.Factory)
 
-        provider.register<ModelRender.Factory>(GlModelRender.Factory)
+        provider.register<ModelHandler.Factory>(GlModelHandler.Factory)
     }
 }

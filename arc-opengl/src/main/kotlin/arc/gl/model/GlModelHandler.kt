@@ -1,22 +1,38 @@
 package arc.gl.model
 
-import arc.graphics.ModelRender
+import arc.graphics.ModelHandler
+import arc.math.AABB
+import arc.math.Vec3f
 import arc.model.Element
 import arc.model.Model
+import arc.model.cube.Cube
 import arc.model.texture.ModelTexture
 import arc.shader.ShaderInstance
 import arc.texture.Texture
 import org.joml.Math
 import org.joml.Matrix4f
 import org.joml.Quaternionf
+import org.joml.Vector3f
 import java.util.*
 
-internal data class GlModelRender(
+internal data class GlModelHandler(
     override val model: Model
-) : ModelRender {
+) : ModelHandler {
 
     private val matrix = Matrix4f()
     private val rotation = Quaternionf()
+
+    private val cachedAabb = AABB.of(Vec3f.ZERO, Vec3f.ZERO)
+    private var matrixDirty = true
+
+    override val aabb: AABB
+        get() {
+            if (matrixDirty) {
+                recalculateAABB()
+                matrixDirty = false
+            }
+            return cachedAabb
+        }
 
     private val textures = model.textures.map { it.toTexture() }
 
@@ -76,14 +92,50 @@ internal data class GlModelRender(
         )
 
         matrix.rotation(rotation)
+        matrixDirty = true
     }
 
     override fun scale(x: Float, y: Float, z: Float) {
         matrix.scale(x, y, z)
+        matrixDirty = true
     }
 
     override fun position(x: Float, y: Float, z: Float) {
         matrix.translate(x, y, z)
+        matrixDirty = true
+    }
+
+    private fun recalculateAABB() {
+        var minX = Float.POSITIVE_INFINITY
+        var minY = Float.POSITIVE_INFINITY
+        var minZ = Float.POSITIVE_INFINITY
+
+        var maxX = Float.NEGATIVE_INFINITY
+        var maxY = Float.NEGATIVE_INFINITY
+        var maxZ = Float.NEGATIVE_INFINITY
+
+        val temp = Vector3f()
+
+        model.elements.filterIsInstance<Cube>().forEach { element ->
+            val corners = listOf(
+                Vector3f(element.from.x.toFloat(), element.from.y.toFloat(), element.from.z.toFloat()),
+                Vector3f(element.to.x.toFloat(), element.to.y.toFloat(), element.to.z.toFloat())
+            )
+
+            corners.forEach { corner ->
+                matrix.transformPosition(corner, temp)
+
+                minX = Math.min(minX, temp.x)
+                minY = Math.min(minY, temp.y)
+                minZ = Math.min(minZ, temp.z)
+                maxX = Math.max(maxX, temp.x)
+                maxY = Math.max(maxY, temp.y)
+                maxZ = Math.max(maxZ, temp.z)
+            }
+        }
+
+        cachedAabb.min = Vec3f.of(minX, minY, minZ)
+        cachedAabb.max = Vec3f.of(maxX, maxY, maxZ)
     }
 
     private fun ModelTexture.toTexture(): Texture {
@@ -94,10 +146,9 @@ internal data class GlModelRender(
         )
     }
 
-    object Factory : ModelRender.Factory {
-        override fun create(model: Model): ModelRender {
-            return GlModelRender(model)
+    object Factory : ModelHandler.Factory {
+        override fun create(model: Model): ModelHandler {
+            return GlModelHandler(model)
         }
     }
-
 }

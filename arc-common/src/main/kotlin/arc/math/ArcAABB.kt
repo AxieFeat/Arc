@@ -4,8 +4,8 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 internal data class ArcAABB(
-    override val min: Vec3f,
-    override val max: Vec3f
+    override var min: Vec3f,
+    override var max: Vec3f
 ) : AABB {
 
     override val center: Vec3f

@@ -1,7 +1,7 @@
 package arc.demo.screen
 
 import arc.demo.shader.ShaderContainer
-import arc.graphics.ModelRender
+import arc.graphics.ModelHandler
 import arc.input.KeyCode
 import arc.lwamodel.LwaModel
 import arc.lwamodel.animation.LwamAnimation
@@ -145,7 +145,7 @@ object ModelRenderScene : Screen("main-menu") {
         ),
     )
 
-    private val modelRender = ModelRender.of(model)
+    private val modelHandler = ModelHandler.of(model)
 
     private val front = Vector3f()
     private val right = Vector3f()
@@ -167,15 +167,18 @@ object ModelRenderScene : Screen("main-menu") {
 
         application.window.isVsync = true
 
-//        modelRender.playAnimation("animation")
+//        modelHandler.playAnimation("animation")
     }
 
     override fun doRender() {
         handleInput()
 
-//        modelRender.tick(partial)
+//        modelHandler.tick(partial)
 
-        modelRender.render(ShaderContainer.positionTexLight)
+        if(camera.frustum.isBoxInFrustum(modelHandler.aabb)) {
+            println("Render")
+            modelHandler.render(ShaderContainer.positionTexLight)
+        }
     }
 
     private fun handleInput() {

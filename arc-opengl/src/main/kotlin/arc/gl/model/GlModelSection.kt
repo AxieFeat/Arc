@@ -44,6 +44,7 @@ internal data class GlModelSection(
         }.use {
             GlDrawer.draw(it)
         }
+        matrix.identity()
     }
 
     fun playAnimation(animation: Animation) {
