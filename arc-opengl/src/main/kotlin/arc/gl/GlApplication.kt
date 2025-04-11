@@ -44,6 +44,7 @@ object GlApplication : AbstractApplication() {
     }
 
     override fun close() {
+        soundEngine.stop()
         window.close()
     }
 
