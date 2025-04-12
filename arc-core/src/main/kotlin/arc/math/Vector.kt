@@ -5,13 +5,11 @@ import arc.util.pattern.Copyable
 /**
  * Encapsulates a general vector.
  */
-@Suppress("INAPPLICABLE_JVM_NAME")
 interface Vector<T : Vector<T>> : Copyable<T> {
 
     /**
      * The euclidean length of this vector.
      */
-    @get:JvmName("len")
     val len: Float
 
     /**
@@ -19,7 +17,6 @@ interface Vector<T : Vector<T>> : Copyable<T> {
      * but not for getting exact lengths, as the return value is the square of the actual length.
      * @return The squared euclidean length
      */
-    @get:JvmName("len2")
     val len2: Float
 
     /**
@@ -166,18 +163,6 @@ interface Vector<T : Vector<T>> : Copyable<T> {
      */
     fun lerp(target: T, alpha: Float): T
 
-//    /**
-//     * Interpolates between this vector and the given target vector by alpha (within range [0,1]) using the given Interpolation
-//     * method. the result is stored in this vector.
-//     *
-//     * @param target The target vector.
-//     * @param alpha The interpolation coefficient.
-//     * @param interpolator An Interpolation object describing the used interpolation method.
-//     *
-//     * @return This vector for chaining.
-//     */
-//    fun interpolate(target: T, alpha: Float, interpolator: Interpolator): T
-
     /**
      * Sets this vector to the unit vector with a random direction.
      *
@@ -188,7 +173,6 @@ interface Vector<T : Vector<T>> : Copyable<T> {
     /**
      * Whether this vector is a unit length vector.
      */
-    @get:JvmName("isUnit")
     val isUnit: Boolean
 
     /**
@@ -199,7 +183,6 @@ interface Vector<T : Vector<T>> : Copyable<T> {
     /**
      * Whether this vector is a zero vector.
      */
-    @get:JvmName("isZero")
     val isZero: Boolean
 
     /**

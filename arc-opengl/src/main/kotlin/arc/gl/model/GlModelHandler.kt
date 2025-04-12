@@ -85,13 +85,18 @@ internal data class GlModelHandler(
     }
 
     override fun rotate(x: Float, y: Float, z: Float) {
-        rotation.rotateXYZ(
+//        rotation.rotateXYZ(
+//            Math.toRadians(x),
+//            Math.toRadians(y),
+//            Math.toRadians(z)
+//        )
+        matrix.rotateXYZ(
             Math.toRadians(x),
             Math.toRadians(y),
             Math.toRadians(z)
-        )
+        ).normal()
 
-        matrix.rotation(rotation)
+//        matrix.rotation(rotation)
         matrixDirty = true
     }
 
@@ -117,9 +122,18 @@ internal data class GlModelHandler(
         val temp = Vector3f()
 
         model.elements.filterIsInstance<Cube>().forEach { element ->
+            val x0 = element.from.x.toFloat()
+            val y0 = element.from.y.toFloat()
+            val z0 = element.from.z.toFloat()
+            val x1 = element.to.x.toFloat()
+            val y1 = element.to.y.toFloat()
+            val z1 = element.to.z.toFloat()
+
             val corners = listOf(
-                Vector3f(element.from.x.toFloat(), element.from.y.toFloat(), element.from.z.toFloat()),
-                Vector3f(element.to.x.toFloat(), element.to.y.toFloat(), element.to.z.toFloat())
+                Vector3f(x0, y0, z0), Vector3f(x1, y0, z0),
+                Vector3f(x1, y1, z0), Vector3f(x0, y1, z0),
+                Vector3f(x0, y0, z1), Vector3f(x1, y0, z1),
+                Vector3f(x1, y1, z1), Vector3f(x0, y1, z1)
             )
 
             corners.forEach { corner ->
@@ -128,6 +142,7 @@ internal data class GlModelHandler(
                 minX = Math.min(minX, temp.x)
                 minY = Math.min(minY, temp.y)
                 minZ = Math.min(minZ, temp.z)
+
                 maxX = Math.max(maxX, temp.x)
                 maxY = Math.max(maxY, temp.y)
                 maxZ = Math.max(maxZ, temp.z)
@@ -137,6 +152,7 @@ internal data class GlModelHandler(
         cachedAabb.min = Vec3f.of(minX, minY, minZ)
         cachedAabb.max = Vec3f.of(maxX, maxY, maxZ)
     }
+
 
     private fun ModelTexture.toTexture(): Texture {
         val image = Base64.getDecoder().decode(base64Image)

@@ -11,37 +11,31 @@ import org.jetbrains.annotations.ApiStatus
  * With VertexFormat you designate what parameters the shader accepts.
  */
 @MutableType
-@Suppress("INAPPLICABLE_JVM_NAME")
 interface VertexFormat {
 
     /**
      * Elements of this format.
      */
-    @get:JvmName("elements")
     val elements: List<VertexFormatElement>
 
     /**
      * Offsets list.
      */
-    @get:JvmName("offsets")
     val offsets: List<Int>
 
     /**
      * Offset of next element.
      */
-    @get:JvmName("nextOffset")
     val nextOffset: Int
 
     /**
      * Normalized element offset.
      */
-    @get:JvmName("normalElementOffset")
     val normalElementOffset: Int
 
     /**
      * Count of elements in this format
      */
-    @get:JvmName("count")
     val count: Int
         get() = elements.size
 

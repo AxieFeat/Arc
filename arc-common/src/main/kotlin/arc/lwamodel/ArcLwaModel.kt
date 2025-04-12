@@ -3,14 +3,7 @@ package arc.lwamodel
 import arc.lwamodel.animation.LwamAnimation
 import arc.lwamodel.group.LwamElementGroup
 import arc.lwamodel.texture.LwamTexture
-import arc.util.UUIDSerializer
-import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.decodeFromByteArray
-import kotlinx.serialization.encodeToByteArray
-import kotlinx.serialization.modules.SerializersModule
-import kotlinx.serialization.protobuf.ProtoBuf
-import java.util.*
 
 @Serializable
 internal data class ArcLwaModel(

@@ -14,32 +14,27 @@ import org.jetbrains.annotations.ApiStatus
  *
  * @sample arc.sample.meshSample
  */
-@Suppress("INAPPLICABLE_JVM_NAME")
 @ImmutableType
 interface VertexBuffer : Bindable, Cleanable {
 
     /**
      * ID of this buffer in Render system.
      */
-    @get:JvmName("id")
     val id: Int
 
     /**
      * Vertex format of this buffer.
      */
-    @get:JvmName("format")
     val format: VertexFormat
 
     /**
      * Mode of drawing of this buffer.
      */
-    @get:JvmName("mode")
     val mode: DrawerMode
 
     /**
      * Count of vertices in this buffer.
      */
-    @get:JvmName("size")
     val size: Int
 
     /**

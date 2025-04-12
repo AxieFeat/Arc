@@ -9,13 +9,11 @@ package arc.input
  * @see InputDevice
  * @see Binding
  */
-@Suppress("INAPPLICABLE_JVM_NAME")
 interface BindingProcessor {
 
     /**
      * List of all bindings.
      */
-    @get:JvmName("bindings")
     val bindings: List<BindingLike>
 
     /**

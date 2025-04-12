@@ -10,7 +10,6 @@ import org.jetbrains.annotations.ApiStatus
  * An AABB is defined by two 3D vectors: the minimum and maximum points.
  * These points describe the boundaries of the box in 3D space.
  */
-@Suppress("INAPPLICABLE_JVM_NAME")
 interface AABB {
 
     /**
@@ -18,7 +17,6 @@ interface AABB {
      *
      * Represents the lower corner of the box in 3D space, defined by its smallest x, y, and z values.
      */
-    @get:JvmName("min")
     var min: Vec3f
 
     /**
@@ -26,13 +24,11 @@ interface AABB {
      *
      * Represents the upper corner of the box in 3D space, defined by its largest x, y, and z values.
      */
-    @get:JvmName("max")
     var max: Vec3f
 
     /**
      * The center point of this axis-aligned bounding box.
      */
-    @get:JvmName("center")
     val center: Vec3f
 
     /**
@@ -66,6 +62,12 @@ interface AABB {
     }
 
     companion object {
+
+        /**
+         * [AABB] with zero values.
+         */
+        @JvmField
+        val ZERO = of(Vec3f.of(0f, 0f, 0f), Vec3f.of(0f, 0f, 0f))
 
         /**
          * Creates a new instance of an axis-aligned bounding box (AABB) using the given minimum and maximum points.

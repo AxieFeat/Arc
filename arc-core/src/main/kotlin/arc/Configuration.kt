@@ -7,44 +7,37 @@ import org.jetbrains.annotations.ApiStatus
 /**
  * This interface represents configuration of Arc.
  */
-@Suppress("INAPPLICABLE_JVM_NAME")
 @ImmutableType
 interface Configuration {
 
     /**
      * Name of window.
      */
-    @get:JvmName("windowName")
     val windowName: String
 
     /**
      * Width of window.
      */
-    @get:JvmName("windowWidth")
     val windowWidth: Int
 
     /**
      * Height of window.
      */
-    @get:JvmName("windowHeight")
     val windowHeight: Int
 
     /**
      * A bit depth of window.
      */
-    @get:JvmName("windowBitDepth")
     val windowBitDepth: Int
 
     /**
      * Refresh rate limit of window.
      */
-    @get:JvmName("windowRefreshRate")
     val windowRefreshRate: Int
 
     /**
      * Is window in fullscreen.
      */
-    @get:JvmName("windowFullScreen")
     val windowFullScreen: Boolean
 
     @ApiStatus.Internal

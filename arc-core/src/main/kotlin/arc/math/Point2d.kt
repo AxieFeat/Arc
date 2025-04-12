@@ -12,20 +12,17 @@ import kotlin.jvm.Throws
 /**
  * A point in a 2D grid, with integer x and y coordinates
  */
-@Suppress("INAPPLICABLE_JVM_NAME")
 @MutableType
 interface Point2d : Copyable<Point2d>, Interpolatable<Point2d> {
 
     /**
      * X position.
      */
-    @get:JvmName("x")
     var x: Double
 
     /**
      * Y position.
      */
-    @get:JvmName("y")
     var y: Double
 
     /**

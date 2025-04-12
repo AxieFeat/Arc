@@ -17,38 +17,32 @@ import java.nio.ByteBuffer
  *
  * @sample arc.sample.drawBufferSample
  */
-@Suppress("INAPPLICABLE_JVM_NAME")
 @MutableType
 interface DrawBuffer : VertexConsumer, Builder<VertexBuffer>, Cleanable {
 
     /**
      * Size of buffer.
      */
-    @get:JvmName("bufferSize")
     val bufferSize: Int
 
     /**
      * Byte buffer, where stored all vertex data. Use it only if known, what a do.
      */
-    @get:JvmName("byteBuffer")
     val byteBuffer: ByteBuffer
 
     /**
      * Count of vertices in this buffer.
      */
-    @get:JvmName("vertexCount")
     val vertexCount: Int
 
     /**
      * Represents the drawing mode used for rendering operations within the buffer.
      */
-    @get:JvmName("mode")
     val mode: DrawerMode
 
     /**
      * Represents the format structure of the vertices used in the `DrawBuffer`.
      */
-    @get:JvmName("format")
     val format: VertexFormat
 
     /**

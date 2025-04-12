@@ -9,7 +9,6 @@ import org.jetbrains.annotations.ApiStatus
 /**
  * Represents a texture in the rendering system.
  */
-@Suppress("INAPPLICABLE_JVM_NAME")
 @ImmutableType
 interface Texture : TextureLike {
 

@@ -16,31 +16,26 @@ import org.joml.Vector4f
  *
  * @sample arc.sample.shaderInstanceSample
  */
-@Suppress("INAPPLICABLE_JVM_NAME")
 interface ShaderInstance : Bindable, Cleanable {
 
     /**
      * ID of this shader in render system.
      */
-    @get:JvmName("id")
     val id: Int
 
     /**
      * The vertex shader associated with this shader instance.
      */
-    @get:JvmName("vertex")
     val vertex: String
 
     /**
      * The fragment shader associated with this shader instance.
      */
-    @get:JvmName("fragment")
     val fragment: String
 
     /**
      * Settings of shader.
      */
-    @get:JvmName("settings")
     val settings: ShaderSettings
 
     /**

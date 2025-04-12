@@ -11,14 +11,12 @@ import arc.util.pattern.Identifiable
  * @see Cube
  * @see Model
  */
-@Suppress("INAPPLICABLE_JVM_NAME")
 @ImmutableType
 interface Element : Identifiable {
 
     /**
      * The origin point of the 3D element in space.
      */
-    @get:JvmName("origin")
     val origin: Point3d
 
 }

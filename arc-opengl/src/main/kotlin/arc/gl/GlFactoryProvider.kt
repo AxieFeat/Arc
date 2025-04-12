@@ -2,6 +2,8 @@ package arc.gl
 
 import arc.Application
 import arc.ArcFactoryProvider
+import arc.display.Display
+import arc.gl.display.GlDisplay
 import arc.gl.model.GlModelHandler
 import arc.gl.graphics.vertex.GlVertexBuffer
 import arc.gl.shader.GlBlendMode
@@ -35,5 +37,7 @@ internal object GlFactoryProvider {
         provider.register<BlendMode.Factory>(GlBlendMode.Factory)
 
         provider.register<ModelHandler.Factory>(GlModelHandler.Factory)
+
+        provider.register<Display.Factory>(GlDisplay.Factory)
     }
 }

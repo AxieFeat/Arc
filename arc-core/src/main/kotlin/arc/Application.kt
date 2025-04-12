@@ -38,7 +38,6 @@ import java.io.File
  * )
  * ```
  */
-@Suppress("INAPPLICABLE_JVM_NAME")
 @MutableType
 interface Application {
 
@@ -46,7 +45,6 @@ interface Application {
      * Provides access to platform-specific information and capabilities
      * for the application, such as device and OS details.
      */
-    @get:JvmName("platform")
     val platform: Platform
 
     /**
@@ -55,43 +53,36 @@ interface Application {
      * @throws WindowException If window is not initialized yet.
      */
     @get:Throws(WindowException::class)
-    @get:JvmName("window")
     val window: Window
 
     /**
      * Render system of application.
      */
-    @get:JvmName("renderSystem")
     val renderSystem: RenderSystem
 
     /**
      * Sound engine of application.
      */
-    @get:JvmName("soundEngine")
     val soundEngine: SoundEngine
 
     /**
      * Location space of application.
      */
-    @get:JvmName("locationSpace")
     val locationSpace: LocationSpace
 
     /**
      * Mouse input device of this application.
      */
-    @get:JvmName("mouse")
     val mouse: MouseInput
 
     /**
      * Keyboard input device of this application.
      */
-    @get:JvmName("keyboard")
     val keyboard: KeyboardInput
 
     /**
      * Represents the current text stored in the system clipboard.
      */
-    @get:JvmName("clipboardText")
     var clipboardText: String
 
     /**

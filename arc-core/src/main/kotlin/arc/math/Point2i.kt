@@ -12,20 +12,17 @@ import kotlin.jvm.Throws
 /**
  * This interface represents a 2D point with integer values.
  */
-@Suppress("INAPPLICABLE_JVM_NAME")
 @MutableType
 interface Point2i : Copyable<Point2i>, Interpolatable<Point2i> {
 
     /**
      * The X-coordinate of the 2D point.
      */
-    @get:JvmName("x")
     var x: Int
 
     /**
      * The Y-coordinate of the 2D point.
      */
-    @get:JvmName("y")
     var y: Int
 
     /**

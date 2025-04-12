@@ -3,13 +3,11 @@ package arc.audio
 /**
  * This interface represents sound engine.
  */
-@Suppress("INAPPLICABLE_JVM_NAME")
 interface SoundEngine {
 
     /**
      * Currently playing sounds.
      */
-    @get:JvmName("playing")
     val playing: Set<Sound>
 
     /**

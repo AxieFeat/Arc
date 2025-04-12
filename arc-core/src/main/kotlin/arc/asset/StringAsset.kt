@@ -7,14 +7,12 @@ import arc.annotations.ImmutableType
  *
  * @see RuntimeAsset
  */
-@Suppress("INAPPLICABLE_JVM_NAME")
 @ImmutableType
 interface StringAsset : AssetLike {
 
     /**
      * String of this asset.
      */
-    @get:JvmName("text")
     val text: String
 
 }

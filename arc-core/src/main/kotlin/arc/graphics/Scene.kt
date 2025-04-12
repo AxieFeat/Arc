@@ -3,37 +3,31 @@ package arc.graphics
 /**
  * This interface represents renderable scene of engine.
  */
-@Suppress("INAPPLICABLE_JVM_NAME")
 interface Scene {
 
     /**
      * Drawer, that this scene use.
      */
-    @get:JvmName("drawer")
     val drawer: Drawer
 
     /**
      * Camera of this scene.
      */
-    @get:JvmName("camera")
     val camera: Camera
 
     /**
      * Count of fps in this scene.
      */
-    @get:JvmName("fps")
     val fps: Int
 
     /**
      * Partial tick of this scene.
      */
-    @get:JvmName("partial")
     val partial: Float
 
     /**
      * Is this scene using now.
      */
-    @get:JvmName("inUse")
     val inUse: Boolean
 
     /**
@@ -44,7 +38,6 @@ interface Scene {
     /**
      * Is cursor showed in window.
      */
-    @get:JvmName("showCursor")
     var showCursor: Boolean
 
     /**

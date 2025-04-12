@@ -40,3 +40,5 @@ include("arc-extensions:arc-font")
 findProject(":arc-extensions:arc-font")?.name = "arc-font"
 include("arc-extensions:arc-model")
 findProject(":arc-extensions:arc-model")?.name = "arc-model"
+include("arc-extensions:arc-display")
+findProject(":arc-extensions:arc-display")?.name = "arc-display"

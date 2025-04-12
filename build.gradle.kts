@@ -4,6 +4,7 @@ plugins {
     checkstyle
     kotlin("jvm") version "2.0.21"
     id("pw.qubique.infrastructure.build-system") version ("0.0.2-snapshot")
+    kotlin("plugin.serialization") version "2.0.0"
 }
 
 allprojects {

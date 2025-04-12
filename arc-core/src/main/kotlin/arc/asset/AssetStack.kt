@@ -10,14 +10,12 @@ import org.jetbrains.annotations.ApiStatus
  *
  * @param T The type of asset contained in the stack, which must implement the [AssetLike] interface.
  */
-@Suppress("INAPPLICABLE_JVM_NAME")
 @ImmutableType
 interface AssetStack<T : AssetLike> : Iterable<T> {
 
     /**
      * Set of all assets in this stack.
      */
-    @get:JvmName("assets")
     val assets: Set<T>
 
     @ApiStatus.Internal

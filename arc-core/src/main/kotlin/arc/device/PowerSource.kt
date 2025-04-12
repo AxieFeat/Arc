@@ -10,7 +10,6 @@ import java.time.LocalDate
  *
  * @see Device
  */
-@Suppress("INAPPLICABLE_JVM_NAME")
 @ImmutableType
 interface PowerSource {
 
@@ -19,7 +18,6 @@ interface PowerSource {
      *
      * @return The power source name, as reported by the operating system.
      */
-    @get:JvmName("name")
     val name: String
 
     /**
@@ -27,7 +25,6 @@ interface PowerSource {
      *
      * @return The power source name, as reported by the device itself.
      */
-    @get:JvmName("deviceName")
     val deviceName: String
 
     /**
@@ -38,7 +35,6 @@ interface PowerSource {
      *
      * @return A value between 0.0 (fully drained) and 1.0 (fully charged).
      */
-    @get:JvmName("remainingCapacityPercent")
     val remainingCapacityPercent: Double
 
     /**
@@ -49,7 +45,6 @@ interface PowerSource {
      *
      * @return If positive, seconds remaining. If negative, -1.0 (calculating) or -2.0 (unlimited).
      */
-    @get:JvmName("timeRemainingEstimated")
     val timeRemainingEstimated: Double
 
     /**
@@ -62,7 +57,6 @@ interface PowerSource {
      *
      * @return Seconds remaining to fully discharge or fully charge the battery.
      */
-    @get:JvmName("timeRemainingInstant")
     val timeRemainingInstant: Double
 
     /**
@@ -70,7 +64,6 @@ interface PowerSource {
      *
      * @return If positive, the charge rate. If negative, the discharge rate.
      */
-    @get:JvmName("powerUsageRate")
     val powerUsageRate: Double
 
     /**
@@ -78,7 +71,6 @@ interface PowerSource {
      *
      * @return The battery voltage, or -1 if unknown.
      */
-    @get:JvmName("voltage")
     val voltage: Double
 
     /**
@@ -86,7 +78,6 @@ interface PowerSource {
      *
      * @return The battery amperage. If positive, charging the battery. If negative, discharging the battery.
      */
-    @get:JvmName("amperage")
     val amperage: Double
 
     /**
@@ -94,7 +85,6 @@ interface PowerSource {
      *
      * @return `true` if plugged in, `false` otherwise.
      */
-    @get:JvmName("powerOnLine")
     val powerOnLine: Boolean
 
     /**
@@ -102,7 +92,6 @@ interface PowerSource {
      *
      * @return `true` if the battery is charging, `false` otherwise.
      */
-    @get:JvmName("charging")
     val charging: Boolean
 
     /**
@@ -110,7 +99,6 @@ interface PowerSource {
      *
      * @return `true` if the battery is discharging, `false` otherwise.
      */
-    @get:JvmName("discharging")
     val discharging: Boolean
 
     /**
@@ -118,7 +106,6 @@ interface PowerSource {
      *
      * @return The units of battery capacity.
      */
-    @get:JvmName("capacityUnits")
     val capacityUnits: CapacityUnits
 
     /**
@@ -126,7 +113,6 @@ interface PowerSource {
      *
      * @return The current capacity. Units are defined by [.getCapacityUnits].
      */
-    @get:JvmName("currentCapacity")
     val currentCapacity: Int
 
     /**
@@ -135,7 +121,6 @@ interface PowerSource {
      *
      * @return The maximum capacity. Units are defined by [capacityUnits].
      */
-    @get:JvmName("maxCapacity")
     val maxCapacity: Int
 
     /**
@@ -144,7 +129,6 @@ interface PowerSource {
      *
      * @return The design capacity. Units are defined by [capacityUnits].
      */
-    @get:JvmName("designCapacity")
     val designCapacity: Int
 
     /**
@@ -152,7 +136,6 @@ interface PowerSource {
      *
      * @return The cycle count of the battery, or -1 if unknown.
      */
-    @get:JvmName("cycleCount")
     val cycleCount: Int
 
     /**
@@ -160,7 +143,6 @@ interface PowerSource {
      *
      * @return The battery chemistry.
      */
-    @get:JvmName("chemistry")
     val chemistry: String
 
     /**
@@ -171,7 +153,6 @@ interface PowerSource {
      *
      * @return The manufacture date, if available. May be `null`.
      */
-    @get:JvmName("manufactureDate")
     val manufactureDate: LocalDate?
 
     /**
@@ -179,7 +160,6 @@ interface PowerSource {
      *
      * @return The manufacturer name.
      */
-    @get:JvmName("manufacturer")
     val manufacturer: String
 
     /**
@@ -190,7 +170,6 @@ interface PowerSource {
      *
      * @return The serial number.
      */
-    @get:JvmName("serialNumber")
     val serialNumber: String
 
     /**
@@ -198,7 +177,6 @@ interface PowerSource {
      *
      * @return The battery's temperature, or 0 if uknown.
      */
-    @get:JvmName("temperature")
     val temperature: Double
 
     /**

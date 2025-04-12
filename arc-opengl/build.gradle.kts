@@ -5,22 +5,27 @@ val macosNatives = "natives-macos"
 val macosArmNatives = "natives-macos-arm64"
 
 private val natives = listOf(
+    "org.lwjgl:lwjgl",
+    "org.lwjgl:lwjgl-glfw",
+    "org.lwjgl:lwjgl-openal",
+    "org.lwjgl:lwjgl-stb",
     "org.lwjgl:lwjgl-opengl",
-    "org.lwjgl:lwjgl-stb"
 )
 
 dependencies {
     api(project(":arc-common"))
 
+    implementation(project(":arc-extensions:arc-model"))
+    implementation(project(":arc-extensions:arc-display"))
+
     // Natives for every OS
     natives.forEach { name ->
-        api("$name:$lwjglVersion")
-        api("$name:$lwjglVersion:$winNatives")
-        api("$name:$lwjglVersion:$linuxNatives")
-        api("$name:$lwjglVersion:$macosNatives")
-        api("$name:$lwjglVersion:$macosArmNatives")
+        implementation("$name:$lwjglVersion")
+        implementation("$name:$lwjglVersion:$winNatives")
+        implementation("$name:$lwjglVersion:$linuxNatives")
+        implementation("$name:$lwjglVersion:$macosNatives")
+        implementation("$name:$lwjglVersion:$macosArmNatives")
     }
 
     implementation("commons-io:commons-io:2.18.0")
-    implementation(project(":arc-extensions:arc-model"))
 }

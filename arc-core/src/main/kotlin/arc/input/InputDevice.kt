@@ -9,26 +9,17 @@ import arc.input.keyboard.KeyboardInput
  * @see MouseInput
  * @see KeyboardInput
  */
-@Suppress("INAPPLICABLE_JVM_NAME")
-interface InputDevice {
+interface InputDevice : BindingHolder {
 
     /**
      * Name of device.
      */
-    @get:JvmName("name")
     val name: String
 
     /**
      * Type of device.
      */
-    @get:JvmName("type")
     val type: DeviceType
-
-    /**
-     * Processor for bindings.
-     */
-    @get:JvmName("bindingProcessor")
-    val bindingProcessor: BindingProcessor
 
     /**
      * Whether the button is currently pressed.

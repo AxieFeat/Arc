@@ -8,13 +8,11 @@ import java.io.File
  * It provides utility methods for accessing files based on different location contexts.
  */
 @ImmutableType
-@Suppress("INAPPLICABLE_JVM_NAME")
 interface LocationSpace {
 
     /**
      * Directory of this application.
      */
-    @get:JvmName("applicationDirectory")
     val applicationDirectory: File
 
     /**

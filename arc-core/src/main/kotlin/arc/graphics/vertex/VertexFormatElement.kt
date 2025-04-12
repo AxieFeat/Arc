@@ -9,43 +9,36 @@ import org.jetbrains.annotations.ApiStatus
  * Represents an immutable element in a vertex format.
  */
 @ImmutableType
-@Suppress("INAPPLICABLE_JVM_NAME")
 interface VertexFormatElement {
 
     /**
      * Name of element. Used just for debugging.
      */
-    @get:JvmName("name")
     val name: String
 
     /**
      * Represents the index of a vertex format element within a [VertexFormat].
      */
-    @get:JvmName("index")
     val index: Int
 
     /**
      * Represents the data type of the vertex attribute in the [VertexFormatElement].
      */
-    @get:JvmName("type")
     val type: VertexType
 
     /**
      * Represents the usage type of a vertex attribute in the [VertexFormatElement].
      */
-    @get:JvmName("usage")
     val usage: VertexUsage
 
     /**
      * Represents the count of elements in this vertex format element.
      */
-    @get:JvmName("count")
     val count: Int
 
     /**
      * Get size of this element.
      */
-    @get:JvmName("size")
     val size: Int
         get() = type.size * this.count
 

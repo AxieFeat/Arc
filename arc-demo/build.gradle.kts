@@ -3,4 +3,5 @@ dependencies {
     implementation(project(":arc-vulkan"))
     implementation(project(":arc-extensions:arc-profiler"))
     implementation(project(":arc-extensions:arc-model"))
+    implementation(project(":arc-extensions:arc-display"))
 }

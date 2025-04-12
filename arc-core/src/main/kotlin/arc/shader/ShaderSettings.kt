@@ -11,7 +11,6 @@ import org.jetbrains.annotations.ApiStatus
 /**
  * This interface represents some settings for shader.
  */
-@Suppress("INAPPLICABLE_JVM_NAME")
 @ImmutableType
 interface ShaderSettings {
 
@@ -19,13 +18,11 @@ interface ShaderSettings {
      * List of uniforms for shader.
      * You can use this list for providing uniforms to shader.
      */
-    @get:JvmName("uniforms")
     val uniforms: List<String>
 
     /**
      * Blending settings.
      */
-    @get:JvmName("blendMode")
     val blendMode: BlendMode
 
     @TypeFactory

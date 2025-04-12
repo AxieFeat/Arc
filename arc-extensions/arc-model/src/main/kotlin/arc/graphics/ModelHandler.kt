@@ -11,19 +11,16 @@ import org.jetbrains.annotations.Range
 /**
  * This interface represents renderer of models.
  */
-@Suppress("INAPPLICABLE_JVM_NAME")
 interface ModelHandler {
 
     /**
      * Model, that this handler will render.
      */
-    @get:JvmName("model")
     val model: Model
 
     /**
      * Bounding box of this model.
      */
-    @get:JvmName("aabb")
     val aabb: AABB
 
     /**

@@ -9,20 +9,17 @@ import org.jetbrains.annotations.ApiStatus
 /**
  * This interface represents texture atlas.
  */
-@Suppress("INAPPLICABLE_JVM_NAME")
 @ImmutableType
 interface TextureAtlas : TextureLike {
 
     /**
      * Width of texture.
      */
-    @get:JvmName("width")
     val width: Int
 
     /**
      * Height of texture.
      */
-    @get:JvmName("height")
     val height: Int
 
     /**

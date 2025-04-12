@@ -7,19 +7,16 @@ import org.jetbrains.annotations.Range
 /**
  * This interface represents manager of rendering.
  */
-@Suppress("INAPPLICABLE_JVM_NAME")
 interface RenderSystem {
 
     /**
      * Shader in current context.
      */
-    @get:JvmName("shader")
     val shader: ShaderInstance
 
     /**
      * Texture in current context.
      */
-    @get:JvmName("texture")
     val texture: Texture
 
     /**
@@ -40,13 +37,11 @@ interface RenderSystem {
     /**
      * Drawer of render system.
      */
-    @get:JvmName("drawer")
     val drawer: Drawer
 
     /**
      * Current game scene. Render scene represents all viewable objects in screen.
      */
-    @get:JvmName("scene")
     val scene: Scene
 
     /**

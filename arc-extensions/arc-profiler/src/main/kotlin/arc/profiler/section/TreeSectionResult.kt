@@ -6,7 +6,6 @@ import arc.annotations.ImmutableType
  * This interface represents some count of result via tree.
  */
 @ImmutableType
-@Suppress("INAPPLICABLE_JVM_NAME")
 interface TreeSectionResult : SectionResult {
 
     /**
@@ -23,7 +22,6 @@ interface TreeSectionResult : SectionResult {
      * How many percentages this section took when the parent section was ended.
      * This is the percentage of time compared to the other sections of the parent.
      */
-    @get:JvmName("usage")
     val usage: Double
 
     /**

@@ -11,6 +11,8 @@ import arc.graphics.vertex.ArcVertexFormat
 import arc.graphics.vertex.ArcVertexFormatElement
 import arc.graphics.vertex.VertexFormat
 import arc.graphics.vertex.VertexFormatElement
+import arc.input.mouse.ArcVirtualMouse
+import arc.input.mouse.VirtualMouseInput
 import arc.lwamodel.ArcLwaModel
 import arc.lwamodel.LwaModel
 import arc.lwamodel.animation.*
@@ -102,6 +104,9 @@ object ArcFactoryProvider : FactoryProvider {
         register<LwamAnimation.Factory>(ArcLwamAnimation.Factory)
         register<LwamAnimator.Factory>(ArcLwamAnimator.Factory)
         register<LwamKeyframe.Factory>(ArcLwamKeyframe.Factory)
+
+        // Display
+        register<VirtualMouseInput.Factory>(ArcVirtualMouse.Factory)
     }
 
     @Suppress("SameParameterValue")

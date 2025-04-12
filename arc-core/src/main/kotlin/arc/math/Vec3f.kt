@@ -10,26 +10,22 @@ import org.jetbrains.annotations.Range
 /**
  * Represents a 3D vector with float values.
  */
-@Suppress("INAPPLICABLE_JVM_NAME")
 @MutableType
 interface Vec3f : Vector<Vec3f>, Interpolatable<Vec3f> {
 
     /**
      * The X-coordinate of the 3D vector.
      */
-    @get:JvmName("x")
     var x: Float
 
     /**
      * The Y-coordinate of the 3D vector.
      */
-    @get:JvmName("y")
     var y: Float
 
     /**
      * The Z-coordinate of the 3D vector.
      */
-    @get:JvmName("z")
     var z: Float
 
     /**

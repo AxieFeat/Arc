@@ -7,13 +7,11 @@ import kotlin.jvm.Throws
  * This interface represents not completed section of profiler.
  */
 @ImmutableType
-@Suppress("INAPPLICABLE_JVM_NAME")
 interface ActiveSection : Section {
 
     /**
      * Last result of this section. If null - result not found.
      */
-    @get:JvmName("result")
     val result: SectionResult?
 
     /**

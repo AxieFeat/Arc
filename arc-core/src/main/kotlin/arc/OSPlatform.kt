@@ -4,6 +4,7 @@ package arc
  * Enum representing different operating system platforms.
  */
 enum class OSPlatform(name: String) {
+
     WINDOWS("windows"),
     LINUX("linux"),
     MACOS("macos"),

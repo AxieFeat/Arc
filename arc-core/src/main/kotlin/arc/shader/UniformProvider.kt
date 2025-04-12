@@ -8,14 +8,12 @@ import arc.annotations.MutableType
  * @sample arc.sample.UniformProviderSample
  * @sample arc.sample.uniformProviderSample
  */
-@Suppress("INAPPLICABLE_JVM_NAME")
 @MutableType
 interface UniformProvider {
 
     /**
      * All uniforms in this provider.
      */
-    @get:JvmName("uniforms")
     val uniforms: Map<String, Uniform>
 
     /**

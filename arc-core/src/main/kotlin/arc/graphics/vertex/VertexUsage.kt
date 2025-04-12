@@ -9,6 +9,7 @@ package arc.graphics.vertex
  *
  * @property usageName Descriptive name for the type of vertex usage.
  */
+@Suppress("MemberVisibilityCanBePrivate")
 enum class VertexUsage(
     val usageName: String
 ) {

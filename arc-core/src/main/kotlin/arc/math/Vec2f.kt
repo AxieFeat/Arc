@@ -11,20 +11,17 @@ import kotlin.jvm.Throws
 /**
  * This interface represents a 2D vector with float values.
  */
-@Suppress("INAPPLICABLE_JVM_NAME")
 @MutableType
 interface Vec2f : Vector<Vec2f>, Interpolatable<Vec2f> {
 
     /**
      * The X-coordinate of the 2D vector.
      */
-    @get:JvmName("x")
     var x: Float
 
     /**
      * The Y-coordinate of the 2D vector.
      */
-    @get:JvmName("y")
     var y: Float
 
     /**

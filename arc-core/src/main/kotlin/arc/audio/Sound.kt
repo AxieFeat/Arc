@@ -10,7 +10,6 @@ import org.jetbrains.annotations.ApiStatus
 /**
  * Represents a sound that can be played, stopped, and managed.
  */
-@Suppress("INAPPLICABLE_JVM_NAME")
 @MutableType
 interface Sound {
 
@@ -31,19 +30,16 @@ interface Sound {
     /**
      * Volume value of this sound.
      */
-    @get:JvmName("volume")
     var volume: Float
 
     /**
      * Pitch value of this sound.
      */
-    @get:JvmName("pitch")
     var pitch: Float
 
     /**
      * Position value of this sound.
      */
-    @get:JvmName("position")
     var position: Point3d
 
     /**

@@ -10,7 +10,7 @@ import org.joml.Vector4f
 
 object EmptyShaderInstance : ShaderInstance {
 
-    override val id: Int = 0
+    override val id: Int = -1
     override val vertex: String = ""
     override val fragment: String = ""
 

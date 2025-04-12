@@ -9,44 +9,37 @@ import org.jetbrains.annotations.ApiStatus
 /**
  * This interface represents window of application.
  */
-@Suppress("INAPPLICABLE_JVM_NAME")
 @MutableType
 interface Window {
 
     /**
      * Represents the unique native handle identifier for the window.
      */
-    @get:JvmName("handle")
     val handle: Long
 
     /**
      * Represents the handler for window events.
      */
-    @get:JvmName("handler")
     var handler: WindowHandler
 
     /**
      * The name of the window.
      */
-    @get:JvmName("name")
     var name: String
 
     /**
      * Represents the current width of the window.
      */
-    @get:JvmName("width")
     val width: Int
 
     /**
      * Represents the height of the window in pixels.
      */
-    @get:JvmName("height")
     val height: Int
 
     /**
      * Represents the position of the window in a 2D coordinate space.
      */
-    @get:JvmName("position")
     val position: Point2i
 
     /**

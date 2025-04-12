@@ -65,6 +65,8 @@ internal class GlFrameBuffer(
         bindTexture()
 
         GlDrawer.draw(buffer)
+
+        unbindTexture()
     }
 
     override fun resize(width: Int, height: Int) {

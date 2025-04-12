@@ -1,7 +1,3 @@
-plugins {
-    kotlin("plugin.serialization") version "2.0.0"
-}
-
 val lwjglVersion = "3.3.6"
 val winNatives = "natives-windows"
 val linuxNatives = "natives-linux"
@@ -15,22 +11,26 @@ private val natives = listOf(
     "org.lwjgl:lwjgl-stb",
 )
 
+apply(plugin = "org.jetbrains.kotlin.plugin.serialization")
+
 dependencies {
     api(project(":arc-core"))
+
     implementation(project(":arc-extensions:arc-profiler"))
     implementation(project(":arc-extensions:arc-model"))
+    implementation(project(":arc-extensions:arc-display"))
 
     // Natives for every OS
     natives.forEach { name ->
-        api("$name:$lwjglVersion")
-        api("$name:$lwjglVersion:$winNatives")
-        api("$name:$lwjglVersion:$linuxNatives")
-        api("$name:$lwjglVersion:$macosNatives")
-        api("$name:$lwjglVersion:$macosArmNatives")
+        implementation("$name:$lwjglVersion")
+        implementation("$name:$lwjglVersion:$winNatives")
+        implementation("$name:$lwjglVersion:$linuxNatives")
+        implementation("$name:$lwjglVersion:$macosNatives")
+        implementation("$name:$lwjglVersion:$macosArmNatives")
     }
 
-    api("it.unimi.dsi:fastutil:8.5.15")
-    api("com.github.oshi:oshi-core:6.6.6")
+    implementation("it.unimi.dsi:fastutil:8.5.15")
+    implementation("com.github.oshi:oshi-core:6.6.6")
+
     api("org.jetbrains.kotlinx:kotlinx-serialization-core-jvm:1.8.0")
-    api("org.jetbrains.kotlinx:kotlinx-serialization-protobuf:1.8.0")
 }

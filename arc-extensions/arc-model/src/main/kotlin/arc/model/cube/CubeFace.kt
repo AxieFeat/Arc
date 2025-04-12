@@ -9,7 +9,6 @@ import arc.model.texture.ModelTexture
  *
  * @see Cube
  */
-@Suppress("INAPPLICABLE_JVM_NAME")
 @ImmutableType
 interface CubeFace {
 
@@ -18,7 +17,6 @@ interface CubeFace {
      *
      * @see CubeFace
      */
-    @get:JvmName("uvMin")
     val uvMin: Point2i
 
     /**
@@ -26,7 +24,6 @@ interface CubeFace {
      *
      * @see CubeFace
      */
-    @get:JvmName("uvMax")
     val uvMax: Point2i
 
     /**
@@ -34,7 +31,6 @@ interface CubeFace {
      *
      * @see ModelTexture
      */
-    @get:JvmName("texture")
     val texture: Int
 
 }

@@ -15,7 +15,6 @@ import kotlin.jvm.Throws
  * - Red, green, and blue values are integers between 0 and 255 (inclusive).
  * - Alpha value is a double between 0.0 and 1.0 (inclusive), where 1.0 represents full opacity and 0.0 full transparency.
  */
-@Suppress("INAPPLICABLE_JVM_NAME")
 @MutableType
 interface Color : Copyable<Color>, Interpolatable<Color> {
 
@@ -25,7 +24,6 @@ interface Color : Copyable<Color>, Interpolatable<Color> {
      * This value must be in the range `0..255`.
      * It is used to define the intensity of the red color in an RGB representation.
      */
-    @get:JvmName("red")
     var red: @Range(from = 0, to = 255) Int
 
     /**
@@ -33,7 +31,6 @@ interface Color : Copyable<Color>, Interpolatable<Color> {
      *
      * This variable is mutable and defines the intensity of the green channel for a color.
      */
-    @get:JvmName("green")
     var green: @Range(from = 0, to = 255) Int
 
     /**
@@ -43,7 +40,6 @@ interface Color : Copyable<Color>, Interpolatable<Color> {
      *
      * This property allows getting or setting the blue value of the color.
      */
-    @get:JvmName("blue")
     var blue: @Range(from = 0, to = 255) Int
 
     /**
@@ -54,7 +50,6 @@ interface Color : Copyable<Color>, Interpolatable<Color> {
      *
      * Modifying this property changes the transparency of the specified color instance.
      */
-    @get:JvmName("alpha")
     var alpha: @Range(from = 0, to = 1) Double
 
     /**

@@ -12,14 +12,12 @@ import java.io.File
  * Although this interface is marked as immutable,
  * in fact the getters can return different values if the file contents have been changed.
  */
-@Suppress("INAPPLICABLE_JVM_NAME")
 @ImmutableType
 interface FileAsset : StringAsset {
 
     /**
      * File of this asset.
      */
-    @get:JvmName("file")
     val file: File
 
     @ApiStatus.Internal

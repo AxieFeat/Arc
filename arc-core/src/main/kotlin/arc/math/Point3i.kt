@@ -12,26 +12,22 @@ import kotlin.jvm.Throws
 /**
  * This interface represents a 3D point with integer values.
  */
-@Suppress("INAPPLICABLE_JVM_NAME")
 @MutableType
 interface Point3i : Copyable<Point3i>, Interpolatable<Point3i> {
 
     /**
      * The X-coordinate of the 3D point.
      */
-    @get:JvmName("x")
     var x: Int
 
     /**
      * The Y-coordinate of the 3D point.
      */
-    @get:JvmName("y")
     var y: Int
 
     /**
      * The Z-coordinate of the 3D point.
      */
-    @get:JvmName("z")
     var z: Int
 
     /**

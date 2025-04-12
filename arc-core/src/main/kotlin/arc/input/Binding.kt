@@ -9,19 +9,16 @@ import arc.input.mouse.MouseBinding
  *
  * @see MouseBinding
  */
-@Suppress("INAPPLICABLE_JVM_NAME")
 interface Binding : BindingLike {
 
     /**
      * ID of this binding.
      */
-    @get:JvmName("id")
     override val id: String
 
     /**
      * Key of binding.
      */
-    @get:JvmName("key")
     val key: KeyCode
 
     /**

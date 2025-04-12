@@ -10,13 +10,11 @@ import org.jetbrains.annotations.ApiStatus
 /**
  * This interface represents profiler for collecting debug info.
  */
-@Suppress("INAPPLICABLE_JVM_NAME")
 interface Profiler {
 
     /**
      * Root section of profiler.
      */
-    @get:JvmName("root")
     val root: RootSection
 
     /**

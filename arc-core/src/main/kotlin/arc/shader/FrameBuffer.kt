@@ -1,45 +1,37 @@
 package arc.shader
 
 import arc.Arc
-import arc.annotations.MutableType
 import arc.annotations.TypeFactory
 import org.jetbrains.annotations.ApiStatus
 
 /**
  * This interface represents frame buffer.
  */
-@Suppress("INAPPLICABLE_JVM_NAME")
-@MutableType
 interface FrameBuffer {
 
     /**
      * Width of buffer.
      */
-    @get:JvmName("width")
     val width: Int
 
     /**
      * Height of buffer.
      */
-    @get:JvmName("height")
     val height: Int
 
     /**
      * Texture width in buffer.
      */
-    @get:JvmName("textureWidth")
     val textureWidth: Int
 
     /**
      * Texture height in buffer.
      */
-    @get:JvmName("textureHeight")
     val textureHeight: Int
 
     /**
      * Is depth used by this buffer.
      */
-    @get:JvmName("useDepth")
     val useDepth: Boolean
 
     /**

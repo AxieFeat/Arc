@@ -8,29 +8,21 @@ import org.jetbrains.annotations.ApiStatus
 /**
  * This interface represents blend setting for shader.
  */
-@Suppress("INAPPLICABLE_JVM_NAME")
 @ImmutableType
 interface BlendMode {
 
-    @get:JvmName("srcColorFactor")
     val srcColorFactor: Int
 
-    @get:JvmName("srcAlphaFactor")
     val srcAlphaFactor: Int
 
-    @get:JvmName("dstColorFactor")
     val dstColorFactor: Int
 
-    @get:JvmName("dstAlphaFactor")
     val dstAlphaFactor: Int
 
-    @get:JvmName("blendFunc")
     val blendFunc: Int
 
-    @get:JvmName("separateBlend")
     val separateBlend: Boolean
 
-    @get:JvmName("opaque")
     val opaque: Boolean
 
     /**

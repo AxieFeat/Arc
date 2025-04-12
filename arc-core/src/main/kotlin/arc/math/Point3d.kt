@@ -12,26 +12,22 @@ import kotlin.jvm.Throws
 /**
  * A point in a 3D grid, with integer x, y and z coordinates
  */
-@Suppress("INAPPLICABLE_JVM_NAME")
 @MutableType
 interface Point3d : Copyable<Point3d>, Interpolatable<Point3d> {
 
     /**
      * X position.
      */
-    @get:JvmName("x")
     var x: Double
 
     /**
      * Y position.
      */
-    @get:JvmName("y")
     var y: Double
 
     /**
      * Z position.
      */
-    @get:JvmName("z")
     var z: Double
 
     /**

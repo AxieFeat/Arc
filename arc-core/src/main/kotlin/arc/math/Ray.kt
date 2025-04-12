@@ -9,20 +9,17 @@ import org.jetbrains.annotations.ApiStatus
 /**
  * Represents a 3D ray defined by an origin and a direction.
  */
-@Suppress("INAPPLICABLE_JVM_NAME")
 @MutableType
 interface Ray : Copyable<Ray> {
 
     /**
      * The origin point of the ray.
      */
-    @get:JvmName("origin")
     var origin: Vec3f
 
     /**
      * The direction vector of the ray.
      */
-    @get:JvmName("direction")
     var direction: Vec3f
 
     /**
@@ -59,7 +56,7 @@ interface Ray : Copyable<Ray> {
          * [Ray] with zero values.
          */
         @JvmField
-        val ZERO = of(Vec3f.ZERO, Vec3f.ZERO)
+        val ZERO = of(Vec3f.of(0f, 0f, 0f), Vec3f.of(0f, 0f, 0f))
 
         /**
          * Create new instance of [Ray].
