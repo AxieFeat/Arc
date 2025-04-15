@@ -14,11 +14,6 @@ private val natives = listOf(
 dependencies {
     api(project(":arc-core"))
 
-    implementation(project(":arc-extensions:arc-profiler"))
-    implementation(project(":arc-extensions:arc-model"))
-    implementation(project(":arc-extensions:arc-display"))
-    implementation(project(":arc-extensions:arc-audio"))
-
     // Natives for every OS
     natives.forEach { name ->
         implementation("$name:$lwjglVersion")

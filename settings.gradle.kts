@@ -73,3 +73,9 @@ include("arc-extensions:arc-profiler:arc-profiler-core")
 findProject(":arc-extensions:arc-profiler:arc-profiler-core")?.name = "arc-profiler-core"
 include("arc-extensions:arc-profiler:arc-profiler-common")
 findProject(":arc-extensions:arc-profiler:arc-profiler-common")?.name = "arc-profiler-common"
+include("arc-extensions:arc-physics")
+findProject(":arc-extensions:arc-physics")?.name = "arc-physics"
+include("arc-extensions:arc-physics:arc-physics-core")
+findProject(":arc-extensions:arc-physics:arc-physics-core")?.name = "arc-physics-core"
+include("arc-extensions:arc-physics:arc-physics-common")
+findProject(":arc-extensions:arc-physics:arc-physics-common")?.name = "arc-physics-common"
