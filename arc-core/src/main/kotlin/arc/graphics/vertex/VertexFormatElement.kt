@@ -62,7 +62,6 @@ interface VertexFormatElement {
         @JvmField val COLOR = create("COLOR", 0, VertexType.UBYTE, VertexUsage.COLOR, 4)
         @JvmField val UV = create("UV", 0, VertexType.FLOAT, VertexUsage.UV, 2)
         @JvmField val OVERLAY = create("OVERLAY", 1, VertexType.SHORT, VertexUsage.UV, 2)
-        @JvmField val LIGHT = create("LIGHT", 2, VertexType.SHORT, VertexUsage.UV, 2)
         @JvmField val NORMAL = create("NORMAL", 0, VertexType.BYTE, VertexUsage.NORMAL, 3)
         @JvmField val PADDING = create("PADDING", 0, VertexType.BYTE, VertexUsage.PADDING, 1)
 

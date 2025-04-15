@@ -3,7 +3,7 @@ package arc.demo
 import arc.Application
 import arc.Configuration
 import arc.audio.SoundEngine
-import arc.demo.screen.ModelRenderScene
+import arc.demo.screen.TerrainScreen
 import arc.demo.screen.Screen
 import arc.demo.shader.ShaderContainer
 import arc.graphics.vertex.VertexFormat
@@ -23,7 +23,7 @@ object VoxelGame : WindowHandler {
         // Set window handler to this instance.
         application.window.handler = this
         application.window.isVsync = true
-        setScreen(ModelRenderScene)
+        setScreen(TerrainScreen)
 
 //        val asset = classpath("arc/sound/pigstep.ogg").asFileAsset()
 //        val sound = SoundLoader.of(SoundFormat.OGG).load(asset)

@@ -1,6 +1,5 @@
 package arc.model
 
-import arc.annotations.ImmutableType
 import arc.math.Point3d
 import arc.model.cube.Cube
 import arc.util.pattern.Identifiable
@@ -11,7 +10,6 @@ import arc.util.pattern.Identifiable
  * @see Cube
  * @see Model
  */
-@ImmutableType
 interface Element : Identifiable {
 
     /**

@@ -18,10 +18,10 @@ object ShaderContainer {
     }
 
     @JvmField
-    val positionTexLight = ShaderInstance.of(
-        vertexShader = classpath("arc/shader/position_tex_light/position_tex_light.vsh").asFileAsset(),
-        fragmentShader = classpath("arc/shader/position_tex_light/position_tex_light.fsh").asFileAsset(),
-        shaderSettings = ShaderSettings.of(classpath("arc/shader/position_tex_light/position_tex_light.json").asFileAsset()),
+    val positionTexColor = ShaderInstance.of(
+        vertexShader = classpath("arc/shader/position_tex_color/position_tex_color.vsh").asFileAsset(),
+        fragmentShader = classpath("arc/shader/position_tex_color/position_tex_color.fsh").asFileAsset(),
+        shaderSettings = ShaderSettings.of(classpath("arc/shader/position_tex_color/position_tex_color.json").asFileAsset()),
     ).also {
         it.compileShaders()
         it.addProvider(DefaultUniformProvider)

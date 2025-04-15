@@ -16,7 +16,6 @@ import java.util.*
  * @see CubeFace
  * @see Face
  */
-@ImmutableType
 interface Cube : Element {
 
     /**
@@ -32,7 +31,7 @@ interface Cube : Element {
     /**
      * All faces of this cube, that will be rendered.
      */
-    val faces: Map<Face, arc.model.cube.CubeFace>
+    val faces: MutableMap<Face, CubeFace>
 
     @ApiStatus.Internal
     @TypeFactory
@@ -42,10 +41,10 @@ interface Cube : Element {
             uuid: UUID,
             from: Point3d,
             to: Point3d,
-            faces: Map<Face, arc.model.cube.CubeFace>,
+            faces: Map<Face, CubeFace>,
             lightLevel: Byte,
             lightColor: Int
-        ) : arc.model.cube.Cube
+        ) : Cube
 
     }
 
@@ -69,11 +68,11 @@ interface Cube : Element {
             uuid: UUID = UUID.randomUUID(),
             from: Point3d = Point3d.ZERO,
             to: Point3d = Point3d.ZERO,
-            faces: Map<Face, arc.model.cube.CubeFace> = mapOf(),
+            faces: Map<Face, CubeFace> = mapOf(),
             lightLevel: Byte = 0,
             lightColor: Int = 0
-        ): arc.model.cube.Cube {
-            return Arc.factory<arc.model.cube.Cube.Factory>().create(uuid, from, to, faces, lightLevel, lightColor)
+        ): Cube {
+            return Arc.factory<Factory>().create(uuid, from, to, faces, lightLevel, lightColor)
         }
 
     }

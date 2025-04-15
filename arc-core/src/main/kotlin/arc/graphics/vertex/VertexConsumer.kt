@@ -86,23 +86,4 @@ interface VertexConsumer {
      */
     fun setNormal(x: Float, y: Float, z: Float): VertexConsumer
 
-    /**
-     * Set packed lightmap value for current vertex.
-     *
-     * Packed light is encoded as a 32-bit integer in the following format:
-     *
-     * - Lower 16 bits: block light level (e.g. from torches, lamps).
-     * - Upper 16 bits: sky light level (e.g. from the sun or moon).
-     *
-     * Each light component must be in the range [0, 15], and is usually packed like this:
-     * ```
-     * val packed = (skyLight and 0xF) shl 16 or (blockLight and 0xF)
-     * ```
-     *
-     * @param packedLight Combined lightmap value.
-     *
-     * @return Current instance of [VertexConsumer].
-     */
-    fun setLight(packedLight: Int): VertexConsumer
-
 }

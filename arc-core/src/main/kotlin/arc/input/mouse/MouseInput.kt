@@ -33,4 +33,9 @@ interface MouseInput : InputDevice {
     override val name: String
         get() = "mouse"
 
+    /**
+     * Reset [displayVec].
+     */
+    fun reset()
+
 }

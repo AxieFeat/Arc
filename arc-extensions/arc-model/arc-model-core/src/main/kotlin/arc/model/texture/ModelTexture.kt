@@ -41,7 +41,7 @@ interface ModelTexture {
             width: Int,
             height: Int,
             base64Image: String
-        ): arc.model.texture.ModelTexture
+        ): ModelTexture
 
     }
 
@@ -63,8 +63,8 @@ interface ModelTexture {
             width: Int,
             height: Int,
             base64Image: String
-        ): arc.model.texture.ModelTexture {
-            return Arc.factory<arc.model.texture.ModelTexture.Factory>().create(id, width, height, base64Image)
+        ): ModelTexture {
+            return Arc.factory<Factory>().create(id, width, height, base64Image)
         }
 
     }

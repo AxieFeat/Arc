@@ -21,7 +21,7 @@ interface Animation : Identifiable {
     /**
      * Mode of animation looping.
      */
-    val loop: arc.model.animation.AnimationLoopMode
+    val loop: AnimationLoopMode
 
     /**
      * Delay for starting this animation in seconds.
@@ -41,7 +41,7 @@ interface Animation : Identifiable {
     /**
      * All animators of this animation.
      */
-    val animators: Set<arc.model.animation.Animator>
+    val animators: Set<Animator>
 
     @TypeFactory
     @ApiStatus.Internal
@@ -50,12 +50,12 @@ interface Animation : Identifiable {
         fun create(
             name: String,
             uuid: UUID,
-            loop: arc.model.animation.AnimationLoopMode,
+            loop: AnimationLoopMode,
             startDelay: Double,
             loopDelay: Double,
             duration: Double,
-            animators: Set<arc.model.animation.Animator>,
-        ): arc.model.animation.Animation
+            animators: Set<Animator>,
+        ): Animation
 
     }
 
@@ -76,13 +76,13 @@ interface Animation : Identifiable {
         fun of(
             name: String = "",
             uuid: UUID = UUID.randomUUID(),
-            loop: arc.model.animation.AnimationLoopMode = arc.model.animation.AnimationLoopMode.PLAY_ONCE,
+            loop: AnimationLoopMode = AnimationLoopMode.PLAY_ONCE,
             startDelay: Double = 0.0,
             loopDelay: Double = 0.0,
             duration: Double = 0.0,
-            animators: Set<arc.model.animation.Animator> = setOf(),
-        ): arc.model.animation.Animation {
-            return Arc.factory<arc.model.animation.Animation.Factory>().create(name, uuid, loop, startDelay, loopDelay, duration, animators)
+            animators: Set<Animator> = setOf(),
+        ): Animation {
+            return Arc.factory<Factory>().create(name, uuid, loop, startDelay, loopDelay, duration, animators)
         }
 
     }

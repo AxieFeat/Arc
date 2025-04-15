@@ -56,6 +56,7 @@ internal data class ArcDrawBuffer(
 
     override fun addVertex(matrix: Matrix4f, x: Float, y: Float, z: Float): ArcDrawBuffer {
         val vector3f: Vector3f = matrix.transformPosition(x, y, z, Vector3f())
+
         return addVertex(vector3f.x, vector3f.y, vector3f.z)
     }
 
@@ -93,13 +94,6 @@ internal data class ArcDrawBuffer(
     override fun setNormal(x: Float, y: Float, z: Float): ArcDrawBuffer {
         val address = beginElement(VertexFormatElement.NORMAL)
         putNormal(address, x, y, z)
-
-        return this
-    }
-
-    override fun setLight(packedLight: Int): VertexConsumer {
-        val address = beginElement(VertexFormatElement.LIGHT)
-        putLight(address, packedLight)
 
         return this
     }
@@ -190,6 +184,7 @@ internal data class ArcDrawBuffer(
 
     private fun putPosition(i: Int, x: Float, y: Float, z: Float) {
         val addr = baseAddress + i
+
         MemoryUtil.memPutFloat(addr, x + xOffset)
         MemoryUtil.memPutFloat(addr + 4, y + yOffset)
         MemoryUtil.memPutFloat(addr + 8, z + zOffset)
@@ -197,48 +192,23 @@ internal data class ArcDrawBuffer(
 
     private fun putColor(i: Int, red: Int, green: Int, blue: Int, alpha: Int) {
         val addr = baseAddress + i
+
         MemoryUtil.memPutByte(addr, red.toByte())
         MemoryUtil.memPutByte(addr + 1, green.toByte())
         MemoryUtil.memPutByte(addr + 2, blue.toByte())
         MemoryUtil.memPutByte(addr + 3, alpha.toByte())
     }
 
-    private fun putLight(i: Int, packedLight: Int) {
-        val addr = baseAddress + i
-
-        MemoryUtil.memPutShort(addr, (packedLight and 65535).toShort())
-        MemoryUtil.memPutShort(addr + 2L, (packedLight shr 16 and 65535).toShort())
-    }
-
     private fun putTexture(i: Int, u: Float, v: Float) {
         val addr = baseAddress + i
-// TODO
 
-//        when (element.type) {
-//            VertexType.FLOAT -> {
         MemoryUtil.memPutFloat(addr, u)
         MemoryUtil.memPutFloat(addr + 4, v)
-//            }
-//
-//            VertexType.UINT, VertexType.INT -> {
-//                MemoryUtil.memPutInt(addr, u.toInt())
-//                MemoryUtil.memPutInt(addr + 4, v.toInt())
-//            }
-//
-//            VertexType.USHORT, VertexType.SHORT -> {
-//                MemoryUtil.memPutShort(addr, u.toInt().toShort())
-//                MemoryUtil.memPutShort(addr + 2, v.toInt().toShort())
-//            }
-//
-//            VertexType.UBYTE, VertexType.BYTE -> {
-//                MemoryUtil.memPutByte(addr, u.toInt().toByte())
-//                MemoryUtil.memPutByte(addr + 1, v.toInt().toByte())
-//            }
-//        }
     }
 
     private fun putNormal(i: Int, x: Float, y: Float, z: Float) {
         val addr = baseAddress + i
+
         MemoryUtil.memPutByte(addr, ((x * Byte.MAX_VALUE).toInt() and 0xFF).toByte())
         MemoryUtil.memPutByte(addr + 1, ((y * Byte.MAX_VALUE).toInt() and 0xFF).toByte())
         MemoryUtil.memPutByte(addr + 2, ((z * Byte.MAX_VALUE).toInt() and 0xFF).toByte())

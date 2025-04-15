@@ -2,6 +2,7 @@ package arc.graphics
 
 import arc.graphics.vertex.VertexBuffer
 import arc.graphics.vertex.VertexFormat
+import org.joml.Matrix4f
 
 /**
  * Drawer interface for creating and managing rendering buffers.
@@ -25,5 +26,13 @@ interface Drawer {
      * @param buffer Buffer for rendering.
      */
     fun draw(buffer: VertexBuffer)
+
+    /**
+     * Render buffer.
+     *
+     * @param matrix Matrix for transformation (For using it create uniform with name "modelMatrix").
+     * @param buffer Buffer for rendering.
+     */
+    fun draw(matrix: Matrix4f, buffer: VertexBuffer)
 
 }

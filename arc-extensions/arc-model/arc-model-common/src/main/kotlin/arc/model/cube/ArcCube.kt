@@ -8,7 +8,7 @@ internal data class ArcCube(
     override val uuid: UUID = UUID.randomUUID(),
     override val from: Point3d = Point3d.ZERO,
     override val to: Point3d = Point3d.ZERO,
-    override val faces: Map<Face, CubeFace> = mapOf(),
+    override val faces: MutableMap<Face, CubeFace> = mutableMapOf(),
     override val lightLevel: Byte = 0,
     override val lightColor: Int = 0
 ) : Cube {
@@ -29,7 +29,7 @@ internal data class ArcCube(
             lightLevel: Byte,
             lightColor: Int
         ): Cube {
-            return ArcCube(uuid, from, to, faces, lightLevel, lightColor)
+            return ArcCube(uuid, from, to, faces.toMutableMap(), lightLevel, lightColor)
         }
 
     }

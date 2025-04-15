@@ -2,33 +2,58 @@ package arc.demo.world
 
 import arc.demo.world.block.Block
 import arc.demo.world.chunk.Chunk
+import arc.graphics.EmptyShaderInstance
+import arc.model.Model
+import arc.shader.ShaderInstance
 
 class World {
 
-    val chunks = mutableListOf<Chunk>()
+    private val chunks = mutableMapOf<Pair<Int, Int>, Chunk>()
 
-    fun updateAll() {
-        chunks.forEach { it.updateAll() }
+    fun getChunk(chunkX: Int, chunkZ: Int): Chunk? {
+        return chunks[chunkX to chunkZ]
     }
 
-    fun update(x: Int, z: Int) {
-        chunks.find { it.x == x && it.z == z }?.updateAll()
-    }
-
-    fun getChunk(x: Int, z: Int): Chunk? {
-        return chunks.find { it.x == x && it.z == z }
+    fun getOrCreateChunk(chunkX: Int, chunkZ: Int): Chunk {
+        return chunks.getOrPut(chunkX to chunkZ) { Chunk(this, chunkX, chunkZ) }
     }
 
     fun getBlock(x: Int, y: Int, z: Int): Block? {
-        chunks.forEach { chunk ->
-            chunk.sections.forEach {
-                val block = it.getBlock(x, y, z)
+        val chunkX = x shr 4
+        val chunkZ = z shr 4
+        val chunk = getChunk(chunkX, chunkZ) ?: return null
+        return chunk.getBlock(x and 15, y, z and 15)
+    }
 
-                if(block != null) return block
+    fun setBlock(x: Int, y: Int, z: Int, model: Model?) {
+        val chunkX = x shr 4
+        val chunkZ = z shr 4
+        val chunk = getOrCreateChunk(chunkX, chunkZ)
+        chunk.setBlock(x and 15, y, z and 15, model)
+    }
+
+    fun updateChunk(chunkX: Int, chunkY: Int, chunkZ: Int) {
+        getChunk(chunkX, chunkZ)?.update(chunkY)
+    }
+
+    fun allChanged() {
+        chunks.forEach {
+            it.value.sections.forEach { section ->
+                section?.update()
+            }
+        }
+    }
+
+    fun render(shader: ShaderInstance) {
+        shader.bind()
+
+        chunks.forEach {
+            it.value.sections.forEach { section ->
+                section?.handler?.render(EmptyShaderInstance)
             }
         }
 
-        return null
+        shader.unbind()
     }
 
 }

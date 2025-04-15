@@ -34,7 +34,7 @@ interface ElementGroup : Identifiable {
     @ApiStatus.Internal
     interface Factory {
 
-        fun create(uuid: UUID, name: String, elements: Set<UUID>, origin: Point3d): arc.model.group.ElementGroup
+        fun create(uuid: UUID, name: String, elements: Set<UUID>, origin: Point3d): ElementGroup
 
     }
 
@@ -56,8 +56,8 @@ interface ElementGroup : Identifiable {
             name: String = "",
             elements: Set<UUID> = setOf(),
             origin: Point3d = Point3d.ZERO
-        ): arc.model.group.ElementGroup {
-            return Arc.factory<arc.model.group.ElementGroup.Factory>().create(uuid, name, elements, origin)
+        ): ElementGroup {
+            return Arc.factory<Factory>().create(uuid, name, elements, origin)
         }
 
     }

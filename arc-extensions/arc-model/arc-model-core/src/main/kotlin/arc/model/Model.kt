@@ -6,6 +6,7 @@ import arc.asset.StringAsset
 import arc.model.animation.Animation
 import arc.model.group.ElementGroup
 import arc.model.texture.ModelTexture
+import arc.util.pattern.Copyable
 import org.jetbrains.annotations.ApiStatus
 
 /**
@@ -19,33 +20,41 @@ import org.jetbrains.annotations.ApiStatus
  * Due to its advantages over BB Model, this format is more preferable for use,
  * and it is also very good for transferring over the network.
  */
-@ImmutableType
-interface Model {
+interface Model : Copyable<Model> {
 
     /**
      * All elements in this model.
      */
-    val elements: List<arc.model.Element>
+    val elements: MutableList<Element>
 
     /**
      * All groups in this model.
      */
-    val groups: List<ElementGroup>
+    val groups: MutableList<ElementGroup>
 
     /**
      * All animations in this model.
      */
-    val animations: List<Animation>
+    val animations: MutableList<Animation>
 
     /**
      * All textures in this model.
      */
-    val textures: List<ModelTexture>
+    val textures: MutableList<ModelTexture>
+
+    /**
+     * Merge this model with other model.
+     *
+     * @param model Model for merging.
+     *
+     * @return New instance of [Model].
+     */
+    fun merge(vararg model: Model): Model
 
     @ApiStatus.Internal
     interface Factory {
 
-        fun create(elements: List<arc.model.Element>, groups: List<ElementGroup>, animations: List<Animation>, textures: List<ModelTexture>): arc.model.Model
+        fun create(elements: MutableList<Element>, groups: MutableList<ElementGroup>, animations: MutableList<Animation>, textures: MutableList<ModelTexture>): Model
 
     }
 
@@ -59,7 +68,7 @@ interface Model {
          * @return New instance of [Model].
          */
         @JvmStatic
-        fun from(asset: StringAsset): arc.model.Model {
+        fun from(asset: StringAsset): Model {
             TODO()
         }
 
@@ -74,12 +83,12 @@ interface Model {
          */
         @JvmStatic
         fun of(
-            elements: List<arc.model.Element> = listOf(),
-            groups: List<ElementGroup> = listOf(),
-            animations: List<Animation> = listOf(),
-            textures: List<ModelTexture> = listOf(),
-        ): arc.model.Model {
-            return Arc.factory<arc.model.Model.Factory>().create(elements, groups, animations, textures)
+            elements: MutableList<Element> = mutableListOf(),
+            groups: MutableList<ElementGroup> = mutableListOf(),
+            animations: MutableList<Animation> = mutableListOf(),
+            textures: MutableList<ModelTexture> = mutableListOf(),
+        ): Model {
+            return Arc.factory<Factory>().create(elements, groups, animations, textures)
         }
 
     }
