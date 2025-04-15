@@ -9,14 +9,14 @@ abstract class AbstractScene(
     val application: Application,
 ) : Scene {
 
-    private val timer = Timer(20f)
+    private val timer = Timer()
     private var fpsCounter = 0
     private var debugUpdateTime: Long = OS.getTime()
 
     override val drawer: Drawer = application.renderSystem.drawer
     override val camera: Camera = Camera.create(45f, application.window.width.toFloat(), application.window.height.toFloat())
     override var fps: Int = 0
-    override var partial: Float = 0f
+    override var delta: Float = 0f
     override val inUse: Boolean
         get() = application.renderSystem.scene == this
 
@@ -44,11 +44,11 @@ abstract class AbstractScene(
         }
     }
 
-    open fun onFpsUpdate(fps: Int) {}
-
     protected fun updateTimer() {
         timer.update()
-        this.partial = timer.renderPartialTicks
+        this.delta = timer.deltaTime
     }
+
+    open fun onFpsUpdate(fps: Int) {}
 
 }

@@ -1,8 +1,5 @@
 package arc.math
 
-import kotlinx.serialization.Serializable
-
-@Serializable
 internal data class ArcPoint3d(
     override var x: Double,
     override var y: Double,

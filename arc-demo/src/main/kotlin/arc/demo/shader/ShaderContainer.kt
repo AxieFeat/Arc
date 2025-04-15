@@ -47,4 +47,14 @@ object ShaderContainer {
         it.addProvider(DefaultUniformProvider)
     }
 
+    @JvmField
+    val blitPositionColor = ShaderInstance.of(
+        vertexShader = classpath("arc/shader/blit_position_color/blit_position_color.vsh").asFileAsset(),
+        fragmentShader = classpath("arc/shader/blit_position_color/blit_position_color.fsh").asFileAsset(),
+        shaderSettings = ShaderSettings.of(classpath("arc/shader/blit_position_color/blit_position_color.json").asFileAsset()),
+    ).also {
+        it.compileShaders()
+        it.addProvider(DefaultUniformProvider)
+    }
+
 }

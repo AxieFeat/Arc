@@ -14,7 +14,7 @@ internal object GlVertexUploader {
     @JvmStatic
     @Throws(RuntimeException::class)
     fun draw(vertexBuffer: GlVertexBuffer) {
-        if (vertexBuffer.count == 0) return
+        if (vertexBuffer.vertices == 0) return
 
         glBindVertexArray(vao)
 
@@ -34,7 +34,7 @@ internal object GlVertexUploader {
             offset += element.size
         }
 
-        glDrawArrays(vertexBuffer.mode.id, 0, vertexBuffer.count)
+        glDrawArrays(vertexBuffer.mode.id, 0, vertexBuffer.vertices)
 
         for (i in vertexBuffer.format.elements.indices) {
             glDisableVertexAttribArray(i)

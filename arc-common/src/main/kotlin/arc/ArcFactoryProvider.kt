@@ -1,39 +1,22 @@
 package arc
 
 import arc.asset.*
-import arc.asset.ArcAssetStack
-import arc.asset.ArcRuntimeAsset
-import arc.audio.OggSound
-import arc.audio.Sound
-import arc.graphics.*
 import arc.graphics.ArcCamera
+import arc.graphics.ArcDrawBuffer
+import arc.graphics.Camera
+import arc.graphics.DrawBuffer
 import arc.graphics.vertex.ArcVertexFormat
 import arc.graphics.vertex.ArcVertexFormatElement
 import arc.graphics.vertex.VertexFormat
 import arc.graphics.vertex.VertexFormatElement
-import arc.input.mouse.ArcVirtualMouse
-import arc.input.mouse.VirtualMouseInput
-import arc.lwamodel.ArcLwaModel
-import arc.lwamodel.LwaModel
-import arc.lwamodel.animation.*
-import arc.lwamodel.animation.ArcLwamAnimation
-import arc.lwamodel.cube.ArcLwamCube
-import arc.lwamodel.cube.ArcLwamCubeFace
-import arc.lwamodel.cube.LwamCube
-import arc.lwamodel.cube.LwamCubeFace
-import arc.lwamodel.group.ArcLwamElementGroup
-import arc.lwamodel.group.LwamElementGroup
-import arc.lwamodel.texture.ArcLwamTexture
-import arc.lwamodel.texture.LwamTexture
 import arc.math.*
-import arc.profiler.ArcProfiler
-import arc.profiler.Profiler
 import arc.shader.ArcShaderSettings
 import arc.shader.ShaderSettings
 import arc.util.ArcColor
 import arc.util.Color
 import arc.util.factory.FactoryProvider
 import arc.util.factory.TypeNotFoundException
+import arc.util.factory.register
 import arc.window.ArcWindow
 import arc.window.Window
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap
@@ -76,7 +59,6 @@ object ArcFactoryProvider : FactoryProvider {
         register<Window.Factory>(ArcWindow.Factory)
         register<Configuration.Factory>(ArcConfiguration.Factory)
         register<Camera.Factory>(ArcCamera.Factory)
-        register<Sound.Factory>(OggSound.Factory)
 
         register<VertexFormat.BuilderFactory>(ArcVertexFormat.BuilderFactory)
         register<VertexFormatElement.Factory>(ArcVertexFormatElement.Factory)
@@ -88,25 +70,6 @@ object ArcFactoryProvider : FactoryProvider {
         register<FileAsset.Factory>(ArcFileAsset.Factory)
         register<AssetStack.Factory>(ArcAssetStack.Factory)
         register<MutableAssetStack.Factory>(ArcAssetStack.MutableFactory)
-
-
-        // Extensions
-
-        // Profiler
-        register<Profiler.Factory>(ArcProfiler.Factory)
-
-        // Model
-        register<LwaModel.Factory>(ArcLwaModel.Factory)
-        register<LwamCube.Factory>(ArcLwamCube.Factory)
-        register<LwamCubeFace.Factory>(ArcLwamCubeFace.Factory)
-        register<LwamTexture.Factory>(ArcLwamTexture.Factory)
-        register<LwamElementGroup.Factory>(ArcLwamElementGroup.Factory)
-        register<LwamAnimation.Factory>(ArcLwamAnimation.Factory)
-        register<LwamAnimator.Factory>(ArcLwamAnimator.Factory)
-        register<LwamKeyframe.Factory>(ArcLwamKeyframe.Factory)
-
-        // Display
-        register<VirtualMouseInput.Factory>(ArcVirtualMouse.Factory)
     }
 
     @Suppress("SameParameterValue")

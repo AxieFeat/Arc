@@ -1,9 +1,7 @@
 package arc.math
 
-import kotlinx.serialization.Serializable
 import kotlin.math.*
 
-@Serializable
 internal data class ArcVec3f(
     override var x: Float,
     override var y: Float,

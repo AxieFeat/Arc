@@ -2,7 +2,6 @@ package arc
 
 import arc.annotations.MutableType
 import arc.annotations.TypeFactory
-import arc.audio.SoundEngine
 import arc.files.LocationSpace
 import arc.graphics.RenderSystem
 import arc.input.keyboard.KeyboardInput
@@ -26,7 +25,7 @@ import java.io.File
  *     "opengl" -> GlApplication.preload()
  *     "vulkan" -> VkApplication.preload()
  *
- *     else -> GlApplication.preload() // Fallback to GL if value not correct.
+ *     else -> GlApplication.preload() // Fallback to GL if property not correct.
  * }
  *
  * // Now we can find our application.
@@ -61,11 +60,6 @@ interface Application {
     val renderSystem: RenderSystem
 
     /**
-     * Sound engine of application.
-     */
-    val soundEngine: SoundEngine
-
-    /**
      * Location space of application.
      */
     val locationSpace: LocationSpace
@@ -96,14 +90,21 @@ interface Application {
      * Opens the specified URL.
      *
      * @param url The URL to be opened.
+     *
+     * @throws UnsupportedOperationException If any error occurs when trying to open a URL.
      */
+    @Throws(UnsupportedOperationException::class)
     fun openURL(url: String)
 
     /**
      * Opens the specified folder in the file explorer.
      *
      * @param folder The folder to be opened. It must be a valid directory.
+     *
+     * @throws IllegalArgumentException If provided [folder] is not directory.
+     * @throws UnsupportedOperationException If any error occurs when trying to open a directory.
      */
+    @Throws(IllegalArgumentException::class, UnsupportedOperationException::class)
     fun openFolder(folder: File)
 
     /**

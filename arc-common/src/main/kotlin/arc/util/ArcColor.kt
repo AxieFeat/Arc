@@ -1,9 +1,7 @@
 package arc.util
 
-import kotlinx.serialization.Serializable
 import kotlin.math.roundToInt
 
-@Serializable
 internal data class ArcColor(
     override var red: Int = 255,
     override var green: Int = 255,

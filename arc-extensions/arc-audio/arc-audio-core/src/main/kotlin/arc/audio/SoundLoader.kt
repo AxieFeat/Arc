@@ -1,0 +1,60 @@
+package arc.audio
+
+import arc.Arc
+import arc.annotations.TypeFactory
+import arc.asset.AssetLike
+import org.jetbrains.annotations.ApiStatus
+
+/**
+ * This interface represents loader for sounds in specific format.
+ */
+interface SoundLoader {
+
+    /**
+     * Format of sounds.
+     */
+    val format: SoundFormat
+
+    /**
+     * Load sound from bytes.
+     *
+     * @param bytes Bytes of sound.
+     *
+     * @return Instance of [Sound].
+     */
+    fun load(bytes: ByteArray): Sound
+
+    /**
+     * Load sound from asset like instance.
+     *
+     * @param asset Asset with bytes of sound.
+     *
+     * @return Instance of [Sound].
+     */
+    fun load(asset: AssetLike): Sound = load(asset.bytes)
+
+    @ApiStatus.Internal
+    @TypeFactory
+    interface Factory {
+
+        fun create(format: SoundFormat): SoundLoader
+
+    }
+
+    companion object {
+
+        /**
+         * Get instance of loader for specific format.
+         *
+         * @param format Format for getting loader.
+         *
+         * @return Instance of [SoundLoader].
+         */
+        @JvmStatic
+        fun of(format: SoundFormat): SoundLoader {
+            return Arc.factory<Factory>().create(format)
+        }
+
+    }
+
+}

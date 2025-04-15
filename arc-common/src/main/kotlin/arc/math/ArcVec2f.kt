@@ -1,13 +1,11 @@
 package arc.math
 
-import kotlinx.serialization.Serializable
 import java.util.*
 import kotlin.math.abs
 import kotlin.math.cos
 import kotlin.math.sin
 import kotlin.math.sqrt
 
-@Serializable
 @Suppress("LocalVariableName")
 internal data class ArcVec2f(
     override var x: Float,

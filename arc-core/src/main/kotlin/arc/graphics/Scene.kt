@@ -21,9 +21,9 @@ interface Scene {
     val fps: Int
 
     /**
-     * Partial tick of this scene.
+     * Delta tick of this scene.
      */
-    val partial: Float
+    val delta: Float
 
     /**
      * Is this scene using now.

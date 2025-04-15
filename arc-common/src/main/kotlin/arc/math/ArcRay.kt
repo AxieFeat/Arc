@@ -1,8 +1,5 @@
 package arc.math
 
-import kotlinx.serialization.Serializable
-
-@Serializable
 internal data class ArcRay(
     override var origin: Vec3f,
     override var direction: Vec3f

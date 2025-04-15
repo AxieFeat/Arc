@@ -6,7 +6,6 @@ import arc.files.LocationSpace
 import arc.gl.graphics.GlRenderSystem
 import arc.graphics.RenderSystem
 import arc.input.ArcInput
-import arc.input.InputDevice
 import arc.window.EmptyWindowHandler
 import arc.window.Window
 import org.lwjgl.opengl.GL
@@ -35,8 +34,6 @@ object GlApplication : AbstractApplication() {
         window.create()
 
         GL.createCapabilities()
-
-        soundEngine.start()
     }
 
     override fun screenshot(folder: File, name: String) {
@@ -44,7 +41,6 @@ object GlApplication : AbstractApplication() {
     }
 
     override fun close() {
-        soundEngine.stop()
         window.close()
     }
 

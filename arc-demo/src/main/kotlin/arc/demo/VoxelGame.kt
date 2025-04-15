@@ -2,21 +2,21 @@ package arc.demo
 
 import arc.Application
 import arc.Configuration
-import arc.asset.asFileAsset
-import arc.audio.Sound
+import arc.audio.SoundEngine
 import arc.demo.screen.ModelRenderScene
 import arc.demo.screen.Screen
 import arc.demo.shader.ShaderContainer
-import arc.files.classpath
 import arc.graphics.vertex.VertexFormat
 import arc.window.WindowHandler
 
 object VoxelGame : WindowHandler {
 
     val application: Application = Application.find()
+    private val soundEngine: SoundEngine = SoundEngine.find()
 
     fun start(configuration: Configuration = Configuration.create()) {
         application.init(configuration)
+        soundEngine.start()
 
         loadShaders()
 
@@ -25,15 +25,16 @@ object VoxelGame : WindowHandler {
         application.window.isVsync = true
         setScreen(ModelRenderScene)
 
-        val asset = classpath("arc/sound/pigstep.ogg").asFileAsset()
-        val sound = Sound.from(asset)
-
-        sound.play(volume = 0.3f, loop = true)
+//        val asset = classpath("arc/sound/pigstep.ogg").asFileAsset()
+//        val sound = SoundLoader.of(SoundFormat.OGG).load(asset)
+//
+//        sound.play(volume = 0.3f, loop = true)
 
         loop()
 
         // Close application after exit from loop.
         application.close()
+        soundEngine.stop()
     }
 
     fun setScreen(screen: Screen) {

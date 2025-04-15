@@ -1,7 +1,9 @@
 package arc.demo
 
 import arc.ArcFactoryProvider
+import arc.audio.AlAudioExtension
 import arc.gl.GlApplication
+import arc.model.CommonModelExtension
 
 fun main() {
     // Preload factories.
@@ -15,6 +17,10 @@ fun main() {
 
         else -> GlApplication.preload()
     }
+
+    // Load extensions.
+    AlAudioExtension.bootstrap()
+    CommonModelExtension.bootstrap()
 
     VoxelGame.start()
 }

@@ -33,9 +33,14 @@ interface VertexBuffer : Bindable, Cleanable {
     val mode: DrawerMode
 
     /**
-     * Count of vertices in this buffer.
+     * Size of this buffer.
      */
     val size: Int
+
+    /**
+     * Count of vertices in buffer.
+     */
+    val vertices: Int
 
     /**
      * Store some [DrawBuffer] in this vertex buffer (It will overwrite old values).

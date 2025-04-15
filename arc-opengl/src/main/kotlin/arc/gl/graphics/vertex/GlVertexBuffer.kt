@@ -13,9 +13,9 @@ internal data class GlVertexBuffer(
     override val format: VertexFormat,
 ) : VertexBuffer {
 
+
     override var id: Int = glGenBuffers()
-    var count: Int = 0
-        private set
+    override var vertices: Int = 0
 
     override fun bind() {
         glBindBuffer(GL_ARRAY_BUFFER, id)
@@ -32,7 +32,7 @@ internal data class GlVertexBuffer(
     }
 
     override fun write(drawBuffer: DrawBuffer) {
-        count = drawBuffer.vertexCount
+        vertices = drawBuffer.vertexCount
 
         bind()
 

@@ -1,8 +1,6 @@
 package arc
 
 import arc.OS.execSafe
-import arc.audio.ArcSoundEngine
-import arc.audio.SoundEngine
 import arc.input.keyboard.ArcKeyboardInput
 import arc.input.keyboard.KeyboardInput
 import arc.input.mouse.ArcMouseInput
@@ -20,43 +18,36 @@ abstract class AbstractApplication : Application {
             GLFW.glfwSetClipboardString(window.handle, value)
         }
 
-    override val soundEngine: SoundEngine = ArcSoundEngine
     override val mouse: MouseInput = ArcMouseInput
     override val keyboard: KeyboardInput = ArcKeyboardInput
 
     override fun openURL(url: String) {
         Thread {
-            when (platform.device.os) {
-                OSPlatform.MACOS -> {
-                    execSafe("open", url)
-                }
-                OSPlatform.LINUX -> {
-                    execSafe("xdg-open", url)
-                }
-                OSPlatform.WINDOWS -> {
-                    execSafe("rundll32", "url.dll,FileProtocolHandler", url)
-                }
+            val result = when (platform.device.os) {
+                OSPlatform.MACOS -> execSafe("open", url)
+                OSPlatform.LINUX -> execSafe("xdg-open", url)
+                OSPlatform.WINDOWS -> execSafe("rundll32", "url.dll,FileProtocolHandler", url)
 
-                else -> println("Can not open URL on this platform.")
+                else -> throw UnsupportedOperationException("Can not open URL on this platform.")
             }
+
+            if(!result) throw UnsupportedOperationException("Occurred error in the opening URL.")
         }.also { it.isDaemon = true }.start()
     }
 
     override fun openFolder(folder: File) {
-        Thread {
-            when (platform.device.os) {
-                OSPlatform.MACOS -> {
-                    execSafe("open", folder.absolutePath)
-                }
-                OSPlatform.LINUX -> {
-                    execSafe("xdg-open", folder.absolutePath)
-                }
-                OSPlatform.WINDOWS -> {
-                    execSafe("explorer.exe /select," + folder.absolutePath.replace("/", "\\"))
-                }
+        if (!folder.isDirectory) throw IllegalArgumentException("File is not a directory.")
 
-                else -> println("Can not open folder on this platform.")
+        Thread {
+            val result = when (platform.device.os) {
+                OSPlatform.MACOS -> execSafe("open", folder.absolutePath)
+                OSPlatform.LINUX -> execSafe("xdg-open", folder.absolutePath)
+                OSPlatform.WINDOWS -> execSafe("explorer.exe /select," + folder.absolutePath.replace("/", "\\"))
+
+                else -> throw UnsupportedOperationException("Can not open folder on this platform.")
             }
+
+            if(!result) throw UnsupportedOperationException("Occurred error in the opening folder.")
         }.also { it.isDaemon = true }.start()
     }
 

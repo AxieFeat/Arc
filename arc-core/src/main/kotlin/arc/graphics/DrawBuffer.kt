@@ -59,15 +59,6 @@ interface DrawBuffer : VertexConsumer, Builder<VertexBuffer>, Cleanable {
     @TypeFactory
     interface Factory {
 
-        /**
-         * Create new instance of [DrawBuffer].
-         *
-         * @param mode Draw mode.
-         * @param format Vertex setting.
-         * @param bufferSize Size for buffer.
-         *
-         * @return New instance of [DrawBuffer]
-         */
         fun create(mode: DrawerMode, format: VertexFormat, bufferSize: Int): DrawBuffer
 
     }

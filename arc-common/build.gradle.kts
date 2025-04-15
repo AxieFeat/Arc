@@ -11,14 +11,13 @@ private val natives = listOf(
     "org.lwjgl:lwjgl-stb",
 )
 
-apply(plugin = "org.jetbrains.kotlin.plugin.serialization")
-
 dependencies {
     api(project(":arc-core"))
 
     implementation(project(":arc-extensions:arc-profiler"))
     implementation(project(":arc-extensions:arc-model"))
     implementation(project(":arc-extensions:arc-display"))
+    implementation(project(":arc-extensions:arc-audio"))
 
     // Natives for every OS
     natives.forEach { name ->
@@ -31,6 +30,4 @@ dependencies {
 
     implementation("it.unimi.dsi:fastutil:8.5.15")
     implementation("com.github.oshi:oshi-core:6.6.6")
-
-    api("org.jetbrains.kotlinx:kotlinx-serialization-core-jvm:1.8.0")
 }
