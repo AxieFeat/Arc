@@ -20,8 +20,6 @@ object TerrainScreen : Screen("main-menu") {
 
     private val noise = PerlinNoiseGenerator.newBuilder().setSeed(3301).setInterpolation(Interpolation.COSINE).build();
 
-//    private val modelHandler = ModelHandler.of(drawer, generateTerrain(128, 128))
-
     private val world = World().also { generateTerrain(it, 4, 4) }
 
     private val front = Vector3f()
@@ -50,11 +48,6 @@ object TerrainScreen : Screen("main-menu") {
         handleInput()
 
         world.render(ShaderContainer.positionTexColor)
-//        val aabb = modelHandler.aabb
-//
-//        if(camera.frustum.isBoxInFrustum(aabb)) {
-//            modelHandler.render(ShaderContainer.positionTexColor)
-//        }
     }
 
     private fun handleInput() {
