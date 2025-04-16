@@ -43,8 +43,6 @@ include("arc-extensions:arc-model")
 findProject(":arc-extensions:arc-model")?.name = "arc-model"
 include("arc-extensions:arc-display")
 findProject(":arc-extensions:arc-display")?.name = "arc-display"
-include("arc-extensions:arc-light")
-findProject(":arc-extensions:arc-light")?.name = "arc-light"
 include("arc-extensions:arc-audio")
 findProject(":arc-extensions:arc-audio")?.name = "arc-audio"
 include("arc-extensions:arc-audio:arc-audio-core")
@@ -61,10 +59,6 @@ include("arc-extensions:arc-font:arc-font-core")
 findProject(":arc-extensions:arc-font:arc-font-core")?.name = "arc-font-core"
 include("arc-extensions:arc-font:arc-font-opengl")
 findProject(":arc-extensions:arc-font:arc-font-opengl")?.name = "arc-font-opengl"
-include("arc-extensions:arc-light:arc-light-core")
-findProject(":arc-extensions:arc-light:arc-light-core")?.name = "arc-light-core"
-include("arc-extensions:arc-light:arc-light-opengl")
-findProject(":arc-extensions:arc-light:arc-light-opengl")?.name = "arc-light-opengl"
 include("arc-extensions:arc-model:arc-model-core")
 findProject(":arc-extensions:arc-model:arc-model-core")?.name = "arc-model-core"
 include("arc-extensions:arc-model:arc-model-common")
@@ -73,9 +67,3 @@ include("arc-extensions:arc-profiler:arc-profiler-core")
 findProject(":arc-extensions:arc-profiler:arc-profiler-core")?.name = "arc-profiler-core"
 include("arc-extensions:arc-profiler:arc-profiler-common")
 findProject(":arc-extensions:arc-profiler:arc-profiler-common")?.name = "arc-profiler-common"
-include("arc-extensions:arc-physics")
-findProject(":arc-extensions:arc-physics")?.name = "arc-physics"
-include("arc-extensions:arc-physics:arc-physics-core")
-findProject(":arc-extensions:arc-physics:arc-physics-core")?.name = "arc-physics-core"
-include("arc-extensions:arc-physics:arc-physics-common")
-findProject(":arc-extensions:arc-physics:arc-physics-common")?.name = "arc-physics-common"
