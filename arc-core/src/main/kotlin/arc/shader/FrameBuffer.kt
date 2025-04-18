@@ -7,6 +7,7 @@ import org.jetbrains.annotations.ApiStatus
 /**
  * This interface represents frame buffer.
  */
+@Suppress("INAPPLICABLE_JVM_NAME")
 interface FrameBuffer {
 
     /**
@@ -32,7 +33,8 @@ interface FrameBuffer {
     /**
      * Is depth used by this buffer.
      */
-    val useDepth: Boolean
+    @get:JvmName("isUseDepth")
+    val isUseDepth: Boolean
 
     /**
      * Bind this buffer for current context.

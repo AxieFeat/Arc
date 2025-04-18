@@ -2,16 +2,14 @@ package arc.model.animation
 
 import arc.Arc
 import arc.annotations.ImmutableType
-import arc.annotations.TypeFactory
-import arc.util.pattern.Identifiable
+import arc.util.pattern.Copyable
 import org.jetbrains.annotations.ApiStatus
-import java.util.*
 
 /**
  * This interface represents animation of some model.
  */
 @ImmutableType
-interface Animation : Identifiable {
+interface Animation : Copyable<Animation> {
 
     /**
      * Name of animation. It used for control it.
@@ -26,63 +24,45 @@ interface Animation : Identifiable {
     /**
      * Delay for starting this animation in seconds.
      */
-    val startDelay: Double
+    val startDelay: Float
 
     /**
      * Delay for looping this animation in seconds.
      */
-    val loopDelay: Double
+    val loopDelay: Float
 
     /**
      * Duration of this animation in seconds.
      */
-    val duration: Double
+    val duration: Float
 
     /**
      * All animators of this animation.
      */
-    val animators: Set<Animator>
+    val animators: List<Animator>
 
-    @TypeFactory
     @ApiStatus.Internal
-    interface Factory {
+    interface Builder : arc.util.pattern.Builder<Animation> {
 
-        fun create(
-            name: String,
-            uuid: UUID,
-            loop: AnimationLoopMode,
-            startDelay: Double,
-            loopDelay: Double,
-            duration: Double,
-            animators: Set<Animator>,
-        ): Animation
+        fun setName(name: String): Builder
+        fun setLoop(loop: AnimationLoopMode): Builder
+        fun setStartDelay(startDelay: Float): Builder
+        fun setLoopDelay(loopDelay: Float): Builder
+        fun setDuration(duration: Float): Builder
+        fun addAnimator(vararg animator: Animator): Builder
 
     }
 
     companion object {
 
         /**
-         * Create new instance of [Animation].
+         * Create new instance of [Animation] via builder.
          *
-         * @param name Name of animation.
-         * @param uuid Unique id of animation.
-         * @param loop Loop mode of animation.
-         * @param startDelay Start delay of animation in milliseconds.
-         * @param loopDelay Loop delay of animation in milliseconds.
-         * @param duration Duration of animation in milliseconds.
-         * @param animators Animators of animation in milliseconds.
+         * @return New instance of [Builder].
          */
         @JvmStatic
-        fun of(
-            name: String = "",
-            uuid: UUID = UUID.randomUUID(),
-            loop: AnimationLoopMode = AnimationLoopMode.PLAY_ONCE,
-            startDelay: Double = 0.0,
-            loopDelay: Double = 0.0,
-            duration: Double = 0.0,
-            animators: Set<Animator> = setOf(),
-        ): Animation {
-            return Arc.factory<Factory>().create(name, uuid, loop, startDelay, loopDelay, duration, animators)
+        fun builder(): Builder {
+            return Arc.factory<Builder>()
         }
 
     }

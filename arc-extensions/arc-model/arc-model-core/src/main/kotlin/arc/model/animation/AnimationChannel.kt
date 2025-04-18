@@ -6,17 +6,17 @@ package arc.model.animation
 enum class AnimationChannel {
 
     /**
-     * This channel allows rotate elements.
+     * This channel allows to rotate cubes.
      */
     ROTATION,
 
     /**
-     * This channel allows change position of elements.
+     * This channel allows change position of cubes.
      */
     POSITION,
 
     /**
-     * This channel allows change scale of elements.
+     * This channel allows change scale of cubes.
      */
     SCALE
 

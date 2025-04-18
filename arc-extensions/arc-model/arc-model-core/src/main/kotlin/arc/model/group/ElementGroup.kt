@@ -2,9 +2,12 @@ package arc.model.group
 
 import arc.Arc
 import arc.annotations.ImmutableType
-import arc.annotations.TypeFactory
 import arc.math.Point3d
+import arc.math.Vec3f
+import arc.model.animation.Animation
 import arc.model.animation.Animator
+import arc.model.cube.Cube
+import arc.util.pattern.Copyable
 import arc.util.pattern.Identifiable
 import org.jetbrains.annotations.ApiStatus
 import java.util.UUID
@@ -13,7 +16,7 @@ import java.util.UUID
  * This interface represents group of elements.
  */
 @ImmutableType
-interface ElementGroup : Identifiable {
+interface ElementGroup : Copyable<ElementGroup> {
 
     /**
      * Name of group. Used by [Animator.target].
@@ -21,43 +24,38 @@ interface ElementGroup : Identifiable {
     val name: String
 
     /**
-     * All elements UUID's of this group.
+     * All Cubes UUID's of this group.
      */
-    val elements: Set<UUID>
+    val cubes: Set<UUID>
 
     /**
-     * Origin point of this group.
+     * Pivot point for rotation.
      */
-    val origin: Point3d
+    val pivot: Vec3f
 
-    @TypeFactory
     @ApiStatus.Internal
-    interface Factory {
+    interface Builder : arc.util.pattern.Builder<ElementGroup> {
 
-        fun create(uuid: UUID, name: String, elements: Set<UUID>, origin: Point3d): ElementGroup
+        fun setName(name: String): Builder
+
+        fun addCube(vararg cube: Cube): Builder = addCube(*cube.map { it.uuid }.toTypedArray())
+        fun addCube(vararg cube: UUID): Builder
+
+        fun setPivot(pivot: Vec3f): Builder = setPivot(pivot.x, pivot.y, pivot.z)
+        fun setPivot(x: Float, y: Float, z: Float): Builder
 
     }
 
     companion object {
 
         /**
-         * Create instance of [ElementGroup].
+         * Create instance of [ElementGroup] via builder.
          *
-         * @param uuid Unique id of group.
-         * @param name Name of group.
-         * @param elements Elements of group.
-         * @param origin Center point of group.
-         *
-         * @return New instance of [ElementGroup].
+         * @return New instance of [Builder].
          */
         @JvmStatic
-        fun of(
-            uuid: UUID = UUID.randomUUID(),
-            name: String = "",
-            elements: Set<UUID> = setOf(),
-            origin: Point3d = Point3d.ZERO
-        ): ElementGroup {
-            return Arc.factory<Factory>().create(uuid, name, elements, origin)
+        fun builder(): Builder {
+            return Arc.factory<Builder>()
         }
 
     }

@@ -2,75 +2,59 @@ package arc.model.animation
 
 import arc.Arc
 import arc.annotations.ImmutableType
-import arc.annotations.TypeFactory
-import arc.math.Point3d
-import arc.util.pattern.Identifiable
+import arc.math.Vec3f
 import arc.util.InterpolationMode
+import arc.util.pattern.Copyable
 import org.jetbrains.annotations.ApiStatus
-import java.util.*
 
 /**
  * This interface represents keyframe of animation
  */
 @ImmutableType
-interface Keyframe : Identifiable {
+interface Keyframe : Copyable<Keyframe> {
 
     /**
      * Channel of this keyframe.
      */
-    val channel: arc.model.animation.AnimationChannel
-
-    /**
-     * Time after animation start when this frame will be executed in seconds.
-     */
-    val time: Double
-
-    /**
-     * Points for changing elements.
-     */
-    val dataPoints: Point3d
+    val channel: AnimationChannel
 
     /**
      * Mode of interpolation for elements changing.
      */
     val interpolation: InterpolationMode
 
-    @TypeFactory
-    @ApiStatus.Internal
-    interface Factory {
+    /**
+     * Time after animation start when this frame will be executed in seconds.
+     */
+    val time: Float
 
-        fun create(
-            uuid: UUID,
-            channel: arc.model.animation.AnimationChannel,
-            time: Double,
-            dataPoints: Point3d,
-            interpolation: InterpolationMode
-        ): arc.model.animation.Keyframe
+    /**
+     * Points for changing elements.
+     */
+    val dataPoints: Vec3f
+
+    @ApiStatus.Internal
+    interface Builder : arc.util.pattern.Builder<Keyframe> {
+
+        fun setChannel(channel: AnimationChannel): Builder
+        fun setInterpolation(interpolation: InterpolationMode): Builder
+        fun setTime(time: Float): Builder
+
+        fun setDataPoints(dataPoints: Vec3f): Builder = setDataPoints(dataPoints.x, dataPoints.y, dataPoints.z)
+        fun setDataPoints(x: Float, y: Float, z: Float): Builder
 
     }
 
     companion object {
 
         /**
-         * Create new instance of [Keyframe].
+         * Create new instance of [Keyframe] via builder.
          *
-         * @param uuid Unique id of keyframe.
-         * @param channel Channel of keyframe.
-         * @param time Time of keyframe.
-         * @param dataPoints Data points of keyframe.
-         * @param interpolation Interpolation mode of keyframe.
-         *
-         * @return New instance of [Keyframe].
+         * @return New instance of [Builder].
          */
         @JvmStatic
-        fun of(
-            uuid: UUID = UUID.randomUUID(),
-            channel: arc.model.animation.AnimationChannel = arc.model.animation.AnimationChannel.SCALE,
-            time: Double = 0.0,
-            dataPoints: Point3d = Point3d.ZERO,
-            interpolation: InterpolationMode = InterpolationMode.LINEAR
-        ): arc.model.animation.Keyframe {
-            return Arc.factory<arc.model.animation.Keyframe.Factory>().create(uuid, channel, time, dataPoints, interpolation)
+        fun builder(): Builder {
+            return Arc.factory<Builder>()
         }
 
     }

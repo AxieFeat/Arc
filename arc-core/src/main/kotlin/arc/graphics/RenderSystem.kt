@@ -7,6 +7,7 @@ import org.jetbrains.annotations.Range
 /**
  * This interface represents manager of rendering.
  */
+@Suppress("INAPPLICABLE_JVM_NAME")
 interface RenderSystem {
 
     /**
@@ -22,16 +23,19 @@ interface RenderSystem {
     /**
      * Is depth test enabled.
      */
+    @get:JvmName("isDepthTestEnabled")
     val isDepthTestEnabled: Boolean
 
     /**
      * Is culling enabled.
      */
+    @get:JvmName("isCullEnabled")
     val isCullEnabled: Boolean
 
     /**
      * Is blending enabled.
      */
+    @get:JvmName("isBlendEnabled")
     val isBlendEnabled: Boolean
 
     /**
@@ -174,14 +178,6 @@ interface RenderSystem {
     fun enableTexture2D()
 
     fun disableTexture2D()
-
-    fun enableLighting()
-
-    fun disableLighting()
-
-    fun enableAlpha()
-
-    fun disableAlpha()
 
     fun blendEquation(mode: Int)
 

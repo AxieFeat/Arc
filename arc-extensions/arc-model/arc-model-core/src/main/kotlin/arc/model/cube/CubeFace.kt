@@ -2,9 +2,8 @@ package arc.model.cube
 
 import arc.Arc
 import arc.annotations.ImmutableType
-import arc.annotations.TypeFactory
 import arc.math.Point2i
-import arc.model.texture.ModelTexture
+import arc.model.Model
 import org.jetbrains.annotations.ApiStatus
 
 /**
@@ -12,6 +11,7 @@ import org.jetbrains.annotations.ApiStatus
  *
  * @see Cube
  */
+@Suppress("INAPPLICABLE_JVM_NAME")
 @ImmutableType
 interface CubeFace {
 
@@ -30,34 +30,41 @@ interface CubeFace {
     val uvMax: Point2i
 
     /**
-     * Represents the texture ID associated with a specific cube face.
-     *
-     * @see ModelTexture
+     * Rotation of texture.
      */
-    val texture: Int
+    val rotation: Float
 
-    @TypeFactory
+    /**
+     * Is this value set to false - this face will be ignored by [Model.cullFaces].
+     */
+    @get:JvmName("isCulling")
+    val isCullable: Boolean
+
     @ApiStatus.Internal
-    interface Factory {
+    interface Builder : arc.util.pattern.Builder<CubeFace> {
 
-        fun create(uvMin: Point2i, uvMax: Point2i, texture: Int): arc.model.cube.CubeFace
+        fun setUvMin(uvMin: Point2i): Builder = setUvMin(uvMin.x, uvMin.y)
+        fun setUvMin(u: Int, v: Int): Builder
+
+        fun setUvMax(uvMax: Point2i): Builder = setUvMax(uvMax.x, uvMax.y)
+        fun setUvMax(u: Int, v: Int): Builder
+
+        fun rotation(rotation: Float): Builder
+
+        fun setCull(cullable: Boolean): Builder
 
     }
 
     companion object {
 
         /**
-         * Create new instance of [CubeFace].
+         * Create new instance of [CubeFace] via builder.
          *
-         * @param uvMin Min UV coords in texture atlas.
-         * @param uvMax Max UV coords in texture atlas.
-         * @param texture ID of texture.
-         *
-         * @return New instance of [CubeFace].
+         * @return New instance of [Builder].
          */
         @JvmStatic
-        fun of(uvMin: Point2i, uvMax: Point2i, texture: Int): arc.model.cube.CubeFace {
-            return Arc.factory<arc.model.cube.CubeFace.Factory>().create(uvMin, uvMax, texture)
+        fun builder(): Builder {
+            return Arc.factory<Builder>()
         }
 
     }

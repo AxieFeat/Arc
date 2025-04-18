@@ -25,3 +25,18 @@ inline fun <reified T> FactoryProvider.provide(): T = provide(T::class.java)
 inline fun <reified T> FactoryProvider.register(factory: T, overwrite: Boolean = true) {
     register(T::class.java, factory, overwrite)
 }
+
+/**
+ * Register the given [provider] of the given type [T] to this factory provider.
+ *
+ * @param T The factory type.
+ * @param provider The provider to register.
+ * @param overwrite If factory already register it will be overwritten by new provider.
+ *
+ * @throws IllegalStateException If the provider is already registered (Only if [overwrite] is false).
+ */
+@JvmSynthetic
+inline fun <reified T> FactoryProvider.register(noinline provider: () -> T, overwrite: Boolean = true) {
+    register(T::class.java, provider, overwrite)
+}
+

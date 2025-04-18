@@ -6,6 +6,7 @@ import arc.math.Point3d
 /**
  * Represents a sound that can be played, stopped, and managed.
  */
+@Suppress("INAPPLICABLE_JVM_NAME")
 @MutableType
 interface Sound {
 
@@ -16,11 +17,13 @@ interface Sound {
      * - `true` if the sound is actively being played.
      * - `false` if the sound is stopped or has not started playing.
      */
+    @get:JvmName("isPlaying")
     val isPlaying: Boolean
 
     /**
      * Indicates whether the sound is currently paused.
      */
+    @get:JvmName("isPaused")
     val isPaused: Boolean
 
     /**
@@ -41,6 +44,8 @@ interface Sound {
     /**
      * Is this sound looping.
      */
+    @get:JvmName("isLoop")
+    @set:JvmName("setLoop")
     var isLoop: Boolean
 
     /**

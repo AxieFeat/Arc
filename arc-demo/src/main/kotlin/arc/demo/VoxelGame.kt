@@ -8,6 +8,9 @@ import arc.demo.screen.Screen
 import arc.demo.shader.ShaderContainer
 import arc.graphics.vertex.VertexFormat
 import arc.window.WindowHandler
+import org.lwjgl.opengl.GL11.GL_RENDERER
+import org.lwjgl.opengl.GL11.GL_VENDOR
+import org.lwjgl.opengl.GL11.glGetString
 
 object VoxelGame : WindowHandler {
 
@@ -30,11 +33,15 @@ object VoxelGame : WindowHandler {
 //
 //        sound.play(volume = 0.3f, loop = true)
 
+        if(application.platform.isIGpu) {
+            println("Warning! Engine started at iGPU.")
+        }
+
         loop()
 
         // Close application after exit from loop.
-        application.close()
         soundEngine.stop()
+        application.close()
     }
 
     fun setScreen(screen: Screen) {

@@ -1,11 +1,12 @@
 package arc.model
 
 import arc.Arc
-import arc.annotations.ImmutableType
-import arc.asset.StringAsset
+import arc.math.Point3i
 import arc.model.animation.Animation
+import arc.model.cube.Cube
 import arc.model.group.ElementGroup
 import arc.model.texture.ModelTexture
+import arc.model.cube.CubeFace
 import arc.util.pattern.Copyable
 import org.jetbrains.annotations.ApiStatus
 
@@ -23,72 +24,93 @@ import org.jetbrains.annotations.ApiStatus
 interface Model : Copyable<Model> {
 
     /**
-     * All elements in this model.
+     * All cubes in this model.
      */
-    val elements: MutableList<Element>
+    val cubes: List<Cube>
 
     /**
      * All groups in this model.
      */
-    val groups: MutableList<ElementGroup>
+    val groups: List<ElementGroup>
 
     /**
      * All animations in this model.
      */
-    val animations: MutableList<Animation>
+    val animations: List<Animation>
 
     /**
-     * All textures in this model.
+     * Texture of this model.
      */
-    val textures: MutableList<ModelTexture>
+    val texture: ModelTexture
 
     /**
-     * Merge this model with other model.
+     * Translate positions of all cubes in this model by offsets.
      *
-     * @param model Model for merging.
-     *
-     * @return New instance of [Model].
+     * @param offsetX X offset.
+     * @param offsetY Y offset.
+     * @param offsetZ Z offset.
      */
-    fun merge(vararg model: Model): Model
+    fun translate(offsetX: Float, offsetY: Float, offsetZ: Float) {
+        cubes.forEach { it.translate(offsetX, offsetY, offsetZ) }
+    }
+
+    /**
+     * Is some cube has near cube for some facing.
+     *
+     * @param cube Cube for check.
+     * @param face Face for check.
+     *
+     * @return `true` if a [face] of a [cube] has another face next to it that is larger or the same size. Otherwise, `false.
+     */
+    fun hasNearFace(cube: Cube, face: Face): Boolean
+
+    /**
+     * Cull faces in model, that not viewable (Close by other cube faces).
+     * It will ignore faces, where [CubeFace.isCullable] set to false.
+     */
+    fun cullFaces() {
+        cubes.forEach { cube ->
+            cube.removeFaceIf {
+                hasNearFace(cube, it.key) && it.value.isCullable
+            }
+        }
+    }
+
+    /**
+     * Use greedy meshing for this model.
+     */
+    fun greedy()
+
+    /**
+     * Reset model to default state.
+     *
+     * Example resetting model after animation.
+     */
+    fun reset()
 
     @ApiStatus.Internal
-    interface Factory {
+    interface Builder : arc.util.pattern.Builder<Model> {
 
-        fun create(elements: MutableList<Element>, groups: MutableList<ElementGroup>, animations: MutableList<Animation>, textures: MutableList<ModelTexture>): Model
+        fun addCube(vararg cube: Cube): Builder
+
+        fun addGroup(vararg group: ElementGroup): Builder
+
+        fun addAnimation(vararg animation: Animation): Builder
+
+        fun setTexture(texture: ModelTexture): Builder
 
     }
 
     companion object {
 
         /**
-         * Create [Model] from [StringAsset].
+         * Create new instance of [Model] via builder.
          *
-         * @param asset Asset for Model.
-         *
-         * @return New instance of [Model].
+         * @return New instance of [Builder].
          */
         @JvmStatic
-        fun from(asset: StringAsset): Model {
-            TODO()
-        }
-
-        /**
-         * Create new instance of [Model].
-         *
-         * @param elements Elements of model.
-         * @param textures Textures of model.
-         * @param animations Animations of model.
-         *
-         * @return New instance of [Model].
-         */
-        @JvmStatic
-        fun of(
-            elements: MutableList<Element> = mutableListOf(),
-            groups: MutableList<ElementGroup> = mutableListOf(),
-            animations: MutableList<Animation> = mutableListOf(),
-            textures: MutableList<ModelTexture> = mutableListOf(),
-        ): Model {
-            return Arc.factory<Factory>().create(elements, groups, animations, textures)
+        fun builder(): Builder {
+            return Arc.factory<Builder>()
         }
 
     }

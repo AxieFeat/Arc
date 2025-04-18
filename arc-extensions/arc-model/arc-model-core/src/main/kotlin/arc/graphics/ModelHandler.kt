@@ -6,13 +6,14 @@ import arc.annotations.TypeFactory
 import arc.math.AABB
 import arc.model.Model
 import arc.shader.ShaderInstance
+import arc.util.pattern.Cleanable
 import org.jetbrains.annotations.ApiStatus
 import org.jetbrains.annotations.Range
 
 /**
  * This interface represents renderer of models.
  */
-interface ModelHandler {
+interface ModelHandler : Cleanable {
 
     /**
      * Drawer of model handler.

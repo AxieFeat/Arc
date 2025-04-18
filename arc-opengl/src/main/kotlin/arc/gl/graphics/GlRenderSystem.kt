@@ -123,22 +123,6 @@ internal object GlRenderSystem : RenderSystem {
         glDisable(GL_TEXTURE_2D)
     }
 
-    override fun enableLighting() {
-        glEnable(GL_LIGHTING)
-    }
-
-    override fun disableLighting() {
-        glDisable(GL_LIGHTING)
-    }
-
-    override fun enableAlpha() {
-        glEnable(GL_ALPHA)
-    }
-
-    override fun disableAlpha() {
-        glDisable(GL_ALPHA)
-    }
-
     override fun blendEquation(mode: Int) {
         glBlendEquation(mode)
     }

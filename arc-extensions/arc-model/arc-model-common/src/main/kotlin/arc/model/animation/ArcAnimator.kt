@@ -1,17 +1,36 @@
 package arc.model.animation
 
-import java.util.*
-
 internal data class ArcAnimator(
-    override val uuid: UUID = UUID.randomUUID(),
     override val target: String = "",
-    override val keyframes: Set<Keyframe> = setOf()
+    override val keyframes: Set<Keyframe> = emptySet(),
 ) : Animator {
 
-    object Factory : Animator.Factory {
-        override fun create(uuid: UUID, target: String, keyframes: Set<Keyframe>): Animator {
-            return ArcAnimator(uuid, target, keyframes)
-        }
+    override fun copy(): Animator {
+        return ArcAnimator(target, keyframes.map { it.copy() }.toSet())
     }
+
+    class Builder : Animator.Builder {
+
+        private var target: String = ""
+        private var keyframes = mutableSetOf<Keyframe>()
+
+        override fun setTarget(target: String): Animator.Builder {
+            this.target = target
+
+            return this
+        }
+
+        override fun addKeyframe(vararg keyframe: Keyframe): Animator.Builder {
+            this.keyframes.addAll(keyframe)
+
+            return this
+        }
+
+        override fun build(): Animator {
+            return ArcAnimator(target, keyframes)
+        }
+
+    }
+
 
 }

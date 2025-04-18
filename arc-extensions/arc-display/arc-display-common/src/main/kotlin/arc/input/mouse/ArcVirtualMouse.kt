@@ -13,6 +13,9 @@ internal data class ArcVirtualMouse(
     override var previousPosition: Point2d = Point2d.ZERO
     override var position: Point2d = Point2d.ZERO
     override var displayVec: Vec2f = Vec2f.ZERO
+    override fun reset() {
+
+    }
 
     override fun update(camera: Camera) {
 //        previousPosition = Point2d.of(position.x, position.y)

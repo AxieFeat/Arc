@@ -10,12 +10,12 @@ object EmptyScene : Scene {
         get() = 0
     override val delta: Float
         get() = 0f
-    override val inUse: Boolean
+    override val isUse: Boolean
         get() = false
     override var isSkipRender: Boolean
         get() = true
         set(value) {}
-    override var showCursor: Boolean
+    override var isShowCursor: Boolean
         get() = true
         set(value) {}
 

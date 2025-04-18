@@ -31,4 +31,16 @@ interface FactoryProvider {
      */
     fun <T> register(type: Class<T>, factory: T, overwrite: Boolean = true)
 
+    /**
+     * Register the given [provider] of the given [type] to this factory provider.
+     *
+     * @param T The factory type.
+     * @param type The class of the type.
+     * @param provider The provider to register.
+     * @param overwrite If factory already register it will be overwritten by new provider.
+     *
+     * @throws IllegalStateException If the provider is already registered (Only if [overwrite] is false).
+     */
+    fun <T> register(type: Class<T>, provider: () -> T, overwrite: Boolean = true)
+
 }

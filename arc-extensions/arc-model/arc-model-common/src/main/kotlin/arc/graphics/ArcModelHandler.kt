@@ -2,7 +2,6 @@ package arc.graphics
 
 import arc.math.AABB
 import arc.math.Vec3f
-import arc.model.Element
 import arc.model.Model
 import arc.model.cube.Cube
 import arc.model.texture.ModelTexture
@@ -34,21 +33,21 @@ internal data class ArcModelHandler(
             return cachedAabb
         }
 
-    private val textures = model.textures.map { it.toTexture() }
+    private val texture = model.texture.toAtlasTexture()
 
     private val modelSections = run {
-        if(model.groups.isEmpty()) return@run listOf(ArcModelSection(drawer, "auto-generated", model, model.elements))
+        if(model.groups.isEmpty()) return@run listOf(ArcModelSection(drawer, "auto-generated", texture, model, model.cubes))
 
         val result = mutableListOf<ArcModelSection>()
 
         model.groups.forEach { group ->
-            val elements = mutableListOf<Element>()
+            val cubes = mutableListOf<Cube>()
 
-            group.elements.forEach { element ->
-                elements.add(model.elements.find { it.uuid == element }!!)
+            group.cubes.forEach { element ->
+                cubes.add(model.cubes.find { it.uuid == element }!!)
             }
 
-            result.add(ArcModelSection(drawer, group.name, model, elements))
+            result.add(ArcModelSection(drawer, group.name, texture, model, cubes))
         }
 
         return@run result
@@ -60,9 +59,9 @@ internal data class ArcModelHandler(
 
     override fun render(shader: ShaderInstance) {
         shader.bind()
-        textures.forEach { it.bind() }
+        texture.bind()
         modelSections.forEach { it.render(matrix) }
-        textures.forEach { it.unbind() }
+        texture.unbind()
         shader.unbind()
     }
 
@@ -123,13 +122,13 @@ internal data class ArcModelHandler(
 
         val temp = Vector3f()
 
-        model.elements.filterIsInstance<Cube>().forEach { element ->
-            val x0 = element.from.x.toFloat()
-            val y0 = element.from.y.toFloat()
-            val z0 = element.from.z.toFloat()
-            val x1 = element.to.x.toFloat()
-            val y1 = element.to.y.toFloat()
-            val z1 = element.to.z.toFloat()
+        model.cubes.forEach { element ->
+            val x0 = element.from.x
+            val y0 = element.from.y
+            val z0 = element.from.z
+            val x1 = element.to.x
+            val y1 = element.to.y
+            val z1 = element.to.z
 
             val corners = listOf(
                 Vector3f(x0, y0, z0), Vector3f(x1, y0, z0),
@@ -155,13 +154,10 @@ internal data class ArcModelHandler(
         cachedAabb.max = Vec3f.of(maxX, maxY, maxZ)
     }
 
-
-    private fun ModelTexture.toTexture(): Texture {
-        val image = Base64.getDecoder().decode(base64Image)
-
-        return Texture.from(
-            bytes = image
-        )
+    override fun cleanup() {
+        modelSections.forEach {
+            it.buffer.cleanup()
+        }
     }
 
     object Factory : ModelHandler.Factory {

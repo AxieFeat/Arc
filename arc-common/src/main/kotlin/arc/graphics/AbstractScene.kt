@@ -17,12 +17,12 @@ abstract class AbstractScene(
     override val camera: Camera = Camera.create(45f, application.window.width.toFloat(), application.window.height.toFloat())
     override var fps: Int = 0
     override var delta: Float = 0f
-    override val inUse: Boolean
+    override val isUse: Boolean
         get() = application.renderSystem.scene == this
 
     override var isSkipRender: Boolean = false
 
-    override var showCursor: Boolean = true
+    override var isShowCursor: Boolean = true
         set(value) {
             field = value
 

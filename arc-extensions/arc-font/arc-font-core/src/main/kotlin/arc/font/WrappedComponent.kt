@@ -6,7 +6,7 @@ import org.joml.Matrix4f
 /**
  * This interface represents wrapped Kyori component.
  */
-interface WrappedComponent{
+interface WrappedComponent {
 
     /**
      * Wrapping component.

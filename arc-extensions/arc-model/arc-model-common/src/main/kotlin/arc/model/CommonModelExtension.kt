@@ -29,14 +29,14 @@ object CommonModelExtension {
     @JvmStatic
     fun bootstrap(provider: FactoryProvider = ArcFactoryProvider) {
         // Parts of model.
-        provider.register<Model.Factory>(ArcModel.Factory)
-        provider.register<Cube.Factory>(ArcCube.Factory)
-        provider.register<CubeFace.Factory>(ArcCubeFace.Factory)
-        provider.register<ModelTexture.Factory>(ArcModelTexture.Factory)
-        provider.register<ElementGroup.Factory>(ArcElementGroup.Factory)
-        provider.register<Animation.Factory>(ArcAnimation.Factory)
-        provider.register<Animator.Factory>(ArcAnimator.Factory)
-        provider.register<Keyframe.Factory>(ArcKeyframe.Factory)
+        provider.register<Model.Builder>({ ArcModel.Builder() })
+        provider.register<Cube.Builder>({ ArcCube.Builder() })
+        provider.register<CubeFace.Builder>({ ArcCubeFace.Builder() })
+        provider.register<ModelTexture.Builder>({ ArcModelTexture.Builder() })
+        provider.register<ElementGroup.Builder>({ ArcElementGroup.Builder() })
+        provider.register<Animation.Builder>({ ArcAnimation.Builder() })
+        provider.register<Animator.Builder>({ ArcAnimator.Builder() })
+        provider.register<Keyframe.Builder>({ ArcKeyframe.Builder() })
 
         // Render model.
         provider.register<ModelHandler.Factory>(ArcModelHandler.Factory)

@@ -2,16 +2,15 @@ package arc.model.animation
 
 import arc.Arc
 import arc.annotations.ImmutableType
-import arc.annotations.TypeFactory
-import arc.util.pattern.Identifiable
+import arc.model.group.ElementGroup
+import arc.util.pattern.Copyable
 import org.jetbrains.annotations.ApiStatus
-import java.util.*
 
 /**
  * This interface represents animator of animation.
  */
 @ImmutableType
-interface Animator : Identifiable {
+interface Animator : Copyable<Animator> {
 
     /**
      * Name of target group of elements.
@@ -21,34 +20,28 @@ interface Animator : Identifiable {
     /**
      * Keyframes of this animator.
      */
-    val keyframes: Set<arc.model.animation.Keyframe>
+    val keyframes: Set<Keyframe>
 
-    @TypeFactory
     @ApiStatus.Internal
-    interface Factory {
+    interface Builder : arc.util.pattern.Builder<Animator> {
 
-        fun create(uuid: UUID, target: String, keyframes: Set<arc.model.animation.Keyframe>): arc.model.animation.Animator
+        fun setTarget(group: ElementGroup): Builder = setTarget(group.name)
+        fun setTarget(target: String): Builder
+
+        fun addKeyframe(vararg keyframe: Keyframe): Builder
 
     }
 
     companion object {
 
         /**
-         * Create new instance of [Animator].
+         * Create new instance of [Animator] via builder.
          *
-         * @param uuid Unique id of animator.
-         * @param target Target group of animator.
-         * @param keyframes Keyframes of animator.
-         *
-         * @return New instance of [Animator].
+         * @return New instance of [Builder].
          */
         @JvmStatic
-        fun of(
-            uuid: UUID = UUID.randomUUID(),
-            target: String = "",
-            keyframes: Set<arc.model.animation.Keyframe> = setOf()
-        ): arc.model.animation.Animator {
-            return Arc.factory<arc.model.animation.Animator.Factory>().create(uuid, target, keyframes)
+        fun builder(): Builder {
+            return Arc.factory<Builder>()
         }
 
     }

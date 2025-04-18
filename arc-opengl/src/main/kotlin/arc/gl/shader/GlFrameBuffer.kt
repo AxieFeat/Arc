@@ -11,7 +11,7 @@ import org.lwjgl.system.MemoryUtil
 internal class GlFrameBuffer(
     override var width: Int,
     override var height: Int,
-    override val useDepth: Boolean
+    override val isUseDepth: Boolean
 ) : FrameBuffer {
 
     private var fboId: Int = 0
@@ -52,7 +52,7 @@ internal class GlFrameBuffer(
     override fun cleanup() {
         glDeleteFramebuffers(fboId)
         glDeleteTextures(textureId)
-        if (useDepth) {
+        if (isUseDepth) {
             glDeleteRenderbuffers(depthBufferId)
         }
     }
@@ -78,7 +78,7 @@ internal class GlFrameBuffer(
     }
 
     override fun clear() {
-        glClear(GL_COLOR_BUFFER_BIT or (if (useDepth) GL_DEPTH_BUFFER_BIT else 0))
+        glClear(GL_COLOR_BUFFER_BIT or (if (isUseDepth) GL_DEPTH_BUFFER_BIT else 0))
     }
 
     private fun createFramebuffer(width: Int, height: Int) {
@@ -94,7 +94,7 @@ internal class GlFrameBuffer(
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR)
         glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, textureId, 0)
 
-        depthBufferId = if (useDepth) {
+        depthBufferId = if (isUseDepth) {
             val rbo = glGenRenderbuffers()
             glBindRenderbuffer(GL_RENDERBUFFER, rbo)
             glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, width, height)

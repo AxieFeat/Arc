@@ -9,6 +9,7 @@ import org.jetbrains.annotations.ApiStatus
 /**
  * This interface represents window of application.
  */
+@Suppress("INAPPLICABLE_JVM_NAME")
 @MutableType
 interface Window {
 
@@ -45,21 +46,28 @@ interface Window {
     /**
      * Indicates whether the window currently has input focus.
      */
+    @get:JvmName("isFocus")
     val isFocus: Boolean
 
     /**
      * Indicates whether the window can be resized by the user.
      */
+    @get:JvmName("isResizable")
+    @set:JvmName("setResizable")
     var isResizable: Boolean
 
     /**
      * Indicates whether the window is currently hidden.
      */
+    @get:JvmName("isHide")
+    @set:JvmName("setHide")
     var isHide: Boolean
 
     /**
      * Indicates whether the window has Vsync.
      */
+    @get:JvmName("isVsync")
+    @set:JvmName("setVsync")
     var isVsync: Boolean
 
     /**

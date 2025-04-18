@@ -2,9 +2,10 @@ package arc.model.texture
 
 import arc.Arc
 import arc.annotations.ImmutableType
-import arc.annotations.TypeFactory
 import arc.texture.Texture
+import arc.texture.TextureAtlas
 import org.jetbrains.annotations.ApiStatus
+import java.util.*
 
 /**
  * Represents a texture associated with a 3D model.
@@ -13,58 +14,36 @@ import org.jetbrains.annotations.ApiStatus
 interface ModelTexture {
 
     /**
-     * ID of this texture in Model. NOT in render system!
-     */
-    val id: Int
-
-    /**
-     * Width of [base64Image] image.
-     */
-    val width: Int
-
-    /**
-     * Height of [base64Image] image.
-     */
-    val height: Int
-
-    /**
      * Serialized base64 image in png format.
      */
     val base64Image: String
 
-    @TypeFactory
-    @ApiStatus.Internal
-    interface Factory {
+    /**
+     * Create texture atlas by [base64Image] serialized image.
+     *
+     * @return New instance of [TextureAtlas].
+     */
+    fun toAtlasTexture(): TextureAtlas {
+        return TextureAtlas.from(Base64.getDecoder().decode(base64Image))
+    }
 
-        fun create(
-            id: Int,
-            width: Int,
-            height: Int,
-            base64Image: String
-        ): ModelTexture
+    @ApiStatus.Internal
+    interface Builder : arc.util.pattern.Builder<ModelTexture> {
+
+        fun setImage(base64Image: String): Builder
 
     }
 
     companion object {
 
         /**
-         * Create new instance of [Texture].
+         * Create new instance of [Texture] via builder.
          *
-         * @param id ID of texture.
-         * @param width Width of texture.
-         * @param height Height of texture.
-         * @param base64Image Base64 image in png format.
-         *
-         * @return New instance of [Texture].
+         * @return New instance of [Builder].
          */
         @JvmStatic
-        fun of(
-            id: Int,
-            width: Int,
-            height: Int,
-            base64Image: String
-        ): ModelTexture {
-            return Arc.factory<Factory>().create(id, width, height, base64Image)
+        fun builder(): Builder {
+            return Arc.factory<Builder>()
         }
 
     }

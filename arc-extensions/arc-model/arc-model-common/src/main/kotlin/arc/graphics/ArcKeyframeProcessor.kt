@@ -15,9 +15,9 @@ internal data class ArcKeyframeProcessor(
 
     private var elapsedTime: Float = 0.0f
 
-    private var rotation = Point3d.ZERO.copy()
-    private var translation = Point3d.ZERO.copy()
-    private var scale = Point3d.of(1.0, 1.0, 1.0)
+//    private var rotation = Point3d.ZERO.copy()
+//    private var translation = Point3d.ZERO.copy()
+//    private var scale = Point3d.of(1.0, 1.0, 1.0)
 
     fun update(delta: Float): Boolean {
         elapsedTime += delta
@@ -33,49 +33,49 @@ internal data class ArcKeyframeProcessor(
     fun reset(): ArcKeyframeProcessor {
         elapsedTime = 0f
         matrix.identity()
-        rotation = Point3d.ZERO.copy()
-        translation = Point3d.ZERO.copy()
-        scale = Point3d.of(1.0, 1.0, 1.0)
+//        rotation = Point3d.ZERO.copy()
+//        translation = Point3d.ZERO.copy()
+//        scale = Point3d.of(1.0, 1.0, 1.0)
 
         return this
     }
 
     private fun interpolate(progress: Float): Boolean {
-        when(keyframe.channel) {
-            AnimationChannel.ROTATION -> {
-                rotation.interpolate(keyframe.dataPoints, progress)
-
-                if(rotation == keyframe.dataPoints) return true
-            }
-            AnimationChannel.POSITION -> {
-                translation.interpolate(keyframe.dataPoints, progress)
-
-                if(translation == keyframe.dataPoints) return true
-            }
-            AnimationChannel.SCALE -> {
-                scale.interpolate(keyframe.dataPoints, progress)
-
-                if(scale == keyframe.dataPoints) return true
-            }
-        }
+//        when(keyframe.channel) {
+//            AnimationChannel.ROTATION -> {
+//                rotation.interpolate(keyframe.dataPoints, progress)
+//
+//                if(rotation == keyframe.dataPoints) return true
+//            }
+//            AnimationChannel.POSITION -> {
+//                translation.interpolate(keyframe.dataPoints, progress)
+//
+//                if(translation == keyframe.dataPoints) return true
+//            }
+//            AnimationChannel.SCALE -> {
+//                scale.interpolate(keyframe.dataPoints, progress)
+//
+//                if(scale == keyframe.dataPoints) return true
+//            }
+//        }
 
         return false
     }
 
     private fun updateMatrix() {
-        when(keyframe.channel) {
-            AnimationChannel.ROTATION -> {
-                matrix
-                    .setRotationXYZ(rotation.x.toFloat(), rotation.y.toFloat(), rotation.z.toFloat())
-            }
-            AnimationChannel.POSITION -> {
-                matrix
-                    .translation(translation.x.toFloat(), translation.y.toFloat(), translation.z.toFloat())
-            }
-            AnimationChannel.SCALE -> {
-                matrix
-                    .scale(scale.x.toFloat(), scale.y.toFloat(), scale.z.toFloat())
-            }
-        }
+//        when(keyframe.channel) {
+//            AnimationChannel.ROTATION -> {
+//                matrix
+//                    .setRotationXYZ(rotation.x.toFloat(), rotation.y.toFloat(), rotation.z.toFloat())
+//            }
+//            AnimationChannel.POSITION -> {
+//                matrix
+//                    .translation(translation.x.toFloat(), translation.y.toFloat(), translation.z.toFloat())
+//            }
+//            AnimationChannel.SCALE -> {
+//                matrix
+//                    .scale(scale.x.toFloat(), scale.y.toFloat(), scale.z.toFloat())
+//            }
+//        }
     }
 }

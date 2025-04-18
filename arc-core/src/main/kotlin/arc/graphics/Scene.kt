@@ -3,6 +3,7 @@ package arc.graphics
 /**
  * This interface represents renderable scene of engine.
  */
+@Suppress("INAPPLICABLE_JVM_NAME")
 interface Scene {
 
     /**
@@ -28,17 +29,22 @@ interface Scene {
     /**
      * Is this scene using now.
      */
-    val inUse: Boolean
+    @get:JvmName("isUse")
+    val isUse: Boolean
 
     /**
      * Is this scene render something.
      */
+    @get:JvmName("isSkipRender")
+    @set:JvmName("setSkipRender")
     var isSkipRender: Boolean
 
     /**
      * Is cursor showed in window.
      */
-    var showCursor: Boolean
+    @get:JvmName("isShowCursor")
+    @set:JvmName("setShowCursor")
+    var isShowCursor: Boolean
 
     /**
      * Render this scene.

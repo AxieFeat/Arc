@@ -5,6 +5,7 @@ import arc.util.pattern.Copyable
 /**
  * Encapsulates a general vector.
  */
+@Suppress("INAPPLICABLE_JVM_NAME")
 interface Vector<T : Vector<T>> : Copyable<T> {
 
     /**
@@ -173,6 +174,7 @@ interface Vector<T : Vector<T>> : Copyable<T> {
     /**
      * Whether this vector is a unit length vector.
      */
+    @get:JvmName("isUnit")
     val isUnit: Boolean
 
     /**
@@ -183,6 +185,7 @@ interface Vector<T : Vector<T>> : Copyable<T> {
     /**
      * Whether this vector is a zero vector.
      */
+    @get:JvmName("isZero")
     val isZero: Boolean
 
     /**
