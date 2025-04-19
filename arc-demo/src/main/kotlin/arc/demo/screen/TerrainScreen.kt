@@ -13,40 +13,16 @@ import arc.math.Vec3f
 import arc.model.Face
 import arc.util.Color
 import org.joml.Vector3f
-import org.lwjgl.opengl.GL31
 import java.util.*
 import kotlin.math.*
 
 object TerrainScreen : Screen("terrain") {
 
     private val world = World()
-    private val player = Player(world)
-    private const val worldSize = 8
-
-    private val front = Vector3f()
-    private val right = Vector3f()
-    private val up = Vector3f()
-
-    private var sensitivity = 0f
-    private var speed = 0f
-
-    private const val fovModifier = 1.1f
-    private var targetFov = 65f
-    private var currentFov = 65f
-    private const val fovLerpSpeed = 10f
-
-    private var breakCooldown = 0f
-    private const val breakInterval = 0.1f
-
-    private var placeCooldown = 0f
-    private const val placeInterval = 0.1f
+    private val player = Player(world, camera)
+    private const val worldSize = 2
 
     init {
-        camera.fov = 65f
-        camera.zNear = 0.1f
-        camera.zFar = 10000f
-        camera.update()
-
         isShowCursor = false
         application.keyboard.bindingProcessor.bind(CameraControlBind)
 //        application.mouse.bindingProcessor.bind(BreakBlockInput)
@@ -62,11 +38,13 @@ object TerrainScreen : Screen("terrain") {
             }
         }
 
+        player.setPosition((worldSize * 16 / 2).toDouble(), 70.0, (worldSize * 16 / 2).toDouble())
+
         world.allChanged()
     }
 
     override fun doRender() {
-        handleInput()
+        player.handleInput(delta)
 
         renderCrosshair(0f, 0f, 1f)
 
@@ -76,7 +54,6 @@ object TerrainScreen : Screen("terrain") {
 
         val aabb = generateAABBForHoveredBlock()
         if (aabb != null) {
-            GL31.glLineWidth(2.0f)
             renderAABB(aabb)
         }
     }
@@ -108,100 +85,6 @@ object TerrainScreen : Screen("terrain") {
         val targetZ = z + nz
 
         world.setBlockAndUpdateChunk(targetX, targetY, targetZ)
-    }
-
-
-    private fun handleInput() {
-        this.front.set(0f, 0f, -1f).rotate(camera.rotation).normalize()
-        this.right.set(1f, 0f, 0f).rotate(camera.rotation).normalize()
-        this.up.set(0f, 1f, 0f).rotate(camera.rotation).normalize()
-
-        var newX = camera.position.x
-        var newY = camera.position.y
-        var newZ = camera.position.z
-
-        speed = if (application.keyboard.isPressed(KeyCode.KEY_LCONTROL)) {
-            15f
-        } else {
-            5f
-        } * delta
-
-        targetFov = if (application.keyboard.isPressed(KeyCode.KEY_LCONTROL)) {
-            65f * fovModifier
-        } else {
-            65f
-        }
-
-        currentFov += (targetFov - currentFov) * min(1f, fovLerpSpeed * delta)
-        camera.fov = currentFov
-
-        if (application.keyboard.isPressed(KeyCode.KEY_W)) {
-            newX += front.x * speed
-            newY += front.y * speed
-            newZ += front.z * speed
-        }
-        if (application.keyboard.isPressed(KeyCode.KEY_S)) {
-            newX -= front.x * speed
-            newY -= front.y * speed
-            newZ -= front.z * speed
-        }
-        if (application.keyboard.isPressed(KeyCode.KEY_A)) {
-            newX -= right.x * speed
-            newY -= right.y * speed
-            newZ -= right.z * speed
-        }
-        if (application.keyboard.isPressed(KeyCode.KEY_D)) {
-            newX += right.x * speed
-            newY += right.y * speed
-            newZ += right.z * speed
-        }
-        if (application.keyboard.isPressed(KeyCode.KEY_SPACE)) {
-            newX += up.x * speed
-            newY += up.y * speed
-            newZ += up.z * speed
-        }
-        if (application.keyboard.isPressed(KeyCode.KEY_LSHIFT)) {
-            newX -= up.x * speed
-            newY -= up.y * speed
-            newZ -= up.z * speed
-        }
-
-        if (application.mouse.isPressed(KeyCode.MOUSE_LEFT)) {
-            breakCooldown -= delta
-            if (breakCooldown <= 0f) {
-                breakBlock()
-                breakCooldown = breakInterval
-            }
-        } else {
-            breakCooldown = 0f
-        }
-
-        if (application.mouse.isPressed(KeyCode.MOUSE_RIGHT)) {
-            placeCooldown -= delta
-            if (placeCooldown <= 0f) {
-                placeBlock()
-                placeCooldown = placeInterval
-            }
-        } else {
-            placeCooldown = 0f
-        }
-
-        camera.position.x = newX
-        camera.position.y = newY
-        camera.position.z = newZ
-        player.setPosition(newX.toFloat(), newY.toFloat(), newZ.toFloat())
-
-        if(CameraControlBind.status) {
-            this.sensitivity = 65f * delta
-            camera.rotate(
-                -application.mouse.displayVec.y * sensitivity,
-                -application.mouse.displayVec.x * sensitivity,
-                0f
-            )
-        }
-
-        camera.update()
-        application.mouse.reset()
     }
 
 

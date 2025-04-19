@@ -100,7 +100,7 @@ class World {
                 val worldX = chunkX * 16 + localX
                 val worldZ = chunkZ * 16 + localZ
 
-                val height = (perlin(worldX * scale, worldZ * scale) * 100).toInt()
+                val height = (perlin(worldX * scale, worldZ * scale) * 10).toInt()
                     .coerceIn(1, maxHeight)
 
                 for (y in 0 until height) {

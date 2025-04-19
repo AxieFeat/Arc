@@ -25,47 +25,51 @@ internal data class ArcCamera(
     override var position: Point3d = Point3d.of(0.0, 0.0, 0.0)
     override var rotation: Quaternionf = Quaternionf()
     override var zNear: Float = 0.1f
-    override var zFar: Float = 100f
+    override var zFar: Float = 1000f
 
     private var aspect = windowWidth / windowHeight
+    private var pitch = 0f
+    private var yaw = 0f
+    private var roll = 0f
 
-    // Reusable temp vectors
-    private val tmpOrigin = Vector3f()
-    private val tmpForward = Vector3f()
-    private val tmpUp = Vector3f()
+    private val front = Vector3f(0f, 0f, -1f)
+    private val up = Vector3f(0f, 1f, 0f)
+    private val right = Vector3f(1f, 0f, 0f)
 
     override val frustum: Frustum = ArcFrustum(this)
 
     override fun rotate(pitch: Float, yaw: Float, roll: Float) {
-        rotation.rotateXYZ(
-            Math.toRadians(pitch),
-            Math.toRadians(yaw),
-            Math.toRadians(roll)
-        )
+        this.pitch = (this.pitch + pitch).coerceIn(-89f, 89f)
+        this.yaw += yaw
+
+        rotation.identity()
+            .rotateY(Math.toRadians(-this.yaw))
+            .rotateX(Math.toRadians(this.pitch))
+
+        front.set(0f, 0f, -1f).rotate(rotation)
+        right.set(1f, 0f, 0f).rotate(rotation)
+        up.set(0f, 1f, 0f).rotate(rotation)
     }
 
     override fun update() {
         projection.identity()
             .perspective(Math.toRadians(fov), aspect, zNear, zFar)
 
-        tmpOrigin.set(position.x.toFloat(), position.y.toFloat(), position.z.toFloat())
+        val cameraPos = Vector3f(position.x.toFloat(), position.y.toFloat(), position.z.toFloat())
+        val cameraTarget = Vector3f(cameraPos).add(front)
 
-        tmpForward.set(0f, 0f, -1f).rotate(rotation).normalize()
-        val target = Vector3f(tmpOrigin).add(tmpForward)
-        tmpUp.set(0f, 1f, 0f).rotate(rotation)
-
-        view.identity().lookAt(tmpOrigin, target, tmpUp)
+        view.identity().lookAt(cameraPos, cameraTarget, up)
         combined.set(projection).mul(view)
 
         ray.origin.apply {
-            this.x = tmpOrigin.x
-            this.y = tmpOrigin.y
-            this.z = tmpOrigin.z
+            this.x = cameraPos.x
+            this.y = cameraPos.y
+            this.z = cameraPos.z
         }
         ray.direction.apply {
-            this.x = tmpForward.x
-            this.y = tmpForward.y
-            this.z = tmpForward.z
+            this.x = front.x
+            this.y = front.y
+            this.z = front.z
         }
     }
 
@@ -76,6 +80,8 @@ internal data class ArcCamera(
         windowHeight = height.toFloat()
         windowWidth = width.toFloat()
         aspect = windowWidth / windowHeight
+
+        update()
     }
 
     override fun reset() {
@@ -84,6 +90,12 @@ internal data class ArcCamera(
         combined.set(projection).mul(view)
         rotation.identity()
         position = Point3d.of(0.0, 0.0, 0.0)
+        pitch = 0f
+        yaw = 0f
+        roll = 0f
+        front.set(0f, 0f, -1f)
+        up.set(0f, 1f, 0f)
+        right.set(1f, 0f, 0f)
     }
 
     object Factory : Camera.Factory {

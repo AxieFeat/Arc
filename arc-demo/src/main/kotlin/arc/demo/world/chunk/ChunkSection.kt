@@ -1,16 +1,21 @@
 package arc.demo.world.chunk
 
 import arc.demo.VoxelGame
+import arc.demo.lighting.LightMap
+import arc.demo.lighting.LightSolver
 import arc.demo.world.WorldModelDispatcher
 import arc.demo.world.block.Block
+import arc.math.AABB
+import arc.math.Vec3f
 import arc.model.Model
+import org.joml.Math
+import org.joml.Vector3f
 
 class ChunkSection(
     val chunk: Chunk
-) {
+)  {
 
     val blocks = arrayOfNulls<Block>(16 * 16 * 16)
-
     var dispatcher: WorldModelDispatcher? = null
 
     fun getBlock(x: Int, y: Int, z: Int): Block? {
@@ -28,7 +33,17 @@ class ChunkSection(
             val worldZ = chunk.z * 16 + z
 
             model.translate(worldX.toFloat(), worldY.toFloat(), worldZ.toFloat())
-            blocks[index] = Block(this, worldX, worldY, worldZ, model)
+            blocks[index] = Block(
+                this,
+                worldX,
+                worldY,
+                worldZ,
+                model,
+                AABB.of(
+                    Vec3f.of(worldX.toFloat(), worldY.toFloat(), worldZ.toFloat()),
+                    Vec3f.of(worldX.toFloat() + 1f, worldY.toFloat() + 1f, worldZ.toFloat() + 1f)
+                )
+            )
         }
     }
 

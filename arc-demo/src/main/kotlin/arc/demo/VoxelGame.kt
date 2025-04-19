@@ -3,14 +3,11 @@ package arc.demo
 import arc.Application
 import arc.Configuration
 import arc.audio.SoundEngine
-import arc.demo.screen.TerrainScreen
 import arc.demo.screen.Screen
+import arc.demo.screen.TerrainScreen
 import arc.demo.shader.ShaderContainer
 import arc.graphics.vertex.VertexFormat
 import arc.window.WindowHandler
-import org.lwjgl.opengl.GL11.GL_RENDERER
-import org.lwjgl.opengl.GL11.GL_VENDOR
-import org.lwjgl.opengl.GL11.glGetString
 
 object VoxelGame : WindowHandler {
 
