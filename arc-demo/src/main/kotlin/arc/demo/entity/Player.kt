@@ -1,14 +1,22 @@
 package arc.demo.entity
 
-import arc.demo.VoxelGame
-import arc.graphics.Camera
-import arc.math.AABB
+import arc.demo.world.World
 import arc.math.Vec3f
 
-object Player {
+class Player(
+    val world: World,
+) {
 
-    val camera: Camera = Camera.create(65f, VoxelGame.application.window.width.toFloat(), VoxelGame.application.window.height.toFloat())
+    var distanceView = 8
 
-    val aabb: AABB = AABB.of(Vec3f.ZERO, Vec3f.ZERO)
+    val position: Vec3f = Vec3f.of(0f, 0f, 0f)
+
+    fun setPosition(x: Float, y: Float, z: Float) {
+        position.apply {
+            this.x = x
+            this.y = y
+            this.z = z
+        }
+    }
 
 }

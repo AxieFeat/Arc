@@ -4,6 +4,7 @@ import arc.culling.ArcFrustum
 import arc.culling.Frustum
 import arc.math.Point3d
 import arc.math.Ray
+import arc.math.Vec3f
 import org.joml.Math
 import org.joml.Matrix4f
 import org.joml.Quaternionf
@@ -15,26 +16,30 @@ internal data class ArcCamera(
     override var windowHeight: Float,
 ) : Camera {
 
-    override val ray: Ray = Ray.ZERO.copy()
+    override val ray: Ray = Ray.of(Vec3f.of(0f, 0f, 0f), Vec3f.of(0f, 0f, 0f))
 
     override var view: Matrix4f = Matrix4f()
     override var projection: Matrix4f = Matrix4f()
     override val combined: Matrix4f = Matrix4f()
 
-    override var position: Point3d = Point3d.ZERO
+    override var position: Point3d = Point3d.of(0.0, 0.0, 0.0)
     override var rotation: Quaternionf = Quaternionf()
     override var zNear: Float = 0.1f
     override var zFar: Float = 100f
 
-    private var lookAtTarget: Point3d? = null
     private var aspect = windowWidth / windowHeight
+
+    // Reusable temp vectors
+    private val tmpOrigin = Vector3f()
+    private val tmpForward = Vector3f()
+    private val tmpUp = Vector3f()
 
     override val frustum: Frustum = ArcFrustum(this)
 
-    override fun rotate(yaw: Float, pitch: Float, roll: Float) {
+    override fun rotate(pitch: Float, yaw: Float, roll: Float) {
         rotation.rotateXYZ(
-            Math.toRadians(yaw),
             Math.toRadians(pitch),
+            Math.toRadians(yaw),
             Math.toRadians(roll)
         )
     }
@@ -43,29 +48,29 @@ internal data class ArcCamera(
         projection.identity()
             .perspective(Math.toRadians(fov), aspect, zNear, zFar)
 
-        val originVec = Vector3f(position.x.toFloat(), position.y.toFloat(), position.z.toFloat())
+        tmpOrigin.set(position.x.toFloat(), position.y.toFloat(), position.z.toFloat())
 
-        val forward = Vector3f(0f, 0f, -1f).rotate(rotation).normalize()
+        tmpForward.set(0f, 0f, -1f).rotate(rotation).normalize()
+        val target = Vector3f(tmpOrigin).add(tmpForward)
+        tmpUp.set(0f, 1f, 0f).rotate(rotation)
 
-        val target = Vector3f(originVec).add(forward)
-        val up = Vector3f(0f, 1f, 0f).rotate(rotation)
-
-        view.identity().lookAt(originVec, target, up)
+        view.identity().lookAt(tmpOrigin, target, tmpUp)
         combined.set(projection).mul(view)
 
         ray.origin.apply {
-            x = originVec.x
-            y = originVec.y
-            z = originVec.z
+            this.x = tmpOrigin.x
+            this.y = tmpOrigin.y
+            this.z = tmpOrigin.z
         }
         ray.direction.apply {
-            x = forward.x
-            y = forward.y
-            z = forward.z
+            this.x = tmpForward.x
+            this.y = tmpForward.y
+            this.z = tmpForward.z
         }
     }
 
     override fun updateAspect(width: Int, height: Int) {
+        if(height == 0) return
         if (windowHeight == height.toFloat() && windowWidth == width.toFloat()) return
 
         windowHeight = height.toFloat()
@@ -77,9 +82,8 @@ internal data class ArcCamera(
         view.identity()
         projection.identity()
         combined.set(projection).mul(view)
-        lookAtTarget = null
         rotation.identity()
-        position = Point3d.ZERO
+        position = Point3d.of(0.0, 0.0, 0.0)
     }
 
     object Factory : Camera.Factory {

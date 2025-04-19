@@ -23,6 +23,15 @@ internal data class ArcColor(
         this.alpha = another.alpha
     }
 
+    override fun mul(value: Float): Color {
+        this.red = (this.red * value).toInt().coerceIn(0, 255)
+        this.green = (this.green * value).toInt().coerceIn(0, 255)
+        this.blue = (this.blue * value).toInt().coerceIn(0, 255)
+        this.alpha *= value.coerceIn(0f, 1f)
+
+        return this
+    }
+
     override fun toInt(): Int {
         val alphaInt = (alpha * 255).toInt().coerceIn(0, 255)
         return java.awt.Color(red, green, blue, alphaInt).rgb

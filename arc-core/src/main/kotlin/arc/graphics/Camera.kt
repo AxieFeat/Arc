@@ -77,7 +77,7 @@ interface Camera {
     /**
      * Rotate camera.
      */
-    fun rotate(yaw: Float, pitch: Float, roll: Float)
+    fun rotate(pitch: Float, yaw: Float, roll: Float)
 
     /**
      * Update matrices of camera.

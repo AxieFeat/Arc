@@ -1,5 +1,6 @@
 package arc.demo.screen
 
+import arc.demo.entity.Player
 import arc.demo.input.CameraControlBind
 import arc.demo.shader.ShaderContainer
 import arc.demo.shader.VertexFormatContainer
@@ -10,22 +11,17 @@ import arc.input.KeyCode
 import arc.math.AABB
 import arc.math.Vec3f
 import arc.model.Face
-import arc.model.Model
-import arc.model.cube.Cube
-import arc.model.cube.CubeFace
-import arc.model.texture.ModelTexture
 import arc.util.Color
-import de.articdive.jnoise.core.api.functions.Interpolation
-import de.articdive.jnoise.generators.noisegen.perlin.PerlinNoiseGenerator
 import org.joml.Vector3f
 import org.lwjgl.opengl.GL31
-import kotlin.math.abs
+import java.util.*
+import kotlin.math.*
 
-object TerrainScreen : Screen("main-menu") {
+object TerrainScreen : Screen("terrain") {
 
-    private val noise = PerlinNoiseGenerator.newBuilder().setSeed(3301).setInterpolation(Interpolation.COSINE).build();
-
-    private val world = World().also { generateTerrain(it, 2, 2) }
+    private val world = World()
+    private val player = Player(world)
+    private const val worldSize = 8
 
     private val front = Vector3f()
     private val right = Vector3f()
@@ -33,6 +29,17 @@ object TerrainScreen : Screen("main-menu") {
 
     private var sensitivity = 0f
     private var speed = 0f
+
+    private const val fovModifier = 1.1f
+    private var targetFov = 65f
+    private var currentFov = 65f
+    private const val fovLerpSpeed = 10f
+
+    private var breakCooldown = 0f
+    private const val breakInterval = 0.1f
+
+    private var placeCooldown = 0f
+    private const val placeInterval = 0.1f
 
     init {
         camera.fov = 65f
@@ -48,12 +55,22 @@ object TerrainScreen : Screen("main-menu") {
         application.renderSystem.enableDepthTest()
 
         application.window.isVsync = true
+
+        for(x in 0..<worldSize) {
+            for(z in 0..<worldSize) {
+                world.generateChunkAt(x, z)
+            }
+        }
+
+        world.allChanged()
     }
 
     override fun doRender() {
         handleInput()
 
         renderCrosshair(0f, 0f, 1f)
+
+        renderSky()
 
         world.render(ShaderContainer.positionTexColor)
 
@@ -72,6 +89,28 @@ object TerrainScreen : Screen("main-menu") {
         }
     }
 
+    fun placeBlock() {
+        val hit = raycastForBlock() ?: return
+
+        val (x, y, z, face, _) = hit
+
+        val (nx, ny, nz) = when (face) {
+            Face.UP    -> Triple(0, 1, 0)
+            Face.DOWN  -> Triple(0, -1, 0)
+            Face.NORTH -> Triple(0, 0, -1)
+            Face.SOUTH -> Triple(0, 0, 1)
+            Face.WEST  -> Triple(-1, 0, 0)
+            Face.EAST  -> Triple(1, 0, 0)
+        }
+
+        val targetX = x + nx
+        val targetY = y + ny
+        val targetZ = z + nz
+
+        world.setBlockAndUpdateChunk(targetX, targetY, targetZ)
+    }
+
+
     private fun handleInput() {
         this.front.set(0f, 0f, -1f).rotate(camera.rotation).normalize()
         this.right.set(1f, 0f, 0f).rotate(camera.rotation).normalize()
@@ -82,10 +121,19 @@ object TerrainScreen : Screen("main-menu") {
         var newZ = camera.position.z
 
         speed = if (application.keyboard.isPressed(KeyCode.KEY_LCONTROL)) {
-            1f
+            15f
         } else {
             5f
         } * delta
+
+        targetFov = if (application.keyboard.isPressed(KeyCode.KEY_LCONTROL)) {
+            65f * fovModifier
+        } else {
+            65f
+        }
+
+        currentFov += (targetFov - currentFov) * min(1f, fovLerpSpeed * delta)
+        camera.fov = currentFov
 
         if (application.keyboard.isPressed(KeyCode.KEY_W)) {
             newX += front.x * speed
@@ -117,13 +165,31 @@ object TerrainScreen : Screen("main-menu") {
             newY -= up.y * speed
             newZ -= up.z * speed
         }
-        if(application.mouse.isPressed(KeyCode.MOUSE_LEFT)) {
-            breakBlock()
+
+        if (application.mouse.isPressed(KeyCode.MOUSE_LEFT)) {
+            breakCooldown -= delta
+            if (breakCooldown <= 0f) {
+                breakBlock()
+                breakCooldown = breakInterval
+            }
+        } else {
+            breakCooldown = 0f
+        }
+
+        if (application.mouse.isPressed(KeyCode.MOUSE_RIGHT)) {
+            placeCooldown -= delta
+            if (placeCooldown <= 0f) {
+                placeBlock()
+                placeCooldown = placeInterval
+            }
+        } else {
+            placeCooldown = 0f
         }
 
         camera.position.x = newX
         camera.position.y = newY
         camera.position.z = newZ
+        player.setPosition(newX.toFloat(), newY.toFloat(), newZ.toFloat())
 
         if(CameraControlBind.status) {
             this.sensitivity = 65f * delta
@@ -138,69 +204,9 @@ object TerrainScreen : Screen("main-menu") {
         application.mouse.reset()
     }
 
+
     override fun onFpsUpdate(fps: Int) {
         name = "FPS: $fps, Frame time: $frameTime ms"
-    }
-
-    fun generateTerrain(world: World, chunkWidth: Int, chunkDepth: Int) {
-        val scale = 0.1
-        val maxHeight = 64
-
-        for (chunkX in 0 until chunkWidth) {
-            for (chunkZ in 0 until chunkDepth) {
-                world.getOrCreateChunk(chunkX, chunkZ)
-
-                for (localX in 0 until 16) {
-                    for (localZ in 0 until 16) {
-                        val worldX = chunkX * 16 + localX
-                        val worldZ = chunkZ * 16 + localZ
-
-                        val height = (perlin(worldX * scale, worldZ * scale) * 10).toInt()
-                            .coerceIn(1, maxHeight)
-
-                        for (y in 0 until height) {
-                            world.setBlock(worldX, y, worldZ, model())
-                        }
-                    }
-                }
-            }
-        }
-
-        world.allChanged()
-        println("World generated!")
-    }
-
-    private fun model() = Model.builder()
-        .addCube(
-            Cube.builder()
-                .setFrom(0f, 0f, 0f)
-                .setTo(1f, 1f, 1f)
-                .addFace(Face.NORTH, defaultFace())
-                .addFace(Face.SOUTH, defaultFace())
-                .addFace(Face.WEST, defaultFace())
-                .addFace(Face.EAST, defaultFace())
-                .addFace(Face.UP, defaultFace())
-                .addFace(Face.DOWN, defaultFace())
-                .build()
-        )
-        .setTexture(
-            ModelTexture.builder()
-                .setImage("iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAAAAAA6mKC9AAAAZElEQVR42jWNsQ0AMQjEGJcB3HsEr/xSkncBOgkfUyXIguoo4mEXGdkFFvBdlGmpwKCAWIWOeYFladCK4n2BXZZn6vR3dsXRfLnKWfFoXmtUrX81AiboaZ9u4I1G8KdqPICl6AdyLn2NfcJFIAAAAABJRU5ErkJggg==")
-                .build()
-        )
-        .build()
-
-    private fun defaultFace(): CubeFace {
-        return CubeFace.builder()
-            .setUvMin(0, 0)
-            .setUvMax(16, 16)
-            .build()
-    }
-
-    private fun perlin(x: Double, y: Double): Double {
-        val value = noise.evaluateNoise(x, y)
-
-        return (value + 1.0) / 2.0
     }
 
     private fun renderCrosshair(centerX: Float, centerY: Float, size: Float) {
@@ -221,10 +227,10 @@ object TerrainScreen : Screen("main-menu") {
     }
 
     private fun generateAABBForHoveredBlock(maxDistance: Float = 5f): AABB? {
-        val block = raycastForBlock(maxDistance)
-        return if (block != null) {
-            val blockMin = Vec3f.of(block.x.toFloat(), block.y.toFloat(), block.z.toFloat())
-            val blockMax = Vec3f.of((block.x + 1).toFloat(), (block.y + 1).toFloat(), (block.z + 1).toFloat())
+        val hit = raycastForBlock(maxDistance)
+        return if (hit != null) {
+            val blockMin = Vec3f.of(hit.x.toFloat(), hit.y.toFloat(), hit.z.toFloat())
+            val blockMax = Vec3f.of((hit.x + 1).toFloat(), (hit.y + 1).toFloat(), (hit.z + 1).toFloat())
 
             AABB.of(blockMin, blockMax)
         } else {
@@ -284,63 +290,141 @@ object TerrainScreen : Screen("main-menu") {
         ShaderContainer.positionColor.unbind()
     }
 
+    data class RaycastHit(
+        val x: Int,
+        val y: Int,
+        val z: Int,
+        val face: Face,
+        val block: Block
+    )
 
-    private fun raycastForBlock(maxDistance: Float = 5f): Block? {
-        val rayOrigin = camera.ray.origin
-        val rayDirection = camera.ray.direction
+    private fun raycastForBlock(maxDistance: Float = 6f): RaycastHit? {
+        val origin = camera.ray.origin
+        val direction = camera.ray.direction
 
-        val dirX = rayDirection.x
-        val dirY = rayDirection.y
-        val dirZ = rayDirection.z
+        var x = origin.x.toInt()
+        var y = origin.y.toInt()
+        var z = origin.z.toInt()
 
-        var x = rayOrigin.x.toInt()
-        var y = rayOrigin.y.toInt()
-        var z = rayOrigin.z.toInt()
+        val stepX = if (direction.x < 0) -1 else 1
+        val stepY = if (direction.y < 0) -1 else 1
+        val stepZ = if (direction.z < 0) -1 else 1
 
-        val stepX = if (dirX > 0) 1 else -1
-        val stepY = if (dirY > 0) 1 else -1
-        val stepZ = if (dirZ > 0) 1 else -1
+        val tDeltaX = if (direction.x != 0f) abs(1f / direction.x) else Float.POSITIVE_INFINITY
+        val tDeltaY = if (direction.y != 0f) abs(1f / direction.y) else Float.POSITIVE_INFINITY
+        val tDeltaZ = if (direction.z != 0f) abs(1f / direction.z) else Float.POSITIVE_INFINITY
 
-        val tDeltaX = if (dirX != 0f) 1f / abs(dirX) else Float.MAX_VALUE
-        val tDeltaY = if (dirY != 0f) 1f / abs(dirY) else Float.MAX_VALUE
-        val tDeltaZ = if (dirZ != 0f) 1f / abs(dirZ) else Float.MAX_VALUE
+        val blockX = floor(origin.x).toInt()
+        val blockY = floor(origin.y).toInt()
+        val blockZ = floor(origin.z).toInt()
 
-        var tMaxX = if (dirX > 0) (x + 1 - rayOrigin.x.toInt()) * tDeltaX else (x - rayOrigin.x.toInt()) * tDeltaX
-        var tMaxY = if (dirY > 0) (y + 1 - rayOrigin.y.toInt()) * tDeltaY else (y - rayOrigin.y.toInt()) * tDeltaY
-        var tMaxZ = if (dirZ > 0) (z + 1 - rayOrigin.z.toInt()) * tDeltaZ else (z - rayOrigin.z.toInt()) * tDeltaZ
+        var tMaxX = if (direction.x < 0) (origin.x - blockX) * tDeltaX else (blockX + 1 - origin.x) * tDeltaX
+        var tMaxY = if (direction.y < 0) (origin.y - blockY) * tDeltaY else (blockY + 1 - origin.y) * tDeltaY
+        var tMaxZ = if (direction.z < 0) (origin.z - blockZ) * tDeltaZ else (blockZ + 1 - origin.z) * tDeltaZ
 
-        var distance = 0f
+        var distanceTraveled = 0f
 
-        while (distance < maxDistance) {
+        var lastStepFace: Face = Face.UP
+
+        while (distanceTraveled <= maxDistance) {
             val block = world.getBlock(x, y, z)
             if (block != null) {
-                return block
+                return RaycastHit(x, y, z, lastStepFace, block)
             }
 
-            if (tMaxX < tMaxY) {
-                if (tMaxX < tMaxZ) {
-                    x += stepX
-                    distance = tMaxX
-                    tMaxX += tDeltaX
-                } else {
-                    z += stepZ
-                    distance = tMaxZ
-                    tMaxZ += tDeltaZ
-                }
+            if (tMaxX < tMaxY && tMaxX < tMaxZ) {
+                x += stepX
+                distanceTraveled = tMaxX
+                tMaxX += tDeltaX
+                lastStepFace = if (stepX > 0) Face.WEST else Face.EAST
+            } else if (tMaxY < tMaxZ) {
+                y += stepY
+                distanceTraveled = tMaxY
+                tMaxY += tDeltaY
+                lastStepFace = if (stepY > 0) Face.DOWN else Face.UP
             } else {
-                if (tMaxY < tMaxZ) {
-                    y += stepY
-                    distance = tMaxY
-                    tMaxY += tDeltaY
-                } else {
-                    z += stepZ
-                    distance = tMaxZ
-                    tMaxZ += tDeltaZ
-                }
+                z += stepZ
+                distanceTraveled = tMaxZ
+                tMaxZ += tDeltaZ
+                lastStepFace = if (stepZ > 0) Face.NORTH else Face.SOUTH
             }
         }
 
         return null
+    }
+
+
+    private fun renderSky() {
+        renderStars()
+    }
+
+    private fun renderStars() {
+        ShaderContainer.positionColor.bind()
+
+        val random = Random(10842L)
+
+        drawer.begin(DrawerMode.TRIANGLES, VertexFormatContainer.positionColor, 25000).use { buffer ->
+            for (i in 0..1499) {
+                var d0 = (random.nextFloat() * 2.0f - 1.0f).toDouble()
+                var d1 = (random.nextFloat() * 2.0f - 1.0f).toDouble()
+                var d2 = (random.nextFloat() * 2.0f - 1.0f).toDouble()
+                val d3 = (0.15f + random.nextFloat() * 0.1f).toDouble()
+                var d4 = d0 * d0 + d1 * d1 + d2 * d2
+
+                if (d4 < 1.0 && d4 > 0.01) {
+                    d4 = 1.0 / sqrt(d4)
+                    d0 *= d4
+                    d1 *= d4
+                    d2 *= d4
+
+                    val d5 = d0 * 100.0
+                    val d6 = d1 * 100.0
+                    val d7 = d2 * 100.0
+                    val d8 = atan2(d0, d2)
+                    val d9 = sin(d8)
+                    val d10 = cos(d8)
+                    val d11 = atan2(sqrt(d0 * d0 + d2 * d2), d1)
+                    val d12 = sin(d11)
+                    val d13 = cos(d11)
+                    val d14 = random.nextDouble() * Math.PI * 2.0
+                    val d15 = sin(d14)
+                    val d16 = cos(d14)
+
+                    val vertices = Array(4) { Vec3f.of(0f, 0f, 0f) }
+
+                    for (j in 0..3) {
+                        val d18 = ((j and 2) - 1).toDouble() * d3
+                        val d19 = ((j + 1 and 2) - 1).toDouble() * d3
+                        val d21 = d18 * d16 - d19 * d15
+                        val d22 = d19 * d16 + d18 * d15
+                        val d23 = d21 * d12
+                        val d24 = -d21 * d13
+                        val d25 = d24 * d9 - d22 * d10
+                        val d26 = d22 * d9 + d24 * d10
+
+                        vertices[j] = Vec3f.of(
+                            (d5 + d25).toFloat(),
+                            (d6 + d23).toFloat(),
+                            (d7 + d26).toFloat()
+                        )
+                    }
+
+                    buffer.addVertex(vertices[0].x, vertices[0].y, vertices[0].z).setColor(Color.WHITE)
+                    buffer.addVertex(vertices[1].x, vertices[1].y, vertices[1].z).setColor(Color.WHITE)
+                    buffer.addVertex(vertices[2].x, vertices[2].y, vertices[2].z).setColor(Color.WHITE)
+
+                    buffer.addVertex(vertices[0].x, vertices[0].y, vertices[0].z).setColor(Color.WHITE)
+                    buffer.addVertex(vertices[2].x, vertices[2].y, vertices[2].z).setColor(Color.WHITE)
+                    buffer.addVertex(vertices[3].x, vertices[3].y, vertices[3].z).setColor(Color.WHITE)
+                }
+            }
+
+            buffer.build().use {
+                drawer.draw(it)
+            }
+        }
+
+        ShaderContainer.positionColor.unbind()
     }
 
 

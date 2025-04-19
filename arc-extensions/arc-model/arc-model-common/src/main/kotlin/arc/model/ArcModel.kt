@@ -70,6 +70,7 @@ internal data class ArcModel(
                         rangesOverlap(from.z, to.z, oFrom.z, oTo.z)
                     ) return true
                 }
+                else -> {}
             }
         }
 

@@ -60,6 +60,15 @@ interface Color : Copyable<Color>, Interpolatable<Color> {
     fun write(another: Color)
 
     /**
+     * Multiply values in color.
+     *
+     * @param value Multiply value.
+     *
+     * @return Current instance of [Color].
+     */
+    fun mul(value: Float): Color
+
+    /**
      * Converts the current color instance into its integer representation.
      *
      * @return The integer representation of the color.

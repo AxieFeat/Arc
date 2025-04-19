@@ -1,11 +1,17 @@
 package arc.demo.world.chunk
 
+import arc.demo.VoxelGame
+import arc.demo.world.WorldModelDispatcher
 import arc.demo.world.block.Block
 import arc.model.Model
 
-class ChunkSection(val chunk: Chunk) {
+class ChunkSection(
+    val chunk: Chunk
+) {
 
     val blocks = arrayOfNulls<Block>(16 * 16 * 16)
+
+    var dispatcher: WorldModelDispatcher? = null
 
     fun getBlock(x: Int, y: Int, z: Int): Block? {
         return blocks[getIndex(x, y, z)]
@@ -32,4 +38,21 @@ class ChunkSection(val chunk: Chunk) {
     }
 
     fun isEmpty(): Boolean = blocks.all { it == null }
+
+    fun rebuildModel() {
+        if(isEmpty()) {
+            dispatcher?.cleanup()
+            dispatcher = null
+            return
+        }
+
+        dispatcher?.rebuild(blocks) ?: run {
+           dispatcher = WorldModelDispatcher(
+                chunk.world,
+                VoxelGame.application.renderSystem.drawer,
+                blocks,
+                blocks.filterNotNull().first().model.texture.toAtlasTexture()
+           )
+        }
+    }
 }

@@ -80,7 +80,6 @@ internal data class ArcModelSection(
 
     private fun generateBuffer(atlas: TextureAtlas): DrawBuffer {
         val buffer = drawer.begin(DrawerMode.TRIANGLES, vertexFormat, model.cubes.size * 250)
-
         val tempVertices = FloatArray(12)
 
         section.forEach { cube ->
@@ -140,31 +139,27 @@ internal data class ArcModelSection(
 
                 buffer.addVertex(matrix, tempVertices[0], tempVertices[1], tempVertices[2])
                     .setTexture(uMin, vMax)
-                    .setColor(Color.of(255, 75, 75))
+                    .setColor(Color.WHITE)
                 buffer.addVertex(matrix, tempVertices[3], tempVertices[4], tempVertices[5])
                     .setTexture(uMin, vMin)
-                    .setColor(Color.of(155, 155, 155))
+                    .setColor(Color.WHITE)
                 buffer.addVertex(matrix, tempVertices[6], tempVertices[7], tempVertices[8])
                     .setTexture(uMax, vMin)
-                    .setColor(Color.of(155, 155, 155))
+                    .setColor(Color.WHITE)
 
                 buffer.addVertex(matrix, tempVertices[6], tempVertices[7], tempVertices[8])
                     .setTexture(uMax, vMin)
-                    .setColor(Color.of(155, 155, 155))
+                    .setColor(Color.WHITE)
                 buffer.addVertex(matrix, tempVertices[9], tempVertices[10], tempVertices[11])
                     .setTexture(uMax, vMax)
-                    .setColor(Color.of(155, 155, 155))
+                    .setColor(Color.WHITE)
                 buffer.addVertex(matrix, tempVertices[0], tempVertices[1], tempVertices[2])
                     .setTexture(uMin, vMax)
-                    .setColor(Color.of(255, 75, 75))
+                    .setColor(Color.WHITE)
             }
         }
 
         return buffer
-    }
-
-    private fun packLight(blockLight: Int, skyLight: Int): Int {
-        return ((skyLight and 0xF) shl 16) or (blockLight and 0xF)
     }
 
 }
