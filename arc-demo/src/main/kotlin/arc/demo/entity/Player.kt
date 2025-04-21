@@ -225,7 +225,7 @@ class Player(
         val dx = chunk.x - playerChunkX
         val dz = chunk.z - playerChunkZ
 
-        return abs(dx) <= viewDistance && abs(dz) <= viewDistance
+        return abs(dx) <= distance && abs(dz) <= distance
     }
 
     fun shouldDelete(chunk: Chunk, distance: Int = memoryDistance): Boolean {
