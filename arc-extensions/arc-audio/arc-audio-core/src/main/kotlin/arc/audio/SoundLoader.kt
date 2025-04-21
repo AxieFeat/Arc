@@ -44,6 +44,24 @@ interface SoundLoader {
     companion object {
 
         /**
+         * [SoundFormat.OGG] loader.
+         */
+        @JvmField
+        val OGG = of(SoundFormat.OGG)
+
+        /**
+         * [SoundFormat.WAV] loader.
+         */
+        @JvmField
+        val WAV = of(SoundFormat.WAV)
+
+        /**
+         * [SoundFormat.MP3] loader.
+         */
+        @JvmField
+        val MP3 = of(SoundFormat.MP3)
+
+        /**
          * Get instance of loader for specific format.
          *
          * @param format Format for getting loader.

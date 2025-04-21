@@ -24,7 +24,7 @@ interface ModelTexture {
      * @return New instance of [TextureAtlas].
      */
     fun toAtlasTexture(): TextureAtlas {
-        return TextureAtlas.from(Base64.getDecoder().decode(base64Image))
+        return TextureAtlas.png(Base64.getDecoder().decode(base64Image))
     }
 
     @ApiStatus.Internal

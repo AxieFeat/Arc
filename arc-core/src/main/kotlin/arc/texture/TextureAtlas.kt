@@ -1,16 +1,14 @@
 package arc.texture
 
-import arc.Arc
 import arc.annotations.ImmutableType
-import arc.annotations.TypeFactory
 import arc.asset.AssetLike
-import org.jetbrains.annotations.ApiStatus
+import java.nio.ByteBuffer
 
 /**
  * This interface represents texture atlas.
  */
 @ImmutableType
-interface TextureAtlas : TextureLike {
+interface TextureAtlas : Texture {
 
     /**
      * Width of texture.
@@ -32,37 +30,67 @@ interface TextureAtlas : TextureLike {
      */
     fun uv(x: Int, y: Int): Pair<Float, Float>
 
-    @TypeFactory
-    @ApiStatus.Internal
-    interface Factory {
-
-        fun create(bytes: ByteArray): TextureAtlas
-
-    }
-
     companion object {
 
         /**
          * Create [TextureAtlas] from [AssetLike] object.
          *
-         * @param asset Asset for Texture Atlas.
+         * @param asset Asset for Texture Atlas in png format.
          *
          * @return New instance of [TextureAtlas].
          */
         @JvmStatic
-        fun from(asset: AssetLike): TextureAtlas = from(asset.bytes)
+        fun png(asset: AssetLike): TextureAtlas = TextureAtlasLoader.PNG.load(asset)
+
+        /**
+         * Create [TextureAtlas] from byte array.
+         *
+         * @param bytes Bytes of texture in png format.
+         *
+         * @return New instance of [TextureAtlas].
+         */
+        @JvmStatic
+        fun png(bytes: ByteArray): TextureAtlas = TextureAtlasLoader.PNG.load(bytes)
+
+        /**
+         * Create [TextureAtlas] from byte buffer.
+         *
+         * @param buffer Byte buffer of texture in png format.
+         *
+         * @return New instance of [TextureAtlas].
+         */
+        @JvmStatic
+        fun from(buffer: ByteBuffer): TextureAtlas = TextureAtlasLoader.PNG.load(buffer)
 
         /**
          * Create [TextureAtlas] from [AssetLike] object.
          *
-         * @param bytes Bytes of texture.
+         * @param asset Asset for Texture Atlas in raw format.
          *
          * @return New instance of [TextureAtlas].
          */
         @JvmStatic
-        fun from(bytes: ByteArray): TextureAtlas {
-            return Arc.factory<Factory>().create(bytes)
-        }
+        fun raw(asset: AssetLike, width: Int, height: Int): TextureAtlas = TextureAtlasLoader.RAW.load(asset, width, height)
+
+        /**
+         * Create [TextureAtlas] from byte array.
+         *
+         * @param bytes Bytes of texture in raw format.
+         *
+         * @return New instance of [TextureAtlas].
+         */
+        @JvmStatic
+        fun raw(bytes: ByteArray, width: Int, height: Int): TextureAtlas = TextureAtlasLoader.RAW.load(bytes, width, height)
+
+        /**
+         * Create [TextureAtlas] from byte buffer.
+         *
+         * @param buffer Byte buffer of texture in raw format.
+         *
+         * @return New instance of [TextureAtlas].
+         */
+        @JvmStatic
+        fun raw(buffer: ByteBuffer, width: Int, height: Int): TextureAtlas = TextureAtlasLoader.RAW.load(buffer, width, height)
 
     }
 

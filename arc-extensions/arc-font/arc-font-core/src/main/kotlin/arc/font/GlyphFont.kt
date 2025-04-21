@@ -1,100 +1,99 @@
 package arc.font
 
+import arc.Arc
+import arc.annotations.TypeFactory
+import arc.graphics.Drawer
 import arc.graphics.vertex.VertexBuffer
 import arc.texture.TextureAtlas
 import arc.util.pattern.Bindable
 import arc.util.pattern.Cleanable
+import org.jetbrains.annotations.ApiStatus
+import org.joml.Matrix4f
 
 /**
- * This class represents glyph-based font.
- *
- * @param glyphs Glyphs of this font.
+ * This interface represents glyph-based font.
  */
-data class GlyphFont(
-    val glyphs: Set<Glyph>
-) : Cleanable, Bindable {
-
-    private var cachedTexture: TextureAtlas? = null
+interface GlyphFont : Bindable, Cleanable {
 
     /**
-     * Getter of current texture atlas in font.
+     * Drawer for preparing texts.
      */
-    val texture: TextureAtlas
-        get() = cachedTexture!!
+    val drawer: Drawer
 
     /**
-     * Prepare texture for this glyph font.
+     * All glyphs in this font.
      */
-    fun prepareTexture() {
-        cachedTexture?.cleanup()
-
-        // TODO
-    }
+    val glyphs: List<Glyph>
 
     /**
-     * Get glyph from font by name.
-     *
-     * @param name Name of glyph.
-     *
-     * @return Instance of [Glyph] or null, if not found.
+     * Texture atlas with all glyphs.
      */
-    fun getGlyph(name: String): Glyph? {
-        return glyphs.find { it.name == name }
-    }
+    val atlas: TextureAtlas
 
     /**
-     * Get glyph from font by it ordinal number.
-     *
-     * @param ordinal Ordinal number of glyph.
-     *
-     * @return Instance of [Glyph] or null, if not found.
-     */
-    fun getGlyph(ordinal: Int): Glyph? {
-        return glyphs.find { it.codepoint == ordinal }
-    }
-
-    /**
-     * Get glyph from font by char.
+     * Get glyph by some char.
      *
      * @param char Char of glyph.
      *
      * @return Instance of [Glyph] or null, if not found.
      */
-    fun getGlyph(char: Char): Glyph? {
-        return glyphs.find { it.char == char }
-    }
+    fun getGlyph(char: Char): Glyph?
 
     /**
-     * Prepares [VertexBuffer] for rendering [WrappedComponent].
+     * Get glyph by name.
      *
-     * @param wrappedComponent Wrapped component for preparing.
+     * @param name Name of glyph.
      *
-     * @return Instance of [VertexBuffer] with vertex data.
+     * @return Instance of [Glyph] or null, if not found.
      */
-    fun prepareComponent(wrappedComponent: WrappedComponent): VertexBuffer {
-        TODO()
-    }
+    fun getGlyph(name: String): Glyph?
 
     /**
-     * Cleanup resources of this font.
+     * Get glyph by ordinal number.
+     *
+     * @param codepoint Ordinal point.
+     *
+     * @return Instance of [Glyph] or null, if not found.
      */
-    override fun cleanup() {
-        cachedTexture?.cleanup()
-        cachedTexture = null
-    }
+    fun getGlyph(codepoint: Int): Glyph?
 
     /**
-     * Binds this font. You need bind this font for rendering any buffer, that generated via [prepareComponent]
+     * Generate [VertexBuffer] for some text.
+     *
+     * @param matrix Matrix for transformation.
+     * @param text Text for preparing.
+     *
+     * @return Instance of [VertexBuffer].
      */
-    override fun bind() {
-        cachedTexture?.bind()
+    fun prepare(matrix: Matrix4f, text: String): VertexBuffer
+
+    override fun bind() { atlas.bind() }
+    override fun unbind() { atlas.unbind() }
+    override fun cleanup() { atlas.cleanup() }
+
+    @TypeFactory
+    @ApiStatus.Internal
+    interface Factory {
+
+        fun create(drawer: Drawer, glyphs: List<Glyph>): GlyphFont
+
     }
 
-    /**
-     * Unbind this font.
-     */
-    override fun unbind() {
-        cachedTexture?.unbind()
+    companion object {
+
+        /**
+         * Create glyph font by list of glyphs.
+         *
+         * @param drawer Drawer for preparing texts.
+         * @param glyphs Glyphs of font.
+         *
+         * @return New instance of [GlyphFont].
+         */
+        @JvmStatic
+        fun from(drawer: Drawer, glyphs: List<Glyph>): GlyphFont {
+            return Arc.factory<Factory>().create(drawer, glyphs)
+        }
+
     }
 
 }

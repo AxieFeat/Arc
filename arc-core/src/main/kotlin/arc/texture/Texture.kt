@@ -1,10 +1,8 @@
 package arc.texture
 
-import arc.Arc
 import arc.annotations.ImmutableType
-import arc.annotations.TypeFactory
 import arc.asset.AssetLike
-import org.jetbrains.annotations.ApiStatus
+import java.nio.ByteBuffer
 
 /**
  * Represents a texture in the rendering system.
@@ -12,37 +10,67 @@ import org.jetbrains.annotations.ApiStatus
 @ImmutableType
 interface Texture : TextureLike {
 
-    @TypeFactory
-    @ApiStatus.Internal
-    interface Factory {
-
-        fun create(bytes: ByteArray): Texture
-
-    }
-
     companion object {
 
         /**
          * Create [Texture] from [AssetLike] object.
          *
-         * @param asset Asset for Texture.
+         * @param asset Asset for Texture in png format.
          *
          * @return New instance of [Texture].
          */
         @JvmStatic
-        fun from(asset: AssetLike): Texture = from(asset.bytes)
+        fun png(asset: AssetLike): Texture = TextureLoader.PNG.load(asset)
+
+        /**
+         * Create [Texture] from byte array.
+         *
+         * @param bytes Bytes of texture in png format.
+         *
+         * @return New instance of [Texture].
+         */
+        @JvmStatic
+        fun png(bytes: ByteArray): Texture = TextureLoader.PNG.load(bytes)
+
+        /**
+         * Create [Texture] from byte buffer.
+         *
+         * @param buffer Byte buffer of texture in png format.
+         *
+         * @return New instance of [Texture].
+         */
+        @JvmStatic
+        fun png(buffer: ByteBuffer): Texture = TextureLoader.PNG.load(buffer)
 
         /**
          * Create [Texture] from [AssetLike] object.
          *
-         * @param bytes Bytes of texture.
+         * @param asset Asset for Texture in raw format.
          *
          * @return New instance of [Texture].
          */
         @JvmStatic
-        fun from(bytes: ByteArray): Texture {
-            return Arc.factory<Factory>().create(bytes)
-        }
+        fun raw(asset: AssetLike): Texture = TextureLoader.RAW.load(asset)
+
+        /**
+         * Create [Texture] from byte array.
+         *
+         * @param bytes Bytes of texture in raw format.
+         *
+         * @return New instance of [Texture].
+         */
+        @JvmStatic
+        fun raw(bytes: ByteArray): Texture = TextureLoader.RAW.load(bytes)
+
+        /**
+         * Create [Texture] from byte buffer.
+         *
+         * @param buffer Byte buffer of texture in raw format.
+         *
+         * @return New instance of [Texture].
+         */
+        @JvmStatic
+        fun raw(buffer: ByteBuffer): Texture = TextureLoader.RAW.load(buffer)
 
     }
 

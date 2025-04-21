@@ -1,36 +1,13 @@
 package arc.gl.texture
 
 import arc.gl.graphics.GlRenderSystem
-import arc.gl.texture.TextureUtil.createDirectByteBuffer
 import arc.texture.EmptyTexture
 import arc.texture.Texture
 import org.lwjgl.opengl.GL41.*
-import org.lwjgl.stb.STBImage
-import org.lwjgl.system.MemoryStack
-import java.nio.ByteBuffer
 
-internal class GlTexture(
-    bytes: ByteArray,
-) : Texture {
+internal open class GlTexture : Texture {
 
     override val id: Int = glGenTextures()
-
-    init {
-        MemoryStack.stackPush().use { stack ->
-            val w = stack.mallocInt(1)
-            val h = stack.mallocInt(1)
-            val channels = stack.mallocInt(1)
-
-            val buf: ByteBuffer = STBImage.stbi_load_from_memory(bytes.createDirectByteBuffer(), w, h, channels, 4)
-                    ?: throw RuntimeException("Image file not loaded: " + STBImage.stbi_failure_reason())
-
-            val width = w.get()
-            val height = h.get()
-
-            TextureUtil.loadRGB(id, width, height, buf)
-            STBImage.stbi_image_free(buf)
-        }
-    }
 
     override fun bind() {
         glActiveTexture(GL_TEXTURE0)
@@ -46,11 +23,5 @@ internal class GlTexture(
 
     override fun cleanup() {
         glDeleteTextures(id)
-    }
-
-    object Factory : Texture.Factory {
-        override fun create(bytes: ByteArray): Texture {
-            return GlTexture(bytes)
-        }
     }
 }

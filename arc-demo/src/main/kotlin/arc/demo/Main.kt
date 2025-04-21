@@ -2,6 +2,7 @@ package arc.demo
 
 import arc.ArcFactoryProvider
 import arc.audio.AlAudioExtension
+import arc.font.CommonFontExtension
 import arc.gl.GlApplication
 import arc.model.CommonModelExtension
 
@@ -21,6 +22,7 @@ fun main() {
     // Load extensions.
     AlAudioExtension.bootstrap()
     CommonModelExtension.bootstrap()
+    CommonFontExtension.bootstrap()
 
     VoxelGame.start()
 }

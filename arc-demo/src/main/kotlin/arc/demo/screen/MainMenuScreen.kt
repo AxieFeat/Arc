@@ -12,7 +12,7 @@ import org.joml.Vector3f
 
 object MainMenuScreen : Screen("main-menu") {
 
-    private val grassAtlas = TextureAtlas.from(
+    private val grassAtlas = TextureAtlas.png(
         asset = FileAsset.from(
             classpath("arc/texture/grass.png"),
         )

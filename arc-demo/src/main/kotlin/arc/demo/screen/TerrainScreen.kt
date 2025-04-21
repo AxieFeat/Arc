@@ -1,18 +1,24 @@
 package arc.demo.screen
 
+import arc.asset.asFileAsset
 import arc.demo.entity.Player
+import arc.demo.font.FontLoader
 import arc.demo.input.CameraControlBind
 import arc.demo.shader.ShaderContainer
 import arc.demo.shader.VertexFormatContainer
 import arc.demo.world.World
 import arc.demo.world.block.Block
+import arc.files.classpath
 import arc.graphics.DrawerMode
-import arc.input.KeyCode
 import arc.math.AABB
 import arc.math.Vec3f
 import arc.model.Face
+import arc.shader.BlendMode
 import arc.util.Color
-import org.joml.Vector3f
+import org.joml.Matrix4f
+import org.lwjgl.opengl.GL11
+import org.lwjgl.opengl.GL11.GL_NO_ERROR
+import org.lwjgl.opengl.GL11.glGetError
 import java.util.*
 import kotlin.math.*
 
@@ -20,37 +26,50 @@ object TerrainScreen : Screen("terrain") {
 
     private val world = World()
     private val player = Player(world, camera)
-    private const val worldSize = 2
+
+    private val font = FontLoader.load(classpath("arc/font/Monocraft.json").asFileAsset())
+    private val matrix = Matrix4f().ortho(0f, application.window.width.toFloat(), 0f, application.window.height.toFloat(), -1f, 1f)
+    private val hello = font.prepare(matrix.translate(10f, 10f, 0f).scale(5f), "temez gondon")
+
+    val crosshairBuffer = drawer.begin(DrawerMode.LINES, VertexFormatContainer.positionColor).use { buffer ->
+        val crossSize = 1f / 20f
+        buffer.addVertex(0f - crossSize, 0f, 0f).setColor(Color.RED)
+        buffer.addVertex(0f + crossSize, 0f, 0f).setColor(Color.RED)
+
+        buffer.addVertex(0f, 0f - crossSize, 0f).setColor(Color.RED)
+        buffer.addVertex(0f, 0f + crossSize, 0f).setColor(Color.RED)
+
+        buffer.build()
+    }
 
     init {
         isShowCursor = false
         application.keyboard.bindingProcessor.bind(CameraControlBind)
-//        application.mouse.bindingProcessor.bind(BreakBlockInput)
 
         application.renderSystem.enableCull()
         application.renderSystem.enableDepthTest()
 
         application.window.isVsync = true
 
-        for(x in 0..<worldSize) {
-            for(z in 0..<worldSize) {
-                world.generateChunkAt(x, z)
-            }
-        }
+        player.viewDistance = 8
+        player.memoryDistance = 16
 
-        player.setPosition((worldSize * 16 / 2).toDouble(), 70.0, (worldSize * 16 / 2).toDouble())
-
-        world.allChanged()
+        player.setPosition(0.0, 50.0, 0.0)
+        player.fly = true
     }
 
     override fun doRender() {
         player.handleInput(delta)
 
-        renderCrosshair(0f, 0f, 1f)
+        ShaderContainer.blitScreen.bind()
+        font.bind()
+        drawer.draw(hello)
 
-        renderSky()
+        renderCrosshair()
 
-        world.render(ShaderContainer.positionTexColor)
+//        renderSky()
+
+        world.render(ShaderContainer.positionTexColor, player)
 
         val aabb = generateAABBForHoveredBlock()
         if (aabb != null) {
@@ -92,28 +111,17 @@ object TerrainScreen : Screen("terrain") {
         name = "FPS: $fps, Frame time: $frameTime ms"
     }
 
-    private fun renderCrosshair(centerX: Float, centerY: Float, size: Float) {
+    private fun renderCrosshair() {
         ShaderContainer.blitPositionColor.bind()
-        val crossSize = size / 20
-        drawer.begin(DrawerMode.LINES, VertexFormatContainer.positionColor).use { buffer ->
-            buffer.addVertex(centerX - crossSize, centerY, 0f).setColor(Color.RED)
-            buffer.addVertex(centerX + crossSize, centerY, 0f).setColor(Color.RED)
-
-            buffer.addVertex(centerX, centerY - crossSize, 0f).setColor(Color.RED)
-            buffer.addVertex(centerX, centerY + crossSize, 0f).setColor(Color.RED)
-
-            buffer.build().use {
-                drawer.draw(it)
-            }
-        }
+        drawer.draw(crosshairBuffer)
         ShaderContainer.blitPositionColor.unbind()
     }
 
     private fun generateAABBForHoveredBlock(maxDistance: Float = 5f): AABB? {
         val hit = raycastForBlock(maxDistance)
         return if (hit != null) {
-            val blockMin = Vec3f.of(hit.x.toFloat(), hit.y.toFloat(), hit.z.toFloat())
-            val blockMax = Vec3f.of((hit.x + 1).toFloat(), (hit.y + 1).toFloat(), (hit.z + 1).toFloat())
+            val blockMin = Vec3f.of(hit.x.toFloat() - 0.001f, hit.y.toFloat() - 0.001f, hit.z.toFloat() - 0.001f)
+            val blockMax = Vec3f.of((hit.x + 1.001).toFloat(), (hit.y + 1.001).toFloat(), (hit.z + 1.001).toFloat())
 
             AABB.of(blockMin, blockMax)
         } else {
@@ -235,7 +243,6 @@ object TerrainScreen : Screen("terrain") {
 
         return null
     }
-
 
     private fun renderSky() {
         renderStars()

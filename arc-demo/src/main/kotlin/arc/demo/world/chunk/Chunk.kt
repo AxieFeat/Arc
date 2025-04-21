@@ -1,7 +1,9 @@
 package arc.demo.world.chunk
 
+import arc.demo.entity.Player
 import arc.demo.world.World
 import arc.demo.world.block.Block
+import arc.graphics.Camera
 import arc.model.Model
 
 class Chunk(
@@ -10,7 +12,9 @@ class Chunk(
     val z: Int
 ) {
 
-    val sections = Array<ChunkSection?>(16) { null }
+    var sections = Array<ChunkSection?>(16) { null }
+    var isLoaded = false
+        private set
 
     fun getSection(y: Int): ChunkSection? {
         return if (y in 0 until 16) sections[y] else null
@@ -64,5 +68,43 @@ class Chunk(
         section.setBlock(x and 15, y and 15, z and 15, model)
 
         return section
+    }
+
+    fun render(camera: Camera, player: Player) {
+        sections.forEach { section ->
+            if(section != null) {
+                if (player.shouldRender(this)) {
+
+                    if (!isLoaded) load()
+
+                    if (camera.frustum.isBoxInFrustum(section.aabb)) {
+                        section.dispatcher?.render()
+                    }
+
+                } else {
+                    unload()
+                    if(player.shouldDelete(this)) {
+                        sections = Array<ChunkSection?>(16) { null }
+                        println("Deleted data in chunk [$x:$z]")
+                    }
+                    return
+                }
+            }
+        }
+    }
+
+    fun unload() {
+        isLoaded = false
+        sections.forEach { it?.unload() }
+    }
+
+    fun load() {
+        isLoaded = true
+        sections.forEach { it?.load() }
+        println("Loaded chunk at [$x:$z]")
+    }
+
+    fun isEmpty(): Boolean {
+        return sections.filterNotNull().isEmpty()
     }
 }

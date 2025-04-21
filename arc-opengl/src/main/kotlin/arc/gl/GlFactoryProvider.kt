@@ -8,6 +8,7 @@ import arc.gl.shader.GlFrameBuffer
 import arc.gl.shader.GlShaderInstance
 import arc.gl.texture.GlTexture
 import arc.gl.texture.GlTextureAtlas
+import arc.gl.texture.GlTextureLoader
 import arc.graphics.vertex.VertexBuffer
 import arc.util.factory.register
 import arc.shader.BlendMode
@@ -15,6 +16,8 @@ import arc.shader.FrameBuffer
 import arc.shader.ShaderInstance
 import arc.texture.Texture
 import arc.texture.TextureAtlas
+import arc.texture.TextureAtlasLoader
+import arc.texture.TextureLoader
 
 internal object GlFactoryProvider {
 
@@ -24,8 +27,8 @@ internal object GlFactoryProvider {
     fun bootstrap() {
         provider.register<Application.Factory>(GlApplication.Factory)
 
-        provider.register<Texture.Factory>(GlTexture.Factory)
-        provider.register<TextureAtlas.Factory>(GlTextureAtlas.Factory)
+        provider.register<TextureLoader.Factory>(GlTextureLoader.Factory)
+        provider.register<TextureAtlasLoader.Factory>(GlTextureLoader.Factory)
 
         provider.register<FrameBuffer.Factory>(GlFrameBuffer.Factory)
         provider.register<ShaderInstance.Factory>(GlShaderInstance.Factory)

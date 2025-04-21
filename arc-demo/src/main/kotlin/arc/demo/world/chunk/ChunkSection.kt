@@ -17,6 +17,13 @@ class ChunkSection(
 
     val blocks = arrayOfNulls<Block>(16 * 16 * 16)
     var dispatcher: WorldModelDispatcher? = null
+    val aabb = AABB.of(
+        Vec3f.of((chunk.x * 16).toFloat(), (chunk.sections.indexOf(this) * 16).toFloat() + 16f, (chunk.z * 16).toFloat()),
+        Vec3f.of((chunk.x * 16).toFloat() + 16f, (chunk.sections.indexOf(this) * 16).toFloat() + 32f, (chunk.z * 16).toFloat() + 16f)
+    )
+
+    var isLoaded = false
+        private set
 
     fun getBlock(x: Int, y: Int, z: Int): Block? {
         return blocks[getIndex(x, y, z)]
@@ -70,4 +77,16 @@ class ChunkSection(
            )
         }
     }
+
+    fun unload() {
+        isLoaded = false
+        dispatcher?.cleanup()
+        dispatcher = null
+    }
+
+    fun load() {
+        isLoaded = true
+        rebuildModel()
+    }
+
 }

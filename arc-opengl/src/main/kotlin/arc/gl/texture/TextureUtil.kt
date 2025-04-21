@@ -19,12 +19,4 @@ internal object TextureUtil {
         GL30.glGenerateMipmap(GL11.GL_TEXTURE_2D)
     }
 
-    @JvmStatic
-    fun ByteArray.createDirectByteBuffer(): ByteBuffer {
-        val buffer = ByteBuffer.allocateDirect(this.size)
-        buffer.put(this)
-        buffer.flip()
-        return buffer
-    }
-
 }

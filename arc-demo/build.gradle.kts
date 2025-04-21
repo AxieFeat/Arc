@@ -7,6 +7,7 @@ dependencies {
 
     implementation(project(":arc-extensions:arc-audio:arc-audio-openal"))
     implementation(project(":arc-extensions:arc-model:arc-model-common"))
+    implementation(project(":arc-extensions:arc-font:arc-font-common"))
 
     implementation("de.articdive:jnoise-pipeline:4.1.0")
 }

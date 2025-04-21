@@ -1,5 +1,7 @@
 package arc.demo.world
 
+import arc.demo.VoxelGame
+import arc.demo.entity.Player
 import arc.demo.world.block.Block
 import arc.demo.world.chunk.Chunk
 import arc.demo.world.chunk.ChunkSection
@@ -15,7 +17,7 @@ import de.articdive.jnoise.generators.noisegen.perlin.PerlinNoiseGenerator
 class World {
 
     private val noise = PerlinNoiseGenerator.newBuilder().setInterpolation(Interpolation.COSINE).build();
-    private val chunks = mutableMapOf<Pair<Int, Int>, Chunk>()
+    val chunks = mutableMapOf<Pair<Int, Int>, Chunk>()
 
     fun getChunk(chunkX: Int, chunkZ: Int): Chunk? {
         return chunks[chunkX to chunkZ]
@@ -73,27 +75,32 @@ class World {
         println("Blocks in world: $counter")
     }
 
-    fun render(shader: ShaderInstance) {
+    fun render(shader: ShaderInstance, player: Player) {
         shader.bind()
 
-//        val camera = VoxelGame.application.renderSystem.scene.camera
+        player.shouldLoad().forEach {
+            if(getChunk(it.first, it.second) == null || getChunk(it.first, it.second)?.isLoaded == false) {
+                generateChunkAt(it.first, it.second)?.load()
+            }
+        }
+
+        val camera = VoxelGame.application.renderSystem.scene.camera
 
         chunks.values.forEach { chunk ->
-            chunk.sections.forEach { section ->
-                section?.dispatcher?.render()
-            }
+            chunk.render(camera, player)
         }
 
         shader.unbind()
     }
 
-    fun generateChunkAt(chunkX: Int, chunkZ: Int) {
+    fun generateChunkAt(chunkX: Int, chunkZ: Int): Chunk? {
+        if(getChunk(chunkX, chunkZ) != null && !getChunk(chunkX, chunkZ)!!.isEmpty()) return null
+
         val start = System.currentTimeMillis()
         val scale = 0.05
         val maxHeight = 255
 
         val chunk = getOrCreateChunk(chunkX, chunkZ)
-        val needUpdate = mutableSetOf<ChunkSection>()
 
         for (localX in 0 until 16) {
             for (localZ in 0 until 16) {
@@ -104,18 +111,18 @@ class World {
                     .coerceIn(1, maxHeight)
 
                 for (y in 0 until height) {
-                    needUpdate.add(
-                        chunk.setBlock(worldX, y, worldZ, model())
-                    )
+                    chunk.setBlock(worldX, y, worldZ, model())
                 }
             }
         }
 
-        needUpdate.forEach { section ->
-            section.rebuildModel()
-        }
-
         println("Chunk [${chunkX}:${chunkZ}] generated for ${System.currentTimeMillis() - start} ms!")
+
+        return chunk
+    }
+
+    fun unload(chunkX: Int, chunkZ: Int) {
+        getChunk(chunkX, chunkZ)?.unload()
     }
 
     private fun perlin(x: Double, y: Double): Double {
