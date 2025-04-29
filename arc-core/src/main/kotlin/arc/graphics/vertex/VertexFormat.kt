@@ -90,6 +90,7 @@ interface VertexFormat {
     /**
      * Use this interface to build own [VertexFormat].
      */
+    @ApiStatus.Internal
     interface Builder : arc.util.pattern.Builder<VertexFormat> {
 
         /**
@@ -110,14 +111,6 @@ interface VertexFormat {
 
     }
 
-    @ApiStatus.Internal
-    @TypeFactory
-    interface BuilderFactory {
-
-        fun create(): Builder
-
-    }
-
     companion object {
 
         /**
@@ -125,7 +118,7 @@ interface VertexFormat {
          */
         @JvmStatic
         fun builder(): Builder {
-            return Arc.factory<BuilderFactory>().create()
+            return Arc.factory<Builder>()
         }
 
     }

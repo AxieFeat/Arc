@@ -12,12 +12,10 @@ internal object GlRenderSystem : RenderSystem {
     override var shader: ShaderInstance = EmptyShaderInstance
     override var texture: Texture = EmptyTexture
 
-    override var isDepthTestEnabled: Boolean = true
-    override var isBlendEnabled: Boolean = true
     override val drawer: Drawer = GlDrawer
+
     @set:JvmName("_setScene")
     override var scene: Scene = EmptyScene
-    override var isCullEnabled: Boolean = true
 
     override fun bindShader(shader: ShaderInstance) {
         this.shader = shader
@@ -49,35 +47,28 @@ internal object GlRenderSystem : RenderSystem {
     }
 
     override fun enableDepthTest() {
-        isDepthTestEnabled = true
         glEnable(GL_DEPTH_TEST)
     }
 
     override fun disableDepthTest() {
-        isDepthTestEnabled = false
         glDisable(GL_DEPTH_TEST)
     }
 
     override fun enableCull() {
-        isCullEnabled = true
         glEnable(GL_CULL_FACE)
     }
 
     override fun disableCull() {
-        isCullEnabled = false
         glDisable(GL_CULL_FACE)
     }
 
     override fun enableBlend() {
-        isBlendEnabled = true
         glEnable(GL_BLEND)
     }
 
     override fun disableBlend() {
-        isBlendEnabled = false
         glDisable(GL_BLEND)
     }
-
 
     override fun polygonMode(face: Int, mode: Int) {
         glPolygonMode(face, mode)

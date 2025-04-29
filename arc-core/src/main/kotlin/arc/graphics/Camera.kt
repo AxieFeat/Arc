@@ -114,7 +114,7 @@ interface Camera {
          * @return New instance of [Camera].
          */
         @JvmStatic
-        fun create(fov: Float, width: Float, height: Float): Camera {
+        fun of(fov: Float, width: Float, height: Float): Camera {
             return Arc.factory<Factory>().create(fov, height, width)
         }
 

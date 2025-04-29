@@ -9,11 +9,6 @@ import arc.math.AABB
 interface Frustum {
 
     /**
-     * Camera of this frustum.
-     */
-    val camera: Camera
-
-    /**
      * Is AABB in frustum.
      */
     fun isBoxInFrustum(aabb: AABB): Boolean
@@ -22,5 +17,12 @@ interface Frustum {
      * Is bounding box in frustum.
      */
     fun isBoxInFrustum(minX: Float, minY: Float, minZ: Float, maxX: Float, maxY: Float, maxZ: Float): Boolean
+
+    /**
+     * Update frustum with [Camera.combined] matrices.
+     *
+     * @param camera Camera for updating frustum.
+     */
+    fun update(camera: Camera)
 
 }

@@ -78,11 +78,11 @@ class World {
     fun render(shader: ShaderInstance, player: Player) {
         shader.bind()
 
-        player.shouldLoad().forEach {
-            if(getChunk(it.first, it.second) == null || getChunk(it.first, it.second)?.isLoaded == false) {
-                generateChunkAt(it.first, it.second)?.load()
-            }
-        }
+//        player.shouldLoad().forEach {
+//            if(getChunk(it.first, it.second) == null || getChunk(it.first, it.second)?.isLoaded == false) {
+//                generateChunkAt(it.first, it.second)?.load()
+//            }
+//        }
 
         val camera = VoxelGame.application.renderSystem.scene.camera
 
@@ -129,6 +129,7 @@ class World {
         val value = noise.evaluateNoise(x, y)
 
         return (value + 1.0) / 2.0
+//        return 0.0
     }
 
     private fun model() = Model.builder()

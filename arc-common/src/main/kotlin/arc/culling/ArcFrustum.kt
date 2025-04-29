@@ -4,9 +4,7 @@ import arc.graphics.Camera
 import arc.math.AABB
 import org.joml.FrustumIntersection
 
-internal class ArcFrustum(
-    override var camera: Camera
-) : Frustum {
+internal class ArcFrustum : Frustum {
 
     private val frustumIntersection = FrustumIntersection()
 
@@ -21,9 +19,11 @@ internal class ArcFrustum(
         minX: Float, minY: Float, minZ: Float,
         maxX: Float, maxY: Float, maxZ: Float
     ): Boolean {
-        frustumIntersection.set(camera.combined)
-
         return frustumIntersection.testAab(minX, minY, minZ, maxX, maxY, maxZ)
+    }
+
+    override fun update(camera: Camera) {
+        frustumIntersection.set(camera.combined)
     }
 
 }

@@ -3,6 +3,7 @@ package arc.graphics
 import arc.Arc
 import arc.annotations.MutableType
 import arc.annotations.TypeFactory
+import arc.graphics.vertex.VertexArrayBuffer
 import arc.graphics.vertex.VertexBuffer
 import arc.graphics.vertex.VertexConsumer
 import arc.graphics.vertex.VertexFormat
@@ -18,7 +19,7 @@ import java.nio.ByteBuffer
  * @sample arc.sample.drawBufferSample
  */
 @MutableType
-interface DrawBuffer : VertexConsumer, Builder<VertexBuffer>, Cleanable {
+interface DrawBuffer : VertexConsumer, Cleanable {
 
     /**
      * Size of buffer.
@@ -53,7 +54,12 @@ interface DrawBuffer : VertexConsumer, Builder<VertexBuffer>, Cleanable {
     /**
      * Build current buffer in vertex buffer.
      */
-    override fun build(): VertexBuffer
+    fun build(): VertexBuffer
+
+    /**
+     * Build current buffer in vertex array buffer.
+     */
+    fun buildArray(): VertexArrayBuffer
 
     @ApiStatus.Internal
     @TypeFactory

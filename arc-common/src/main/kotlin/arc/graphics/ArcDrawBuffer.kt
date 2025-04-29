@@ -37,7 +37,13 @@ internal data class ArcDrawBuffer(
     override fun build(): VertexBuffer {
         endWriting()
 
-        return VertexBuffer.of(this)
+        return VertexBuffer.of(mode, format, byteBuffer, vertexCount)
+    }
+
+    override fun buildArray(): VertexArrayBuffer {
+        endWriting()
+
+        return VertexArrayBuffer.of(mode, format, byteBuffer, vertexCount)
     }
 
     override fun cleanup() {

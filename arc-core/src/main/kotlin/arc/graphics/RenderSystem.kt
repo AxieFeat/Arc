@@ -21,24 +21,6 @@ interface RenderSystem {
     val texture: Texture
 
     /**
-     * Is depth test enabled.
-     */
-    @get:JvmName("isDepthTestEnabled")
-    val isDepthTestEnabled: Boolean
-
-    /**
-     * Is culling enabled.
-     */
-    @get:JvmName("isCullEnabled")
-    val isCullEnabled: Boolean
-
-    /**
-     * Is blending enabled.
-     */
-    @get:JvmName("isBlendEnabled")
-    val isBlendEnabled: Boolean
-
-    /**
      * Drawer of render system.
      */
     val drawer: Drawer

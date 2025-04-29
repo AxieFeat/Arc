@@ -73,7 +73,7 @@ object ArcFactoryProvider : FactoryProvider {
         register<Configuration.Factory>(ArcConfiguration.Factory)
         register<Camera.Factory>(ArcCamera.Factory)
 
-        register<VertexFormat.BuilderFactory>(ArcVertexFormat.BuilderFactory)
+        register<VertexFormat.Builder>({ ArcVertexFormat.Builder() })
         register<VertexFormatElement.Factory>(ArcVertexFormatElement.Factory)
         register<DrawBuffer.Factory>(ArcDrawBuffer.Factory)
         register<ShaderSettings.Factory>(ArcShaderSettings.Factory)

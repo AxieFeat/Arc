@@ -27,19 +27,6 @@ interface Scene {
     val delta: Float
 
     /**
-     * Is this scene using now.
-     */
-    @get:JvmName("isUse")
-    val isUse: Boolean
-
-    /**
-     * Is this scene render something.
-     */
-    @get:JvmName("isSkipRender")
-    @set:JvmName("setSkipRender")
-    var isSkipRender: Boolean
-
-    /**
      * Is cursor showed in window.
      */
     @get:JvmName("isShowCursor")

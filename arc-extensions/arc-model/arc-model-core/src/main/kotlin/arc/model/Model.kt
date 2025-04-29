@@ -16,7 +16,9 @@ import org.jetbrains.annotations.ApiStatus
  * LWAM (Lightweight Arc Model) - its format of models, that based on BB Model format, but:
  *  * Any method for storaging, it can be binary file also.
  *  * Without unnecessary parameters, only those necessary for rendering.
- *  * Support for colored lightning in elements.
+ *  * Support colored lightning for cubes.
+ *
+ * General disadvantage - only one texture per model.
  *
  * Due to its advantages over BB Model, this format is more preferable for use,
  * and it is also very good for transferring over the network.
@@ -60,13 +62,15 @@ interface Model : Copyable<Model> {
      * @param cube Cube for check.
      * @param face Face for check.
      *
-     * @return `true` if a [face] of a [cube] has another face next to it that is larger or the same size. Otherwise, `false.
+     * @return `true` if a [face] of a [cube] has another face next to it that is larger or the same size. Otherwise, `false`.
      */
     fun hasNearFace(cube: Cube, face: Face): Boolean
 
     /**
      * Cull faces in model, that not viewable (Close by other cube faces).
      * It will ignore faces, where [CubeFace.isCullable] set to false.
+     *
+     * This algorithm is slow, and we recommend use in once in startup.
      */
     fun cullFaces() {
         cubes.forEach { cube ->
@@ -77,14 +81,16 @@ interface Model : Copyable<Model> {
     }
 
     /**
-     * Use greedy meshing for this model.
+     * Use greedy meshing for this model. Not use after [cullFaces] function, model can be broken.
+     *
+     * This algorithm is slow, and we recommend use in once in startup.
      */
     fun greedy()
 
     /**
-     * Reset model to default state.
+     * Reset model to init state.
      *
-     * Example resetting model after animation.
+     * Example: Resetting model after animation.
      */
     fun reset()
 

@@ -10,10 +10,13 @@ uniform mat4 modelMatrix;
 
 out vec2 texCoord;
 out vec4 color;
+out vec3 worldPos;
 
 void main() {
-    gl_Position = projectionMatrix * viewMatrix * modelMatrix * vec4(Position, 1.0);
+    vec4 world = modelMatrix * vec4(Position, 1.0);
+    gl_Position = projectionMatrix * viewMatrix * world;
 
     texCoord = UV;
     color = Color;
+    worldPos = world.xyz;
 }

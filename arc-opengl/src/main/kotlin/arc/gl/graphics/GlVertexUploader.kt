@@ -1,6 +1,7 @@
 package arc.gl.graphics
 
-import arc.gl.graphics.vertex.GlVertexBuffer
+import arc.graphics.vertex.VertexArrayBuffer
+import arc.graphics.vertex.VertexBuffer
 import arc.graphics.vertex.VertexType
 import org.lwjgl.opengl.GL11.GL_FLOAT
 import org.lwjgl.opengl.GL20.glEnableVertexAttribArray
@@ -13,8 +14,14 @@ internal object GlVertexUploader {
 
     @JvmStatic
     @Throws(RuntimeException::class)
-    fun draw(vertexBuffer: GlVertexBuffer) {
+    fun draw(vertexBuffer: VertexBuffer) {
         if (vertexBuffer.vertices == 0) return
+
+        if(vertexBuffer is VertexArrayBuffer) {
+            vertexBuffer.bind()
+            glDrawArrays(vertexBuffer.mode.id, 0, vertexBuffer.vertices)
+            return
+        }
 
         glBindVertexArray(vao)
 

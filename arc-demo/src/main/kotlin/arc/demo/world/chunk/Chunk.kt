@@ -73,22 +73,22 @@ class Chunk(
     fun render(camera: Camera, player: Player) {
         sections.forEach { section ->
             if(section != null) {
-                if (player.shouldRender(this)) {
+//                if (player.shouldRender(this)) {
 
-                    if (!isLoaded) load()
+//                    if (!isLoaded) load()
 
                     if (camera.frustum.isBoxInFrustum(section.aabb)) {
                         section.dispatcher?.render()
                     }
 
-                } else {
-                    unload()
-                    if(player.shouldDelete(this)) {
-                        sections = Array<ChunkSection?>(16) { null }
-                        println("Deleted data in chunk [$x:$z]")
-                    }
-                    return
-                }
+//                } else {
+//                    unload()
+//                    if(player.shouldDelete(this)) {
+//                        sections = Array<ChunkSection?>(16) { null }
+//                        println("Deleted data in chunk [$x:$z]")
+//                    }
+//                    return
+//                }
             }
         }
     }

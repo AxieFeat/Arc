@@ -36,7 +36,7 @@ internal data class ArcCamera(
     private val up = Vector3f(0f, 1f, 0f)
     private val right = Vector3f(1f, 0f, 0f)
 
-    override val frustum: Frustum = ArcFrustum(this)
+    override val frustum: Frustum = ArcFrustum()
 
     override fun rotate(pitch: Float, yaw: Float, roll: Float) {
         this.pitch = (this.pitch + pitch).coerceIn(-89f, 89f)
@@ -71,6 +71,8 @@ internal data class ArcCamera(
             this.y = front.y
             this.z = front.z
         }
+
+        frustum.update(this)
     }
 
     override fun updateAspect(width: Int, height: Int) {
@@ -96,6 +98,7 @@ internal data class ArcCamera(
         front.set(0f, 0f, -1f)
         up.set(0f, 1f, 0f)
         right.set(1f, 0f, 0f)
+        frustum.update(this)
     }
 
     object Factory : Camera.Factory {

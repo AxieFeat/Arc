@@ -4,6 +4,7 @@ import arc.demo.world.block.Block
 import arc.graphics.DrawBuffer
 import arc.graphics.Drawer
 import arc.graphics.DrawerMode
+import arc.graphics.vertex.VertexArrayBuffer
 import arc.graphics.vertex.VertexBuffer
 import arc.graphics.vertex.VertexFormat
 import arc.graphics.vertex.VertexFormatElement
@@ -30,12 +31,10 @@ class WorldModelDispatcher(
         .add(VertexFormatElement.COLOR)
         .build()
 
-    private var buffer: VertexBuffer? = generateBuffer(texture).use {
-        it.build()
-    }
+    private var vertexBuffer: VertexBuffer? = generateBuffer(texture).use { it.build() }
 
     fun render() {
-        buffer?.let {
+        vertexBuffer?.let {
             texture.bind()
             drawer.draw(it)
         }
@@ -199,15 +198,14 @@ class WorldModelDispatcher(
 
     fun rebuild(cubes: Array<Block?>) {
         this.cubes = cubes
-        buffer?.cleanup()
 
-        buffer = generateBuffer(texture).use {
+        vertexBuffer = generateBuffer(texture).use {
             if (it.vertexCount > 0) it.build() else null
         }
     }
 
     override fun cleanup() {
         texture.cleanup()
-        buffer?.cleanup()
+        vertexBuffer?.cleanup()
     }
 }

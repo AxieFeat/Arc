@@ -1,6 +1,5 @@
 package arc.gl.graphics
 
-import arc.gl.graphics.vertex.GlVertexBuffer
 import arc.graphics.DrawBuffer
 import arc.graphics.Drawer
 import arc.graphics.DrawerMode
@@ -21,8 +20,6 @@ internal object GlDrawer : Drawer {
     }
 
     override fun draw(matrix: Matrix4f, buffer: VertexBuffer) {
-        if(buffer !is GlVertexBuffer) return
-
         GlRenderSystem.shader.setUniform("modelMatrix", matrix)
 
         GlVertexUploader.draw(buffer)

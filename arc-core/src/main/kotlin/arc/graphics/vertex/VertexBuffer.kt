@@ -1,20 +1,19 @@
 package arc.graphics.vertex
 
 import arc.Arc
-import arc.annotations.ImmutableType
 import arc.annotations.TypeFactory
 import arc.graphics.DrawBuffer
 import arc.graphics.DrawerMode
 import arc.util.pattern.Bindable
 import arc.util.pattern.Cleanable
 import org.jetbrains.annotations.ApiStatus
+import java.nio.ByteBuffer
 
 /**
  * This interface represents buffer of vertices.
  *
  * @sample arc.sample.meshSample
  */
-@ImmutableType
 interface VertexBuffer : Bindable, Cleanable {
 
     /**
@@ -43,17 +42,18 @@ interface VertexBuffer : Bindable, Cleanable {
     val vertices: Int
 
     /**
-     * Store some [DrawBuffer] in this vertex buffer (It will overwrite old values).
+     * Store some [ByteBuffer] in this vertex buffer (It will overwrite old values).
      *
-     * @param drawBuffer Draw buffer for writing it this vertex buffer instance.
+     * @param buffer Buffer for writing it this vertex buffer instance.
+     * @param vertices Count of vertices in buffer.
      */
-    fun write(drawBuffer: DrawBuffer)
+    fun write(buffer: ByteBuffer, vertices: Int)
 
     @ApiStatus.Internal
     @TypeFactory
     interface Factory {
 
-        fun create(drawBuffer: DrawBuffer): VertexBuffer
+        fun create(mode: DrawerMode, format: VertexFormat, buffer: ByteBuffer, vertices: Int): VertexBuffer
 
     }
 
@@ -62,13 +62,16 @@ interface VertexBuffer : Bindable, Cleanable {
         /**
          * Create new instance of [VertexBuffer].
          *
-         * @param drawBuffer Draw buffer for writing vertex data.
+         * @param mode Mode for drawing this vertex buffer.
+         * @param format Format of vertices for this vertex buffer.
+         * @param buffer Buffer for writing vertex data.
+         * @param vertices Count of vertices in buffer.
          *
          * @return New instance of [VertexBuffer].
          */
         @JvmStatic
-        fun of(drawBuffer: DrawBuffer): VertexBuffer {
-            return Arc.factory<Factory>().create(drawBuffer)
+        fun of(mode: DrawerMode, format: VertexFormat, buffer: ByteBuffer, vertices: Int): VertexBuffer {
+            return Arc.factory<Factory>().create(mode, format, buffer, vertices)
         }
 
     }

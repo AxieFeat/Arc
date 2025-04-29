@@ -4,21 +4,29 @@ import arc.asset.asFileAsset
 import arc.demo.entity.Player
 import arc.demo.font.FontLoader
 import arc.demo.input.CameraControlBind
+import arc.demo.input.ScreenshotBind
 import arc.demo.shader.ShaderContainer
 import arc.demo.shader.VertexFormatContainer
 import arc.demo.world.World
 import arc.demo.world.block.Block
 import arc.files.classpath
 import arc.graphics.DrawerMode
+import arc.graphics.EmptyShaderInstance
 import arc.math.AABB
 import arc.math.Vec3f
 import arc.model.Face
-import arc.shader.BlendMode
+import arc.shader.ShaderInstance
 import arc.util.Color
 import org.joml.Matrix4f
-import org.lwjgl.opengl.GL11
-import org.lwjgl.opengl.GL11.GL_NO_ERROR
-import org.lwjgl.opengl.GL11.glGetError
+import org.lwjgl.opengl.ARBUniformBufferObject.GL_INVALID_INDEX
+import org.lwjgl.opengl.ARBUniformBufferObject.glBindBufferBase
+import org.lwjgl.opengl.GL15.*
+import org.lwjgl.opengl.GL15C.glBufferSubData
+import org.lwjgl.opengl.GL20.glGetUniformLocation
+import org.lwjgl.opengl.GL20.glUniform1i
+import org.lwjgl.opengl.GL31.*
+import org.lwjgl.system.MemoryUtil.memAlloc
+import java.nio.ByteBuffer
 import java.util.*
 import kotlin.math.*
 
@@ -30,6 +38,13 @@ object TerrainScreen : Screen("terrain") {
     private val font = FontLoader.load(classpath("arc/font/Monocraft.json").asFileAsset())
     private val matrix = Matrix4f().ortho(0f, application.window.width.toFloat(), 0f, application.window.height.toFloat(), -1f, 1f)
     private val hello = font.prepare(matrix.translate(10f, 10f, 0f).scale(5f), "temez gondon")
+
+    private val lighting = listOf<Light>(
+        Light(Color.RED, Vec3f.of(0f, 5f, -5f), 10f),
+        Light(Color.GREEN, Vec3f.of(0f, 1f, 5f), 10f),
+        Light(Color.BLUE, Vec3f.of(5f, 1f, 0f), 10f),
+    )
+    private val ubo = storeUbo(lighting)
 
     val crosshairBuffer = drawer.begin(DrawerMode.LINES, VertexFormatContainer.positionColor).use { buffer ->
         val crossSize = 1f / 20f
@@ -45,6 +60,7 @@ object TerrainScreen : Screen("terrain") {
     init {
         isShowCursor = false
         application.keyboard.bindingProcessor.bind(CameraControlBind)
+        application.keyboard.bindingProcessor.bind(ScreenshotBind)
 
         application.renderSystem.enableCull()
         application.renderSystem.enableDepthTest()
@@ -55,7 +71,15 @@ object TerrainScreen : Screen("terrain") {
         player.memoryDistance = 16
 
         player.setPosition(0.0, 50.0, 0.0)
-        player.fly = true
+        player.fly = false
+
+        for(x in 0..8) {
+            for(y in 0..8) {
+                world.generateChunkAt(x, y)
+            }
+        }
+
+        world.allChanged()
     }
 
     override fun doRender() {
@@ -69,7 +93,10 @@ object TerrainScreen : Screen("terrain") {
 
 //        renderSky()
 
-        world.render(ShaderContainer.positionTexColor, player)
+        ShaderContainer.positionTexColor.bind()
+        uploadLights(ShaderContainer.positionTexColor, lighting)
+        world.render(EmptyShaderInstance, player)
+        ShaderContainer.positionTexColor.unbind()
 
         val aabb = generateAABBForHoveredBlock()
         if (aabb != null) {
@@ -317,5 +344,61 @@ object TerrainScreen : Screen("terrain") {
         ShaderContainer.positionColor.unbind()
     }
 
+    fun storeUbo(lights: List<Light>): Int {
+        val maxLights = 2048
+        val lightSizeBytes = 32
+        val bufferSize = maxLights * lightSizeBytes
+
+        val uboId = glGenBuffers()
+        glBindBuffer(GL_UNIFORM_BUFFER, uboId)
+        glBufferData(GL_UNIFORM_BUFFER, bufferSize.toLong(), GL_DYNAMIC_DRAW)
+
+        val buffer: ByteBuffer = memAlloc(bufferSize)
+
+        for (i in 0 until maxLights) {
+            val light = lights.getOrNull(i)
+
+            if (light != null && light.color.alpha > 0f) {
+                buffer.putFloat(light.color.red / 255f)
+                buffer.putFloat(light.color.green / 255f)
+                buffer.putFloat(light.color.blue / 255f)
+                buffer.putFloat(light.color.alpha.toFloat())
+
+                buffer.putFloat(light.position.x)
+                buffer.putFloat(light.position.y)
+                buffer.putFloat(light.position.z)
+                buffer.putFloat(light.radius)
+            } else {
+                buffer.putFloat(0f).putFloat(0f).putFloat(0f).putFloat(0f)
+                buffer.putFloat(0f).putFloat(0f).putFloat(0f).putFloat(0f)
+            }
+        }
+
+        buffer.flip()
+        glBufferSubData(GL_UNIFORM_BUFFER, 0, buffer)
+
+        return uboId
+    }
+
+    fun uploadLights(shader: ShaderInstance, lights: List<Light>) {
+        val blockIndex = glGetUniformBlockIndex(shader.id, "Lights")
+        if (blockIndex != GL_INVALID_INDEX) {
+            glUniformBlockBinding(shader.id, blockIndex, 0)
+            glBindBufferBase(GL_UNIFORM_BUFFER, 0, ubo)
+        }
+
+        val lightCountLocation = glGetUniformLocation(shader.id, "lightCount")
+        if (lightCountLocation != -1) {
+            glUniform1i(lightCountLocation, lights.size)
+        }
+
+        glBindBuffer(GL_UNIFORM_BUFFER, 0)
+    }
+
+    data class Light(
+        val color: Color,
+        val position: Vec3f,
+        val radius: Float
+    )
 
 }

@@ -12,7 +12,6 @@ import org.joml.Vector3f
 import org.joml.Vector4f
 import org.lwjgl.opengl.GL20.*
 import org.lwjgl.opengl.GL30.glGetUniformLocation
-import org.lwjgl.opengl.GL41
 import org.lwjgl.system.MemoryStack
 
 internal data class GlShaderInstance(
@@ -28,29 +27,29 @@ internal data class GlShaderInstance(
     private val providers = mutableListOf<UniformProvider>()
 
     override fun compileShaders() {
-        id = GL41.glCreateProgram()
+        id = glCreateProgram()
 
-        vertexShaderId = createShader(vertex, GL41.GL_VERTEX_SHADER)
-        fragmentShaderId = createShader(fragment, GL41.GL_FRAGMENT_SHADER)
+        vertexShaderId = createShader(vertex, GL_VERTEX_SHADER)
+        fragmentShaderId = createShader(fragment, GL_FRAGMENT_SHADER)
 
         link()
     }
 
     override fun bind() {
-        GL41.glUseProgram(id)
+        glUseProgram(id)
         GlRenderSystem.shader = this
 
         providers.forEach { it.provide(this) }
     }
 
     override fun unbind() {
-        GL41.glUseProgram(0)
+        glUseProgram(0)
 
         GlRenderSystem.shader = EmptyShaderInstance
     }
 
     override fun cleanup() {
-        GL41.glDeleteProgram(id)
+        glDeleteProgram(id)
     }
 
     override fun addProvider(provider: UniformProvider) {
@@ -104,44 +103,44 @@ internal data class GlShaderInstance(
     }
 
     private fun createShader(shaderCode: String, shaderType: Int): Int {
-        val shaderId = GL41.glCreateShader(shaderType)
+        val shaderId = glCreateShader(shaderType)
         if (shaderId == 0) {
             throw RuntimeException("Error creating shader. Type: $shaderType")
         }
 
-        GL41.glShaderSource(shaderId, shaderCode)
-        GL41.glCompileShader(shaderId)
+        glShaderSource(shaderId, shaderCode)
+        glCompileShader(shaderId)
 
-        if (GL41.glGetShaderi(shaderId, GL41.GL_COMPILE_STATUS) == 0) {
-            throw RuntimeException("Error compiling Shader code: " + GL41.glGetShaderInfoLog(shaderId, 1024))
+        if (glGetShaderi(shaderId, GL_COMPILE_STATUS) == 0) {
+            throw RuntimeException("Error compiling Shader code: " + glGetShaderInfoLog(shaderId, 1024))
         }
 
-        GL41.glAttachShader(id, shaderId)
+        glAttachShader(id, shaderId)
 
         return shaderId
     }
 
     private fun link() {
-        GL41.glLinkProgram(id)
+        glLinkProgram(id)
 
-        check(GL41.glGetProgrami(id, GL41.GL_LINK_STATUS) != 0) {
-            "Error linking Shader code: ${GL41.glGetProgramInfoLog(id, 1024)}"
+        check(glGetProgrami(id, GL_LINK_STATUS) != 0) {
+            "Error linking Shader code: ${glGetProgramInfoLog(id, 1024)}"
         }
 
-        GL41.glDetachShader(
+        glDetachShader(
             id,
             vertexShaderId
         )
-        GL41.glDetachShader(
+        glDetachShader(
             id,
             fragmentShaderId
         )
 
 
-        GL41.glDeleteShader(
+        glDeleteShader(
             vertexShaderId
         )
-        GL41.glDeleteShader(
+        glDeleteShader(
             fragmentShaderId
         )
     }

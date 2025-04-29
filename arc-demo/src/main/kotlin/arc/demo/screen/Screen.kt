@@ -28,7 +28,6 @@ abstract class Screen(
     }
 
     override fun render() {
-        if (isSkipRender) return
         val start = System.nanoTime()
         updateTimer()
         camera.updateAspect(application.window.width, application.window.height)

@@ -5,16 +5,11 @@ object EmptyScene : Scene {
     override val drawer: Drawer
         get() = throw UnsupportedOperationException("Can not find drawer in empty scene!")
     override val camera: Camera
-        get() = Camera.create(60f, 0f, 0f)
+        get() = Camera.of(60f, 0f, 0f)
     override val fps: Int
         get() = 0
     override val delta: Float
         get() = 0f
-    override val isUse: Boolean
-        get() = false
-    override var isSkipRender: Boolean
-        get() = true
-        set(value) {}
     override var isShowCursor: Boolean
         get() = true
         set(value) {}

@@ -2,6 +2,8 @@ package arc.graphics
 
 /**
  * Enum class representing different drawing modes for primitives.
+ *
+ * @param id ID in render system.
  */
 enum class DrawerMode(
     val id: Int,

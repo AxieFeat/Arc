@@ -27,6 +27,7 @@ internal data class ArcVertexFormat(
                 }
                 uvOffsetsById[vertexFormatElement.index] = this.nextOffset
             }
+
             else -> {}
         }
 
@@ -45,7 +46,7 @@ internal data class ArcVertexFormat(
         return offsets[index]
     }
 
-   override fun getElementOffset(usage: VertexUsage): Int {
+    override fun getElementOffset(usage: VertexUsage): Int {
         for (element in elements) {
             if (element.usage == usage) {
                 return element.count
@@ -80,12 +81,6 @@ internal data class ArcVertexFormat(
             return ArcVertexFormat().also { vertex ->
                 elements.forEach { vertex.add(it) }
             }
-        }
-    }
-
-    object BuilderFactory : VertexFormat.BuilderFactory {
-        override fun create(): VertexFormat.Builder {
-            return Builder()
         }
     }
 }
