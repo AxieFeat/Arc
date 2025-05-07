@@ -60,7 +60,7 @@ interface TextureAtlas : Texture {
          * @return New instance of [TextureAtlas].
          */
         @JvmStatic
-        fun from(buffer: ByteBuffer): TextureAtlas = TextureAtlasLoader.PNG.load(buffer)
+        fun png(buffer: ByteBuffer): TextureAtlas = TextureAtlasLoader.PNG.load(buffer)
 
         /**
          * Create [TextureAtlas] from [AssetLike] object.

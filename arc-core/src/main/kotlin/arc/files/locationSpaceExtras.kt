@@ -1,9 +1,16 @@
 @file:JvmSynthetic
-@file:Suppress("NOTHING_TO_INLINE")
 
 package arc.files
 
+import arc.Application
 import java.io.File
+
+/**
+ * You should use these functions only after the [Application] is initialized in the [arc.util.factory.FactoryProvider],
+ * otherwise you may get unexpected errors.
+ */
+@JvmSynthetic
+private val application = Application.find()
 
 /**
  * Get file from path.
@@ -14,7 +21,7 @@ import java.io.File
  * @return New instance of [File].
  */
 @JvmSynthetic
-inline fun file(loc: FileLocation, path: String): File = ArcLocationSpace.file(loc, path)
+fun file(loc: FileLocation, path: String): File = application.locationSpace.file(loc, path)
 
 /**
  * Get file from classpath.
@@ -26,7 +33,7 @@ inline fun file(loc: FileLocation, path: String): File = ArcLocationSpace.file(l
  * @see FileLocation.CLASSPATH
  */
 @JvmSynthetic
-inline fun classpath(path: String): File = ArcLocationSpace.classpath(path)
+fun classpath(path: String): File = application.locationSpace.classpath(path)
 
 /**
  * Get file from absolute path.
@@ -38,7 +45,7 @@ inline fun classpath(path: String): File = ArcLocationSpace.classpath(path)
  * @see FileLocation.ABSOLUTE
  */
 @JvmSynthetic
-inline fun absolute(path: String): File = ArcLocationSpace.absolute(path)
+fun absolute(path: String): File = application.locationSpace.absolute(path)
 
 /**
  * Get file from directory of current application.
@@ -50,4 +57,4 @@ inline fun absolute(path: String): File = ArcLocationSpace.absolute(path)
  * @see FileLocation.LOCAL
  */
 @JvmSynthetic
-inline fun local(path: String): File = ArcLocationSpace.local(path)
+fun local(path: String): File = application.locationSpace.local(path)

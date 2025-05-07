@@ -13,8 +13,12 @@ import arc.model.texture.ModelTexture
 import arc.shader.ShaderInstance
 import de.articdive.jnoise.core.api.functions.Interpolation
 import de.articdive.jnoise.generators.noisegen.perlin.PerlinNoiseGenerator
+import java.util.concurrent.CompletableFuture
+import java.util.concurrent.Executors
 
 class World {
+
+    private val executor = Executors.newFixedThreadPool(4)
 
     private val noise = PerlinNoiseGenerator.newBuilder().setInterpolation(Interpolation.COSINE).build();
     val chunks = mutableMapOf<Pair<Int, Int>, Chunk>()
@@ -78,11 +82,11 @@ class World {
     fun render(shader: ShaderInstance, player: Player) {
         shader.bind()
 
-//        player.shouldLoad().forEach {
-//            if(getChunk(it.first, it.second) == null || getChunk(it.first, it.second)?.isLoaded == false) {
-//                generateChunkAt(it.first, it.second)?.load()
-//            }
-//        }
+        player.shouldLoad().forEach {
+            if(getChunk(it.first, it.second) == null || getChunk(it.first, it.second)?.isLoaded == false) {
+                generateChunkAt(it.first, it.second).join()?.load()
+            }
+        }
 
         val camera = VoxelGame.application.renderSystem.scene.camera
 
@@ -93,32 +97,38 @@ class World {
         shader.unbind()
     }
 
-    fun generateChunkAt(chunkX: Int, chunkZ: Int): Chunk? {
-        if(getChunk(chunkX, chunkZ) != null && !getChunk(chunkX, chunkZ)!!.isEmpty()) return null
+    fun generateChunkAt(chunkX: Int, chunkZ: Int): CompletableFuture<Chunk?> {
+        if(getChunk(chunkX, chunkZ) != null && !getChunk(chunkX, chunkZ)!!.isEmpty()) return CompletableFuture.completedFuture(null)
 
-        val start = System.currentTimeMillis()
-        val scale = 0.05
-        val maxHeight = 255
+        val completableFuture = CompletableFuture<Chunk?>()
 
-        val chunk = getOrCreateChunk(chunkX, chunkZ)
+        executor.submit {
+            val start = System.currentTimeMillis()
+            val scale = 0.05
+            val maxHeight = 255
 
-        for (localX in 0 until 16) {
-            for (localZ in 0 until 16) {
-                val worldX = chunkX * 16 + localX
-                val worldZ = chunkZ * 16 + localZ
+            val chunk = getOrCreateChunk(chunkX, chunkZ)
 
-                val height = (perlin(worldX * scale, worldZ * scale) * 10).toInt()
-                    .coerceIn(1, maxHeight)
+            for (localX in 0 until 16) {
+                for (localZ in 0 until 16) {
+                    val worldX = chunkX * 16 + localX
+                    val worldZ = chunkZ * 16 + localZ
 
-                for (y in 0 until height) {
-                    chunk.setBlock(worldX, y, worldZ, model())
+                    val height = (perlin(worldX * scale, worldZ * scale) * 10).toInt()
+                        .coerceIn(1, maxHeight)
+
+                    for (y in 0 until height) {
+                        chunk.setBlock(worldX, y, worldZ, model())
+                    }
                 }
             }
+
+            println("Chunk [${chunkX}:${chunkZ}] generated for ${System.currentTimeMillis() - start} ms!")
+
+            completableFuture.complete(chunk)
         }
 
-        println("Chunk [${chunkX}:${chunkZ}] generated for ${System.currentTimeMillis() - start} ms!")
-
-        return chunk
+        return completableFuture
     }
 
     fun unload(chunkX: Int, chunkZ: Int) {

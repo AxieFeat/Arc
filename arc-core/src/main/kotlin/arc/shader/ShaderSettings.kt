@@ -58,6 +58,7 @@ interface ShaderSettings {
          *
          * @return New instance of [ShaderSettings].
          */
+        @JvmStatic
         fun of(asset: StringAsset): ShaderSettings {
 
             val jsonObject = JsonParser.parseString(asset.text).asJsonObject

@@ -13,6 +13,8 @@ import arc.texture.TextureAtlas
 import arc.util.Color
 import arc.util.pattern.Cleanable
 import org.joml.Matrix4f
+import java.util.concurrent.CompletableFuture
+import java.util.concurrent.Executors
 
 class WorldModelDispatcher(
     val world: World,
@@ -21,6 +23,10 @@ class WorldModelDispatcher(
     val texture: TextureAtlas,
     val ambientOcclusion: Boolean = true
 ) : Cleanable {
+
+    companion object {
+        private val executor = Executors.newFixedThreadPool(4)
+    }
 
     private val matrix = Matrix4f()
     private val aoFactor = 0.15f
@@ -31,7 +37,7 @@ class WorldModelDispatcher(
         .add(VertexFormatElement.COLOR)
         .build()
 
-    private var vertexBuffer: VertexBuffer? = generateBuffer(texture).use { it.build() }
+    private var vertexBuffer: VertexBuffer? = generateBuffer(texture).join().use { it.build() }
 
     fun render() {
         vertexBuffer?.let {
@@ -40,46 +46,52 @@ class WorldModelDispatcher(
         }
     }
 
-    private fun generateBuffer(atlas: TextureAtlas): DrawBuffer {
-        val buffer = drawer.begin(DrawerMode.TRIANGLES, vertexFormat, cubes.size * 250)
+    private fun generateBuffer(atlas: TextureAtlas): CompletableFuture<DrawBuffer> {
+        val completableFuture = CompletableFuture<DrawBuffer>()
 
-        cubes.filterNotNull().forEach { block ->
-            val posX = block.x
-            val posY = block.y
-            val posZ = block.z
+        executor.submit {
+            val buffer = drawer.begin(DrawerMode.TRIANGLES, vertexFormat, cubes.size * 250)
 
-            block.model.cubes.forEach { cube ->
-                val (x1, y1, z1) = cube.from
-                val (x2, y2, z2) = cube.to
+            cubes.filterNotNull().forEach { block ->
+                val posX = block.x
+                val posY = block.y
+                val posZ = block.z
 
-                cube.faces.forEach { (face, cubeFace) ->
-                    val (dx, dy, dz) = getNeighborOffset(face)
-                    if (isBlocked(posX + dx, posY + dy, posZ + dz)) return@forEach
+                block.model.cubes.forEach { cube ->
+                    val (x1, y1, z1) = cube.from
+                    val (x2, y2, z2) = cube.to
 
-                    val uMin = cubeFace.uvMin.x.toFloat() / atlas.width
-                    val vMin = cubeFace.uvMin.y.toFloat() / atlas.height
-                    val uMax = cubeFace.uvMax.x.toFloat() / atlas.width
-                    val vMax = cubeFace.uvMax.y.toFloat() / atlas.height
+                    cube.faces.forEach { (face, cubeFace) ->
+                        val (dx, dy, dz) = getNeighborOffset(face)
+                        if (isBlocked(posX + dx, posY + dy, posZ + dz)) return@forEach
 
-                    val light = when (face) {
-                        Face.UP -> 1.0f
-                        Face.DOWN -> 0.75f
-                        Face.NORTH -> 0.8f
-                        Face.SOUTH -> 0.9f
-                        Face.WEST -> 0.85f
-                        Face.EAST -> 0.95f
+                        val uMin = cubeFace.uvMin.x.toFloat() / atlas.width
+                        val vMin = cubeFace.uvMin.y.toFloat() / atlas.height
+                        val uMax = cubeFace.uvMax.x.toFloat() / atlas.width
+                        val vMax = cubeFace.uvMax.y.toFloat() / atlas.height
+
+                        val light = when (face) {
+                            Face.UP -> 1.0f
+                            Face.DOWN -> 0.75f
+                            Face.NORTH -> 0.8f
+                            Face.SOUTH -> 0.9f
+                            Face.WEST -> 0.85f
+                            Face.EAST -> 0.95f
+                        }
+
+                        val ao = if (ambientOcclusion) calculateAO(face, posX, posY, posZ) else FloatArray(8)
+
+                        val vertices = getFaceVertices(face, x1, y1, z1, x2, y2, z2, ao, light)
+
+                        addQuad(buffer, uMin, vMin, uMax, vMax, vertices)
                     }
-
-                    val ao = if (ambientOcclusion) calculateAO(face, posX, posY, posZ) else FloatArray(8)
-
-                    val vertices = getFaceVertices(face, x1, y1, z1, x2, y2, z2, ao, light)
-
-                    addQuad(buffer, uMin, vMin, uMax, vMax, vertices)
                 }
             }
+
+            completableFuture.complete(buffer)
         }
 
-        return buffer
+        return completableFuture
     }
 
     private fun calculateAO(face: Face, x: Int, y: Int, z: Int): FloatArray {
@@ -199,7 +211,7 @@ class WorldModelDispatcher(
     fun rebuild(cubes: Array<Block?>) {
         this.cubes = cubes
 
-        vertexBuffer = generateBuffer(texture).use {
+        vertexBuffer = generateBuffer(texture).join().use {
             if (it.vertexCount > 0) it.build() else null
         }
     }

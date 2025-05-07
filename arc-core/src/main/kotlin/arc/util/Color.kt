@@ -102,9 +102,9 @@ interface Color : Copyable<Color>, Interpolatable<Color> {
 
         @Throws(IllegalArgumentException::class)
         fun create(
-            red: @Range(from = 0, to = 255) Int,
+            red:   @Range(from = 0, to = 255) Int,
             green: @Range(from = 0, to = 255) Int,
-            blue: @Range(from = 0, to = 255) Int,
+            blue:  @Range(from = 0, to = 255) Int,
             alpha: @Range(from = 0, to = 1) Double
         ): Color
 
@@ -148,9 +148,9 @@ interface Color : Copyable<Color>, Interpolatable<Color> {
          */
         @JvmStatic
         fun of(
-            red: @Range(from = 0, to = 255) Int = 255,
+            red:   @Range(from = 0, to = 255) Int = 255,
             green: @Range(from = 0, to = 255) Int = 255,
-            blue: @Range(from = 0, to = 255) Int = 255,
+            blue:  @Range(from = 0, to = 255) Int = 255,
             alpha: @Range(from = 0, to = 1) Double = 1.0
         ): Color = Arc.factory<Factory>().create(red, green, blue, alpha)
 

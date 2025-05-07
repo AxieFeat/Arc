@@ -26,18 +26,21 @@ internal object GlFactoryProvider {
     private val provider = ArcFactoryProvider
 
     @JvmStatic
-    fun bootstrap() {
-        provider.register<Application.Factory>(GlApplication.Factory)
+    fun bootstrap(overwrite: Boolean = false) {
+        try {
+            provider.register<Application.Factory>(GlApplication.Factory, overwrite)
 
-        provider.register<TextureLoader.Factory>(GlTextureLoader.Factory)
-        provider.register<TextureAtlasLoader.Factory>(GlTextureLoader.Factory)
+            provider.register<TextureLoader.Factory>(GlTextureLoader.Factory, overwrite)
+            provider.register<TextureAtlasLoader.Factory>(GlTextureLoader.Factory, overwrite)
 
-        provider.register<VertexBuffer.Factory>(GlVertexBuffer.Factory)
-        provider.register<VertexArrayBuffer.Factory>(GlVertexArrayBuffer.Factory)
+            provider.register<VertexBuffer.Factory>(GlVertexBuffer.Factory, overwrite)
+            provider.register<VertexArrayBuffer.Factory>(GlVertexArrayBuffer.Factory, overwrite)
 
-        provider.register<FrameBuffer.Factory>(GlFrameBuffer.Factory)
-        provider.register<ShaderInstance.Factory>(GlShaderInstance.Factory)
-        provider.register<BlendMode.Factory>(GlBlendMode.Factory)
-
+            provider.register<FrameBuffer.Factory>(GlFrameBuffer.Factory, overwrite)
+            provider.register<ShaderInstance.Factory>(GlShaderInstance.Factory, overwrite)
+            provider.register<BlendMode.Factory>(GlBlendMode.Factory, overwrite)
+        } catch (e: IllegalStateException) {
+            throw RuntimeException("Can not initialize OpenGL Application, because some application already initialized!", e)
+        }
     }
 }

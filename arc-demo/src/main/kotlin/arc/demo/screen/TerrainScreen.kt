@@ -71,15 +71,15 @@ object TerrainScreen : Screen("terrain") {
         player.memoryDistance = 16
 
         player.setPosition(0.0, 50.0, 0.0)
-        player.fly = false
+        player.fly = true
 
-        for(x in 0..8) {
-            for(y in 0..8) {
-                world.generateChunkAt(x, y)
-            }
-        }
+//        for(x in 0..8) {
+//            for(y in 0..8) {
+//                world.generateChunkAt(x, y)
+//            }
+//        }
 
-        world.allChanged()
+//        world.allChanged()
     }
 
     override fun doRender() {

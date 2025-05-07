@@ -56,7 +56,6 @@ object ArcFactoryProvider : FactoryProvider {
 
     @JvmStatic
     fun bootstrap() {
-        // Оригинальные регистрации — синглтоны
         register<Point2i.Factory>(ArcPoint2i.Factory)
         register<Point3i.Factory>(ArcPoint3i.Factory)
         register<Point2d.Factory>(ArcPoint2d.Factory)

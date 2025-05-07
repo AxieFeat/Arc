@@ -49,6 +49,13 @@ interface VertexBuffer : Bindable, Cleanable {
      */
     fun write(buffer: ByteBuffer, vertices: Int)
 
+    /**
+     * Store some [DrawBuffer] in this vertex buffer (It will overwrite old values).
+     *
+     * @param buffer Draw buffer with vertex data.
+     */
+    fun write(buffer: DrawBuffer) = write(buffer.byteBuffer, buffer.vertexCount)
+
     @ApiStatus.Internal
     @TypeFactory
     interface Factory {
