@@ -3,8 +3,8 @@ package arc.math
 import kotlin.math.roundToInt
 
 internal data class ArcPoint2i(
-    override var x: Int,
-    override var y: Int
+    override val x: Int,
+    override val y: Int
 ) : Point2i {
 
     override fun copy(): Point2i {
@@ -14,10 +14,10 @@ internal data class ArcPoint2i(
     override fun interpolate(other: Point2i, progress: Float): Point2i {
         require(progress in 0.0..1.0) { "Progress value is not in 0.0..1.0 range!" }
 
-        this.x += ((other.x - x) * progress).roundToInt()
-        this.y += ((other.y - y) * progress).roundToInt()
-
-        return this
+        return withXY(
+            ((other.x - x) * progress).roundToInt(),
+            ((other.y - y) * progress).roundToInt()
+        )
     }
 
     object Factory : Point2i.Factory {

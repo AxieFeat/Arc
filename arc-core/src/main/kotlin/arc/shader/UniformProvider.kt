@@ -1,14 +1,11 @@
 package arc.shader
 
-import arc.annotations.MutableType
-
 /**
  * This interface represents provider for shader uniforms.
  *
  * @sample arc.sample.UniformProviderSample
  * @sample arc.sample.uniformProviderSample
  */
-@MutableType
 interface UniformProvider {
 
     /**

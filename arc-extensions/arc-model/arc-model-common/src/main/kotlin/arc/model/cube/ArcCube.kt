@@ -9,8 +9,8 @@ import java.util.function.Predicate
 
 internal data class ArcCube(
     override val uuid: UUID = UUID.randomUUID(),
-    override val from: Vec3f = Vec3f.of(0f, 0f, 0f),
-    override val to: Vec3f = Vec3f.of(0f, 0f, 0f),
+    override var from: Vec3f = Vec3f.of(0f, 0f, 0f),
+    override var to: Vec3f = Vec3f.of(0f, 0f, 0f),
     override val pivot: Vec3f = Vec3f.of(0f, 0f, 0f),
     override val rotation: Vec3f = Vec3f.of(0f, 0f, 0f),
     override val lightLevel: Byte = 0,
@@ -25,16 +25,12 @@ internal data class ArcCube(
     )
 
     override fun translate(offsetX: Float, offsetY: Float, offsetZ: Float) {
-        from.apply {
-            this.x += offsetX
-            this.y += offsetY
-            this.z += offsetZ
-        }
-        to.apply {
-            this.x += offsetX
-            this.y += offsetY
-            this.z += offsetZ
-        }
+        from = from.add(
+            Vec3f.of(offsetX, offsetY, offsetZ)
+        )
+        to = to.add(
+            Vec3f.of(offsetX, offsetY, offsetZ)
+        )
     }
 
     override fun removeFaceIf(filter: Predicate<Map.Entry<Face, CubeFace>>) {
@@ -61,10 +57,10 @@ internal data class ArcCube(
     class Builder : Cube.Builder {
 
         private var uuid = UUID.randomUUID()
-        private val from = Vec3f.of(0f, 0f, 0f)
-        private val to = Vec3f.of(0f, 0f, 0f)
-        private val pivot = Vec3f.of(0f, 0f, 0f)
-        private val rotation = Vec3f.of(0f, 0f, 0f)
+        private var from = Vec3f.of(0f, 0f, 0f)
+        private var to = Vec3f.of(0f, 0f, 0f)
+        private var pivot = Vec3f.of(0f, 0f, 0f)
+        private var rotation = Vec3f.of(0f, 0f, 0f)
         private var lightLevel: Byte = 0
         private var lightColor: Color = Color.of()
         private val faces = mutableMapOf<Face, CubeFace>()
@@ -75,39 +71,23 @@ internal data class ArcCube(
             return this
         }
 
-        override fun setFrom(x: Float, y: Float, z: Float): Cube.Builder {
-            from.apply {
-                this.x = x
-                this.y = y
-                this.z = z
-            }
+        override fun setFrom(from: Vec3f): Cube.Builder {
+            this.from = from
             return this
         }
 
-        override fun setTo(x: Float, y: Float, z: Float): Cube.Builder {
-            to.apply {
-                this.x = x
-                this.y = y
-                this.z = z
-            }
+        override fun setTo(to: Vec3f): Cube.Builder {
+            this.to = to
             return this
         }
 
-        override fun setPivot(x: Float, y: Float, z: Float): Cube.Builder {
-            pivot.apply {
-                this.x = x
-                this.y = y
-                this.z = z
-            }
+        override fun setPivot(pivot: Vec3f): Cube.Builder {
+            this.pivot = pivot
             return this
         }
 
-        override fun setRotation(x: Float, y: Float, z: Float): Cube.Builder {
-            rotation.apply {
-                this.x = x
-                this.y = y
-                this.z = z
-            }
+        override fun setRotation(rotation: Vec3f): Cube.Builder {
+            this.rotation = rotation
             return this
         }
 

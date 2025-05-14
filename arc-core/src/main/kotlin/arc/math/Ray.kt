@@ -1,36 +1,76 @@
 package arc.math
 
 import arc.Arc
-import arc.annotations.MutableType
+import arc.annotations.ImmutableType
 import arc.annotations.TypeFactory
 import arc.util.pattern.Copyable
 import org.jetbrains.annotations.ApiStatus
+import org.jetbrains.annotations.Contract
 
 /**
  * Represents a 3D ray defined by an origin and a direction.
  */
-@MutableType
+@ImmutableType
 interface Ray : Copyable<Ray> {
 
     /**
      * The origin point of the ray.
      */
-    var origin: Vec3f
+    val origin: Vec3f
 
     /**
      * The direction vector of the ray.
      */
-    var direction: Vec3f
+    val direction: Vec3f
+
+    /**
+     * Create new instance of [Ray] with new [origin] point.
+     *
+     * This also create new instance if current origin point equals new.
+     *
+     * @param origin New origin point.
+     *
+     * @return New instance of [Ray].
+     */
+    @Contract("_ -> New")
+    fun withOrigin(origin: Vec3f): Ray = withOriginAndDirection(origin = origin)
+
+    /**
+     * Create new instance of [Ray] with new [direction] point.
+     *
+     * This also create new instance if current direction point equals new.
+     *
+     * @param direction New direction point.
+     *
+     * @return New instance of [Ray].
+     */
+    @Contract("_ -> New")
+    fun withDirection(direction: Vec3f): Ray = withOriginAndDirection(direction = direction)
+
+    /**
+     * Create new instance of [Ray] with new [origin] and [direction] point.
+     *
+     * This also create new instance if current origin or direction point equals new.
+     *
+     * @param origin New origin point.
+     * @param direction New direction point.
+     *
+     * @return New instance of [Ray].
+     */
+    @Contract("_, _ -> New")
+    fun withOriginAndDirection(
+        origin: Vec3f = this.origin,
+        direction: Vec3f = this.direction
+    ): Ray = of(origin, direction)
 
     /**
      * Returns the endpoint given the distance.
      *
-     * @param out The vector to set to the result.
      * @param distance The distance from the end point to the start point.
      *
-     * @return The [out] param.
+     * @return Vector with result point.
      */
-    fun getEndPoint(out: Vec3f, distance: Float): Vec3f
+    fun getEndPoint(distance: Float): Vec3f
 
     /**
      * Create copy of this ray.

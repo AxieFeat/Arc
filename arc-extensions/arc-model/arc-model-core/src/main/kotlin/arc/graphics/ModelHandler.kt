@@ -89,8 +89,8 @@ interface ModelHandler : Cleanable {
      */
     fun position(x: Float, y: Float, z: Float)
 
-    @TypeFactory
     @ApiStatus.Internal
+    @TypeFactory
     interface Factory {
 
         fun create(drawer: Drawer, model: Model): ModelHandler

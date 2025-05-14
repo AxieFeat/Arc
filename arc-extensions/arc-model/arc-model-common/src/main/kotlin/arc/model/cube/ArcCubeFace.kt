@@ -16,20 +16,14 @@ internal data class ArcCubeFace(
         private var rotation = 0f
         private var isCullable = true
 
-        override fun setUvMin(u: Int, v: Int): CubeFace.Builder {
-            uvMin.apply {
-                this.x = u
-                this.y = v
-            }
+        override fun setUvMin(uvMin: Point2i): CubeFace.Builder {
+            this.uvMin = uvMin
 
             return this
         }
 
-        override fun setUvMax(u: Int, v: Int): CubeFace.Builder {
-            uvMax.apply {
-                this.x = u
-                this.y = v
-            }
+        override fun setUvMax(uvMax: Point2i): CubeFace.Builder {
+            this.uvMax = uvMax
 
             return this
         }
@@ -49,6 +43,7 @@ internal data class ArcCubeFace(
         override fun build(): CubeFace {
             return ArcCubeFace(uvMin, uvMax, rotation, isCullable)
         }
+
     }
 
 }

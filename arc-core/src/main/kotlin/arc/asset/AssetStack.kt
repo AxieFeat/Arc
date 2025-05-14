@@ -46,6 +46,16 @@ interface AssetStack<T : AssetLike> : Iterable<T> {
             return Arc.factory<Factory>().create(assets)
         }
 
+        /**
+         * Create new stack of assets.
+         *
+         * @param asset Assets of stack.
+         *
+         * @return New instance of [AssetStack].
+         */
+        @JvmStatic
+        fun <T : AssetLike> of(vararg asset: T): AssetStack<T> = of(asset.toSet())
+
     }
 
 }

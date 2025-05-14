@@ -43,11 +43,11 @@ interface CubeFace {
     @ApiStatus.Internal
     interface Builder : arc.util.pattern.Builder<CubeFace> {
 
-        fun setUvMin(uvMin: Point2i): Builder = setUvMin(uvMin.x, uvMin.y)
-        fun setUvMin(u: Int, v: Int): Builder
+        fun setUvMin(uvMin: Point2i): Builder
+        fun setUvMin(u: Int, v: Int): Builder = setUvMin(Point2i.of(u, v))
 
-        fun setUvMax(uvMax: Point2i): Builder = setUvMax(uvMax.x, uvMax.y)
-        fun setUvMax(u: Int, v: Int): Builder
+        fun setUvMax(uvMax: Point2i): Builder
+        fun setUvMax(u: Int, v: Int): Builder = setUvMax(Point2i.of(u, v))
 
         fun rotation(rotation: Float): Builder
 

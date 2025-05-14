@@ -21,7 +21,7 @@ internal class ArcWindow(
     private val defaultErrorCallback = GLFWErrorCallback.create(ArcWindow::bootCrash)
 
     override var handle: Long = 0
-    override val position: Point2i = Point2i.of(0, 0)
+    override var position: Point2i = Point2i.of(0, 0)
     override var isFocus: Boolean = true
 
     override var name: String = name
@@ -114,8 +114,7 @@ internal class ArcWindow(
     }
 
     private fun onMove(handle: Long, x: Int, y: Int) {
-        this.position.x = x
-        this.position.y = y
+        this.position = position.withXY(x, y)
 
         handler.windowMove(x, y)
     }

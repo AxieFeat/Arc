@@ -1,7 +1,7 @@
 package arc.input
 
 /**
- * All keys in controller, keyboard and mouse.
+ * All keys in keyboard and mouse.
  */
 enum class KeyCode(
     val keyType: KeyType,
@@ -13,16 +13,15 @@ enum class KeyCode(
     ANY_KEY(KeyType.KEY, -1),
     ANY_MOUSE(KeyType.MOUSE, -1),
 
-    //mouse
+    // Mouse
     MOUSE_LEFT(KeyType.MOUSE, 0),
     MOUSE_RIGHT(KeyType.MOUSE, 1),
     MOUSE_MIDDLE(KeyType.MOUSE, 2),
     MOUSE_BACK(KeyType.MOUSE, 3),
     MOUSE_FORWARD(KeyType.MOUSE, 4),
-    // Not have ID because it processes with other method.
-    MOUSE_SCROLL(KeyType.MOUSE, -1),
+    MOUSE_SCROLL(KeyType.MOUSE, -1), // Not have ID because it processes with other method.
 
-    //keyboard
+    // Keyboard
     KEY_ESCAPE(KeyType.KEY, 256),
     KEY_LMETA(KeyType.KEY, 343),
     KEY_RMETA(KeyType.KEY, 347),
@@ -130,13 +129,31 @@ enum class KeyCode(
     KEY_END(KeyType.KEY, 269);
 
     companion object {
+
+        /**
+         * Get key-code from it integer id.
+         *
+         * @param id ID of key code.
+         *
+         * @return Some [KeyCode], fallback to [ANY] if not found.
+         */
+        @JvmStatic
         fun fromId(id: Int): KeyCode {
             return entries.find { it.id == id } ?: ANY
         }
 
+        /**
+         * Get all keycodes, that represents some char.
+         *
+         * @param char Char for finding.
+         *
+         * @return List of [KeyCode]'s
+         */
+        @JvmStatic
         fun fromChar(char: Char): List<KeyCode> {
             return entries.filter { it.char == char }
         }
+
     }
     
 }

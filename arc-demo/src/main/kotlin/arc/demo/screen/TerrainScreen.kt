@@ -12,7 +12,12 @@ import arc.demo.world.block.Block
 import arc.files.classpath
 import arc.graphics.DrawerMode
 import arc.graphics.EmptyShaderInstance
+import arc.input.KeyCode
+import arc.input.bind
+import arc.input.onPress
+import arc.input.onScroll
 import arc.math.AABB
+import arc.math.Point3d
 import arc.math.Vec3f
 import arc.model.Face
 import arc.shader.ShaderInstance
@@ -57,20 +62,80 @@ object TerrainScreen : Screen("terrain") {
         buffer.build()
     }
 
+    val starsBuffer = drawer.begin(DrawerMode.TRIANGLES, VertexFormatContainer.positionColor, 9000).use { buffer ->
+        val random = Random(10842L)
+
+        repeat(1499) {
+            var d0 = (random.nextFloat() * 2.0f - 1.0f).toDouble()
+            var d1 = (random.nextFloat() * 2.0f - 1.0f).toDouble()
+            var d2 = (random.nextFloat() * 2.0f - 1.0f).toDouble()
+            val d3 = (0.15f + random.nextFloat() * 0.1f).toDouble()
+            var d4 = d0 * d0 + d1 * d1 + d2 * d2
+
+            if (d4 < 1.0 && d4 > 0.01) {
+                d4 = 1.0 / sqrt(d4)
+                d0 *= d4
+                d1 *= d4
+                d2 *= d4
+
+                val d5 = d0 * 100.0
+                val d6 = d1 * 100.0
+                val d7 = d2 * 100.0
+                val d8 = atan2(d0, d2)
+                val d9 = sin(d8)
+                val d10 = cos(d8)
+                val d11 = atan2(sqrt(d0 * d0 + d2 * d2), d1)
+                val d12 = sin(d11)
+                val d13 = cos(d11)
+                val d14 = random.nextDouble() * Math.PI * 2.0
+                val d15 = sin(d14)
+                val d16 = cos(d14)
+
+                val vertices = Array(4) { Vec3f.of(0f, 0f, 0f) }
+
+                for (j in 0..3) {
+                    val d18 = ((j and 2) - 1).toDouble() * d3
+                    val d19 = ((j + 1 and 2) - 1).toDouble() * d3
+                    val d21 = d18 * d16 - d19 * d15
+                    val d22 = d19 * d16 + d18 * d15
+                    val d23 = d21 * d12
+                    val d24 = -d21 * d13
+                    val d25 = d24 * d9 - d22 * d10
+                    val d26 = d22 * d9 + d24 * d10
+
+                    vertices[j] = Vec3f.of(
+                        (d5 + d25).toFloat(),
+                        (d6 + d23).toFloat(),
+                        (d7 + d26).toFloat()
+                    )
+                }
+
+                buffer.addVertex(vertices[0].x, vertices[0].y, vertices[0].z).setColor(Color.WHITE)
+                buffer.addVertex(vertices[1].x, vertices[1].y, vertices[1].z).setColor(Color.WHITE)
+                buffer.addVertex(vertices[2].x, vertices[2].y, vertices[2].z).setColor(Color.WHITE)
+
+                buffer.addVertex(vertices[0].x, vertices[0].y, vertices[0].z).setColor(Color.WHITE)
+                buffer.addVertex(vertices[2].x, vertices[2].y, vertices[2].z).setColor(Color.WHITE)
+                buffer.addVertex(vertices[3].x, vertices[3].y, vertices[3].z).setColor(Color.WHITE)
+            }
+        }
+
+        buffer.build()
+    }
+
     init {
         isShowCursor = false
-        application.keyboard.bindingProcessor.bind(CameraControlBind)
-        application.keyboard.bindingProcessor.bind(ScreenshotBind)
+        application.keyboard.bind(CameraControlBind)
+        application.keyboard.bind(ScreenshotBind)
 
         application.renderSystem.enableCull()
-        application.renderSystem.enableDepthTest()
 
         application.window.isVsync = true
 
         player.viewDistance = 8
         player.memoryDistance = 16
 
-        player.setPosition(0.0, 50.0, 0.0)
+        player.position = Point3d.of(0.0, 50.0, 0.0)
         player.fly = true
 
 //        for(x in 0..8) {
@@ -85,13 +150,13 @@ object TerrainScreen : Screen("terrain") {
     override fun doRender() {
         player.handleInput(delta)
 
+        renderSky()
+
         ShaderContainer.blitScreen.bind()
         font.bind()
         drawer.draw(hello)
 
         renderCrosshair()
-
-//        renderSky()
 
         ShaderContainer.positionTexColor.bind()
         uploadLights(ShaderContainer.positionTexColor, lighting)
@@ -272,76 +337,17 @@ object TerrainScreen : Screen("terrain") {
     }
 
     private fun renderSky() {
+        application.renderSystem.disableDepthTest()
         renderStars()
+        application.renderSystem.enableDepthTest()
     }
 
     private fun renderStars() {
-        ShaderContainer.positionColor.bind()
+        ShaderContainer.sky.bind()
 
-        val random = Random(10842L)
+        drawer.draw(starsBuffer)
 
-        drawer.begin(DrawerMode.TRIANGLES, VertexFormatContainer.positionColor, 25000).use { buffer ->
-            for (i in 0..1499) {
-                var d0 = (random.nextFloat() * 2.0f - 1.0f).toDouble()
-                var d1 = (random.nextFloat() * 2.0f - 1.0f).toDouble()
-                var d2 = (random.nextFloat() * 2.0f - 1.0f).toDouble()
-                val d3 = (0.15f + random.nextFloat() * 0.1f).toDouble()
-                var d4 = d0 * d0 + d1 * d1 + d2 * d2
-
-                if (d4 < 1.0 && d4 > 0.01) {
-                    d4 = 1.0 / sqrt(d4)
-                    d0 *= d4
-                    d1 *= d4
-                    d2 *= d4
-
-                    val d5 = d0 * 100.0
-                    val d6 = d1 * 100.0
-                    val d7 = d2 * 100.0
-                    val d8 = atan2(d0, d2)
-                    val d9 = sin(d8)
-                    val d10 = cos(d8)
-                    val d11 = atan2(sqrt(d0 * d0 + d2 * d2), d1)
-                    val d12 = sin(d11)
-                    val d13 = cos(d11)
-                    val d14 = random.nextDouble() * Math.PI * 2.0
-                    val d15 = sin(d14)
-                    val d16 = cos(d14)
-
-                    val vertices = Array(4) { Vec3f.of(0f, 0f, 0f) }
-
-                    for (j in 0..3) {
-                        val d18 = ((j and 2) - 1).toDouble() * d3
-                        val d19 = ((j + 1 and 2) - 1).toDouble() * d3
-                        val d21 = d18 * d16 - d19 * d15
-                        val d22 = d19 * d16 + d18 * d15
-                        val d23 = d21 * d12
-                        val d24 = -d21 * d13
-                        val d25 = d24 * d9 - d22 * d10
-                        val d26 = d22 * d9 + d24 * d10
-
-                        vertices[j] = Vec3f.of(
-                            (d5 + d25).toFloat(),
-                            (d6 + d23).toFloat(),
-                            (d7 + d26).toFloat()
-                        )
-                    }
-
-                    buffer.addVertex(vertices[0].x, vertices[0].y, vertices[0].z).setColor(Color.WHITE)
-                    buffer.addVertex(vertices[1].x, vertices[1].y, vertices[1].z).setColor(Color.WHITE)
-                    buffer.addVertex(vertices[2].x, vertices[2].y, vertices[2].z).setColor(Color.WHITE)
-
-                    buffer.addVertex(vertices[0].x, vertices[0].y, vertices[0].z).setColor(Color.WHITE)
-                    buffer.addVertex(vertices[2].x, vertices[2].y, vertices[2].z).setColor(Color.WHITE)
-                    buffer.addVertex(vertices[3].x, vertices[3].y, vertices[3].z).setColor(Color.WHITE)
-                }
-            }
-
-            buffer.build().use {
-                drawer.draw(it)
-            }
-        }
-
-        ShaderContainer.positionColor.unbind()
+        ShaderContainer.sky.unbind()
     }
 
     fun storeUbo(lights: List<Light>): Int {

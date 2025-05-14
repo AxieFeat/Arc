@@ -35,12 +35,8 @@ internal data class ArcElementGroup(
             return this
         }
 
-        override fun setPivot(x: Float, y: Float, z: Float): ElementGroup.Builder {
-            this.pivot.apply {
-                this.x = x
-                this.y = y
-                this.z = z
-            }
+        override fun setPivot(pivot: Vec3f): ElementGroup.Builder {
+            this.pivot = pivot
 
             return this
         }

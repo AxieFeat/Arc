@@ -1,7 +1,6 @@
 package arc.window
 
 import arc.Arc
-import arc.annotations.MutableType
 import arc.annotations.TypeFactory
 import arc.math.Point2i
 import org.jetbrains.annotations.ApiStatus
@@ -10,7 +9,6 @@ import org.jetbrains.annotations.ApiStatus
  * This interface represents window of application.
  */
 @Suppress("INAPPLICABLE_JVM_NAME")
-@MutableType
 interface Window {
 
     /**

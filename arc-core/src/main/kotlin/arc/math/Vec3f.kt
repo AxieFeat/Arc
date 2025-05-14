@@ -1,32 +1,83 @@
 package arc.math
 
 import arc.Arc
-import arc.annotations.MutableType
+import arc.annotations.ImmutableType
 import arc.annotations.TypeFactory
 import arc.util.pattern.Interpolatable
 import org.jetbrains.annotations.ApiStatus
+import org.jetbrains.annotations.Contract
 import org.jetbrains.annotations.Range
 
 /**
  * Represents a 3D vector with float values.
  */
-@MutableType
+@ImmutableType
 interface Vec3f : Vector<Vec3f>, Interpolatable<Vec3f> {
 
     /**
      * The X-coordinate of the 3D vector.
      */
-    var x: Float
+    val x: Float
 
     /**
      * The Y-coordinate of the 3D vector.
      */
-    var y: Float
+    val y: Float
 
     /**
      * The Z-coordinate of the 3D vector.
      */
-    var z: Float
+    val z: Float
+
+    /**
+     * Create new instance of [Vec3f] with new [x], [y] and [z] value.
+     *
+     * This also create new instance if current X or Y or Z value equals new X or Y or Z.
+     *
+     * @param x New X value.
+     * @param y New Y value.
+     * @param z New Z Value.
+     *
+     * @return New instance of [Vec3f].
+     */
+    @Contract("_, _, _ -> New")
+    fun withXYZ(x: Float = this.x, y: Float = this.y, z: Float = this.z): Vec3f = of(x, y, z)
+
+    /**
+     * Create new instance of [Vec3f] with new [x] value.
+     *
+     * This also create new instance if current X value equals new X.
+     *
+     * @param x New X value.
+     *
+     * @return New instance of [Vec3f].
+     */
+    @Contract("_ -> New")
+    fun withX(x: Float): Vec3f = withXYZ(x = x)
+
+    /**
+     * Create new instance of [Vec3f] with new [y] value.
+     *
+     * This also create new instance if current Y value equals new Y.
+     *
+     * @param y New Y value.
+     *
+     * @return New instance of [Vec3f].
+     */
+    @Contract("_ -> New")
+    fun withY(y: Float): Vec3f = withXYZ(y = y)
+
+    /**
+     * Create new instance of [Vec3f] with new [z] value.
+     *
+     * This also create new instance if current Z value equals new Z.
+     *
+     * @param z New Z value.
+     *
+     * @return New instance of [Vec3f].
+     */
+    @Contract("_ -> New")
+    fun withZ(z: Float): Vec3f = withXYZ(z = z)
 
     /**
      * Interpolate with other vector.
@@ -34,7 +85,7 @@ interface Vec3f : Vector<Vec3f>, Interpolatable<Vec3f> {
      * @param other Vector for interpolation.
      * @param progress Progress of interpolation in ``0.0..1.0`` range.
      *
-     * @return Current instance of [Vec3f] with new values.
+     * @return New instance of [Vec3f] with new values.
      *
      * @throws IllegalArgumentException If [progress] is not in ``0.0..1.0`` range.
      */

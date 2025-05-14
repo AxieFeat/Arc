@@ -41,8 +41,8 @@ interface ElementGroup : Copyable<ElementGroup> {
         fun addCube(vararg cube: Cube): Builder = addCube(*cube.map { it.uuid }.toTypedArray())
         fun addCube(vararg cube: UUID): Builder
 
-        fun setPivot(pivot: Vec3f): Builder = setPivot(pivot.x, pivot.y, pivot.z)
-        fun setPivot(x: Float, y: Float, z: Float): Builder
+        fun setPivot(pivot: Vec3f): Builder
+        fun setPivot(x: Float, y: Float, z: Float): Builder = setPivot(Vec3f.of(x, y, z))
 
     }
 

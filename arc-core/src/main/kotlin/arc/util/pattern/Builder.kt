@@ -8,9 +8,9 @@ package arc.util.pattern
 interface Builder<T> {
 
     /**
-     * Builds and returns an instance of type T.
+     * Builds and returns an instance of type [T].
      *
-     * @return An instance of type T.
+     * @return An instance of type [T].
      */
     fun build(): T
 

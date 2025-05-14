@@ -16,7 +16,7 @@ internal data class ArcCamera(
     override var windowHeight: Float,
 ) : Camera {
 
-    override val ray: Ray = Ray.of(Vec3f.of(0f, 0f, 0f), Vec3f.of(0f, 0f, 0f))
+    override var ray: Ray = Ray.of(Vec3f.of(0f, 0f, 0f), Vec3f.of(0f, 0f, 0f))
 
     override var view: Matrix4f = Matrix4f()
     override var projection: Matrix4f = Matrix4f()
@@ -61,16 +61,19 @@ internal data class ArcCamera(
         view.identity().lookAt(cameraPos, cameraTarget, up)
         combined.set(projection).mul(view)
 
-        ray.origin.apply {
-            this.x = cameraPos.x
-            this.y = cameraPos.y
-            this.z = cameraPos.z
-        }
-        ray.direction.apply {
-            this.x = front.x
-            this.y = front.y
-            this.z = front.z
-        }
+
+        this.ray = ray.withOriginAndDirection(
+            origin = Vec3f.of(
+                cameraPos.x,
+                cameraPos.y,
+                cameraPos.z
+            ),
+            direction = Vec3f.of(
+                front.x,
+                front.y,
+                front.z
+            )
+        )
 
         frustum.update(this)
     }

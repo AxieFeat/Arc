@@ -1,13 +1,11 @@
 package arc.graphics.vertex
 
-import arc.annotations.MutableType
 import arc.util.Color
 import org.joml.Matrix4f
 
 /**
  * Interface for creating and managing vertex data in a 3D space.
  */
-@MutableType
 interface VertexConsumer {
 
     /**

@@ -11,31 +11,32 @@ interface Vector<T : Vector<T>> : Copyable<T> {
     /**
      * The euclidean length of this vector.
      */
-    val len: Float
+    fun len(): Float
 
     /**
      * This method is faster than [Vector.len] because it avoids calculating a square root. It is useful for comparisons,
      * but not for getting exact lengths, as the return value is the square of the actual length.
-     * @return The squared euclidean length
+     *
+     * @return The squared euclidean length.
      */
-    val len2: Float
+    fun len2(): Float
 
     /**
      * Limits the length of this vector, based on the desired maximum length.
      *
      * @param limit Desired maximum length for this vector.
      *
-     * @return This vector for chaining.
+     * @return New vector.
      */
     fun limit(limit: Float): T
 
     /**
      * Limits the length of this vector, based on the desired maximum length squared.
-     * This method is slightly faster than limit().
+     * This method is slightly faster than [limit].
      *
      * @param limit2 Squared desired maximum length for this vector.
      *
-     * @return This vector for chaining.
+     * @return New vector or current instance, if nothing are changed.
      *
      * @see len2
      */
@@ -46,17 +47,17 @@ interface Vector<T : Vector<T>> : Copyable<T> {
      *
      * @param len Desired length for this vector.
      *
-     * @return This vector for chaining.
+     * @return New vector.
      */
     fun setLength(len: Float): T
 
     /**
      * Sets the length of this vector, based on the square of the desired length. Does nothing if this vector is zero.
-     * This method is slightly faster than setLength().
+     * This method is slightly faster than [setLength].
      *
      * @param len2 Desired square of the length for this vector.
      *
-     * @return This vector for chaining.
+     * @return New vector or current instance, if nothing are changed.
      *
      * @see len2
      */
@@ -68,32 +69,23 @@ interface Vector<T : Vector<T>> : Copyable<T> {
      * @param min Min length.
      * @param max Max length.
      *
-     * @return This vector for chaining.
+     * @return New vector or current instance, if nothing are changed.
      */
     fun clamp(min: Float, max: Float): T
-
-    /**
-     * Sets this vector from the given vector.
-     *
-     * @param v The vector.
-     *
-     * @return This vector for chaining.
-     */
-    fun set(v: T): T
 
     /**
      * Subtracts the given vector from this vector.
      *
      * @param v The vector.
      *
-     * @return This vector for chaining.
+     * @return New vector.
      */
     fun sub(v: T): T
 
     /**
      * Normalizes this vector. Does nothing if it is zero.
      *
-     * @return This vector for chaining.
+     * @return New vector or current instance, if nothing are changed.
      */
     fun nor(): T
 
@@ -102,7 +94,7 @@ interface Vector<T : Vector<T>> : Copyable<T> {
      *
      * @param v The vector.
      *
-     * @return This vector for chaining.
+     * @return New vector.
      */
     fun add(v: T): T
 
@@ -118,19 +110,21 @@ interface Vector<T : Vector<T>> : Copyable<T> {
      *
      * @param scalar The scalar.
      *
-     * @return This vector for chaining.
+     * @return New vector.
      */
     fun scl(scalar: Float): T
 
     /**
      * Scales this vector by another vector.
      *
-     * @return This vector for chaining.
+     * @return New vector.
      */
     fun scl(v: T): T
 
     /**
      * Inverse of [scl].
+     *
+     * @return New vector.
      */
     fun div(other: T): T
 
@@ -154,39 +148,16 @@ interface Vector<T : Vector<T>> : Copyable<T> {
     fun dst2(v: T): Float
 
     /**
-     * Linearly interpolates between this vector and the target vector by alpha which is in the range [0,1]. The result is stored
-     * in this vector.
-     *
-     * @param target The target vector.
-     * @param alpha The interpolation coefficient.
-     *
-     * @return This vector for chaining.
-     */
-    fun lerp(target: T, alpha: Float): T
-
-    /**
-     * Sets this vector to the unit vector with a random direction.
-     *
-     * @return This vector for chaining.
-     */
-    fun setToRandomDirection(): T
-
-    /**
-     * Whether this vector is a unit length vector.
-     */
-    @get:JvmName("isUnit")
-    val isUnit: Boolean
-
-    /**
      * @return Whether this vector is a unit length vector within the given margin.
      */
-    fun isUnit(margin: Float): Boolean
+    @JvmName("isUnit")
+    fun isUnit(margin: Float = 0.000000001f): Boolean
 
     /**
      * Whether this vector is a zero vector.
      */
-    @get:JvmName("isZero")
-    val isZero: Boolean
+    @JvmName("isZero")
+    fun isZero(): Boolean
 
     /**
      * @return Whether the length of this vector is smaller than the given margin
@@ -275,16 +246,10 @@ interface Vector<T : Vector<T>> : Copyable<T> {
     fun mulAdd(v: T, mulVec: T): T
 
     /**
-     * Sets the components of this vector to 0.
-     *
-     * @return This vector for chaining.
-     */
-    fun setZero(): T
-
-    /**
      * Create copy of this vector.
      *
      * @return A copy of this vector.
      */
     override fun copy(): T
+
 }

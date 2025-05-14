@@ -1,8 +1,8 @@
 package arc.math
 
 internal data class ArcPoint2d(
-    override var x: Double,
-    override var y: Double
+    override val x: Double,
+    override val y: Double
 ) : Point2d {
 
     override fun copy(): Point2d {
@@ -12,10 +12,10 @@ internal data class ArcPoint2d(
     override fun interpolate(other: Point2d, progress: Float): Point2d {
         require(progress in 0.0..1.0) { "Progress value is not in 0.0..1.0 range!" }
 
-        this.x += (other.x - x) * progress
-        this.y += (other.y - y) * progress
-
-        return this
+        return withXY(
+            (other.x - x) * progress,
+            (other.y - y) * progress
+        )
     }
 
     object Factory : Point2d.Factory {

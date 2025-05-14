@@ -7,7 +7,7 @@ internal data class ArcKeyframe(
     override val channel: AnimationChannel = AnimationChannel.POSITION,
     override val interpolation: InterpolationMode = InterpolationMode.LINEAR,
     override val time: Float = 1f,
-    override val dataPoints: Vec3f = Vec3f.of(0f, 0f, 0f)
+    override var dataPoints: Vec3f = Vec3f.of(0f, 0f, 0f)
 ) : Keyframe {
 
     override fun copy(): Keyframe {
@@ -40,11 +40,11 @@ internal data class ArcKeyframe(
         }
 
         override fun setDataPoints(x: Float, y: Float, z: Float): Keyframe.Builder {
-            this.dataPoints.apply {
-                this.x = x
-                this.y = y
-                this.z = z
-            }
+            this.dataPoints = this.dataPoints.withXYZ(
+                x = x,
+                y = y,
+                z = z
+            )
 
             return this
         }

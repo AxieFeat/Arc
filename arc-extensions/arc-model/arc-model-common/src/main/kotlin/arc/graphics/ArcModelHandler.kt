@@ -4,14 +4,11 @@ import arc.math.AABB
 import arc.math.Vec3f
 import arc.model.Model
 import arc.model.cube.Cube
-import arc.model.texture.ModelTexture
 import arc.shader.ShaderInstance
-import arc.texture.Texture
 import org.joml.Math
 import org.joml.Matrix4f
 import org.joml.Quaternionf
 import org.joml.Vector3f
-import java.util.*
 
 internal data class ArcModelHandler(
     override val drawer: Drawer,
@@ -21,7 +18,7 @@ internal data class ArcModelHandler(
     private val matrix = Matrix4f()
     private val rotation = Quaternionf()
 
-    private val cachedAabb = AABB.of(Vec3f.ZERO, Vec3f.ZERO)
+    private var cachedAabb = AABB.of(Vec3f.ZERO, Vec3f.ZERO)
     private var matrixDirty = true
 
     override val aabb: AABB
@@ -150,8 +147,11 @@ internal data class ArcModelHandler(
             }
         }
 
-        cachedAabb.min = Vec3f.of(minX, minY, minZ)
-        cachedAabb.max = Vec3f.of(maxX, maxY, maxZ)
+
+        cachedAabb = AABB.of(
+            min = Vec3f.of(minX, minY, minZ),
+            max = Vec3f.of(maxX, maxY, maxZ),
+        )
     }
 
     override fun cleanup() {

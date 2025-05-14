@@ -1,9 +1,9 @@
 package arc.math
 
 internal data class ArcPoint3d(
-    override var x: Double,
-    override var y: Double,
-    override var z: Double
+    override val x: Double,
+    override val y: Double,
+    override val z: Double
 ) : Point3d {
 
     override fun copy(): Point3d {
@@ -13,11 +13,11 @@ internal data class ArcPoint3d(
     override fun interpolate(other: Point3d, progress: Float): Point3d {
         require(progress in 0.0..1.0) { "Progress value is not in 0.0..1.0 range!" }
 
-        this.x += (other.x - x) * progress
-        this.y += (other.y - y) * progress
-        this.z += (other.z - z) * progress
-
-        return this
+        return withXYZ(
+            (other.x - x) * progress,
+            (other.y - y) * progress,
+            (other.z - z) * progress
+        )
     }
 
     object Factory : Point3d.Factory {

@@ -36,9 +36,6 @@ interface MouseInput : InputDevice {
     /**
      * Reset [displayVec].
      */
-    fun reset() {
-        displayVec.x = 0f
-        displayVec.y = 0f
-    }
+    fun reset()
 
 }

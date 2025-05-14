@@ -12,7 +12,7 @@ internal object GlDrawer : Drawer {
     private val emptyMatrix = Matrix4f()
 
     override fun begin(mode: DrawerMode, format: VertexFormat, bufferSize: Int): DrawBuffer {
-        return DrawBuffer.create(mode, format, bufferSize)
+        return DrawBuffer.of(mode, format, bufferSize)
     }
 
     override fun draw(buffer: VertexBuffer) {

@@ -1,7 +1,6 @@
 package arc.graphics.vertex
 
 import arc.Arc
-import arc.annotations.MutableType
 import arc.annotations.TypeFactory
 import org.jetbrains.annotations.ApiStatus
 
@@ -10,7 +9,6 @@ import org.jetbrains.annotations.ApiStatus
  *
  * With VertexFormat you designate what parameters the shader accepts.
  */
-@MutableType
 interface VertexFormat {
 
     /**

@@ -8,6 +8,7 @@ import arc.demo.screen.TerrainScreen
 import arc.demo.shader.ShaderContainer
 import arc.graphics.vertex.VertexFormat
 import arc.window.WindowHandler
+import kotlin.system.exitProcess
 
 object VoxelGame : WindowHandler {
 
@@ -39,6 +40,8 @@ object VoxelGame : WindowHandler {
         // Close application after exit from loop.
         soundEngine.stop()
         application.close()
+
+        exitProcess(0)
     }
 
     fun setScreen(screen: Screen) {

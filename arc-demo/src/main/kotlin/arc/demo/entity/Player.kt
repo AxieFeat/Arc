@@ -20,7 +20,15 @@ class Player(
     val camera: Camera,
 ) {
 
-    val position: Point3d = Point3d.of(0.0, 0.0, 0.0)
+    var position: Point3d = Point3d.of(0.0, 0.0, 0.0)
+    set(value) {
+        field = value
+        camera.position = position.withXYZ(
+            x = position.x,
+            y = position.y + 1.65,
+            z = position.z
+        )
+    }
     private val velocity = Vector3f(0f, 0f, 0f)
 
     var viewDistance = 8
@@ -51,20 +59,6 @@ class Player(
     private val gravity = -20f
     private val jumpVelocity = 8f
     private val terminalVelocity = -50f
-
-    fun setPosition(x: Double, y: Double, z: Double) {
-        position.apply {
-            this.x = x
-            this.y = y
-            this.z = z
-        }
-
-        camera.position.apply {
-            this.x = position.x
-            this.y = position.y + 1.65
-            this.z = position.z
-        }
-    }
 
     private fun getPlayerAABB(pos: Vector3f): AABB {
         val min = Vec3f.of(pos.x - playerSize.x, pos.y, pos.z - playerSize.z)
@@ -146,7 +140,11 @@ class Player(
             val pos = Vector3f(position.x.toFloat(), position.y.toFloat(), position.z.toFloat())
             pos.add(moveDir.mul(delta))
 
-            setPosition(pos.x.toDouble(), pos.y.toDouble(), pos.z.toDouble())
+            position = Point3d.of(
+                pos.x.toDouble(),
+                pos.y.toDouble(),
+                pos.z.toDouble()
+            )
         } else {
             if (moveDir.lengthSquared() > 0f) {
                 moveDir.normalize().mul(speed)
@@ -188,7 +186,11 @@ class Player(
                 }
             }
 
-            setPosition(pos.x.toDouble(), pos.y.toDouble(), pos.z.toDouble())
+            position = Point3d.of(
+                pos.x.toDouble(),
+                pos.y.toDouble(),
+                pos.z.toDouble()
+            )
         }
 
         if (CameraControlBind.status) {

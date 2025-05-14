@@ -1,7 +1,6 @@
 package arc.model.cube
 
 import arc.Arc
-import arc.annotations.MutableType
 import arc.math.AABB
 import arc.math.Vec3f
 import arc.model.Face
@@ -19,7 +18,6 @@ import java.util.function.Predicate
  * @see CubeFace
  * @see Face
  */
-@MutableType
 interface Cube : Copyable<Cube>, Identifiable {
 
     /**
@@ -83,17 +81,17 @@ interface Cube : Copyable<Cube>, Identifiable {
 
         fun setUUID(uuid: UUID): Builder
 
-        fun setFrom(from: Vec3f): Builder = setFrom(from.x, from.y, from.z)
-        fun setFrom(x: Float, y: Float, z: Float): Builder
+        fun setFrom(from: Vec3f): Builder
+        fun setFrom(x: Float, y: Float, z: Float): Builder = setFrom(Vec3f.of(x, y, z))
 
-        fun setTo(to: Vec3f): Builder = setTo(to.x, to.y, to.z)
-        fun setTo(x: Float, y: Float, z: Float): Builder
+        fun setTo(to: Vec3f): Builder
+        fun setTo(x: Float, y: Float, z: Float): Builder = setTo(Vec3f.of(x, y, z))
 
-        fun setPivot(pivot: Vec3f): Builder = setPivot(pivot.x, pivot.y, pivot.z)
-        fun setPivot(x: Float, y: Float, z: Float): Builder
+        fun setPivot(pivot: Vec3f): Builder
+        fun setPivot(x: Float, y: Float, z: Float): Builder = setPivot(Vec3f.of(x, y, z))
 
-        fun setRotation(rotation: Vec3f): Builder = setRotation(rotation.x, rotation.y, rotation.z)
-        fun setRotation(x: Float, y: Float, z: Float): Builder
+        fun setRotation(rotation: Vec3f): Builder
+        fun setRotation(x: Float, y: Float, z: Float): Builder = setRotation(Vec3f.of(x, y, z))
 
         fun setLightLevel(lightLevel: Byte): Builder
         fun setLightColor(lightColor: Color): Builder

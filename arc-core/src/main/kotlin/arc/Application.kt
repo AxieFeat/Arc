@@ -1,6 +1,5 @@
 package arc
 
-import arc.annotations.MutableType
 import arc.annotations.TypeFactory
 import arc.files.LocationSpace
 import arc.graphics.RenderSystem
@@ -37,7 +36,6 @@ import java.io.File
  * )
  * ```
  */
-@MutableType
 interface Application {
 
     /**

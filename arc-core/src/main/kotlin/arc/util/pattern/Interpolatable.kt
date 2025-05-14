@@ -16,7 +16,7 @@ interface Interpolatable<T> {
      * @param other Object for interpolation.
      * @param progress Progress of interpolation in ``0.0..1.0`` range.
      *
-     * @return Current instance of [Interpolatable] with new values.
+     * @return New instance of [Interpolatable] with new values.
      *
      * @throws IllegalArgumentException If [progress] is not in ``0.0..1.0`` range.
      */

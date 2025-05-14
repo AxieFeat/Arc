@@ -57,4 +57,14 @@ object ShaderContainer {
         it.addProvider(DefaultUniformProvider)
     }
 
+    @JvmField
+    val sky = ShaderInstance.of(
+        vertexShader = classpath("arc/shader/sky/sky.vsh").asFileAsset(),
+        fragmentShader = classpath("arc/shader/sky/sky.fsh").asFileAsset(),
+        shaderSettings = ShaderSettings.of(classpath("arc/shader/sky/sky.json").asFileAsset()),
+    ).also {
+        it.compileShaders()
+        it.addProvider(DefaultUniformProvider)
+    }
+
 }

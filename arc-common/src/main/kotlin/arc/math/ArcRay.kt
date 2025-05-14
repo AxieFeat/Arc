@@ -5,8 +5,8 @@ internal data class ArcRay(
     override var direction: Vec3f
 ) : Ray {
 
-    override fun getEndPoint(out: Vec3f, distance: Float): Vec3f {
-        return out.set(direction).scl(distance).add(origin)
+    override fun getEndPoint(distance: Float): Vec3f {
+        return direction.scl(distance).add(origin)
     }
 
     override fun copy(): Ray = ArcRay(origin, direction)

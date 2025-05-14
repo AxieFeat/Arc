@@ -1,13 +1,11 @@
 package arc.graphics
 
 import arc.Arc
-import arc.annotations.MutableType
 import arc.annotations.TypeFactory
 import arc.graphics.vertex.VertexArrayBuffer
 import arc.graphics.vertex.VertexBuffer
 import arc.graphics.vertex.VertexConsumer
 import arc.graphics.vertex.VertexFormat
-import arc.util.pattern.Builder
 import arc.util.pattern.Cleanable
 import org.jetbrains.annotations.ApiStatus
 import java.nio.ByteBuffer
@@ -18,7 +16,6 @@ import java.nio.ByteBuffer
  *
  * @sample arc.sample.drawBufferSample
  */
-@MutableType
 interface DrawBuffer : VertexConsumer, Cleanable {
 
     /**
@@ -81,7 +78,7 @@ interface DrawBuffer : VertexConsumer, Cleanable {
          * @return New instance of [DrawBuffer]
          */
         @JvmStatic
-        fun create(mode: DrawerMode, format: VertexFormat, bufferSize: Int = 256): DrawBuffer {
+        fun of(mode: DrawerMode, format: VertexFormat, bufferSize: Int = 256): DrawBuffer {
             return Arc.factory<Factory>().create(mode, format, bufferSize)
         }
 

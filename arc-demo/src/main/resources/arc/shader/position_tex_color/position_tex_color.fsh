@@ -48,6 +48,11 @@ vec4 color_light(vec3 pos, vec4 base_color) {
 void main() {
     vec4 texColor = texture(Sampler, texCoord);
     vec4 baseColor = color * texColor;
+    vec4 colorLight = color_light(worldPos, baseColor);
 
-    fragColor = color_light(worldPos, baseColor);
+    if(colorLight.a <= 0) {
+        discard;
+    }
+
+    fragColor = colorLight;
 }

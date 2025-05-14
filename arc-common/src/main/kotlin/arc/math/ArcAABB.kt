@@ -1,16 +1,10 @@
 package arc.math
 
 internal data class ArcAABB(
-    override var min: Vec3f,
-    override var max: Vec3f
-) : AABB {
-
+    override val min: Vec3f,
+    override val max: Vec3f,
     override val center: Vec3f
-        get() = Vec3f.of(
-            (min.x + max.x) * 0.5f,
-            (min.y + max.y) * 0.5f,
-            (min.z + max.z) * 0.5f
-        )
+) : AABB {
 
     override fun contains(point: Vec3f): Boolean {
         return point.x in min.x..max.x &&
@@ -25,8 +19,8 @@ internal data class ArcAABB(
     }
 
     object Factory : AABB.Factory {
-        override fun create(min: Vec3f, max: Vec3f): AABB {
-            return ArcAABB(min, max)
+        override fun create(min: Vec3f, max: Vec3f, center: Vec3f): AABB {
+            return ArcAABB(min, max, center)
         }
     }
 }

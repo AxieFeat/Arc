@@ -1,0 +1,6 @@
+{
+  "uniforms": [
+    "viewMatrix",
+    "projectionMatrix"
+  ]
+}

@@ -4,7 +4,7 @@ import arc.input.DeviceType
 import arc.input.InputDevice
 
 /**
- * This interface represents controller for keyboard device.
+ * This interface represents keyboard input device.
  *
  * @see InputDevice
  */

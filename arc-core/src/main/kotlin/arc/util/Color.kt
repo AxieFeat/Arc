@@ -1,7 +1,7 @@
 package arc.util
 
 import arc.Arc
-import arc.annotations.MutableType
+import arc.annotations.ImmutableType
 import arc.annotations.TypeFactory
 import arc.util.pattern.Copyable
 import arc.util.pattern.Interpolatable
@@ -15,58 +15,59 @@ import kotlin.jvm.Throws
  * - Red, green, and blue values are integers between 0 and 255 (inclusive).
  * - Alpha value is a double between 0.0 and 1.0 (inclusive), where 1.0 represents full opacity and 0.0 full transparency.
  */
-@MutableType
+@ImmutableType
 interface Color : Copyable<Color>, Interpolatable<Color> {
 
     /**
      * Represents the red component of a color.
      *
-     * This value must be in the range `0..255`.
-     * It is used to define the intensity of the red color in an RGB representation.
+     * This value must be in the range ``0..255``.
      */
-    var red: @Range(from = 0, to = 255) Int
+    val red: @Range(from = 0, to = 255) Int
 
     /**
-     * Represents the green component of a color in the range [0, 255].
+     * Represents the green component of a color.
      *
-     * This variable is mutable and defines the intensity of the green channel for a color.
+     * This value must be in the range ``0..255``.
      */
-    var green: @Range(from = 0, to = 255) Int
+    val green: @Range(from = 0, to = 255) Int
 
     /**
      * Represents the blue component of a color.
      *
-     * The value must be in the range [0, 255], where 0 represents no intensity and 255 represents full intensity.
-     *
-     * This property allows getting or setting the blue value of the color.
+     * This value must be in the range ``0..255``.
      */
-    var blue: @Range(from = 0, to = 255) Int
+    val blue: @Range(from = 0, to = 255) Int
 
     /**
      * Represents the alpha (opacity) component of a color.
      *
      * The value must be a double within the range of 0.0 to 1.0, where 0.0 signifies full
      * transparency and 1.0 signifies full opacity.
-     *
-     * Modifying this property changes the transparency of the specified color instance.
      */
-    var alpha: @Range(from = 0, to = 1) Double
+    val alpha: @Range(from = 0, to = 1) Double
 
     /**
-     * Writes the data of the given color [another] into the current color instance.
+     * Interpolate with other color.
      *
-     * @param another The color whose data will be used to overwrite this instance.
+     * @param other Color for interpolation.
+     * @param progress Progress of interpolation in ``0.0..1.0`` range.
+     *
+     * @return New instance of [Color] with new values.
+     *
+     * @throws IllegalArgumentException If [progress] is not in ``0.0..1.0`` range.
      */
-    fun write(another: Color)
+    @Throws(IllegalArgumentException::class)
+    override fun interpolate(other: Color, progress: @Range(from = 0, to = 1) Float): Color
 
     /**
      * Multiply values in color.
      *
      * @param value Multiply value.
      *
-     * @return Current instance of [Color].
+     * @return New instance of [Color].
      */
-    fun mul(value: Float): Color
+    operator fun times(value: Float): Color
 
     /**
      * Converts the current color instance into its integer representation.
@@ -81,19 +82,6 @@ interface Color : Copyable<Color>, Interpolatable<Color> {
      * @return New instance of [Color].
      */
     override fun copy(): Color
-
-    /**
-     * Interpolate with other color.
-     *
-     * @param other Color for interpolation.
-     * @param progress Progress of interpolation in ``0.0..1.0`` range.
-     *
-     * @return Current instance of [Color] with new values.
-     *
-     * @throws IllegalArgumentException If [progress] is not in ``0.0..1.0`` range.
-     */
-    @Throws(IllegalArgumentException::class)
-    override fun interpolate(other: Color, progress: @Range(from = 0, to = 1) Float): Color
 
     @TypeFactory
     @ApiStatus.Internal

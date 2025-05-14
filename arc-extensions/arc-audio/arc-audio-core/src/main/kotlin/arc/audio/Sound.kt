@@ -1,13 +1,11 @@
 package arc.audio
 
-import arc.annotations.MutableType
 import arc.math.Point3d
 
 /**
  * Represents a sound that can be played, stopped, and managed.
  */
 @Suppress("INAPPLICABLE_JVM_NAME")
-@MutableType
 interface Sound {
 
     /**

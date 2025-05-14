@@ -1,7 +1,6 @@
 package arc.asset
 
 import arc.Arc
-import arc.annotations.MutableType
 import arc.annotations.TypeFactory
 import org.jetbrains.annotations.ApiStatus
 
@@ -10,7 +9,6 @@ import org.jetbrains.annotations.ApiStatus
  *
  * @param T The type of asset contained in the stack, which must implement the [AssetLike] interface.
  */
-@MutableType
 interface MutableAssetStack<T : AssetLike> : AssetStack<T> {
 
     /**
@@ -54,6 +52,16 @@ interface MutableAssetStack<T : AssetLike> : AssetStack<T> {
         fun <T : AssetLike> of(assets: Set<T> = setOf()): MutableAssetStack<T> {
             return Arc.factory<Factory>().create(assets)
         }
+
+        /**
+         * Create new stack of assets.
+         *
+         * @param asset Assets of stack.
+         *
+         * @return New instance of [MutableAssetStack].
+         */
+        @JvmStatic
+        fun <T : AssetLike> of(vararg asset: T): MutableAssetStack<T> = of(asset.toSet())
 
     }
 

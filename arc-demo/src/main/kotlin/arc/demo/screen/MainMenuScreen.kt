@@ -89,9 +89,7 @@ object MainMenuScreen : Screen("main-menu") {
             newZ -= up.z * speed
         }
 
-        camera.position.x = newX
-        camera.position.y = newY
-        camera.position.z = newZ
+        camera.position = Point3d.of(newX, newY, newZ)
 
         if (application.mouse.isPressed(KeyCode.MOUSE_LEFT)) {
             this.sensitivity = 65f * delta

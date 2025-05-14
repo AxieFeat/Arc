@@ -40,14 +40,19 @@ internal object ArcMouseInput : MouseInput {
         return false
     }
 
+    override fun reset() {
+        displayVec = displayVec.withXY(0f, 0f)
+    }
+
     fun positionUpdate(x: Double, y: Double) {
         previousPosition = Point2d.of(position.x, position.y)
 
-        position.x = x
-        position.y = y
+        position = position.withXY(x, y)
 
-        displayVec.x = (position.x - previousPosition.x).toFloat()
-        displayVec.y = (position.y - previousPosition.y).toFloat()
+        displayVec = displayVec.withXY(
+            (position.x - previousPosition.x).toFloat(),
+            (position.y - previousPosition.y).toFloat()
+        )
     }
 
     fun keyUpdate(key: KeyCode, pressed: Boolean) {
