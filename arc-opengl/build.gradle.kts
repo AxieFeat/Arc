@@ -1,25 +1,10 @@
-val lwjglVersion = "3.3.6"
-val winNatives = "natives-windows"
-val linuxNatives = "natives-linux"
-val macosNatives = "natives-macos"
-val macosArmNatives = "natives-macos-arm64"
-
-private val natives = listOf(
-    "org.lwjgl:lwjgl-stb",
-    "org.lwjgl:lwjgl-opengl"
-)
+import arc.util.lwjgl
 
 dependencies {
-    api(project(":arc-common"))
+    api(projects.arcCommon)
 
-    // Natives for every OS
-    natives.forEach { name ->
-        implementation("$name:$lwjglVersion")
-        implementation("$name:$lwjglVersion:$winNatives")
-        implementation("$name:$lwjglVersion:$linuxNatives")
-        implementation("$name:$lwjglVersion:$macosNatives")
-        implementation("$name:$lwjglVersion:$macosArmNatives")
-    }
+    lwjgl(libs.lwjgl.stb)
+    lwjgl(libs.lwjgl.opengl)
 
-    implementation("commons-io:commons-io:2.18.0")
+    implementation(libs.commonsIo)
 }

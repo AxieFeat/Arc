@@ -1,4 +1,4 @@
 dependencies {
-    implementation(project(":arc-common"))
-    api(project(":arc-extensions:arc-font:arc-font-core"))
+    implementation(projects.arcCommon)
+    api(projects.arcExtensions.arcFont.arcFontCore)
 }

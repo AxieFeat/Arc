@@ -1,37 +1,21 @@
-dependencies {
-    implementation(project(":arc-opengl"))
-    implementation(project(":arc-vulkan"))
-    implementation(project(":arc-extensions:arc-profiler"))
-    implementation(project(":arc-extensions:arc-model"))
-    implementation(project(":arc-extensions:arc-display"))
+import arc.util.lwjgl
 
-    implementation(project(":arc-extensions:arc-audio:arc-audio-openal"))
-    implementation(project(":arc-extensions:arc-model:arc-model-common"))
-    implementation(project(":arc-extensions:arc-font:arc-font-common"))
+dependencies {
+    implementation(projects.arcOpengl)
+    implementation(projects.arcVulkan)
+    implementation(projects.arcExtensions.arcProfiler)
+    implementation(projects.arcExtensions.arcModel)
+    implementation(projects.arcExtensions.arcDisplay)
+
+    implementation(projects.arcExtensions.arcAudio.arcAudioOpenal)
+    implementation(projects.arcExtensions.arcModel.arcModelCommon)
+    implementation(projects.arcExtensions.arcFont.arcFontCommon)
+
+    lwjgl(libs.lwjgl.lib)
+    lwjgl(libs.lwjgl.glfw)
+    lwjgl(libs.lwjgl.openal)
+    lwjgl(libs.lwjgl.stb)
+    lwjgl(libs.lwjgl.opengl)
 
     implementation("de.articdive:jnoise-pipeline:4.1.0")
-}
-
-val lwjglVersion = "3.3.6"
-val winNatives = "natives-windows"
-val linuxNatives = "natives-linux"
-val macosNatives = "natives-macos"
-val macosArmNatives = "natives-macos-arm64"
-
-private val natives = listOf(
-    "org.lwjgl:lwjgl",
-    "org.lwjgl:lwjgl-glfw",
-    "org.lwjgl:lwjgl-openal",
-    "org.lwjgl:lwjgl-stb",
-    "org.lwjgl:lwjgl-opengl",
-)
-
-dependencies {
-    natives.forEach { name ->
-        implementation("$name:$lwjglVersion")
-        implementation("$name:$lwjglVersion:$winNatives")
-        implementation("$name:$lwjglVersion:$linuxNatives")
-        implementation("$name:$lwjglVersion:$macosNatives")
-        implementation("$name:$lwjglVersion:$macosArmNatives")
-    }
 }

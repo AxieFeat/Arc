@@ -1,3 +1,3 @@
 dependencies {
-    api(project(":arc-common"))
+    api(projects.arcCommon)
 }

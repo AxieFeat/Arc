@@ -1,25 +1,12 @@
-val lwjglVersion = "3.3.6"
-val winNatives = "natives-windows"
-val linuxNatives = "natives-linux"
-val macosNatives = "natives-macos"
-val macosArmNatives = "natives-macos-arm64"
-
-private val natives = listOf(
-    "org.lwjgl:lwjgl-glfw"
-)
+import arc.util.lwjgl
+import org.gradle.kotlin.dsl.dependencies
 
 dependencies {
-    api(project(":arc-core"))
+    api(projects.arcCore)
 
-    // Natives for every OS
-    natives.forEach { name ->
-        implementation("$name:$lwjglVersion")
-        implementation("$name:$lwjglVersion:$winNatives")
-        implementation("$name:$lwjglVersion:$linuxNatives")
-        implementation("$name:$lwjglVersion:$macosNatives")
-        implementation("$name:$lwjglVersion:$macosArmNatives")
-    }
+    lwjgl(libs.lwjgl.lib)
+    lwjgl(libs.lwjgl.glfw)
 
-    implementation("it.unimi.dsi:fastutil:8.5.15")
-    implementation("com.github.oshi:oshi-core:6.6.6")
+    implementation(libs.fastutil)
+    implementation(libs.oshi)
 }

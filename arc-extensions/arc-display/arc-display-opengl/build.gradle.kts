@@ -1,4 +1,4 @@
 dependencies {
-    implementation(project(":arc-opengl"))
-    implementation(project(":arc-extensions:arc-display:arc-display-common"))
+    implementation(projects.arcOpengl)
+    implementation(projects.arcExtensions.arcDisplay.arcDisplayCommon)
 }

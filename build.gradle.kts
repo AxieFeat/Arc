@@ -1,11 +1,11 @@
 import pw.qubique.infrastructure.build.feature.Feature
 
 plugins {
-    checkstyle
-    kotlin("jvm") version "2.0.21"
-    kotlin("plugin.serialization") version "2.0.0"
-    id("pw.qubique.infrastructure.build-system") version ("0.0.2-snapshot")
-    id("com.google.devtools.ksp") version "2.1.21-2.0.1"
+    alias(libs.plugins.checkstyle)
+    alias(libs.plugins.kotlin)
+    alias(libs.plugins.serialization)
+    alias(libs.plugins.ksp)
+    alias(libs.plugins.buildSystem)
 }
 
 subprojects {
@@ -46,14 +46,10 @@ subprojects {
     }
 }
 
-dependencies {
-    implementation(kotlin("script-runtime"))
-}
-
 fun Project.applyAnnotationProcessor() {
-    if (findProperty("skipAnnotationProcessor") != "true") {
-        this.dependencies {
-            add("ksp", project(":arc-annotation-processor"))
-        }
+    if (findProperty("skipAnnotationProcessor") == "true") return
+
+    dependencies {
+        add("ksp", project(":arc-annotation-processor"))
     }
 }

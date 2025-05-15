@@ -1,4 +1,4 @@
 dependencies {
-    implementation(project(":arc-common"))
-    implementation(project(":arc-extensions:arc-profiler:arc-profiler-core"))
+    implementation(projects.arcCommon)
+    implementation(projects.arcExtensions.arcProfiler.arcProfilerCore)
 }

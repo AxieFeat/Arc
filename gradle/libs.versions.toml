@@ -1,0 +1,43 @@
+metadata.format.version = "1.1"
+
+[versions]
+
+kotlin = "2.0.21"
+serialization = "1.8.1"
+serialization-plugin = "2.0.0"
+build-system = "0.0.2-snapshot"
+lwjgl = "3.3.6"
+gson = "2.12.1"
+annotations = "26.0.2"
+fastutil = "8.5.15"
+oshi = "6.6.6"
+ksp = "2.1.21-2.0.1"
+joml = "1.10.8"
+commons-io = "2.18.0"
+
+[libraries]
+
+serialization = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-core-jvm", version.ref = "serialization" }
+
+annotations = { group = "org.jetbrains", name = "annotations", version.ref = "annotations" }
+gson = { group = "com.google.code.gson", name = "gson", version.ref = "gson" }
+fastutil = { group = "it.unimi.dsi", name = "fastutil", version.ref = "fastutil" }
+ksp = { group = "com.google.devtools.ksp", name = "symbol-processing-api", version.ref = "ksp" }
+joml = { group = "org.joml", name = "joml", version.ref = "joml" }
+oshi = { group = "com.github.oshi", name = "oshi-core", version.ref = "oshi" }
+
+commonsIo = { group = "commons-io", name = "commons-io", version.ref = "commons-io" }
+
+lwjgl-lib = { group = "org.lwjgl", name = "lwjgl", version.ref = "lwjgl" }
+lwjgl-glfw = { group = "org.lwjgl", name = "lwjgl-glfw", version.ref = "lwjgl" }
+lwjgl-stb = { group = "org.lwjgl", name = "lwjgl-stb", version.ref = "lwjgl" }
+lwjgl-opengl = { group = "org.lwjgl", name = "lwjgl-opengl", version.ref = "lwjgl" }
+lwjgl-openal = { group = "org.lwjgl", name = "lwjgl-openal", version.ref = "lwjgl" }
+
+[plugins]
+
+kotlin = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "serialization-plugin" }
+ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
+buildSystem = { id = "pw.qubique.infrastructure.build-system", version.ref = "build-system" }
+checkstyle = { id = "checkstyle" }

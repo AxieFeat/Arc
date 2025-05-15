@@ -1,25 +1,9 @@
-val lwjglVersion = "3.3.6"
-val winNatives = "natives-windows"
-val linuxNatives = "natives-linux"
-val macosNatives = "natives-macos"
-val macosArmNatives = "natives-macos-arm64"
-
-private val natives = listOf(
-    "org.lwjgl:lwjgl-openal",
-    "org.lwjgl:lwjgl-stb"
-)
+import arc.util.lwjgl
 
 dependencies {
-    implementation(project(":arc-common"))
+    implementation(projects.arcCommon)
+    api(projects.arcExtensions.arcAudio.arcAudioCore)
 
-    api(project(":arc-extensions:arc-audio:arc-audio-core"))
-
-    // Natives for every OS
-    natives.forEach { name ->
-        implementation("$name:$lwjglVersion")
-        implementation("$name:$lwjglVersion:$winNatives")
-        implementation("$name:$lwjglVersion:$linuxNatives")
-        implementation("$name:$lwjglVersion:$macosNatives")
-        implementation("$name:$lwjglVersion:$macosArmNatives")
-    }
+    lwjgl(libs.lwjgl.openal)
+    lwjgl(libs.lwjgl.stb)
 }

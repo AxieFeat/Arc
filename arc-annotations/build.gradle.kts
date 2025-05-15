@@ -1,3 +1,3 @@
 dependencies {
-    api("org.jetbrains:annotations:26.0.2")
+    api(libs.annotations)
 }

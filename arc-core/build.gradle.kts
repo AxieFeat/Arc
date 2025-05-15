@@ -1,6 +1,6 @@
 dependencies {
-    api(project(":arc-annotations"))
+    api(projects.arcAnnotations)
 
-    api("org.joml:joml:1.10.8")
-    api("com.google.code.gson:gson:2.12.1")
+    api(libs.joml)
+    api(libs.gson)
 }

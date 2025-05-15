@@ -1,5 +1,5 @@
 subprojects {
     dependencies {
-        api(project(":arc-core"))
+        api(project(":arc-core")) // May be remade?
     }
 }
