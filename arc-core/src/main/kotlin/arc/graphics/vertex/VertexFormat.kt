@@ -6,8 +6,39 @@ import org.jetbrains.annotations.ApiStatus
 
 /**
  * Represents a format structure for defining vertex attributes and their properties.
- *
  * With VertexFormat you designate what parameters the shader accepts.
+ *
+ * VertexFormat allows you to control the DrawBuffer and what parameters will be provided to the shader.
+ *
+ * In example, we have these VertexFormat:
+ * ```kotlin
+ * val format = VertexFormat.builder()
+ *         .add(VertexFormatElement.POSITION) // <- First element should be position ALWAYS!
+ *         .add(VertexFormatElement.COLOR) // <- Any elements, example color.
+ *         .build()
+ * ```
+ * With this format we can create buffer and also it says, what data should be provided to shader.
+ * How it works with [arc.graphics.DrawBuffer] you can see in it class.
+ *
+ * For providing vertex data to shaders you should use layouts. Example for VertexFormat above:
+ * ```glsl
+ * layout (location = 0) in vec3 Position; // <- location = 0 - always is Position.
+ * layout (location = 1) in vec4 Color; // <- location = 1 - Our color argument.
+ * ```
+ * In these example we use position (vec3) and color (vec4) - what about other types?
+ * ```plain
+ * (That's not all types)
+ *
+ * VertexFormatElement.POSITION -> vec3
+ * VertexFormatElement.COLOR -> vec4
+ * VertexFormatElement.UV -> vec2
+ * ```
+ * To find out what data type a [VertexFormatElement] will have, look at its [VertexType] and [VertexFormatElement.count].
+ * In example [VertexFormatElement.POSITION] have [VertexType.FLOAT] -
+ * this means that the data type in the shader will be `float`.
+ * And it [VertexFormatElement.count] equals 3 - this means that the data type in the shader will have 3 such values
+ * (it turns out 3 `float` values in this case).
+ * In result, we have `vec3` in glsl shader - vector with 3 `float` values.
  */
 interface VertexFormat {
 

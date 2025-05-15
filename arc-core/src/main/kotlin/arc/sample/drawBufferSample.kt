@@ -13,7 +13,6 @@ internal fun drawBufferSample() {
     // (Don't forget preload factories, implementation and start application)
     val application = Application.find()
 
-
     // Now we can create buffer via render system drawer.
     val buffer: DrawBuffer = application.renderSystem.drawer.begin(
         mode = DrawerMode.TRIANGLES, // We recommend use TRIANGLES. Also NOT use QUADS, its deprecated.
@@ -26,7 +25,13 @@ internal fun drawBufferSample() {
     )
 
     // Add vertex info to our buffer.
+
     buffer.addVertex(0f, 0.5f, 0f).setColor(Color.BLUE)
     buffer.addVertex(-0.5f, -0.5f, 0f).setColor(Color.RED)
     buffer.addVertex(0.5f, -0.5f, 0f).setColor(Color.GREEN)
+
+    // addVertex() represents VertexFormatElement.POSITION
+    // setColor() represents VertexFormatElement.COLOR
+    // In this way we follow the vertex format.
+    // Note that the order must match the one specified in the VertexFormat.
 }

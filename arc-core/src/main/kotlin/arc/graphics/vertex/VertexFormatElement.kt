@@ -7,6 +7,8 @@ import org.jetbrains.annotations.ApiStatus
 
 /**
  * Represents an immutable element in a vertex format.
+ *
+ * @see VertexFormat
  */
 @ImmutableType
 interface VertexFormatElement {

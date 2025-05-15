@@ -14,12 +14,29 @@ import java.nio.ByteBuffer
  * DrawBuffer is an interface that used for setting vertex data.
  * With this buffer you can render any polygon.
  *
+ * In simple words - the buffer allows you to specify vertices and their parameters (coordinates, textures, etc.).
+ * In order to specify what parameters the vertices will have, there is [VertexFormat]. As its name suggests,
+ * it represents the vertex format for the buffer, i.e. what vertex data will be transferred and in what order.
+ * ```kotlin
+ * VertexFormat.builder()
+ *         .add(VertexFormatElement.POSITION) // <- First element should be position ALWAYS!
+ *         .add(VertexFormatElement.COLOR) // <- Any elements, example color.
+ *         .build()
+ *
+ * // Then we can use our format for buffer.
+ * ```
+ *
+ * In addition to the fact that [VertexFormat] allows you to control [DrawBuffer],
+ * it is also used to provide parameters to shaders, more details in the [VertexFormat] class
+ *
  * @sample arc.sample.drawBufferSample
  */
 interface DrawBuffer : VertexConsumer, Cleanable {
 
     /**
      * Size of buffer.
+     *
+     * The buffer size actually allows you to say: "How many vertices and their data will fit here".
      */
     val bufferSize: Int
 
@@ -39,7 +56,7 @@ interface DrawBuffer : VertexConsumer, Cleanable {
     val mode: DrawerMode
 
     /**
-     * Represents the format structure of the vertices used in the `DrawBuffer`.
+     * Represents the format structure of the vertices used in the [DrawBuffer].
      */
     val format: VertexFormat
 
