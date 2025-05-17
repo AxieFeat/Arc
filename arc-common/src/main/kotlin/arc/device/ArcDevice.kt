@@ -7,13 +7,10 @@ internal object ArcDevice : Device {
 
     private val systemInfo = SystemInfo()
 
-    override val os: OSPlatform = when(systemInfo.operatingSystem.family.lowercase()) {
-        "macos" -> OSPlatform.MACOS
-        "windows" -> OSPlatform.WINDOWS
-        "linux" -> OSPlatform.LINUX
-        "android" -> OSPlatform.ANDROID
-
-        else -> OSPlatform.UNKNOWN.also { println("OS not supported: ${systemInfo.operatingSystem.family.lowercase()}") }
+    override val os: OSPlatform = OSPlatform.fromString(systemInfo.operatingSystem.family.lowercase()).also {
+        if(it == OSPlatform.UNKNOWN) {
+            println("OS not supported: ${systemInfo.operatingSystem.family.lowercase()}")
+        }
     }
 
     override val java: String = Runtime.version().version().joinToString(".")

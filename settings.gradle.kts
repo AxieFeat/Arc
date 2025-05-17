@@ -30,27 +30,27 @@ plugins {
     id("org.gradle.toolchains.foojay-resolver-convention") version "0.8.0"
 }
 
-include("arc-core")
 include("arc-annotations")
-include("arc-vulkan")
-include("arc-opengl")
-include("arc-common")
-include("arc-extensions")
-include("arc-extensions:arc-profiler")
-include("arc-demo")
-include("arc-extensions:arc-font")
-include("arc-extensions:arc-model")
-include("arc-extensions:arc-display")
-include("arc-extensions:arc-audio")
-include("arc-extensions:arc-audio:arc-audio-core")
-include("arc-extensions:arc-audio:arc-audio-openal")
-include("arc-extensions:arc-display:arc-display-common")
-include("arc-extensions:arc-display:arc-display-core")
-include("arc-extensions:arc-display:arc-display-opengl")
-include("arc-extensions:arc-font:arc-font-core")
-include("arc-extensions:arc-font:arc-font-common")
-include("arc-extensions:arc-model:arc-model-core")
-include("arc-extensions:arc-model:arc-model-common")
-include("arc-extensions:arc-profiler:arc-profiler-core")
-include("arc-extensions:arc-profiler:arc-profiler-common")
 include("arc-annotation-processor")
+include("arc-core")
+include("arc-common")
+include("arc-opengl")
+include("arc-vulkan")
+
+include("arc-extensions")
+extension("arc-font",         "core", "common")
+extension("arc-model",        "core", "common")
+extension("arc-display",      "core", "common", "opengl")
+extension("arc-audio",        "core", "openal")
+extension("arc-profiler",     "core", "common")
+extension("arc-input",        "core", "glfw")
+
+include("arc-demo")
+
+fun extension(name: String, vararg impl: String) {
+    include("arc-extensions:$name")
+
+    impl.forEach {
+        include("arc-extensions:$name:$name-$it")
+    }
+}

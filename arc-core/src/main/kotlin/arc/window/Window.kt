@@ -22,6 +22,11 @@ interface Window {
     var handler: WindowHandler
 
     /**
+     * Info about backend library of window implementation.
+     */
+    val backend: WindowBackend
+
+    /**
      * The name of the window.
      */
     var name: String
@@ -122,7 +127,7 @@ interface Window {
          * @return New instance of [Window].
          */
         @JvmStatic
-        fun create(name: String, handler: WindowHandler, width: Int, height: Int): Window {
+        fun of(name: String, handler: WindowHandler, width: Int, height: Int): Window {
             return Arc.factory<Factory>().create(name, handler, width, height)
         }
 

@@ -6,10 +6,10 @@ import arc.math.Vec2f
 import arc.window.Window
 import org.lwjgl.glfw.GLFW
 
-internal object ArcMouseInput : MouseInput {
+internal object GlfwMouseInput : MouseInput {
 
     lateinit var window: Window
-    override val bindingProcessor: BindingProcessor = ArcBindingProcessor()
+    override val bindingProcessor: BindingProcessor = GlfwBindingProcessor()
     override var previousPosition: Point2d = Point2d.ZERO
     override var position: Point2d = Point2d.ZERO
     override var displayVec: Vec2f = Vec2f.ZERO
@@ -58,10 +58,10 @@ internal object ArcMouseInput : MouseInput {
     fun keyUpdate(key: KeyCode, pressed: Boolean) {
         if(key == KeyCode.MOUSE_SCROLL) return
 
-        ArcInput.executor.submit {
+        GlfwInputEngine.executor.submit {
             bindingProcessor.bindings.forEach { binding ->
 
-                ArcInput.executor.submit {
+                GlfwInputEngine.executor.submit {
                     when (binding) {
                         is Binding -> {
                             if (binding.key == key || binding.key == KeyCode.ANY || binding.key == KeyCode.ANY_MOUSE) {
@@ -74,7 +74,7 @@ internal object ArcMouseInput : MouseInput {
                         }
 
                         is MultiBinding -> {
-                            if (ArcInput.checkForAll(binding.keys, pressed)) {
+                            if (GlfwInputEngine.checkForAll(binding.keys, pressed)) {
                                 binding.onPress()
                             }
                         }
@@ -86,10 +86,10 @@ internal object ArcMouseInput : MouseInput {
     }
 
     fun scrollUpdate(xOffset: Double, yOffset: Double) {
-        ArcInput.executor.submit {
+        GlfwInputEngine.executor.submit {
             bindingProcessor.bindings.forEach { binding ->
 
-                ArcInput.executor.submit {
+                GlfwInputEngine.executor.submit {
                     when (binding) {
                         is MouseBinding -> {
                             if (binding.key == KeyCode.MOUSE_SCROLL || binding.key == KeyCode.ANY || binding.key == KeyCode.ANY_MOUSE) {

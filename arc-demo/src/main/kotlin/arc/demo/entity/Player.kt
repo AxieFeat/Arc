@@ -8,6 +8,8 @@ import arc.demo.world.World
 import arc.demo.world.chunk.Chunk
 import arc.graphics.Camera
 import arc.input.KeyCode
+import arc.input.keyboard
+import arc.input.mouse
 import arc.math.Point3d
 import arc.math.Vec3f
 import arc.math.AABB

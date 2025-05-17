@@ -2,13 +2,11 @@ package arc.gl
 
 import arc.AbstractApplication
 import arc.Application
-import arc.Configuration
-import arc.Platform
+import arc.ApplicationBackend
 import arc.files.ArcLocationSpace
 import arc.files.LocationSpace
 import arc.gl.graphics.GlRenderSystem
 import arc.graphics.RenderSystem
-import arc.input.ArcInput
 import arc.window.EmptyWindowHandler
 import arc.window.Window
 import org.lwjgl.opengl.GL
@@ -22,21 +20,19 @@ import javax.imageio.ImageIO
 
 object GlApplication : AbstractApplication() {
 
-    override val platform: Platform = GlPlatform
+    override val backend: ApplicationBackend = GlApplicationBackend
 
     override lateinit var window: Window
     override lateinit var renderSystem: RenderSystem
     override val locationSpace: LocationSpace = ArcLocationSpace
 
-    override fun init(configuration: Configuration) {
-        this.window = Window.create(
-            name = configuration.windowName,
+    override fun init() {
+        this.window = Window.of(
+            name = "",
             handler = EmptyWindowHandler,
-            height = configuration.windowHeight,
-            width = configuration.windowWidth
+            height = 420,
+            width = 720
         )
-
-        ArcInput.install(this)
 
         this.renderSystem = GlRenderSystem
 
@@ -95,6 +91,5 @@ object GlApplication : AbstractApplication() {
         override fun create(): Application {
             return GlApplication
         }
-
     }
 }

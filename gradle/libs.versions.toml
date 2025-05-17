@@ -25,7 +25,6 @@ fastutil = { group = "it.unimi.dsi", name = "fastutil", version.ref = "fastutil"
 ksp = { group = "com.google.devtools.ksp", name = "symbol-processing-api", version.ref = "ksp" }
 joml = { group = "org.joml", name = "joml", version.ref = "joml" }
 oshi = { group = "com.github.oshi", name = "oshi-core", version.ref = "oshi" }
-
 commonsIo = { group = "commons-io", name = "commons-io", version.ref = "commons-io" }
 
 lwjgl-lib = { group = "org.lwjgl", name = "lwjgl", version.ref = "lwjgl" }

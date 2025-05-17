@@ -1,6 +1,5 @@
 package arc.audio
 
-import arc.ArcFactoryProvider
 import arc.audio.format.SoundLoaderFactory
 import arc.util.factory.FactoryProvider
 import arc.util.factory.register
@@ -16,7 +15,7 @@ object AlAudioExtension {
      * @param provider Provider for configuring.
      */
     @JvmStatic
-    fun bootstrap(provider: FactoryProvider = ArcFactoryProvider) {
+    fun bootstrap(provider: FactoryProvider) {
         provider.register<SoundEngine.Factory>(AlSoundEngine.Factory)
         provider.register<SoundLoader.Factory>(SoundLoaderFactory)
     }

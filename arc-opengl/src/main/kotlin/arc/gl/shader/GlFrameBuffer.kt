@@ -69,12 +69,14 @@ internal class GlFrameBuffer(
         unbindTexture()
     }
 
-    override fun resize(width: Int, height: Int) {
+    override fun resize(width: Int, height: Int): Boolean {
         if (width != this.width || height != this.height) {
             this.width = width
             this.height = height
             createFramebuffer(width, height)
+            return true
         }
+        return false
     }
 
     override fun clear() {

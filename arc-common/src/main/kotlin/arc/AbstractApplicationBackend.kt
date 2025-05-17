@@ -3,9 +3,9 @@ package arc
 import arc.device.ArcDevice
 import arc.device.Device
 
-abstract class AbstractPlatform(
-    override val id: String
-) : Platform {
+abstract class AbstractApplicationBackend(
+    override val name: String
+) : ApplicationBackend {
 
     override val device: Device = ArcDevice
 

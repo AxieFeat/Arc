@@ -8,7 +8,7 @@ plugins {
     alias(libs.plugins.buildSystem)
 }
 
-subprojects {
+allprojects {
     apply(plugin = "checkstyle")
     apply(plugin = "pw.qubique.infrastructure.build-system")
     apply(plugin = "org.jetbrains.kotlin.jvm")

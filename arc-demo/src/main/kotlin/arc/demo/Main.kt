@@ -4,6 +4,7 @@ import arc.ArcFactoryProvider
 import arc.audio.AlAudioExtension
 import arc.font.CommonFontExtension
 import arc.gl.GlApplication
+import arc.input.GlfwInputExtension
 import arc.model.CommonModelExtension
 
 fun main() {
@@ -19,10 +20,13 @@ fun main() {
         else -> GlApplication.preload()
     }
 
+    val provider = ArcFactoryProvider
+
     // Load extensions.
-    AlAudioExtension.bootstrap()
-    CommonModelExtension.bootstrap()
-    CommonFontExtension.bootstrap()
+    GlfwInputExtension.bootstrap(provider)
+    AlAudioExtension.bootstrap(provider)
+    CommonModelExtension.bootstrap(provider)
+    CommonFontExtension.bootstrap(provider)
 
     VoxelGame.start()
 }

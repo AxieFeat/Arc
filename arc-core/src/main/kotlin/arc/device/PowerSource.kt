@@ -1,6 +1,5 @@
 package arc.device
 
-import arc.annotations.ImmutableType
 import java.time.LocalDate
 
 /**
@@ -10,7 +9,6 @@ import java.time.LocalDate
  *
  * @see Device
  */
-@ImmutableType
 interface PowerSource {
 
     /**

@@ -6,6 +6,8 @@ import arc.demo.shader.ShaderContainer
 import arc.demo.shader.VertexFormatContainer
 import arc.files.classpath
 import arc.input.KeyCode
+import arc.input.keyboard
+import arc.input.mouse
 import arc.math.Point3d
 import arc.texture.TextureAtlas
 import org.joml.Vector3f

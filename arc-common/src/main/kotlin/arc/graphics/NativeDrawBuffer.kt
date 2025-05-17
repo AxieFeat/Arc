@@ -7,7 +7,7 @@ import org.joml.Vector3f
 import org.lwjgl.system.MemoryUtil
 import java.nio.ByteBuffer
 
-internal data class ArcDrawBuffer(
+internal data class NativeDrawBuffer(
     override var mode: DrawerMode,
     override var format: VertexFormat,
     override val bufferSize: Int,
@@ -50,7 +50,7 @@ internal data class ArcDrawBuffer(
         MemoryUtil.memFree(byteBuffer)
     }
 
-    override fun addVertex(x: Float, y: Float, z: Float): ArcDrawBuffer {
+    override fun addVertex(x: Float, y: Float, z: Float): NativeDrawBuffer {
         if (needEnding) endVertex() else needEnding = true
 
         val address = beginElement(VertexFormatElement.POSITION)
@@ -60,20 +60,20 @@ internal data class ArcDrawBuffer(
         return this
     }
 
-    override fun addVertex(matrix: Matrix4f, x: Float, y: Float, z: Float): ArcDrawBuffer {
+    override fun addVertex(matrix: Matrix4f, x: Float, y: Float, z: Float): NativeDrawBuffer {
         val vector3f: Vector3f = matrix.transformPosition(x, y, z, Vector3f())
 
         return addVertex(vector3f.x, vector3f.y, vector3f.z)
     }
 
-    override fun setColor(red: Int, green: Int, blue: Int, alpha: Int): ArcDrawBuffer {
+    override fun setColor(red: Int, green: Int, blue: Int, alpha: Int): NativeDrawBuffer {
         val address = beginElement(VertexFormatElement.COLOR)
         putColor(address, red, green, blue, alpha)
 
         return this
     }
 
-    override fun setColor(color: Color): ArcDrawBuffer {
+    override fun setColor(color: Color): NativeDrawBuffer {
         return setColor(
             color.red,
             color.green,
@@ -82,14 +82,14 @@ internal data class ArcDrawBuffer(
         )
     }
 
-    override fun setTexture(u: Float, v: Float): ArcDrawBuffer {
+    override fun setTexture(u: Float, v: Float): NativeDrawBuffer {
         val address = beginElement(VertexFormatElement.UV)
         putTexture(address, u, v)
 
         return this
     }
 
-    override fun setTranslation(x: Float, y: Float, z: Float): ArcDrawBuffer {
+    override fun setTranslation(x: Float, y: Float, z: Float): NativeDrawBuffer {
         this.xOffset = x
         this.yOffset = y
         this.zOffset = z
@@ -97,7 +97,7 @@ internal data class ArcDrawBuffer(
         return this
     }
 
-    override fun setNormal(x: Float, y: Float, z: Float): ArcDrawBuffer {
+    override fun setNormal(x: Float, y: Float, z: Float): NativeDrawBuffer {
         val address = beginElement(VertexFormatElement.NORMAL)
         putNormal(address, x, y, z)
 
@@ -116,7 +116,7 @@ internal data class ArcDrawBuffer(
         }
     }
 
-    private fun endWriting(): ArcDrawBuffer {
+    private fun endWriting(): NativeDrawBuffer {
         endVertex()
 
         byteBuffer.position(0)
@@ -125,7 +125,7 @@ internal data class ArcDrawBuffer(
         return this
     }
 
-    private fun endVertex(): ArcDrawBuffer {
+    private fun endVertex(): NativeDrawBuffer {
         if(elementsToFill > 0) throw IllegalArgumentException("Can not build vertex! Missing element in vertex: ${
             leftElements().joinToString(
                 ", "
@@ -222,7 +222,7 @@ internal data class ArcDrawBuffer(
 
     object Factory : DrawBuffer.Factory {
         override fun create(mode: DrawerMode, format: VertexFormat, bufferSize: Int): DrawBuffer {
-            return ArcDrawBuffer(mode, format, bufferSize)
+            return NativeDrawBuffer(mode, format, bufferSize)
         }
     }
 }

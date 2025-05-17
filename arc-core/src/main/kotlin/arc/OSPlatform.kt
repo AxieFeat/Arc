@@ -3,7 +3,7 @@ package arc
 /**
  * Enum representing different operating system platforms.
  */
-enum class OSPlatform(name: String) {
+enum class OSPlatform(val id: String) {
 
     WINDOWS("windows"),
     LINUX("linux"),
@@ -17,12 +17,13 @@ enum class OSPlatform(name: String) {
         /**
          * Get platform from id string value.
          *
-         * @param name Name of platform.
+         * @param id ID of platform.
          *
          * @return Platform from string. Can return [UNKNOWN] if not found.
          */
-        fun fromString(name: String): OSPlatform {
-            return entries.find { it.name == name } ?: UNKNOWN
+        @JvmStatic
+        fun fromString(id: String): OSPlatform {
+            return entries.find { it.id == id } ?: UNKNOWN
         }
 
     }

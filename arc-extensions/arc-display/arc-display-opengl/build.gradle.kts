@@ -1,4 +1,4 @@
 dependencies {
     implementation(projects.arcOpengl)
-    implementation(projects.arcExtensions.arcDisplay.arcDisplayCommon)
+    api(projects.arcExtensions.arcDisplay.arcDisplayCommon)
 }

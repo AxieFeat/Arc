@@ -1,6 +1,5 @@
 package arc.font
 
-import arc.ArcFactoryProvider
 import arc.util.factory.FactoryProvider
 import arc.util.factory.register
 
@@ -15,7 +14,7 @@ object CommonFontExtension {
      * @param provider Provider for configuring.
      */
     @JvmStatic
-    fun bootstrap(provider: FactoryProvider = ArcFactoryProvider) {
+    fun bootstrap(provider: FactoryProvider) {
         provider.register<GlyphFont.Factory>(ArcGlyphFont.Factory)
     }
 

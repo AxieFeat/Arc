@@ -1,19 +1,22 @@
 package arc
 
-import arc.annotations.ImmutableType
 import arc.device.Device
 
 /**
- * This interface represents platform of application.
+ * This interface represents info about backend implementation of application.
  */
 @Suppress("INAPPLICABLE_JVM_NAME")
-@ImmutableType
-interface Platform {
+interface ApplicationBackend {
 
     /**
-     * Identification of platform. You can set here name of your implementation.
+     * Name of backend implementation.
      */
-    val id: String
+    val name: String
+
+    /**
+     * Version of backend library, that used for implement application.
+     */
+    val version: String
 
     /**
      * Represents the device where the application is running.

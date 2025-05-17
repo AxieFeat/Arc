@@ -2,7 +2,7 @@ package arc
 
 import arc.asset.*
 import arc.graphics.ArcCamera
-import arc.graphics.ArcDrawBuffer
+import arc.graphics.NativeDrawBuffer
 import arc.graphics.Camera
 import arc.graphics.DrawBuffer
 import arc.graphics.vertex.ArcVertexFormat
@@ -17,7 +17,7 @@ import arc.util.Color
 import arc.util.factory.FactoryProvider
 import arc.util.factory.TypeNotFoundException
 import arc.util.factory.register
-import arc.window.ArcWindow
+import arc.window.GlfwWindow
 import arc.window.Window
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap
 import java.lang.reflect.Field
@@ -68,13 +68,12 @@ object ArcFactoryProvider : FactoryProvider {
         register<Vec3f.Factory>(ArcVec3f.Factory)
 
         register<Color.Factory>(ArcColor.Factory)
-        register<Window.Factory>(ArcWindow.Factory)
-        register<Configuration.Factory>(ArcConfiguration.Factory)
+        register<Window.Factory>(GlfwWindow.Factory)
         register<Camera.Factory>(ArcCamera.Factory)
 
         register<VertexFormat.Builder>({ ArcVertexFormat.Builder() })
         register<VertexFormatElement.Factory>(ArcVertexFormatElement.Factory)
-        register<DrawBuffer.Factory>(ArcDrawBuffer.Factory)
+        register<DrawBuffer.Factory>(NativeDrawBuffer.Factory)
         register<ShaderSettings.Factory>(ArcShaderSettings.Factory)
 
         register<RuntimeAsset.Factory>(ArcRuntimeAsset.Factory)

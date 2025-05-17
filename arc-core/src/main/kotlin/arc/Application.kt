@@ -3,8 +3,6 @@ package arc
 import arc.annotations.TypeFactory
 import arc.files.LocationSpace
 import arc.graphics.RenderSystem
-import arc.input.keyboard.KeyboardInput
-import arc.input.mouse.MouseInput
 import arc.window.Window
 import arc.window.WindowException
 import org.jetbrains.annotations.ApiStatus
@@ -31,18 +29,15 @@ import java.io.File
  * val application = Application.find()
  *
  * // Before any operations we need init all system via init().
- * application.init(
- *     Configuration.create() // Here you can set configuration of application.
- * )
+ * application.init()
  * ```
  */
 interface Application {
 
     /**
-     * Provides access to platform-specific information and capabilities
-     * for the application, such as device and OS details.
+     * Provides access to information about backend implementation of application.
      */
-    val platform: Platform
+    val backend: ApplicationBackend
 
     /**
      * Window of this application.
@@ -63,26 +58,14 @@ interface Application {
     val locationSpace: LocationSpace
 
     /**
-     * Mouse input device of this application.
-     */
-    val mouse: MouseInput
-
-    /**
-     * Keyboard input device of this application.
-     */
-    val keyboard: KeyboardInput
-
-    /**
      * Represents the current text stored in the system clipboard.
      */
     var clipboardText: String
 
     /**
-     * Initializes the application with the given configuration.
-     *
-     * @param configuration The configuration object that defines properties for the application's setup.
+     * Initializes the application.
      */
-    fun init(configuration: Configuration)
+    fun init()
 
     /**
      * Opens the specified URL.

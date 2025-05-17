@@ -1,10 +1,8 @@
 package arc.model
 
-import arc.ArcFactoryProvider
 import arc.graphics.ArcModelHandler
 import arc.graphics.ModelHandler
 import arc.model.animation.*
-import arc.model.animation.ArcAnimation
 import arc.model.cube.ArcCube
 import arc.model.cube.ArcCubeFace
 import arc.model.cube.Cube
@@ -27,7 +25,7 @@ object CommonModelExtension {
      * @param provider Provider for configuring.
      */
     @JvmStatic
-    fun bootstrap(provider: FactoryProvider = ArcFactoryProvider) {
+    fun bootstrap(provider: FactoryProvider) {
         // Parts of model.
         provider.register<Model.Builder>({ ArcModel.Builder() })
         provider.register<Cube.Builder>({ ArcCube.Builder() })

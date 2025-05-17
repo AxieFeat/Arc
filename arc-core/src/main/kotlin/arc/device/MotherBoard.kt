@@ -1,13 +1,10 @@
 package arc.device
 
-import arc.annotations.ImmutableType
-
 /**
  * This interface represents motherboard of [Device].
  *
  * @see Device
  */
-@ImmutableType
 interface MotherBoard {
 
     /**

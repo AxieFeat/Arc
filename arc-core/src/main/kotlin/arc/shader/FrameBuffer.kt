@@ -86,8 +86,10 @@ interface FrameBuffer {
      *
      * @param width New width.
      * @param height New height.
+     *
+     * @return `true` if was resized, otherwise `false`.
      */
-    fun resize(width: Int, height: Int)
+    fun resize(width: Int, height: Int): Boolean
 
     /**
      * Clear current frame buffer.

@@ -1,13 +1,11 @@
 package arc.files
 
-import arc.annotations.ImmutableType
 import java.io.File
 
 /**
  * This interface represents a space to interact with and manage file locations for an application.
  * It provides utility methods for accessing files based on different location contexts.
  */
-@ImmutableType
 interface LocationSpace {
 
     /**

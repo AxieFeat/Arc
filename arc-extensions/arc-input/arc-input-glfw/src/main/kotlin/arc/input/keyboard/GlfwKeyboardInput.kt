@@ -1,16 +1,13 @@
 package arc.input.keyboard
 
 import arc.input.*
-import arc.input.ArcBindingProcessor
-import arc.input.mouse.ArcMouseInput
 import arc.window.Window
 import org.lwjgl.glfw.GLFW
-import java.util.concurrent.Executors
 
-internal object ArcKeyboardInput : KeyboardInput {
+internal object GlfwKeyboardInput : KeyboardInput {
 
     lateinit var window: Window
-    override val bindingProcessor: BindingProcessor = ArcBindingProcessor()
+    override val bindingProcessor: BindingProcessor = GlfwBindingProcessor()
 
     override fun isPressed(key: KeyCode): Boolean {
         if(key.keyType != KeyType.KEY) return false
@@ -37,10 +34,10 @@ internal object ArcKeyboardInput : KeyboardInput {
     fun keyUpdate(key: KeyCode, pressed: Boolean) {
         if(key.keyType != KeyType.KEY) return
 
-        ArcInput.executor.submit {
+        GlfwInputEngine.executor.submit {
             bindingProcessor.bindings.forEach { binding ->
 
-                ArcInput.executor.submit {
+                GlfwInputEngine.executor.submit {
                     when (binding) {
                         is Binding -> {
                             if (binding.key == key || binding.key == KeyCode.ANY || binding.key == KeyCode.ANY_KEY) {
@@ -53,7 +50,7 @@ internal object ArcKeyboardInput : KeyboardInput {
                         }
 
                         is MultiBinding -> {
-                            if (ArcInput.checkForAll(binding.keys, pressed)) {
+                            if (GlfwInputEngine.checkForAll(binding.keys, pressed)) {
                                 binding.onPress()
                             }
                         }

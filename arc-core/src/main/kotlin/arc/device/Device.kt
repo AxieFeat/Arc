@@ -6,7 +6,6 @@ import arc.annotations.ImmutableType
 /**
  * Represents the characteristics and specifications of a device.
  */
-@ImmutableType
 interface Device {
 
     /**

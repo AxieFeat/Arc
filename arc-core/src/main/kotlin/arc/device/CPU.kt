@@ -1,7 +1,5 @@
 package arc.device
 
-import arc.annotations.ImmutableType
-
 /**
  * This interface represents central processor of [Device].
  *
@@ -9,7 +7,6 @@ import arc.annotations.ImmutableType
  *
  * @see Device
  */
-@ImmutableType
 interface CPU {
 
     /**

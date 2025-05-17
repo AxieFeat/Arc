@@ -1,24 +1,22 @@
 package arc.window
 
-import arc.input.KeyCode
-import arc.input.KeyType
-import arc.input.keyboard.ArcKeyboardInput
-import arc.input.mouse.ArcMouseInput
 import arc.math.Point2i
 import org.lwjgl.glfw.Callbacks
 import org.lwjgl.glfw.GLFW.*
 import org.lwjgl.glfw.GLFWErrorCallback
 import org.lwjgl.system.MemoryUtil
 
-@Suppress("UNUSED_PARAMETER")
-internal class ArcWindow(
+@Suppress("UNUSED_PARAMETER", "unused")
+internal class GlfwWindow(
     name: String,
     override var handler: WindowHandler,
     override var width: Int,
     override var height: Int
 ) : Window {
 
-    private val defaultErrorCallback = GLFWErrorCallback.create(ArcWindow::bootCrash)
+    private val defaultErrorCallback = GLFWErrorCallback.create(GlfwWindow::bootCrash)
+
+    override val backend: WindowBackend = GlfwWindowBackend
 
     override var handle: Long = 0
     override var position: Point2i = Point2i.of(0, 0)
@@ -74,8 +72,6 @@ internal class ArcWindow(
         glfwSetCursorEnterCallback(handle, ::onEnter)
         glfwSetCursorPosCallback(handle, ::onCursorMove)
         glfwSetScrollCallback(handle, ::onScroll)
-        glfwSetKeyCallback(handle, ::onKey)
-        glfwSetMouseButtonCallback(handle, ::onMouseButton)
 
         glfwMakeContextCurrent(handle)
 
@@ -105,14 +101,6 @@ internal class ArcWindow(
         glfwSwapBuffers(handle)
     }
 
-    private fun onKey(handle: Long, key: Int, scancode: Int, action: Int, mods: Int) {
-        ArcKeyboardInput.keyUpdate(KeyCode.fromId(key), action == GLFW_PRESS)
-    }
-
-    private fun onMouseButton(handle: Long, button: Int, action: Int, mods: Int) {
-        ArcMouseInput.keyUpdate(KeyCode.fromId(button), action == GLFW_PRESS)
-    }
-
     private fun onMove(handle: Long, x: Int, y: Int) {
         this.position = position.withXY(x, y)
 
@@ -121,14 +109,10 @@ internal class ArcWindow(
 
     private fun onCursorMove(handle: Long, x: Double, y: Double) {
         handler.cursorMove(x, y)
-
-        ArcMouseInput.positionUpdate(x, y)
     }
 
     private fun onScroll(handle: Long, xOffset: Double, yOffset: Double) {
         handler.scroll(xOffset, yOffset)
-
-        ArcMouseInput.scrollUpdate(xOffset, yOffset)
     }
 
     private fun onResize(handle: Long, width: Int, height: Int) {
@@ -150,7 +134,7 @@ internal class ArcWindow(
 
     object Factory : Window.Factory {
         override fun create(name: String, handler: WindowHandler, width: Int, height: Int): Window {
-            return ArcWindow(name, handler, width, height)
+            return GlfwWindow(name, handler, width, height)
         }
     }
 
