@@ -20,19 +20,19 @@ Arc Engine is a flexible 3D/2D game engine designed to be implementation-agnosti
 - **arc-opengl**: OpenGL-based engine implementation
 - **arc-vulkan**: Vulkan-based engine implementation
 - **arc-extensions**: Various engine extensions
-  - Audio: Audio system with OpenAL implementation
-  - Display: Virtual displays system
-  - Font: Font render system
-  - Input: Input engine system with GLFW implementation
-  - Model: LWAM models system
-  - Profiler: Simple profiling system.
+  - **arc-audio**: Audio system with OpenAL implementation
+  - **arc-display**: Virtual displays system
+  - **arc-font**: Font render system
+  - **arc-input**: Input engine system with GLFW implementation
+  - **arc-model**: LWAM models system
+  - **arc-profiler**: Simple profiling system.
 - **arc-annotations**: Utility annotations for better API understanding
 - **arc-annotation-processor**: Processor for annotations
 - **arc-demo**: Demo applications and examples
 
 ### Requirements
 - JDK 21 or higher
-- Kotlin 1.9 or higher
+- Any lang for JVM (Kotlin is very recommended)
 - OpenGL/Vulkan compatible graphics card
 
 ### Setup
