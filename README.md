@@ -25,7 +25,7 @@ Arc Engine is a flexible 3D/2D game engine designed to be implementation-agnosti
   - **arc-font**: Font render system
   - **arc-input**: Input engine system with GLFW implementation
   - **arc-model**: LWAM models system
-  - **arc-profiler**: Simple profiling system.
+  - **arc-profiler**: Simple profiling system
 - **arc-annotations**: Utility annotations for better API understanding
 - **arc-annotation-processor**: Processor for annotations
 - **arc-demo**: Demo applications and examples
