@@ -1,7 +1,9 @@
 package arc.graphics
 
+import arc.graphics.scene.Scene
+
 /**
- * Empty realisation of [Scene].
+ * Empty realisation of [arc.graphics.scene.Scene].
  *
  * Can be used as a stub instead of the nullable type.
  */

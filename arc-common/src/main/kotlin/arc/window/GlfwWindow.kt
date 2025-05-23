@@ -2,6 +2,7 @@ package arc.window
 
 import arc.math.Point2i
 import org.lwjgl.glfw.Callbacks
+import org.lwjgl.glfw.GLFW
 import org.lwjgl.glfw.GLFW.*
 import org.lwjgl.glfw.GLFWErrorCallback
 import org.lwjgl.system.MemoryUtil
@@ -29,6 +30,9 @@ internal class GlfwWindow(
             glfwSetWindowTitle(handle, value)
         }
 
+    override val timeFromInitialize: Double
+        get() = glfwGetTime()
+
     override var isResizable: Boolean = true
         set(value) {
             field = value
@@ -46,6 +50,17 @@ internal class GlfwWindow(
             field = value
 
             glfwSwapInterval(if(value) GLFW_TRUE else GLFW_FALSE)
+        }
+
+    override var isShowCursor: Boolean = true
+        set(value) {
+            field = value
+
+            glfwSetInputMode(
+                handle,
+                GLFW_CURSOR,
+                if (field) GLFW_CURSOR_NORMAL else GLFW_CURSOR_DISABLED
+            )
         }
 
     override fun resize(width: Int, height: Int) {

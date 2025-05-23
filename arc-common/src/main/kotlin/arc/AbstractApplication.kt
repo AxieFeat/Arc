@@ -1,10 +1,14 @@
 package arc
 
 import arc.OS.execSafe
+import arc.files.ArcLocationSpace
+import arc.files.LocationSpace
 import org.lwjgl.glfw.GLFW
 import java.io.File
 
 abstract class AbstractApplication : Application {
+
+    override val locationSpace: LocationSpace = ArcLocationSpace
 
     override var clipboardText: String
         get() {

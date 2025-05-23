@@ -47,6 +47,11 @@ interface Window {
     val position: Point2i
 
     /**
+     * Get elapsed time since a window is initialized.
+     */
+    val timeFromInitialize: Double
+
+    /**
      * Indicates whether the window currently has input focus.
      */
     @get:JvmName("isFocus")
@@ -72,6 +77,13 @@ interface Window {
     @get:JvmName("isVsync")
     @set:JvmName("setVsync")
     var isVsync: Boolean
+
+    /**
+     * Is cursor viewable in this window.
+     */
+    @get:JvmName("isShowCursor")
+    @set:JvmName("setShowCursor")
+    var isShowCursor: Boolean
 
     /**
      * Resizes the window to the specified width and height.

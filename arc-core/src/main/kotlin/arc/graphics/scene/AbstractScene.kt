@@ -1,38 +1,32 @@
-package arc.graphics
+package arc.graphics.scene
 
 import arc.Application
-import arc.OS
-import arc.util.Timer
-import org.lwjgl.glfw.GLFW
+import arc.graphics.Camera
+import arc.graphics.Drawer
 
 abstract class AbstractScene(
     val application: Application,
 ) : Scene {
 
-    private val timer = Timer()
+    private val timer = DeltaTimer(application.window)
     private var fpsCounter = 0
-    private var debugUpdateTime: Long = OS.getTime()
+    private var debugUpdateTime: Long = TimeUtil.getTime(application.window)
 
     override val drawer: Drawer = application.renderSystem.drawer
     override val camera: Camera = Camera.of(45f, application.window.width.toFloat(), application.window.height.toFloat())
     override var fps: Int = 0
     override var delta: Float = 0f
 
-    override var isShowCursor: Boolean = true
+    override var isShowCursor: Boolean
+        get() = application.window.isShowCursor
         set(value) {
-            field = value
-
-            GLFW.glfwSetInputMode(
-                application.window.handle,
-                GLFW.GLFW_CURSOR,
-                if (field) GLFW.GLFW_CURSOR_NORMAL else GLFW.GLFW_CURSOR_DISABLED
-            )
+            application.window.isShowCursor = value
         }
 
     protected open fun calculateFps() {
         fpsCounter++
 
-        while (OS.getTime() >= this.debugUpdateTime + 1000L) {
+        while (TimeUtil.getTime(application.window) >= this.debugUpdateTime + 1000L) {
             this.fps = this.fpsCounter
             this.debugUpdateTime += 1000L
             this.fpsCounter = 0

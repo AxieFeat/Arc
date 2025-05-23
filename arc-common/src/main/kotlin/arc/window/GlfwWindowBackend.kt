@@ -2,7 +2,7 @@ package arc.window
 
 import org.lwjgl.glfw.GLFW
 
-object GlfwWindowBackend : WindowBackend {
+internal object GlfwWindowBackend : WindowBackend {
 
     override val name: String
         get() = "glfw"

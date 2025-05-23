@@ -1,7 +1,5 @@
 package arc
 
-import org.lwjgl.glfw.GLFW
-
 /**
  * Utility class for executing some OS methods.
  */
@@ -22,14 +20,6 @@ internal object OS {
         } catch (t: Throwable) {
             return false
         }
-    }
-
-    /**
-     * Get time by GLFW.
-     */
-    @JvmStatic
-    fun getTime(): Long {
-        return (GLFW.glfwGetTime() * 1000L).toLong()
     }
 
 }

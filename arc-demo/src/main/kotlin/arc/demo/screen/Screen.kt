@@ -1,7 +1,7 @@
 package arc.demo.screen
 
 import arc.demo.VoxelGame
-import arc.graphics.AbstractScene
+import arc.graphics.scene.AbstractScene
 import kotlin.math.roundToInt
 
 abstract class Screen(

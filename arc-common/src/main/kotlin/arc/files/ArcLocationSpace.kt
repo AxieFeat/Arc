@@ -2,7 +2,7 @@ package arc.files
 
 import java.io.File
 
-object ArcLocationSpace : LocationSpace {
+internal object ArcLocationSpace : LocationSpace {
 
     override val applicationDirectory: File = run {
         val file = File(

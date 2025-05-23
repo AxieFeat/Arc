@@ -2,6 +2,7 @@ package arc.gl.graphics
 
 import arc.gl.GlApplication
 import arc.graphics.*
+import arc.graphics.scene.Scene
 import arc.shader.ShaderInstance
 import arc.texture.EmptyTexture
 import arc.texture.Texture

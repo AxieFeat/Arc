@@ -1,4 +1,7 @@
-package arc.graphics
+package arc.graphics.scene
+
+import arc.graphics.Camera
+import arc.graphics.Drawer
 
 /**
  * This interface represents renderable scene of engine.

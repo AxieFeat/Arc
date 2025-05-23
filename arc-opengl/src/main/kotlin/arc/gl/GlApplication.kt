@@ -3,8 +3,6 @@ package arc.gl
 import arc.AbstractApplication
 import arc.Application
 import arc.ApplicationBackend
-import arc.files.ArcLocationSpace
-import arc.files.LocationSpace
 import arc.gl.graphics.GlRenderSystem
 import arc.graphics.RenderSystem
 import arc.window.EmptyWindowHandler
@@ -24,7 +22,6 @@ object GlApplication : AbstractApplication() {
 
     override lateinit var window: Window
     override lateinit var renderSystem: RenderSystem
-    override val locationSpace: LocationSpace = ArcLocationSpace
 
     override fun init() {
         this.window = Window.of(

@@ -1,5 +1,6 @@
 package arc.graphics
 
+import arc.graphics.scene.Scene
 import arc.shader.ShaderInstance
 import arc.texture.Texture
 import org.jetbrains.annotations.Range
