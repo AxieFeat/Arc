@@ -5,6 +5,11 @@ import arc.demo.shader.ShaderContainer
 import arc.graphics.DrawerMode
 import arc.graphics.vertex.VertexFormat
 import arc.graphics.vertex.VertexFormatElement
+import arc.input.KeyCode
+import arc.input.mouse
+import arc.input.onPress
+import arc.input.onRelease
+import arc.input.onScroll
 import arc.shader.FrameBuffer
 import arc.shader.ShaderInstance
 import org.joml.Vector2f
@@ -37,23 +42,20 @@ object FractalScreen : Screen("fractal") {
             uniform float scale;
             uniform float iTime;
             uniform vec2 juliaC;
-            
+            uniform int maxIter;
+
             out vec4 FragColor;
-            
-            const uint maxIter = 100000;
             
             void main() {
                 vec2 fragCoord = gl_FragCoord.xy;
             
                 vec2 uv = (fragCoord - iResolution * 0.5) * scale + center;
-                //vec2 z = vec2(0.0);
-                //vec2 c = uv;
                 vec2 z = uv;
                 vec2 c = juliaC;
             
-                uint iter = 0;
+                int iter = 0;
             
-                for (uint i = 0; i < maxIter; i++) {
+                for (int i = 0; i < maxIter; i++) {
                     if (dot(z, z) > 4.0) break;
                     z = vec2(
                         z.x * z.x - z.y * z.y + c.x,
@@ -108,8 +110,54 @@ object FractalScreen : Screen("fractal") {
         buffer.build()
     }
 
+    var center = Vector2f(0f, 0f)
+    var scale = 1f / application.window.height.toFloat()
+
+    var dragging = false
+
+    init {
+        application.mouse.onScroll { x, y ->
+            val zoomFactor = 1.1f
+            val oldScale = scale
+
+            scale *= if (y > 0) 1f / zoomFactor else zoomFactor
+
+            val mousePos = application.mouse.displayVec
+            val windowWidth = application.window.width.toFloat()
+            val windowHeight = application.window.height.toFloat()
+
+            val mouseWorldBefore = Vector2f(
+                (mousePos.x - windowWidth / 2f) * oldScale + center.x,
+                (windowHeight / 2f - mousePos.y) * oldScale + center.y
+            )
+
+            val mouseWorldAfter = Vector2f(
+                (mousePos.x - windowWidth / 2f) * scale + center.x,
+                (windowHeight / 2f - mousePos.y) * scale + center.y
+            )
+
+            center.add(mouseWorldBefore).sub(mouseWorldAfter)
+
+            needUpdate = true
+        }
+
+        application.mouse.onPress(KeyCode.MOUSE_LEFT) {
+            dragging = true
+        }
+
+        application.mouse.onRelease(KeyCode.MOUSE_LEFT) {
+            dragging = false
+            application.mouse.reset()
+        }
+    }
+
     override fun doRender() {
         if(frameBuffer.resize(application.window.width, application.window.height)) {
+            needUpdate = true
+        }
+
+        if (dragging) {
+            center.sub(application.mouse.displayVec.x * scale, -application.mouse.displayVec.y * scale)
             needUpdate = true
         }
 
@@ -123,10 +171,11 @@ object FractalScreen : Screen("fractal") {
             val height = application.window.height.toFloat()
 
             shader.setUniform("iResolution", Vector2f(width, height))
-            shader.setUniform("center", Vector2f(0f, 0f))
-            shader.setUniform("scale", 1f / height)
+            shader.setUniform("center", center)
+            shader.setUniform("scale", scale)
             shader.setUniform("iTime", 0.0f)
             shader.setUniform("juliaC", Vector2f(-1.2f, 0.15015f))
+            shader.setUniform("maxIter", 15000)
 
             drawer.draw(buffer)
 

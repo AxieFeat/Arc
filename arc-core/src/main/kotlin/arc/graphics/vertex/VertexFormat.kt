@@ -134,7 +134,7 @@ interface VertexFormat {
         /**
          * Build [VertexFormat].
          *
-         * @return New instance of [VertexFormat] with settings from buffer.
+         * @return New instance of [VertexFormat] with settings from builder.
          */
         override fun build(): VertexFormat
 

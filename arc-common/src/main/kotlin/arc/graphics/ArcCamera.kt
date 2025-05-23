@@ -61,7 +61,6 @@ internal data class ArcCamera(
         view.identity().lookAt(cameraPos, cameraTarget, up)
         combined.set(projection).mul(view)
 
-
         this.ray = ray.withOriginAndDirection(
             origin = Vec3f.of(
                 cameraPos.x,

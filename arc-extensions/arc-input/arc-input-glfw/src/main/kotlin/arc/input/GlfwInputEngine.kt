@@ -1,17 +1,12 @@
 package arc.input
 
-import arc.input.GlfwInputEngine
 import arc.input.keyboard.GlfwKeyboardInput
 import arc.input.keyboard.GlfwKeyboardInput.isPressed
 import arc.input.keyboard.KeyboardInput
 import arc.input.mouse.GlfwMouseInput
 import arc.input.mouse.MouseInput
 import arc.window.Window
-import org.lwjgl.glfw.GLFW.GLFW_PRESS
-import org.lwjgl.glfw.GLFW.glfwSetCursorPosCallback
-import org.lwjgl.glfw.GLFW.glfwSetKeyCallback
-import org.lwjgl.glfw.GLFW.glfwSetMouseButtonCallback
-import org.lwjgl.glfw.GLFW.glfwSetScrollCallback
+import org.lwjgl.glfw.GLFW.*
 import java.util.concurrent.Executors
 
 @Suppress("unused")

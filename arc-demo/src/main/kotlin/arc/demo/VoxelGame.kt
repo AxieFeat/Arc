@@ -2,6 +2,7 @@ package arc.demo
 
 import arc.Application
 import arc.audio.SoundEngine
+import arc.demo.screen.FractalScreen
 import arc.demo.screen.Screen
 import arc.demo.screen.TerrainScreen
 import arc.demo.shader.ShaderContainer

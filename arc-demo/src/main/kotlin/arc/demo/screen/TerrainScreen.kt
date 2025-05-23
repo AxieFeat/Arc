@@ -60,7 +60,7 @@ object TerrainScreen : Screen("terrain") {
         buffer.build()
     }
 
-    val starsBuffer = drawer.begin(DrawerMode.TRIANGLES, VertexFormatContainer.positionColor, 9000).use { buffer ->
+    val starsBuffer = drawer.begin(DrawerMode.TRIANGLES, VertexFormatContainer.positionColor, 19000).use { buffer ->
         val random = Random(10842L)
 
         repeat(1499) {

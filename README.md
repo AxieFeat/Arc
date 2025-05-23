@@ -1,90 +1,136 @@
 # Arc Engine
 
-Русский | English
+[English](README.md) | [Русский](README_ru.md)
 
-Игровой движок для создания 3D/2D игр, который не привязан
-к конкретной реализации. То есть его можно использовать практически с любой технологией и платформой
+Arc Engine is a flexible 3D/2D game engine designed to be implementation-agnostic, allowing it to work with virtually any technology and platform.
 
-#### Плюсы Arc:
-1. Современное API на Kotlin
-2. Нет привязки к конкретной реализации
-3. Готовые реализации движка под OpenGL и Vulkan.
-4. Легковесность и простота. Для создания игры необходимо лишь пару строчек кода и умение создавать шейдеры
-5. Несколько реализаций движка в одной игре*
+### Features
+- Modern Kotlin API
+- Implementation-agnostic architecture
+- Ready-to-use OpenGL and Vulkan implementations
+- Lightweight and simple - create games with minimal code and shader knowledge
+- Multiple engine implementations in one game*
+- Extensive extension system (Audio, Input, Display, Font, Model, Profiler)
 
-\* Только одна из реализаций может использоваться в runtime
+\* Only one implementation can be used at runtime
 
-#### Минусы Arc:
-1. Отсутствие поддержки. Не надейтесь на частые обновления и своевременные фиксы багов
-2. Нет гарантии, что код будет полностью кросс-платформенным
-3. Нет прямого доступа к низкоуровневым методам
+### Project Structure
+- **arc-core**: Main engine API interfaces
+- **arc-common**: Common implementation of core features (math, window, sound)
+- **arc-opengl**: OpenGL-based engine implementation
+- **arc-vulkan**: Vulkan-based engine implementation
+- **arc-extensions**: Various engine extensions
+  - Audio: Audio system with OpenAL implementation
+  - Display: Virtual displays system
+  - Font: Font render system
+  - Input: Input engine system with GLFW implementation
+  - Model: LWAM models system
+  - Profiler: Simple profiling system.
+- **arc-annotations**: Utility annotations for better API understanding
+- **arc-annotation-processor**: Processor for annotations
+- **arc-demo**: Demo applications and examples
 
-Простейший пример использования Arc:
+### Requirements
+- JDK 21 or higher
+- Kotlin 1.9 or higher
+- OpenGL/Vulkan compatible graphics card
+
+### Setup
+1. Add the dependency to your project:
+```kotlin
+dependencies {
+    // If you want to use API in an already done game.
+    implementation("arc.engine:arc-core:1.0")
+
+
+    // Or if you want to create your own game - Select a backend implementation of engine.
+    implementation("arc.engine:arc-opengl:1.0") // For OpenGL
+    implementation("arc.engine:arc-vulkan:1.0") // For Vulkan
+}
+```
+
+2. Add desired extensions:
+```kotlin
+dependencies {
+    implementation("arc.engine:arc-input-glfw:1.0") // For control's via GLFW.
+    implementation("arc.engine:arc-audio-openal:1.0") // For sound system.
+    // Add other extensions as needed
+}
+```
+
+### Basic Usage Example
+Here's a simple example that renders a colored triangle:
 
 ```kotlin
-import arc.Application
-import arc.ArcFactoryProvider
-import arc.Configuration
-import arc.asset.shader.FragmentShader
-import arc.asset.shader.ShaderData
-import arc.asset.shader.VertexShader
-import arc.files.classpath
-import arc.gl.GlApplication
-import arc.graphics.DrawBuffer
-import arc.graphics.DrawerMode
-import arc.graphics.RenderSystem
-import arc.graphics.VertexBuffer
-import arc.graphics.vertex.VertexFormat
-import arc.graphics.vertex.VertexFormatElement
-import arc.shader.ShaderInstance
-import arc.util.Color
-import java.io.File
+// Note: Required imports from arc.* packages are omitted for brevity
+// See the full example in arc-demo module
 
 fun main() {
-    // Предзагружаем базовые классы.
+    // Bootstrap the implementations
     ArcFactoryProvider.install()
     ArcFactoryProvider.bootstrap()
 
-    // Предзагружаем OpenGL.
+    // Preload OpenGL
     GlApplication.preload()
 
-    // Находим приложение в текущем контексте (Это будет OpenGL реализация)
+    // Find application in current context (OpenGL implementation)
     val application: Application = Application.find()
-    application.init(Configuration.create()) // Инициализируем все системы. Это так же создаст окно.
+    application.init(Configuration.create())
 
-    // Получаем шейдер и компилируем его
+    // Get shader and compile it
     val shader: ShaderInstance = getShaderInstance()
     shader.compileShaders()
 
     val renderSystem: RenderSystem = application.renderSystem
 
-    // Создадим буфер с нашими вершинами.
+    // Create buffer with our vertices
     val buffer: VertexBuffer = createBuffer(application)
 
     while (!application.window.shouldClose()) {
-        // Начинаем кадр рендера
+        // Begin render frame
         renderSystem.beginFrame()
 
-        shader.bind() // Устанавливаем шейдер в текущем контексте
-
-        renderSystem.drawer.draw(buffer) // Рисуем наш треугольник
-
+        shader.bind()
+        renderSystem.drawer.draw(buffer)
         shader.unbind()
 
-        // Заканчиваем кадр
+        // End frame
         renderSystem.endFrame()
     }
 }
 
 private fun getShaderInstance(): ShaderInstance {
-    val vertex: File = classpath("arc/shader/example.vsh")
-    val fragment: File = classpath("arc/shader/example.fsh")
-    val uniform: File = classpath("arc/shader/example.json")
+    val vertexShader = """
+        #version 410
+
+        layout (location = 0) in vec3 Position;
+        layout (location = 1) in vec4 Color;
+
+        out vec4 vertexColor;
+
+        void main()
+        {
+            gl_Position = vec4(Position, 1.0);
+
+            vertexColor = Color;
+        } 
+        """.trimIndent().asRuntimeAsset()
+
+    val fragmentShader = """
+        #version 410
+
+        in vec4 vertexColor;
+        out vec4 FragColor;
+
+        void main()
+        {
+            FragColor = vertexColor;
+        }
+        """.trimIndent().asRuntimeAsset()
 
     return ShaderInstance.of(
-        VertexShader.from(vertex),
-        FragmentShader.from(fragment),
-        ShaderData.from(uniform)
+        vertexShader,
+        fragmentShader
     )
 }
 
@@ -97,75 +143,46 @@ private fun createBuffer(application: Application): VertexBuffer {
             .build()
     )
 
-    buffer.addVertex(0f, 0.5f, 0f).setColor(Color.BLUE).endVertex()
-    buffer.addVertex(-0.5f, -0.5f, 0f).setColor(Color.RED).endVertex()
-    buffer.addVertex(0.5f, -0.5f, 0f).setColor(Color.GREEN).endVertex()
-    buffer.end()
+    buffer.addVertex(0f, 0.5f, 0f).setColor(Color.BLUE)
+    buffer.addVertex(-0.5f, -0.5f, 0f).setColor(Color.RED)
+    buffer.addVertex(0.5f, -0.5f, 0f).setColor(Color.GREEN)
 
     return buffer.build()
 }
 ```
-Так же нам нужны простейшие шейдеры
 
-example.vsh
-```glsl
-#version 410
+For more detailed examples, check the `arc-demo` module.
 
-layout (location = 0) in vec3 Position;
-layout (location = 1) in vec4 Color;
+# Engine Philosophy
 
-out vec4 vertexColor;
+The engine does not imply direct use of LWJGL methods and internal implementations, for this reason all implementations
+are **internal** classes. Users should use **only the functionality of `arc-core`** *(or other core modules)*. Using
+internal implementations is highly undesirable, and dependencies like `arc.engine:arc-opengl:1.0` should
+be specified only in the GAME, to initialize the OpenGL (in this case) context with a single line.
 
-void main()
-{
-    gl_Position = vec4(Position, 1.0);
+### Project Structure
 
-    vertexColor = Color;
-}
-```
+(*Utility modules `arc-annotations` and `arc-annotation-processor` are excluded here*)
 
-example.fsh
-```glsl
-#version 410
+***arc-core*** - The main API of the engine, it consists of interfaces that are subsequently implemented by other
+modules. It's important to understand that the API in this module should be generic and suitable for any rendering technology,
+and you CANNOT use naming in this module that would refer to any specific implementation.
 
-in vec4 vertexColor;
-out vec4 FragColor;
+***arc-common*** - Basic implementation of arc-core, which contains functions common to all rendering technologies. For example, it
+implements mathematics, window, and sound. If you create a class that is not abstract and serves only to
+implement an interface from arc-core - make it `internal`. It is also not desirable to use naming
+that would somehow refer to any specific implementation.
 
-void main()
-{
-    FragColor = vertexColor;
-}
-```
+***arc-opengl*** - Engine implementation using OpenGL. In this module, it is desirable to write code
+that will relate only to OpenGL. In this module, you should use naming
+that refers to the fact that classes relate to OpenGL (For example, the prefix Gl at the beginning of class names). Also, if possible,
+all classes should be `internal`.
 
-example.json
-```json
-{}
-```
+***arc-vulkan*** - Engine implementation using Vulkan. In this module, it is desirable to write code
+that will relate only to Vulkan. In this module, you should use naming
+that refers to the fact that classes relate to Vulkan (For example, the prefix Vk at the beginning of class names). Also, if possible,
+all classes should be `internal`.
 
-## Что следует знать
-
-arc-annotations - Утилитарный модуль, содержит лишь аннотации, которые могут помочь понять API лучше.
-
-arc-core - Главная API движка, она представляет собой интерфейсы, которые в последствии реализуются другими 
-модулями. Важно понимать, что API в этом модуле должна быть обобщённой и подходить под любую технологию рендера,
-к тому же вы НЕ можете делать нейминг в этом модуле, который будет отсылать на какую-то конкретную реализацию.
-
-arc-common - Базовая реализация arc-core, которая содержит общие для всех технологий рендера функции. Так например там
-реализована математика, окно и звук. Если вы создаёте класс, который не является абстрактным и служит только чтобы,
-реализовать интерфейс из arc-core - делайте его internal. Здесь так же не желательно использовать нейминг,
-который так или иначе будет отсылать на какую-то конкретную реализацию.
-
-arc-opengl - Реализация движка, использующая OpenGL. В этом модуле желательно писать код,
-который будет относиться только к OpenGL. В этом модуле следует использовать нейминг,
-который отсылает на то, что классы относятся к OpenGL (Например приставка Gl в начале названия классов). Так же, по возможности,
-все классы должны быть internal.
-
-arc-vulkan - Реализация движка, использующая Vulkan. В этом модуле желательно писать код,
-который будет относиться только к Vulkan. В этом модуле следует использовать нейминг,
-который отсылает на то, что классы относятся к Vulkan (Например приставка Vk в начале названия классов). Так же, по возможности,
-все классы должны быть internal.
-
-arc-extensions - Различные расширения для движка, например профайлер. По возможности используйте только интерфейсы, для
-описания API, а реализацию пишите в отдельном модуле или в arc-common/opengl/vulkan.
-
-arc-demo - Демонстрация движка, здесь можно писать абсолютно любой код для тестов и не только.
+***arc-extensions*** - Various extensions for the engine. If possible, it is necessary to divide extensions into a similar structure
+as the engine itself. That is, a `core` module with description through interfaces, a `common` module with generalized implementations, and all other
+modules (For example, `opengl`, `vulkan`, `openal`, `glfw`, etc.), which will be implemented through a specific technology.

@@ -20,7 +20,7 @@ internal data class NativeDrawBuffer(
 
     private var vertexFormatIndex = 0 // Current index of element in format.
 
-    // Getter of current instance of element in format
+    // Getter of current instance of element in format.
     private val vertexFormatElement: VertexFormatElement
         get() = format.getElement(vertexFormatIndex)
 
@@ -61,7 +61,7 @@ internal data class NativeDrawBuffer(
     }
 
     override fun addVertex(matrix: Matrix4f, x: Float, y: Float, z: Float): NativeDrawBuffer {
-        val vector3f: Vector3f = matrix.transformPosition(x, y, z, Vector3f())
+        val vector3f = matrix.transformPosition(x, y, z, tempVector)
 
         return addVertex(vector3f.x, vector3f.y, vector3f.z)
     }
@@ -111,7 +111,11 @@ internal data class NativeDrawBuffer(
         if(elementsToFill <= 0) throw IllegalStateException("Can not begin element: ${element.name}, all elements already configured!")
         if(vertexFormatElement != element) throw IllegalArgumentException("Can not begin element, waited ${element.name}, but receive ${vertexFormatElement.name}!")
 
-        return (vertexCount * format.nextOffset + format.getOffset(vertexFormatIndex)).also {
+        val offset = (vertexCount * format.nextOffset + format.getOffset(vertexFormatIndex))
+
+        ensureCapacity(offset, element.count * element.type.size)
+
+        return offset.also {
             nextVertexFormatIndex()
         }
     }
@@ -136,7 +140,6 @@ internal data class NativeDrawBuffer(
 
         vertexCount++
         vertexFormatIndex = 0
-        growBuffer(format.nextOffset)
         return this
     }
 
@@ -167,16 +170,11 @@ internal data class NativeDrawBuffer(
         return result
     }
 
-    private fun growBuffer(requiredBytes: Int) {
-        if (byteBuffer.remaining() < requiredBytes) {
-            val newCapacity = byteBuffer.capacity() * 2
-            val newBuffer = MemoryUtil.memAlloc(newCapacity)
-            MemoryUtil.memCopy(baseAddress, MemoryUtil.memAddress(newBuffer), byteBuffer.position().toLong())
-
-            MemoryUtil.memFree(byteBuffer)
-
-            byteBuffer = newBuffer
-            baseAddress = MemoryUtil.memAddress(byteBuffer)
+    private fun ensureCapacity(offset: Int, size: Int) {
+        if (offset + size > byteBuffer.capacity()) {
+            throw DrawBufferOverflowException("DrawBuffer overflow!" +
+                    " Required ${(offset + size)} bytes," +
+                    " but capacity is only ${byteBuffer.capacity()} bytes.")
         }
     }
 
@@ -186,6 +184,7 @@ internal data class NativeDrawBuffer(
         needEnding = false
         vertexCount = 0
         vertexFormatIndex = 0
+        elementsToFill = format.count
     }
 
     private fun putPosition(i: Int, x: Float, y: Float, z: Float) {
@@ -199,10 +198,7 @@ internal data class NativeDrawBuffer(
     private fun putColor(i: Int, red: Int, green: Int, blue: Int, alpha: Int) {
         val addr = baseAddress + i
 
-        MemoryUtil.memPutByte(addr, red.toByte())
-        MemoryUtil.memPutByte(addr + 1, green.toByte())
-        MemoryUtil.memPutByte(addr + 2, blue.toByte())
-        MemoryUtil.memPutByte(addr + 3, alpha.toByte())
+        MemoryUtil.memPutInt(addr, (alpha shl 24) or (blue shl 16) or (green shl 8) or red)
     }
 
     private fun putTexture(i: Int, u: Float, v: Float) {
@@ -225,4 +221,15 @@ internal data class NativeDrawBuffer(
             return NativeDrawBuffer(mode, format, bufferSize)
         }
     }
+
+    companion object {
+        // Temp vector for transformation via matrix in addVertex() function
+        @JvmStatic
+        private val tempVector = Vector3f()
+    }
+
+    class DrawBufferOverflowException(
+        message: String
+    ) : RuntimeException(message)
+
 }
