@@ -4,17 +4,21 @@ import org.gradle.api.artifacts.dsl.DependencyHandler
 import org.gradle.api.provider.Provider
 import org.gradle.api.artifacts.MinimalExternalModuleDependency
 
-private enum class LwjglPlatform(val classifier: String) {
+enum class LwjglPlatform(val classifier: String) {
     WINDOWS("natives-windows"),
     LINUX("natives-linux"),
     MACOS("natives-macos"),
     MACOS_ARM64("natives-macos-arm64")
 }
 
-fun DependencyHandler.lwjgl(depend: Provider<MinimalExternalModuleDependency>) {
+fun DependencyHandler.lwjgl(depend: Provider<MinimalExternalModuleDependency>, vararg platform: LwjglPlatform = LwjglPlatform.values()) {
     add("implementation", depend)
 
-    LwjglPlatform.values().forEach {
-        add("implementation", variantOf(depend) { classifier(it.classifier) })
+    platform.forEach {
+        add(depend, it)
     }
+}
+
+private fun DependencyHandler.add(depend: Provider<MinimalExternalModuleDependency>, platform: LwjglPlatform) {
+    add("implementation", variantOf(depend) { classifier(platform.classifier) })
 }

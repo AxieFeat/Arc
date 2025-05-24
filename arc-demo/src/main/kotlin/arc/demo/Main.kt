@@ -6,6 +6,7 @@ import arc.font.CommonFontExtension
 import arc.gl.OpenGL
 import arc.input.GlfwInputExtension
 import arc.model.CommonModelExtension
+import arc.vk.Vulkan
 
 fun main() {
     // Preload factories.
@@ -15,7 +16,7 @@ fun main() {
     // Select implementation by property.
     when(System.getProperty("arc.application")) {
         "opengl" -> OpenGL.preload()
-//        "vulkan" -> Vulkan.preload()
+        "vulkan" -> Vulkan.preload()
 
         else -> OpenGL.preload()
     }
