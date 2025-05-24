@@ -24,42 +24,42 @@ interface Device {
     val cpu: CPU
 
     /**
-     * Graphic cards of device.
+     * Graphic cards of a device.
      */
     val gpu: List<GPU>
 
     /**
-     * Powers sources of device.
+     * Powers sources of a device.
      */
     val powerSources: List<PowerSource>
 
     /**
-     * MotherBoard of device.
+     * MotherBoard of a device.
      */
     val motherBoard: MotherBoard
 
     /**
-     * RAM of device.
+     * RAM of a device.
      */
     val ram: RAM
 
     /**
-     * Model name of device.
+     * Model name of a device.
      */
     val model: String
 
     /**
-     * Name of serial number of device.
+     * Name of serial number of devices.
      */
     val serial: String
 
     /**
-     * Hardware UUID of device.
+     * Hardware UUID of a device.
      */
     val uuid: String
 
     /**
-     * Manufacturer of device.
+     * Manufacturer of a device.
      */
     val manufacturer: String
 

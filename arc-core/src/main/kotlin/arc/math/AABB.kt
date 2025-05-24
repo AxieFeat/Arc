@@ -55,7 +55,7 @@ interface AABB {
     /**
      * Create new instance of [AABB] with new [min] point.
      *
-     * This also create new instance if current min point equals new.
+     * This also creates a new instance if the current min point equals new.
      *
      * @param min New min point.
      *
@@ -67,7 +67,7 @@ interface AABB {
     /**
      * Create new instance of [AABB] with new [max] point.
      *
-     * This also create new instance if current max point equals new.
+     * This also creates a new instance if the current max point equals new.
      *
      * @param max New max point.
      *
@@ -79,7 +79,7 @@ interface AABB {
     /**
      * Create new instance of [AABB] with new [center] point.
      *
-     * This also create new instance if current center point equals new.
+     * This also creates a new instance if the current center point equals new.
      *
      * @param center New center point.
      *

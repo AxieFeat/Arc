@@ -6,7 +6,7 @@ import arc.math.Point2i
 import org.jetbrains.annotations.ApiStatus
 
 /**
- * This interface represents window of application.
+ * This interface represents a window of the application.
  */
 @Suppress("INAPPLICABLE_JVM_NAME")
 interface Window {
@@ -22,7 +22,7 @@ interface Window {
     var handler: WindowHandler
 
     /**
-     * Info about backend library of window implementation.
+     * Info about a backend library of window implementation.
      */
     val backend: WindowBackend
 
@@ -58,7 +58,7 @@ interface Window {
     val isFocus: Boolean
 
     /**
-     * Indicates whether the window can be resized by the user.
+     * Indicates whether the user can resize the window.
      */
     @get:JvmName("isResizable")
     @set:JvmName("setResizable")
@@ -79,7 +79,7 @@ interface Window {
     var isVsync: Boolean
 
     /**
-     * Is cursor viewable in this window.
+     * Is the cursor viewable in this window?
      */
     @get:JvmName("isShowCursor")
     @set:JvmName("setShowCursor")
@@ -109,12 +109,12 @@ interface Window {
     fun shouldClose(): Boolean
 
     /**
-     * Make some updates in frame begin.
+     * Make some updates in the frame begin.
      */
     fun beginFrame()
 
     /**
-     * Make some updates in frame end.
+     * Make some updates in the frame end.
      */
     fun endFrame()
 
@@ -131,10 +131,10 @@ interface Window {
         /**
          * Create new instance of [Window].
          *
-         * @param name Name of window.
-         * @param handler Event handler of window.
-         * @param width Width of window.
-         * @param height Height of window.
+         * @param name Name of a window.
+         * @param handler Event handler of a window.
+         * @param width Width of a window.
+         * @param height Height of a window.
          *
          * @return New instance of [Window].
          */

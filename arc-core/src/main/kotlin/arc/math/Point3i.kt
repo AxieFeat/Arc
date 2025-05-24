@@ -34,7 +34,7 @@ interface Point3i : Copyable<Point3i>, Interpolatable<Point3i> {
     /**
      * Create new instance of [Point3i] with new [x], [y] and [z] value.
      *
-     * This also create new instance if current X or Y or Z value equals new X or Y or Z.
+     * This also creates a new instance if the current X or Y or Z value equals new X or Y or Z.
      *
      * @param x New X value.
      * @param y New Y value.
@@ -48,7 +48,7 @@ interface Point3i : Copyable<Point3i>, Interpolatable<Point3i> {
     /**
      * Create new instance of [Point3i] with new [x] value.
      *
-     * This also create new instance if current X value equals new X.
+     * This also creates a new instance if the current X value equals the new X.
      *
      * @param x New X value.
      *
@@ -60,7 +60,7 @@ interface Point3i : Copyable<Point3i>, Interpolatable<Point3i> {
     /**
      * Create new instance of [Point3i] with new [y] value.
      *
-     * This also create new instance if current Y value equals new Y.
+     * This also creates a new instance if the current Y value equals new Y.
      *
      * @param y New Y value.
      *
@@ -72,7 +72,7 @@ interface Point3i : Copyable<Point3i>, Interpolatable<Point3i> {
     /**
      * Create new instance of [Point3i] with new [z] value.
      *
-     * This also create new instance if current Z value equals new Z.
+     * This also creates a new instance if the current Z value equals new Z.
      *
      * @param z New Z value.
      *
@@ -82,7 +82,7 @@ interface Point3i : Copyable<Point3i>, Interpolatable<Point3i> {
     fun withZ(z: Int): Point3i = withXYZ(z = z)
 
     /**
-     * Interpolate with other point.
+     * Interpolate with another point.
      *
      * @param other Point for interpolation.
      * @param progress Progress of interpolation in ``0.0..1.0`` range.

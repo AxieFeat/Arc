@@ -1,7 +1,7 @@
 package arc.window
 
 /**
- * This interface represents event handler of window.
+ * This interface represents the event handler of a window.
  */
 interface WindowHandler {
 
@@ -11,7 +11,7 @@ interface WindowHandler {
     fun focus(focus: Boolean) {}
 
     /**
-     * Handles the resize of window.
+     * Handles the resize of a window.
      */
     fun resize(width: Int, height: Int) {}
 
@@ -26,17 +26,17 @@ interface WindowHandler {
     fun cursorLeaved() {}
 
     /**
-     * Handles cursor moving in window.
+     * Handles cursor moving in a window.
      */
     fun cursorMove(x: Double, y: Double) {}
 
     /**
-     * Handles cursor scrolling in window.
+     * Handles cursor scrolling in a window.
      */
     fun scroll(x: Double, y: Double) {}
 
     /**
-     * Handles moving of window.
+     * Handles moving of a window.
      */
     fun windowMove(x: Int, y: Int) {}
 

@@ -39,7 +39,7 @@ interface VertexFormatElement {
     val count: Int
 
     /**
-     * Get size of this element.
+     * Get the size of this element.
      */
     val size: Int
         get() = type.size * this.count

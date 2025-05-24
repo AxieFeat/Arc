@@ -10,14 +10,14 @@ import org.jetbrains.annotations.ApiStatus
 import java.nio.ByteBuffer
 
 /**
- * This interface represents buffer of vertices.
+ * This interface represents a buffer of vertices.
  *
  * @sample arc.sample.meshSample
  */
 interface VertexBuffer : Bindable, Cleanable {
 
     /**
-     * ID of this buffer in Render system.
+     * ID of this buffer in a Render system.
      */
     val id: Int
 
@@ -37,7 +37,7 @@ interface VertexBuffer : Bindable, Cleanable {
     val size: Int
 
     /**
-     * Count of vertices in buffer.
+     * Count of vertices in the buffer.
      */
     val vertices: Int
 
@@ -45,7 +45,7 @@ interface VertexBuffer : Bindable, Cleanable {
      * Store some [ByteBuffer] in this vertex buffer (It will overwrite old values).
      *
      * @param buffer Buffer for writing it this vertex buffer instance.
-     * @param vertices Count of vertices in buffer.
+     * @param vertices Count of vertices in the buffer.
      */
     fun write(buffer: ByteBuffer, vertices: Int)
 
@@ -72,7 +72,7 @@ interface VertexBuffer : Bindable, Cleanable {
          * @param mode Mode for drawing this vertex buffer.
          * @param format Format of vertices for this vertex buffer.
          * @param buffer Buffer for writing vertex data.
-         * @param vertices Count of vertices in buffer.
+         * @param vertices Count of vertices in the buffer.
          *
          * @return New instance of [VertexBuffer].
          */

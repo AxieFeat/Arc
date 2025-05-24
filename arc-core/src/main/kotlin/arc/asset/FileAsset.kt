@@ -7,7 +7,7 @@ import org.jetbrains.annotations.ApiStatus
 import java.io.File
 
 /**
- * This interface represents asset, that can be stored in file system.
+ * This interface represents an asset that can be stored in a file system.
  *
  * Although this interface is marked as immutable,
  * in fact the getters can return different values if the file contents have been changed.
@@ -41,7 +41,7 @@ interface FileAsset : StringAsset {
     companion object {
 
         /**
-         * Create instance of [FileAsset] from file.
+         * Create instance of [FileAsset] from a file.
          *
          * @param file File of asset.
          *

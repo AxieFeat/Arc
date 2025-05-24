@@ -43,7 +43,7 @@ interface TextureAtlas : Texture {
         fun png(asset: AssetLike): TextureAtlas = TextureAtlasLoader.PNG.load(asset)
 
         /**
-         * Create [TextureAtlas] from byte array.
+         * Create [TextureAtlas] from a byte array.
          *
          * @param bytes Bytes of texture in png format.
          *
@@ -73,7 +73,7 @@ interface TextureAtlas : Texture {
         fun raw(asset: AssetLike, width: Int, height: Int): TextureAtlas = TextureAtlasLoader.RAW.load(asset, width, height)
 
         /**
-         * Create [TextureAtlas] from byte array.
+         * Create [TextureAtlas] from a byte array.
          *
          * @param bytes Bytes of texture in raw format.
          *

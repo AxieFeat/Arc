@@ -26,7 +26,7 @@ interface Ray : Copyable<Ray> {
     /**
      * Create new instance of [Ray] with new [origin] point.
      *
-     * This also create new instance if current origin point equals new.
+     * This also creates a new instance if the current origin point equals new.
      *
      * @param origin New origin point.
      *
@@ -38,7 +38,7 @@ interface Ray : Copyable<Ray> {
     /**
      * Create new instance of [Ray] with new [direction] point.
      *
-     * This also create new instance if current direction point equals new.
+     * This also creates a new instance if the current direction point equals new.
      *
      * @param direction New direction point.
      *
@@ -50,7 +50,7 @@ interface Ray : Copyable<Ray> {
     /**
      * Create new instance of [Ray] with new [origin] and [direction] point.
      *
-     * This also create new instance if current origin or direction point equals new.
+     * This also creates a new instance if the current origin or direction point equals new.
      *
      * @param origin New origin point.
      * @param direction New direction point.
@@ -73,7 +73,7 @@ interface Ray : Copyable<Ray> {
     fun getEndPoint(distance: Float): Vec3f
 
     /**
-     * Create copy of this ray.
+     * Create a copy of this ray.
      *
      * @return New instance of [Ray] with setting from current instance.
      */

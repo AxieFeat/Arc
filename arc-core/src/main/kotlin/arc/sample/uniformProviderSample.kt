@@ -17,7 +17,7 @@ internal object UniformProviderSample : AbstractUniformProvider() {
 
     // Now we can configure uniforms for providing to shaders.
     init {
-        // For example, we can provide projection and view matrices from camera.
+        // For example, we can provide projection and view matrices from the camera.
 
         // In first argument we set name of uniform in shader.
         addUniform("projectionMatrix") {

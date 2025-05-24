@@ -3,7 +3,7 @@ package arc.device
 import java.time.LocalDate
 
 /**
- * This interface represents power source of [Device].
+ * This interface represents a power source of [Device].
  *
  * Note: On some OC values may not be present.
  *
@@ -28,7 +28,7 @@ interface PowerSource {
     /**
      * Estimated remaining capacity as a fraction of max capacity.
      *
-     * This is an estimated/smoothed value which should correspond to the Operating System's "percent power" display,
+     * This is an estimated/smoothed value that should correspond to the Operating System's "percent power" display,
      * and may not directly correspond to the ratio of [currentCapacity] to [maxCapacity].
      *
      * @return A value between 0.0 (fully drained) and 1.0 (fully charged).
@@ -38,8 +38,8 @@ interface PowerSource {
     /**
      * Estimated time remaining on the power source, in seconds, as reported by the operating system.
      *
-     * This is an estimated/smoothed value which should correspond to the Operating System's "battery time remaining"
-     * display, and will react slowly to changes in power consumption.
+     * This is an estimated/smoothed value that should correspond to the Operating System's "battery time remaining"
+     *  display and will react slowly to changes in power consumption.
      *
      * @return If positive, seconds remaining. If negative, -1.0 (calculating) or -2.0 (unlimited).
      */
@@ -74,7 +74,7 @@ interface PowerSource {
     /**
      * Amperage of the battery, in milliAmperes (mA).
      *
-     * @return The battery amperage. If positive, charging the battery. If negative, discharging the battery.
+     * @return The battery amperage. If positive, charge the battery. If negative, discharging the battery.
      */
     val amperage: Double
 
@@ -114,7 +114,7 @@ interface PowerSource {
     val currentCapacity: Int
 
     /**
-     * The maximum capacity of the battery. When compared to design capacity, permits a measure of battery state of
+     * The maximum capacity of the battery. When compared to design capacity, permits a measure of the battery's state of
      * health. It is possible for max capacity to exceed design capacity.
      *
      * @return The maximum capacity. Units are defined by [capacityUnits].
@@ -122,7 +122,7 @@ interface PowerSource {
     val maxCapacity: Int
 
     /**
-     * The design (original) capacity of the battery. When compared to maximum capacity, permits a measure of battery
+     * The design (original) capacity of the battery. When compared to maximum capacity, permits a measure of the battery's
      * state of health. It is possible for max capacity to exceed design capacity.
      *
      * @return The design capacity. Units are defined by [capacityUnits].
@@ -137,7 +137,7 @@ interface PowerSource {
     val cycleCount: Int
 
     /**
-     * The battery chemistry (e.g., Lithium Ion).
+     * The battery chemistry (e.g., Lithium-ion).
      *
      * @return The battery chemistry.
      */
@@ -146,7 +146,7 @@ interface PowerSource {
     /**
      * The battery's date of manufacture.
      *
-     * Some battery manufacturers encode the manufacture date in the serial number. Parsing this value is operating
+     * Some battery manufacturers encode the manufacture date in the serial number. Parsing this value is an operating
      * system and battery manufacturer dependent, and is left to the user.
      *
      * @return The manufacture date, if available. May be `null`.
@@ -156,14 +156,14 @@ interface PowerSource {
     /**
      * The name of the battery's manufacturer.
      *
-     * @return The manufacturer name.
+     * @return The manufacturer's name.
      */
     val manufacturer: String
 
     /**
      * The battery's serial number.
      *
-     * Some battery manufacturers encode the manufacture date in the serial number. Parsing this value is operating
+     * Some battery manufacturers encode the manufacture date in the serial number. Parsing this value is an operating
      * system and battery manufacturer dependent, and is left to the user.
      *
      * @return The serial number.
@@ -173,7 +173,7 @@ interface PowerSource {
     /**
      * The battery's temperature, in degrees Celsius.
      *
-     * @return The battery's temperature, or 0 if uknown.
+     * @return The battery's temperature, or 0 if unknown.
      */
     val temperature: Double
 
@@ -193,7 +193,7 @@ interface PowerSource {
 
         /**
          * Relative units. The specific units are not defined. The ratio of current/max capacity still represents state
-         * of charge and the ratio of max/design capacity still represents state of health.
+         * of charge and the ratio of max/design capacity still represents the state of health.
          */
         RELATIVE
     }

@@ -3,7 +3,7 @@ package arc.asset
 import arc.annotations.ImmutableType
 
 /**
- * Represents a very basic asset of engine.
+ * Represents a very basic asset of the engine.
  */
 @ImmutableType
 interface AssetLike {

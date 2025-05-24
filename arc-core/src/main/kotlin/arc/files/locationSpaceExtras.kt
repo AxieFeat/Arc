@@ -13,7 +13,7 @@ import java.io.File
 private val application = Application.find()
 
 /**
- * Get file from path.
+ * Get a file from a path.
  *
  * @param loc Type of file location.
  * @param path Path to file.
@@ -24,7 +24,7 @@ private val application = Application.find()
 fun file(loc: FileLocation, path: String): File = application.locationSpace.file(loc, path)
 
 /**
- * Get file from classpath.
+ * Get a file from classpath.
  *
  * @param path Path to file.
  *
@@ -36,7 +36,7 @@ fun file(loc: FileLocation, path: String): File = application.locationSpace.file
 fun classpath(path: String): File = application.locationSpace.classpath(path)
 
 /**
- * Get file from absolute path.
+ * Get a file from an absolute path.
  *
  * @param path Path to file.
  *
@@ -48,7 +48,7 @@ fun classpath(path: String): File = application.locationSpace.classpath(path)
 fun absolute(path: String): File = application.locationSpace.absolute(path)
 
 /**
- * Get file from directory of current application.
+ * Get a file from directory of current application.
  *
  * @param path Path to file.
  *

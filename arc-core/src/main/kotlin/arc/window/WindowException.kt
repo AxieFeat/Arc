@@ -1,7 +1,7 @@
 package arc.window
 
 /**
- * Some exception with window.
+ * Some exception with a window.
  */
 class WindowException(
     message: String? = null,

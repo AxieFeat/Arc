@@ -6,12 +6,12 @@ package arc.window
 interface WindowBackend {
 
     /**
-     * It should be a name of implementation in lower case without spaces or any special symbol.
+     * It should be a name of implementation in the lower case without spaces or any special symbol.
      */
     val name: String
 
     /**
-     * Version of backend library.
+     * Version of a backend library.
      */
     val version: String
 

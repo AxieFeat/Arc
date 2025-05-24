@@ -14,7 +14,7 @@ interface LocationSpace {
     val applicationDirectory: File
 
     /**
-     * Get file from path.
+     * Get a file from a path.
      *
      * @param loc Type of file location.
      * @param path Path to file.
@@ -24,7 +24,7 @@ interface LocationSpace {
     fun file(loc: FileLocation, path: String): File
 
     /**
-     * Get file from classpath.
+     * Get a file from the classpath.
      *
      * @param path Path to file.
      *
@@ -35,7 +35,7 @@ interface LocationSpace {
     fun classpath(path: String): File
 
     /**
-     * Get file from absolute path.
+     * Get a file from an absolute path.
      *
      * @param path Path to file.
      *
@@ -46,7 +46,7 @@ interface LocationSpace {
     fun absolute(path: String): File
 
     /**
-     * Get file from directory of current application.
+     * Get a file from directory of current application.
      *
      * @param path Path to file.
      *

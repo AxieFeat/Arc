@@ -6,13 +6,13 @@ import arc.texture.Texture
 import org.jetbrains.annotations.Range
 
 /**
- * This interface represents manager of rendering.
+ * This interface represents the manager of rendering.
  */
 @Suppress("INAPPLICABLE_JVM_NAME")
 interface RenderSystem {
 
     /**
-     * Shader in current context.
+     * Shader in the current context.
      */
     val shader: ShaderInstance
 
@@ -22,12 +22,12 @@ interface RenderSystem {
     val texture: Texture
 
     /**
-     * Drawer of render system.
+     * Drawer of a render system.
      */
     val drawer: Drawer
 
     /**
-     * Current game scene. Render scene represents all viewable objects in screen.
+     * Current game scene. Render scene represents all viewable objects in the screen.
      */
     val scene: Scene
 

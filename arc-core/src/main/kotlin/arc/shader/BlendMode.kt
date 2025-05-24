@@ -6,7 +6,7 @@ import arc.annotations.TypeFactory
 import org.jetbrains.annotations.ApiStatus
 
 /**
- * This interface represents blend setting for shader.
+ * This interface represents a blend setting for shader.
  */
 @ImmutableType
 interface BlendMode {
@@ -26,7 +26,7 @@ interface BlendMode {
     val opaque: Boolean
 
     /**
-     * Apply blend setting in current context.
+     * Apply blend setting in the current context.
      */
     fun apply()
 

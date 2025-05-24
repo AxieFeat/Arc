@@ -8,7 +8,7 @@ import org.jetbrains.annotations.ApiStatus
 import java.nio.ByteBuffer
 
 /**
- * This interface represents loader for textures in specific format.
+ * This interface represents a loader for textures in a specific format.
  */
 interface TextureLoader {
 
@@ -49,7 +49,7 @@ interface TextureLoader {
     fun load(bytes: ByteArray): Texture = load(bytes.createDirectByteBuffer())
 
     /**
-     * Load texture via byte array.
+     * Load texture via a byte array.
      *
      * Note: [width] and [height] required only for [TextureFormat.RAW].
      *

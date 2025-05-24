@@ -12,14 +12,14 @@ import org.jetbrains.annotations.ApiStatus
 interface MutableAssetStack<T : AssetLike> : AssetStack<T> {
 
     /**
-     * Add new asset to stack.
+     * Add new asset to the stack.
      *
      * @param asset Asset to add.
      */
     fun add(asset: T)
 
     /**
-     * Remove asset from stack.
+     * Remove asset from the stack.
      *
      * @param asset Asset to remove.
      */
@@ -42,7 +42,7 @@ interface MutableAssetStack<T : AssetLike> : AssetStack<T> {
         val EMPTY = of(emptySet())
 
         /**
-         * Create new stack of assets.
+         * Create a new stack of assets.
          *
          * @param assets Assets of stack.
          *
@@ -54,7 +54,7 @@ interface MutableAssetStack<T : AssetLike> : AssetStack<T> {
         }
 
         /**
-         * Create new stack of assets.
+         * Create a new stack of assets.
          *
          * @param asset Assets of stack.
          *

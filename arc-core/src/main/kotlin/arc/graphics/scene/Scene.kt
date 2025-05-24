@@ -4,13 +4,13 @@ import arc.graphics.Camera
 import arc.graphics.Drawer
 
 /**
- * This interface represents renderable scene of engine.
+ * This interface represents a renderable scene of the engine.
  */
 @Suppress("INAPPLICABLE_JVM_NAME")
 interface Scene {
 
     /**
-     * Drawer, that this scene use.
+     * Drawer that this scene uses.
      */
     val drawer: Drawer
 
@@ -30,7 +30,7 @@ interface Scene {
     val delta: Float
 
     /**
-     * Is cursor showed in window.
+     * Is cursor showed in a window.
      */
     @get:JvmName("isShowCursor")
     @set:JvmName("setShowCursor")

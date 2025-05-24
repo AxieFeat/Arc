@@ -39,7 +39,7 @@ internal fun shaderInstanceSample() {
     }
     """.trimIndent().asRuntimeAsset()
 
-    // Ok, lets create ShaderInstance.
+    // Ok, let's create ShaderInstance.
     val shader = ShaderInstance.of(
         vertexShader,
         fragmentShader

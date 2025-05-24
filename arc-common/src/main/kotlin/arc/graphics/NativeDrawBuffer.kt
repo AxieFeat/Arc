@@ -18,13 +18,13 @@ internal data class NativeDrawBuffer(
 
     override var vertexCount = 0
 
-    private var vertexFormatIndex = 0 // Current index of element in format.
+    private var vertexFormatIndex = 0 // Current index of an element in format.
 
-    // Getter of current instance of element in format.
+    // Getter of current instance of an element in format.
     private val vertexFormatElement: VertexFormatElement
         get() = format.getElement(vertexFormatIndex)
 
-    // Count of wrote elements at current vertex.
+    // Count of writing elements at current vertex.
     private var elementsToFill = format.count
 
     // Used for auto-ending of vertices.
@@ -113,7 +113,7 @@ internal data class NativeDrawBuffer(
 
         val offset = (vertexCount * format.nextOffset + format.getOffset(vertexFormatIndex))
 
-        ensureCapacity(offset, element.count * element.type.size)
+        ensureCapacity(offset, element.size)
 
         return offset.also {
             nextVertexFormatIndex()
@@ -156,7 +156,7 @@ internal data class NativeDrawBuffer(
     }
 
     /**
-     * Return elements, that yet not completed in current vertex.
+     * Return elements, that yet not completed in the current vertex.
      */
     private fun leftElements(): List<VertexFormatElement> {
         if(elementsToFill <= 0) return emptyList()

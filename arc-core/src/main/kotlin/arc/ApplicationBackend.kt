@@ -14,7 +14,7 @@ interface ApplicationBackend {
     val name: String
 
     /**
-     * Version of backend library, that used for implement application.
+     * Version of a backend library, that used for implement application.
      */
     val version: String
 
@@ -24,7 +24,7 @@ interface ApplicationBackend {
     val device: Device
 
     /**
-     * Is application running in integrated graphics card.
+     * Is the application running in integrated graphics card?
      */
     @get:JvmName("isIGpu")
     val isIGpu: Boolean

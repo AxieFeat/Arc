@@ -9,7 +9,7 @@ import com.google.gson.JsonParser
 import org.jetbrains.annotations.ApiStatus
 
 /**
- * This interface represents some settings for shader.
+ * This interface represents some settings for the shader.
  */
 @ImmutableType
 interface ShaderSettings {
@@ -52,7 +52,7 @@ interface ShaderSettings {
         }
 
         /**
-         * Deserialize [ShaderSettings] from json file.
+         * Deserialize [ShaderSettings] from JSON file.
          *
          * @param asset Asset with text in JSON format.
          *

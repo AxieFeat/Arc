@@ -1,7 +1,7 @@
 package arc.util.pattern
 
 /**
- * This interface represents resource, that can be released from memory.
+ * This interface represents a resource that can be released from memory.
  */
 interface Cleanable : AutoCloseable {
 

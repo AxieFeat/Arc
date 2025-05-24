@@ -5,7 +5,7 @@ import arc.annotations.TypeFactory
 import org.jetbrains.annotations.ApiStatus
 
 /**
- * This interface represents frame buffer.
+ * This interface represents a frame buffer.
  */
 @Suppress("INAPPLICABLE_JVM_NAME")
 interface FrameBuffer {
@@ -21,7 +21,7 @@ interface FrameBuffer {
     val height: Int
 
     /**
-     * Texture width in buffer.
+     * Texture width in the buffer.
      */
     val textureWidth: Int
 
@@ -31,7 +31,7 @@ interface FrameBuffer {
     val textureHeight: Int
 
     /**
-     * Is depth used by this buffer.
+     * Is depth used by this buffer?
      */
     @get:JvmName("isUseDepth")
     val isUseDepth: Boolean
@@ -44,7 +44,7 @@ interface FrameBuffer {
     fun bind(viewport: Boolean)
 
     /**
-     * Unbind this buffer from current context.
+     * Unbind this buffer from the current context.
      */
     fun unbind()
 
@@ -82,7 +82,7 @@ interface FrameBuffer {
     fun render(width: Int = this.width, height: Int = this.height)
 
     /**
-     * Resize viewport of this frame buffer.
+     * Resize the viewport of this frame buffer.
      *
      * @param width New width.
      * @param height New height.
@@ -92,7 +92,7 @@ interface FrameBuffer {
     fun resize(width: Int, height: Int): Boolean
 
     /**
-     * Clear current frame buffer.
+     * Clear the current frame buffer.
      */
     fun clear()
 

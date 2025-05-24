@@ -29,7 +29,7 @@ interface Point2d : Copyable<Point2d>, Interpolatable<Point2d> {
     /**
      * Create new instance of [Point2d] with new [x] and [y] value.
      *
-     * This also create new instance if current X or Y value equals new X or Y.
+     * This also creates a new instance if the current X or Y value equals new X or Y.
      *
      * @param x New X value.
      * @param y New Y value.
@@ -42,7 +42,7 @@ interface Point2d : Copyable<Point2d>, Interpolatable<Point2d> {
     /**
      * Create new instance of [Point2d] with new [x] value.
      *
-     * This also create new instance if current X value equals new X.
+     * This also creates a new instance if the current X value equals the new X.
      *
      * @param x New X value.
      *
@@ -54,7 +54,7 @@ interface Point2d : Copyable<Point2d>, Interpolatable<Point2d> {
     /**
      * Create new instance of [Point2d] with new [y] value.
      *
-     * This also create new instance if current Y value equals new Y.
+     * This also creates a new instance if the current Y value equals new Y.
      *
      * @param y New Y value.
      *
@@ -64,7 +64,7 @@ interface Point2d : Copyable<Point2d>, Interpolatable<Point2d> {
     fun withY(y: Double): Point2d = withXY(y = y)
 
     /**
-     * Interpolate with other point.
+     * Interpolate with another point.
      *
      * @param other Point for interpolation.
      * @param progress Progress of interpolation in ``0.0..1.0`` range.

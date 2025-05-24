@@ -42,7 +42,7 @@ interface Color : Copyable<Color>, Interpolatable<Color> {
     /**
      * Represents the alpha (opacity) component of a color.
      *
-     * The value must be a double within the range of 0.0 to 1.0, where 0.0 signifies full
+     * The value must be double within the range of 0.0 to 1.0, where 0.0 signifies full
      * transparency and 1.0 signifies full opacity.
      */
     val alpha: @Range(from = 0, to = 1) Double
@@ -132,7 +132,7 @@ interface Color : Copyable<Color>, Interpolatable<Color> {
          *
          * @return New instance of [Color].
          *
-         * @throws IllegalArgumentException If some value is not in it range.
+         * @throws IllegalArgumentException If some value is not in its range.
          */
         @JvmStatic
         fun of(

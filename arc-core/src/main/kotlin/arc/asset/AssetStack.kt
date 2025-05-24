@@ -35,7 +35,7 @@ interface AssetStack<T : AssetLike> : Iterable<T> {
         val EMPTY = of(emptySet())
 
         /**
-         * Create new stack of assets.
+         * Create a new stack of assets.
          *
          * @param assets Assets of stack.
          *
@@ -47,7 +47,7 @@ interface AssetStack<T : AssetLike> : Iterable<T> {
         }
 
         /**
-         * Create new stack of assets.
+         * Create a new stack of assets.
          *
          * @param asset Assets of stack.
          *

@@ -9,15 +9,15 @@ import arc.util.pattern.Copyable
 interface Vector<T : Vector<T>> : Copyable<T> {
 
     /**
-     * The euclidean length of this vector.
+     * The Euclidean length of this vector.
      */
     fun len(): Float
 
     /**
-     * This method is faster than [Vector.len] because it avoids calculating a square root. It is useful for comparisons,
+     * This method is faster than [Vector.len] because it avoids calculating a square root. It is useful for comparisons
      * but not for getting exact lengths, as the return value is the square of the actual length.
      *
-     * @return The squared euclidean length.
+     * @return The squared Euclidean length.
      */
     fun len2(): Float
 
@@ -34,7 +34,7 @@ interface Vector<T : Vector<T>> : Copyable<T> {
      * Limits the length of this vector, based on the desired maximum length squared.
      * This method is slightly faster than [limit].
      *
-     * @param limit2 Squared desired maximum length for this vector.
+     * @param limit2 Squared the desired maximum length for this vector.
      *
      * @return New vector or current instance, if nothing are changed.
      *
@@ -139,7 +139,7 @@ interface Vector<T : Vector<T>> : Copyable<T> {
 
     /**
      * This method is faster than [Vector.dst] because it avoids calculating a square root. It is useful for
-     * comparisons, but not for getting accurate distances, as the return value is the square of the actual distance.
+     *  comparisons but not for getting accurate distances, as the return value is the square of the actual distance.
      *
      * @param v The other vector.
      *
@@ -211,12 +211,12 @@ interface Vector<T : Vector<T>> : Copyable<T> {
     fun isPerpendicular(other: T, epsilon: Float): Boolean
 
     /**
-     * @return Whether this vector has similar direction compared to the other vector. True if the normalized dot product is > 0.
+     * @return Whether this vector has a similar direction compared to the other vector. True if the normalized dot product is > 0.
      */
     fun hasSameDirection(other: T): Boolean
 
     /**
-     * @return Whether this vector has opposite direction compared to the other vector. True if the normalized dot product is < 0.
+     * @return Whether this vector has an opposite direction compared to the other vector. True if the normalized dot product is < 0.
      */
     fun hasOppositeDirection(other: T): Boolean
 
@@ -246,7 +246,7 @@ interface Vector<T : Vector<T>> : Copyable<T> {
     fun mulAdd(v: T, mulVec: T): T
 
     /**
-     * Create copy of this vector.
+     * Create a copy of this vector.
      *
      * @return A copy of this vector.
      */

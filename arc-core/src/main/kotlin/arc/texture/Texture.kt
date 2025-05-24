@@ -23,7 +23,7 @@ interface Texture : TextureLike {
         fun png(asset: AssetLike): Texture = TextureLoader.PNG.load(asset)
 
         /**
-         * Create [Texture] from byte array.
+         * Create [Texture] from a byte array.
          *
          * @param bytes Bytes of texture in png format.
          *
@@ -53,7 +53,7 @@ interface Texture : TextureLike {
         fun raw(asset: AssetLike): Texture = TextureLoader.RAW.load(asset)
 
         /**
-         * Create [Texture] from byte array.
+         * Create [Texture] from a byte array.
          *
          * @param bytes Bytes of texture in raw format.
          *

@@ -39,7 +39,7 @@ interface VertexArrayBuffer : VertexBuffer {
          * @param mode Mode for drawing this vertex buffer.
          * @param format Format of vertices for this vertex buffer.
          * @param buffer Buffer for writing vertex data.
-         * @param vertices Count of vertices in buffer.
+         * @param vertices Count of vertices in the buffer.
          *
          * @return New instance of [VertexArrayBuffer].
          */

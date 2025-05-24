@@ -17,15 +17,15 @@ import org.jetbrains.annotations.ApiStatus
  *         .add(VertexFormatElement.COLOR) // <- Any elements, example color.
  *         .build()
  * ```
- * With this format we can create buffer and also it says, what data should be provided to shader.
- * How it works with [arc.graphics.DrawBuffer] you can see in it class.
+ * With this format we can create a buffer, and also it says what data should be provided to the shader.
+ * How it works with [arc.graphics.DrawBuffer] you can see in its class.
  *
- * For providing vertex data to shaders you should use layouts. Example for VertexFormat above:
+ * For providing vertex data to shaders, you should use layouts. The example for VertexFormat above:
  * ```glsl
  * layout (location = 0) in vec3 Position; // <- location = 0 - always is Position.
  * layout (location = 1) in vec4 Color; // <- location = 1 - Our color argument.
  * ```
- * In these example we use position (vec3) and color (vec4) - what about other types?
+ * In this example we use position (vec3) and color (vec4) - what about other types?
  * ```plain
  * (That's not all types)
  *
@@ -53,7 +53,7 @@ interface VertexFormat {
     val offsets: List<Int>
 
     /**
-     * Offset of next element.
+     * Offset of the next element.
      */
     val nextOffset: Int
 
@@ -85,7 +85,7 @@ interface VertexFormat {
     fun contains(vertexFormatElement: VertexFormatElement): Boolean
 
     /**
-     * Get element from [elements] by [index].
+     * Get an element from [elements] by [index].
      *
      * @param index Index of element.
      *
@@ -105,14 +105,14 @@ interface VertexFormat {
     /**
      * Get offset by index.
      *
-     * @param index Index in list.
+     * @param index Index in a list.
      *
-     * @return Value from list by index.
+     * @return Value from a list by index.
      */
     fun getOffset(index: Int): Int
 
     /**
-     * Clear current instance.
+     * Clear the current instance.
      */
     fun clear()
 

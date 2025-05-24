@@ -6,12 +6,12 @@ package arc.util.pattern
 interface Bindable {
 
     /**
-     * Binds the resource, making it active in current context.
+     * Binds the resource, making it active in the current context.
      */
     fun bind()
 
     /**
-     * Unbinds the resource, deactivating it from current context.
+     * Unbinds the resource, deactivating it from the current context.
      */
     fun unbind()
 

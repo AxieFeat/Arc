@@ -3,7 +3,7 @@ package arc.asset
 import arc.annotations.ImmutableType
 
 /**
- * This interface represents string-like asset.
+ * This interface represents a string-like asset.
  *
  * @see RuntimeAsset
  */

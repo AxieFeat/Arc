@@ -7,7 +7,7 @@ import org.jetbrains.annotations.ApiStatus
 /**
  * This interface represents some asset, that available only at runtime.
  *
- * NOTE: This type of asset support text asset. But factory support only bytes.
+ * NOTE: This type of asset supports text asset. But the factory supports only bytes.
  * That is, when trying to get a string, you may get an unexpected result.
  */
 interface RuntimeAsset : StringAsset {

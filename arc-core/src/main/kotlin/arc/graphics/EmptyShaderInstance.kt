@@ -9,7 +9,7 @@ import org.joml.Vector3f
 import org.joml.Vector4f
 
 /**
- * Empty realisation of [ShaderInstance].
+ * Empty realization of [ShaderInstance].
  *
  * Can be used as a stub instead of the nullable type.
  */

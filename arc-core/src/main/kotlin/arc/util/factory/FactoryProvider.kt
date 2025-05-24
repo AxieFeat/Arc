@@ -25,7 +25,7 @@ interface FactoryProvider {
      * @param T The factory type.
      * @param type The class of the type.
      * @param factory The factory to register.
-     * @param overwrite If factory already register it will be overwritten by new factory.
+     * @param overwrite If factory already registers it will be overwritten by a new factory.
      *
      * @throws IllegalStateException If the factory is already registered (Only if [overwrite] is false).
      */
@@ -37,7 +37,7 @@ interface FactoryProvider {
      * @param T The factory type.
      * @param type The class of the type.
      * @param provider The provider to register.
-     * @param overwrite If factory already register it will be overwritten by new provider.
+     * @param overwrite If factory already registers it will be overwritten by a new provider.
      *
      * @throws IllegalStateException If the provider is already registered (Only if [overwrite] is false).
      */

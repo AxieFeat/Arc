@@ -15,12 +15,12 @@ import org.joml.Quaternionf
 interface Camera {
 
     /**
-     * Height of application window.
+     * Height of an application window.
      */
     val windowHeight: Float
 
     /**
-     * Width of application window.
+     * Width of an application window.
      */
     val windowWidth: Float
 
@@ -30,7 +30,7 @@ interface Camera {
     val frustum: Frustum
 
     /**
-     * Ray of view of this camera.
+     * Ray of view in this camera.
      */
     val ray: Ray
 
@@ -85,12 +85,12 @@ interface Camera {
     fun update()
 
     /**
-     * Update aspect in camera with new height and width.
+     * Update an aspect in camera with new height and width.
      */
     fun updateAspect(width: Int, height: Int)
 
     /**
-     * Reset all setting in camera.
+     * Reset all settings in the camera.
      */
     fun reset()
 

@@ -17,7 +17,7 @@ enum class OSPlatform(val id: String) {
         /**
          * Get platform from id string value.
          *
-         * @param id ID of platform.
+         * @param id ID of a platform.
          *
          * @return Platform from string. Can return [UNKNOWN] if not found.
          */

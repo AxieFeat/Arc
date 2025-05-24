@@ -15,8 +15,8 @@ import java.nio.ByteBuffer
  * With this buffer you can render any polygon.
  *
  * In simple words - the buffer allows you to specify vertices and their parameters (coordinates, textures, etc.).
- * In order to specify what parameters the vertices will have, there is [VertexFormat]. As its name suggests,
- * it represents the vertex format for the buffer, i.e. what vertex data will be transferred and in what order.
+ * To specify what parameters the vertices will have, there is [VertexFormat]. As its name suggests,
+ * it represents the vertex format for the buffer, i.e., what vertex data will be transferred and in what order.
  * ```kotlin
  * VertexFormat.builder()
  *         .add(VertexFormatElement.POSITION) // <- First element should be position ALWAYS!
@@ -41,7 +41,7 @@ interface DrawBuffer : VertexConsumer, Cleanable {
     val bufferSize: Int
 
     /**
-     * Byte buffer, where stored all vertex data. Use it only if known, what a do.
+     * Byte buffer, where stored all vertex data. Use it only if you know what to do.
      */
     val byteBuffer: ByteBuffer
 
@@ -61,7 +61,7 @@ interface DrawBuffer : VertexConsumer, Cleanable {
     val format: VertexFormat
 
     /**
-     * Clear current vertex info in buffer.
+     * Clear current vertex info in the buffer.
      */
     fun clear()
 

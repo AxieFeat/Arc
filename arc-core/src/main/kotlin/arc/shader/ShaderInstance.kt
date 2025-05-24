@@ -19,7 +19,7 @@ import org.joml.Vector4f
 interface ShaderInstance : Bindable, Cleanable {
 
     /**
-     * ID of this shader in render system.
+     * ID of this shader in a render system.
      */
     val id: Int
 
@@ -39,7 +39,7 @@ interface ShaderInstance : Bindable, Cleanable {
     val settings: ShaderSettings
 
     /**
-     * Add uniform provider to this shader instance.
+     * Add a uniform provider to this shader instance.
      *
      * @param provider Provider to add.
      */

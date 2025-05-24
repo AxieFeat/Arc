@@ -11,7 +11,7 @@ import kotlin.jvm.Throws
 interface Interpolatable<T> {
 
     /**
-     * Interpolate with other object.
+     * Interpolate with another object.
      *
      * @param other Object for interpolation.
      * @param progress Progress of interpolation in ``0.0..1.0`` range.
