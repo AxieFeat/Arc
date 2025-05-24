@@ -3,7 +3,7 @@ package arc.gl.shader
 import arc.gl.graphics.GlRenderSystem
 import arc.shader.BlendMode
 
-data class GlBlendMode(
+internal data class GlBlendMode(
     override val separateBlend: Boolean,
     override val opaque: Boolean,
     override val srcColorFactor: Int,

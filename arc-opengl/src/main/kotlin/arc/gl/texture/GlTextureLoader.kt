@@ -9,7 +9,7 @@ import org.lwjgl.system.MemoryStack
 import java.nio.ByteBuffer
 import kotlin.use
 
-class GlTextureLoader(
+internal class GlTextureLoader(
     override val format: TextureFormat
 ) : TextureAtlasLoader {
 

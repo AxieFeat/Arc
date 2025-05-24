@@ -7,19 +7,15 @@ import arc.gl.graphics.vertex.GlVertexBuffer
 import arc.gl.shader.GlBlendMode
 import arc.gl.shader.GlFrameBuffer
 import arc.gl.shader.GlShaderInstance
-import arc.gl.texture.GlTexture
-import arc.gl.texture.GlTextureAtlas
 import arc.gl.texture.GlTextureLoader
 import arc.graphics.vertex.VertexArrayBuffer
 import arc.graphics.vertex.VertexBuffer
-import arc.util.factory.register
 import arc.shader.BlendMode
 import arc.shader.FrameBuffer
 import arc.shader.ShaderInstance
-import arc.texture.Texture
-import arc.texture.TextureAtlas
 import arc.texture.TextureAtlasLoader
 import arc.texture.TextureLoader
+import arc.util.factory.register
 
 internal object GlFactoryProvider {
 

@@ -6,10 +6,10 @@ import arc.shader.ShaderInstance
 
 internal fun shaderInstanceSample() {
 
-    // First of all, you should know that shaders should be stored, and not created new ones every time, this is a very hard operation.
+    // First, you should know that shaders should be stored, and not created new ones every time - this is a very hard operation.
     // To create a ShaderInstance, you need Vertex and Fragment shaders, in addition to them, you need ShaderSettings, but this is not necessary and it can be empty.
 
-    // In this example we store shaders in code, but don't do this in real projects!
+    // In this example we store shaders in code but don't do this in real projects!
 
     val vertexShader = """
     #version 410
@@ -45,8 +45,8 @@ internal fun shaderInstanceSample() {
         fragmentShader
     )
 
-    // Shader instance created! But now we need compile it for using.
+    // Shader instance created! But now we need to compile it for using.
     shader.compileShaders()
 
-    // Now shader instance is done for rendering. You can bind/unbind it, set uniforms and more.
+    // Now the shader instance is done for rendering. You can bind/unbind it, set uniforms and more.
 }

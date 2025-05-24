@@ -8,6 +8,7 @@ internal data class ArcFileAsset(
 
     override val bytes: ByteArray
         get() = file.readBytes()
+
     override val text: String
         get() = file.readText()
 

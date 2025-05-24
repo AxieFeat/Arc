@@ -10,18 +10,18 @@ import arc.util.Color
 
 internal fun drawBufferSample() {
     // Find our application.
-    // (Don't forget preload factories, implementation and start application)
+    // (Don't forget to preload implementations and start application)
     val application = Application.find()
 
     // Now we can create buffer via render system drawer.
     val buffer: DrawBuffer = application.renderSystem.drawer.begin(
-        mode = DrawerMode.TRIANGLES, // We recommend use TRIANGLES. Also NOT use QUADS, its deprecated.
+        mode = DrawerMode.TRIANGLES, // We recommend using TRIANGLES. Also, NOT use QUADS, it's deprecated.
         format = VertexFormat.builder()
             .add(VertexFormatElement.POSITION)
             .add(VertexFormatElement.COLOR)
             .build(),
 
-        bufferSize = 256 // Its size of buffer. DO NOT use large values unless necessary.
+        bufferSize = 256 // Its size of a buffer. DO NOT use large values unless necessary.
     )
 
     // Add vertex info to our buffer.

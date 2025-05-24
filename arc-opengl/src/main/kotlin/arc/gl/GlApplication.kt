@@ -16,7 +16,7 @@ import java.awt.image.BufferedImage
 import java.io.File
 import javax.imageio.ImageIO
 
-object GlApplication : AbstractApplication() {
+internal object GlApplication : AbstractApplication() {
 
     override val backend: ApplicationBackend = GlApplicationBackend
 
@@ -74,14 +74,6 @@ object GlApplication : AbstractApplication() {
 
     override fun close() {
         window.close()
-    }
-
-    /**
-     * Initialize this application in factory.
-     */
-    @JvmStatic
-    fun preload() {
-        GlFactoryProvider.bootstrap()
     }
 
     internal object Factory : Application.Factory {

@@ -3,7 +3,7 @@ package arc.demo
 import arc.ArcFactoryProvider
 import arc.audio.AlAudioExtension
 import arc.font.CommonFontExtension
-import arc.gl.GlApplication
+import arc.gl.OpenGL
 import arc.input.GlfwInputExtension
 import arc.model.CommonModelExtension
 
@@ -14,10 +14,10 @@ fun main() {
 
     // Select implementation by property.
     when(System.getProperty("arc.application")) {
-        "opengl" -> GlApplication.preload()
-//        "vulkan" -> VkApplication.preload()
+        "opengl" -> OpenGL.preload()
+//        "vulkan" -> Vulkan.preload()
 
-        else -> GlApplication.preload()
+        else -> OpenGL.preload()
     }
 
     val provider = ArcFactoryProvider

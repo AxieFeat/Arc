@@ -71,7 +71,7 @@ fun main() {
     ArcFactoryProvider.bootstrap()
 
     // Preload OpenGL
-    GlApplication.preload()
+    OpenGL.preload()
 
     // Find application in current context (OpenGL implementation)
     val application: Application = Application.find()

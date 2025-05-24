@@ -19,10 +19,10 @@ import java.io.File
  *
  * // Select implementation by property.
  * when(System.getProperty("arc.application")) {
- *     "opengl" -> GlApplication.preload()
- *     "vulkan" -> VkApplication.preload()
+ *     "opengl" -> OpenGL.preload()
+ *     "vulkan" -> Vulkan.preload()
  *
- *     else -> GlApplication.preload() // Fallback to GL if property not correct.
+ *     else -> OpenGL.preload() // Fallback to GL if property not correct.
  * }
  *
  * // Now we can find our application.
@@ -42,7 +42,7 @@ interface Application {
     /**
      * Window of this application.
      *
-     * @throws WindowException If window is not initialized yet.
+     * @throws WindowException If a window is not initialized yet.
      */
     @get:Throws(WindowException::class)
     val window: Window

@@ -17,8 +17,7 @@ internal data class ArcRuntimeAsset(
         return bytes.contentHashCode()
     }
 
-    override val text: String
-        get() = bytes.decodeToString()
+    override val text: String = bytes.decodeToString()
 
     object Factory : RuntimeAsset.Factory {
         override fun create(bytes: ByteArray): RuntimeAsset {

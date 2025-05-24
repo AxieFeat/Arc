@@ -17,12 +17,12 @@ internal object UniformProviderSample : AbstractUniformProvider() {
 
     // Now we can configure uniforms for providing to shaders.
     init {
-        // In example, we can provide projection and view matrices from camera.
+        // For example, we can provide projection and view matrices from camera.
 
         // In first argument we set name of uniform in shader.
         addUniform("projectionMatrix") {
 
-            // This block of code call in every time, when your bind shader.
+            // This block of code calls in every time, when your bind shader.
 
             // Then we just call function of shader instance for setting uniform.
             it.setUniform("projectionMatrix", application.renderSystem.scene.camera.projection)
@@ -36,10 +36,10 @@ internal object UniformProviderSample : AbstractUniformProvider() {
 }
 
 internal fun uniformProviderSample() {
-    // In previous sample we create object UniformProviderSample, we will use it here.
+    // In the previous sample we create object UniformProviderSample, we will use it here.
     val provider = UniformProviderSample
 
-    // Creation simple shader as example.
+    // Creation simple shader as an example.
     val shader = ShaderInstance.of(
         FileAsset.from(File("example.vsh")),
         FileAsset.from(File("example.fsh")),

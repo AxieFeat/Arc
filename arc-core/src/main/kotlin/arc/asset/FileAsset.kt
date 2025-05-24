@@ -20,6 +20,16 @@ interface FileAsset : StringAsset {
      */
     val file: File
 
+    /**
+     * Bytes of this file. Not use too often because this value is not cached.
+     */
+    override val bytes: ByteArray
+
+    /**
+     * Read file bytes as string. Not use too often because this value is not cached.
+     */
+    override val text: String
+
     @ApiStatus.Internal
     @TypeFactory
     interface Factory {

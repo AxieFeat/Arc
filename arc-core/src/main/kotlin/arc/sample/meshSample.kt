@@ -12,18 +12,18 @@ import arc.util.Color
 
 internal fun meshSample() {
     // Find our application.
-    // (Don't forget preload factories, implementation and start application)
+    // (Don't forget preload implementations and start application)
     val application = Application.find()
 
     // Now we can create buffer via render system drawer.
     val buffer: DrawBuffer = application.renderSystem.drawer.begin(
-        mode = DrawerMode.TRIANGLES, // We recommend use TRIANGLES. Also NOT use QUADS, its deprecated.
+        mode = DrawerMode.TRIANGLES, // We recommend using TRIANGLES. Also, NOT use QUADS, it's deprecated.
         format = VertexFormat.builder()
             .add(VertexFormatElement.POSITION)
             .add(VertexFormatElement.COLOR)
             .build(),
 
-        bufferSize = 256 // Its size of buffer. DO NOT use large values unless necessary.
+        bufferSize = 256 // Its size of a buffer. DO NOT use large values unless necessary.
     )
 
     // Add vertex info to our buffer.
@@ -43,16 +43,16 @@ internal fun meshSample() {
     )
     shader.compileShaders() // Don't forget compile shaders.
 
-    // Create simple game loop (Just as an example, you should have your own, only one game loop).
+    // Create a simple game loop (Just as an example, you should have your own, only one game loop).
     while (!application.window.shouldClose()) {
         application.renderSystem.beginFrame() // Begin render frame.
 
-        shader.bind() // Binds our shader in current context.
+        shader.bind() // Binds our shader in the current context.
 
         // Now we can render our buffer via drawer.
         application.renderSystem.drawer.draw(vertexBuffer)
 
-        shader.unbind() // In this case we don't need unbind shader, but in real games it is quite important.
+        shader.unbind() // In this case we don't need to unbind the shader, but in real games it is quite important.
 
         application.renderSystem.endFrame() // End render frame.
     }
