@@ -8,6 +8,10 @@ import arc.demo.screen.TerrainScreen
 import arc.demo.shader.ShaderContainer
 import arc.graphics.vertex.VertexFormat
 import arc.input.GlfwInputEngine
+import arc.input.KeyCode
+import arc.input.bind
+import arc.input.keyboard
+import arc.input.onPress
 import arc.window.WindowHandler
 import kotlin.system.exitProcess
 
@@ -27,7 +31,7 @@ object VoxelGame : WindowHandler {
         // Set window handler to this instance.
         application.window.handler = this
 
-        setScreen(TerrainScreen)
+        setScreen(FractalScreen)
 
 //        val asset = classpath("arc/sound/pigstep.ogg").asFileAsset()
 //        val sound = SoundLoader.of(SoundFormat.OGG).load(asset)

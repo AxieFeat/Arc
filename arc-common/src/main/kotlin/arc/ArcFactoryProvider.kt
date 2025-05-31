@@ -17,8 +17,6 @@ import arc.util.Color
 import arc.util.factory.FactoryProvider
 import arc.util.factory.TypeNotFoundException
 import arc.util.factory.register
-import arc.window.GlfwWindow
-import arc.window.Window
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap
 import java.lang.reflect.Field
 
@@ -68,7 +66,6 @@ object ArcFactoryProvider : FactoryProvider {
         register<Vec3f.Factory>(ArcVec3f.Factory)
 
         register<Color.Factory>(ArcColor.Factory)
-        register<Window.Factory>(GlfwWindow.Factory)
         register<Camera.Factory>(ArcCamera.Factory)
 
         register<VertexFormat.Builder>({ ArcVertexFormat.Builder() })

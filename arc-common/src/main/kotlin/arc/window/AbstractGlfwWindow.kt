@@ -2,20 +2,20 @@ package arc.window
 
 import arc.math.Point2i
 import org.lwjgl.glfw.Callbacks
-import org.lwjgl.glfw.GLFW
 import org.lwjgl.glfw.GLFW.*
 import org.lwjgl.glfw.GLFWErrorCallback
 import org.lwjgl.system.MemoryUtil
 
 @Suppress("UNUSED_PARAMETER", "unused")
-internal class GlfwWindow(
+abstract class AbstractGlfwWindow(
     name: String,
     override var handler: WindowHandler,
     override var width: Int,
-    override var height: Int
+    override var height: Int,
+    override val isResizable: Boolean
 ) : Window {
 
-    private val defaultErrorCallback = GLFWErrorCallback.create(GlfwWindow::bootCrash)
+    private val defaultErrorCallback = GLFWErrorCallback.create(AbstractGlfwWindow::bootCrash)
 
     override val backend: WindowBackend = GlfwWindowBackend
 
@@ -33,16 +33,15 @@ internal class GlfwWindow(
     override val timeFromInitialize: Double
         get() = glfwGetTime()
 
-    override var isResizable: Boolean = true
+    override var isHidden: Boolean = false
         set(value) {
-            field = value
-            glfwWindowHint(GLFW_RESIZABLE, if (isResizable) GLFW_TRUE else GLFW_FALSE)
-        }
+            if(value && !field) {
+                glfwShowWindow(handle)
+            } else if (!value && field) {
+                glfwHideWindow(handle)
+            }
 
-    override var isHide: Boolean = false
-        set(value) {
             field = value
-            glfwWindowHint(GLFW_VISIBLE, if (value) GLFW_FALSE else GLFW_TRUE)
         }
 
     override var isVsync: Boolean = true
@@ -63,22 +62,17 @@ internal class GlfwWindow(
             )
         }
 
-    override fun resize(width: Int, height: Int) {
-        glfwSetWindowSize(handle, width, height)
-    }
-
-    override fun create() {
+    init {
         glfwSetErrorCallback(defaultErrorCallback)
 
         check(glfwInit()) { "Unable to initialize GLFW" }
 
         glfwDefaultWindowHints()
-        glfwWindowHint(GLFW_VISIBLE, if (isHide) GLFW_FALSE else GLFW_TRUE)
+        glfwWindowHint(GLFW_VISIBLE, if (isHidden) GLFW_FALSE else GLFW_TRUE)
         glfwWindowHint(GLFW_RESIZABLE, if (isResizable) GLFW_TRUE else GLFW_FALSE)
+    }
 
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4)
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1)
-
+    override fun create() {
         handle = glfwCreateWindow(width, height, name, MemoryUtil.NULL, MemoryUtil.NULL)
 
         glfwSetWindowPosCallback(handle, ::onMove)
@@ -87,8 +81,6 @@ internal class GlfwWindow(
         glfwSetCursorEnterCallback(handle, ::onEnter)
         glfwSetCursorPosCallback(handle, ::onCursorMove)
         glfwSetScrollCallback(handle, ::onScroll)
-
-        glfwMakeContextCurrent(handle)
 
         val arrWidth = IntArray(1)
         val arrHeight = IntArray(1)
@@ -108,12 +100,8 @@ internal class GlfwWindow(
         return glfwWindowShouldClose(handle)
     }
 
-    override fun beginFrame() {
-        glfwPollEvents()
-    }
-
-    override fun endFrame() {
-        glfwSwapBuffers(handle)
+    override fun resize(width: Int, height: Int) {
+        glfwSetWindowSize(handle, width, height)
     }
 
     private fun onMove(handle: Long, x: Int, y: Int) {
@@ -145,12 +133,6 @@ internal class GlfwWindow(
 
     private fun onEnter(handle: Long, entered: Boolean) {
         if (entered) handler.cursorEntered() else handler.cursorLeaved()
-    }
-
-    object Factory : Window.Factory {
-        override fun create(name: String, handler: WindowHandler, width: Int, height: Int): Window {
-            return GlfwWindow(name, handler, width, height)
-        }
     }
 
     companion object {

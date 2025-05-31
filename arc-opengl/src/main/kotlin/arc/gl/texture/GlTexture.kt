@@ -1,7 +1,5 @@
 package arc.gl.texture
 
-import arc.gl.graphics.GlRenderSystem
-import arc.texture.EmptyTexture
 import arc.texture.Texture
 import org.lwjgl.opengl.GL41.*
 
@@ -18,10 +16,10 @@ internal open class GlTexture : Texture {
 
     override fun unbind() {
         glBindTexture(GL_TEXTURE_2D, 0)
-        GlRenderSystem.texture = EmptyTexture
     }
 
     override fun cleanup() {
         glDeleteTextures(id)
     }
+
 }

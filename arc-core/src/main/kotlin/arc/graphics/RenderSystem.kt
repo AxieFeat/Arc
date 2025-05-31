@@ -101,21 +101,6 @@ interface RenderSystem {
     fun polygonMode(face: Int, mode: Int)
 
     /**
-     * Sets the current color for the shader in the rendering pipeline.
-     *
-     * @param r The red component of the color.
-     * @param g The green component of the color.
-     * @param b The blue component of the color.
-     * @param a The alpha (transparency) component of the color.
-     */
-    fun setShaderColor(
-        r: @Range(from = 0, to = 1) Float,
-        g: @Range(from = 0, to = 1) Float,
-        b: @Range(from = 0, to = 1) Float,
-        a: @Range(from = 0, to = 1) Float
-    )
-
-    /**
      * Clears the depth buffer to the specified depth value.
      *
      * @param depth The depth value to clear the depth buffer to.
@@ -154,17 +139,55 @@ interface RenderSystem {
      */
     fun resetViewport()
 
+    /**
+     * Sets the clear color for the rendering system to use when clearing the screen.
+     *
+     * @param red The red component of the color in ``0.0..1.0``.
+     * @param green The green component of the color in ``0.0..1.0``.
+     * @param blue The blue component of the color in ``0.0..1.0``.
+     * @param alpha The alpha (transparency) component of the color in ``0.0..1.0``.
+     */
     fun clearColor(red: Float, green: Float, blue: Float, alpha: Float)
 
+    /**
+     * Clears the specified buffers in the rendering context.
+     *
+     * @param mask A bitfield indicating which buffers to clear. For example, it can include color, depth, or stencil buffers.
+     */
     fun clear(mask: Int)
 
+    /**
+     * Enables 2D texture rendering in the rendering system.
+     */
     fun enableTexture2D()
 
+    /**
+     * Disables 2D texture rendering in the rendering system.
+     */
     fun disableTexture2D()
 
+    /**
+     * Configures the blending equation to determine how source and destination colors
+     * are combined during a blending operation.
+     */
     fun blendEquation(mode: Int)
 
+    /**
+     * Configures separate blending factors for color and alpha components during blending operations.
+     *
+     * @param sourceFactor The source factor for the color components.
+     * @param destFactor The destination factor for the color components.
+     * @param sourceFactorAlpha The source factor for the alpha components.
+     * @param destFactorAlpha The destination factor for the alpha components.
+     */
     fun blendFuncSeparate(sourceFactor: Int, destFactor: Int, sourceFactorAlpha: Int, destFactorAlpha: Int)
 
+    /**
+     * Configures the blending factors for source and destination colors during a blending operation.
+     *
+     * @param sourceFactor The source factor determines how the source color is scaled in the blending equation.
+     * @param destFactor The destination factor determines how the destination color is scaled in the blending equation.
+     */
     fun blendFunc(sourceFactor: Int, destFactor: Int)
+
 }

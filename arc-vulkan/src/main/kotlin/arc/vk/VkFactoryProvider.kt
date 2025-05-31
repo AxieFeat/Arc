@@ -10,6 +10,8 @@ import arc.shader.ShaderInstance
 import arc.texture.TextureAtlasLoader
 import arc.texture.TextureLoader
 import arc.util.factory.register
+import arc.vk.window.GlfwVkWindow
+import arc.window.Window
 
 internal object VkFactoryProvider {
 
@@ -19,6 +21,8 @@ internal object VkFactoryProvider {
     fun bootstrap(overwrite: Boolean = false) {
         try {
             provider.register<Application.Factory>(VkApplication.Factory, overwrite)
+
+            provider.register<Window.Factory>(GlfwVkWindow.Factory)
 
 //            provider.register<TextureLoader.Factory>(VkTextureLoader.Factory, overwrite)
 //            provider.register<TextureAtlasLoader.Factory>(VkTextureLoader.Factory, overwrite)

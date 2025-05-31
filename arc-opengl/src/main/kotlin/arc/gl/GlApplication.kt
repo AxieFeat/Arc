@@ -4,6 +4,7 @@ import arc.AbstractApplication
 import arc.Application
 import arc.ApplicationBackend
 import arc.gl.graphics.GlRenderSystem
+import arc.gl.window.GlfwGlWindow
 import arc.graphics.RenderSystem
 import arc.window.EmptyWindowHandler
 import arc.window.Window
@@ -20,7 +21,7 @@ internal object GlApplication : AbstractApplication() {
 
     override val backend: ApplicationBackend = GlApplicationBackend
 
-    override lateinit var window: Window
+    override lateinit var window: GlfwGlWindow
     override lateinit var renderSystem: RenderSystem
 
     override fun init() {
@@ -29,7 +30,7 @@ internal object GlApplication : AbstractApplication() {
             handler = EmptyWindowHandler,
             height = 420,
             width = 720
-        )
+        ) as? GlfwGlWindow ?: throw IllegalStateException("Window is not GlfwGlWindow. Why?")
 
         this.renderSystem = GlRenderSystem
 

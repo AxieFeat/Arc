@@ -29,7 +29,7 @@ internal object GlRenderSystem : RenderSystem {
     }
 
     override fun beginFrame() {
-        GlApplication.window.beginFrame()
+        GlApplication.window.pollEvents()
 
         clear(GL_COLOR_BUFFER_BIT or GL_DEPTH_BUFFER_BIT)
         resetViewport()
@@ -40,7 +40,7 @@ internal object GlRenderSystem : RenderSystem {
         shader = EmptyShaderInstance
         texture.unbind()
         texture = EmptyTexture
-        GlApplication.window.endFrame()
+        GlApplication.window.swapBuffers()
     }
 
     override fun setScene(scene: Scene) {
@@ -73,10 +73,6 @@ internal object GlRenderSystem : RenderSystem {
 
     override fun polygonMode(face: Int, mode: Int) {
         glPolygonMode(face, mode)
-    }
-
-    override fun setShaderColor(r: Float, g: Float, b: Float, a: Float) {
-        glColor4f(r, g, b, a)
     }
 
     override fun clearDepth(depth: Double) {

@@ -18,7 +18,7 @@ interface Drawer {
      *
      * @return New instance of [DrawBuffer].
      */
-    fun begin(mode: DrawerMode, format: VertexFormat, bufferSize: Int = 256): DrawBuffer
+    fun begin(mode: DrawerMode, format: VertexFormat, bufferSize: Int = 256): DrawBuffer = DrawBuffer.of(mode, format, bufferSize)
 
     /**
      * Render buffer.
@@ -30,7 +30,7 @@ interface Drawer {
     /**
      * Render buffer.
      *
-     * @param matrix Matrix for transformation (For using it create uniform with name "modelMatrix").
+     * @param matrix Matrix for transformation (For using it create uniform with the name "modelMatrix").
      * @param buffer Buffer for rendering.
      */
     fun draw(matrix: Matrix4f, buffer: VertexBuffer)

@@ -36,7 +36,7 @@ interface DrawBuffer : VertexConsumer, Cleanable {
     /**
      * Size of buffer.
      *
-     * The buffer size actually allows you to say: "How many vertices and their data will fit here".
+     * The buffer size actually allows you to say: "How many vertices and their data can be stored here".
      */
     val bufferSize: Int
 

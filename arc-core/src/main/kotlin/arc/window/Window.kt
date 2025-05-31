@@ -58,18 +58,17 @@ interface Window {
     val isFocus: Boolean
 
     /**
-     * Indicates whether the user can resize the window.
+     * Is window can be resized.
      */
     @get:JvmName("isResizable")
-    @set:JvmName("setResizable")
-    var isResizable: Boolean
+    val isResizable: Boolean
 
     /**
      * Indicates whether the window is currently hidden.
      */
-    @get:JvmName("isHide")
-    @set:JvmName("setHide")
-    var isHide: Boolean
+    @get:JvmName("isHidden")
+    @set:JvmName("setHidden")
+    var isHidden: Boolean
 
     /**
      * Indicates whether the window has Vsync.
@@ -108,21 +107,17 @@ interface Window {
      */
     fun shouldClose(): Boolean
 
-    /**
-     * Make some updates in the frame begin.
-     */
-    fun beginFrame()
-
-    /**
-     * Make some updates in the frame end.
-     */
-    fun endFrame()
-
     @ApiStatus.Internal
     @TypeFactory
     interface Factory {
 
-        fun create(name: String, handler: WindowHandler, width: Int, height: Int): Window
+        fun create(
+            name: String,
+            handler: WindowHandler,
+            width: Int,
+            height: Int,
+            isResizable: Boolean,
+        ): Window
 
     }
 
@@ -135,12 +130,19 @@ interface Window {
          * @param handler Event handler of a window.
          * @param width Width of a window.
          * @param height Height of a window.
+         * @param isResizable Is window can be resized.
          *
          * @return New instance of [Window].
          */
         @JvmStatic
-        fun of(name: String, handler: WindowHandler, width: Int, height: Int): Window {
-            return Arc.factory<Factory>().create(name, handler, width, height)
+        fun of(
+            name: String,
+            handler: WindowHandler,
+            width: Int,
+            height: Int,
+            isResizable: Boolean = true,
+        ): Window {
+            return Arc.factory<Factory>().create(name, handler, width, height, isResizable)
         }
 
     }

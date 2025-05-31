@@ -1,7 +1,7 @@
 package arc.gl.display
 
+import arc.Application
 import arc.display.Display
-import arc.gl.GlApplication
 import arc.graphics.DrawerMode
 import arc.graphics.vertex.VertexFormat
 import arc.graphics.vertex.VertexFormatElement
@@ -14,6 +14,8 @@ internal data class GlDisplay(
     override val width: Int,
     override val height: Int
 ) : Display {
+
+    private val application = Application.find()
 
     override val matrix: Matrix4f = Matrix4f()
 
@@ -30,7 +32,7 @@ internal data class GlDisplay(
         .add(VertexFormatElement.UV)
         .build()
 
-    private val buffer = GlApplication.renderSystem.drawer.begin(DrawerMode.TRIANGLES, format, 256).use { buffer ->
+    private val buffer = application.renderSystem.drawer.begin(DrawerMode.TRIANGLES, format, 256).use { buffer ->
         val minX = 0f
         val minY = 0f
         val maxX = 20f
@@ -57,7 +59,7 @@ internal data class GlDisplay(
 
         frameBuffer.bindTexture()
 
-        GlApplication.renderSystem.drawer.draw(buffer)
+        application.renderSystem.drawer.draw(buffer)
 
         frameBuffer.unbindTexture()
 
