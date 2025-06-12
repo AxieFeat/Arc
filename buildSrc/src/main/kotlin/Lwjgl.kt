@@ -1,5 +1,3 @@
-package arc.util
-
 import org.gradle.api.artifacts.dsl.DependencyHandler
 import org.gradle.api.provider.Provider
 import org.gradle.api.artifacts.MinimalExternalModuleDependency

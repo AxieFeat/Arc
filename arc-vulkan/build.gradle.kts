@@ -1,6 +1,3 @@
-import arc.util.LwjglPlatform
-import arc.util.lwjgl
-
 dependencies {
     api(projects.arcCommon)
 

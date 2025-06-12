@@ -1,11 +1,9 @@
 plugins {
     `kotlin-dsl`
+    `java-gradle-plugin`
 }
 
-repositories {
-    mavenCentral()
-}
-
-kotlin {
-    jvmToolchain(21)
+dependencies {
+    implementation(libs.plugin.kotlin)
+    implementation(libs.plugin.ksp)
 }

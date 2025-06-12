@@ -2,6 +2,12 @@ enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 rootProject.name = "arc"
 
+dependencyResolutionManagement {
+    repositories {
+        mavenCentral()
+    }
+}
+
 pluginManagement {
     repositories {
         mavenCentral()

@@ -44,7 +44,7 @@ class VulkanInstance(
             if (supportsValidation) {
                 requiredLayers = stack.mallocPointer(numValidationLayers)
                 for (i in 0..<numValidationLayers) {
-                    requiredLayers.put(i, stack.ASCII(validationLayers[i]))
+                    validationLayers[i]?.let { requiredLayers.put(i, stack.ASCII(it)) }
                 }
             }
 

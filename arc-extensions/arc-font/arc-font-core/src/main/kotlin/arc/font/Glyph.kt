@@ -1,7 +1,5 @@
 package arc.font
 
-import kotlinx.serialization.Serializable
-
 /**
  * This class represents some glyph in glyph-based fonts.
  *
@@ -10,7 +8,6 @@ import kotlinx.serialization.Serializable
  * @param codepoint Glyph ordinal number.
  * @param pattern Patter of this glyph, used for texture generation.
  */
-@Serializable
 data class Glyph(
     val char: Char = ' ',
     val name: String = "",

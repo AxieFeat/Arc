@@ -16,10 +16,10 @@ import kotlin.use
 @Suppress("UNUSED_PARAMETER", "unused")
 internal class GlfwVkWindow(
     name: String,
-    override var handler: WindowHandler,
-    override var width: Int,
-    override var height: Int,
-    override val isResizable: Boolean
+    handler: WindowHandler,
+    width: Int,
+    height: Int,
+    isResizable: Boolean
 ) : AbstractGlfwWindow(name, handler, width, height, isResizable) {
 
     var surface by Delegates.notNull<Long>()

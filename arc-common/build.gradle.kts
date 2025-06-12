@@ -1,4 +1,3 @@
-import arc.util.lwjgl
 import org.gradle.kotlin.dsl.dependencies
 
 dependencies {

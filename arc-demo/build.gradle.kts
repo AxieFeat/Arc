@@ -1,5 +1,3 @@
-import arc.util.lwjgl
-
 dependencies {
     implementation(projects.arcOpengl)
     implementation(projects.arcVulkan)

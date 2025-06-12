@@ -13,10 +13,10 @@ import org.lwjgl.glfw.GLFW.glfwWindowHint
 @Suppress("UNUSED_PARAMETER", "unused")
 internal class GlfwGlWindow(
     name: String,
-    override var handler: WindowHandler,
-    override var width: Int,
-    override var height: Int,
-    override val isResizable: Boolean
+    handler: WindowHandler,
+    width: Int,
+    height: Int,
+    isResizable: Boolean
 ) : AbstractGlfwWindow(name, handler, width, height, isResizable) {
 
     init {
