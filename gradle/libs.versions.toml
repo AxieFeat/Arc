@@ -3,9 +3,6 @@ metadata.format.version = "1.1"
 [versions]
 
 kotlin = "2.1.21"
-serialization = "1.8.1"
-serialization-plugin = "2.0.0"
-build-system = "0.0.2-snapshot"
 lwjgl = "3.3.6"
 gson = "2.12.1"
 annotations = "26.0.2"
@@ -16,8 +13,6 @@ joml = "1.10.8"
 commons-io = "2.18.0"
 
 [libraries]
-
-serialization = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-core-jvm", version.ref = "serialization" }
 
 annotations = { group = "org.jetbrains", name = "annotations", version.ref = "annotations" }
 gson = { group = "com.google.code.gson", name = "gson", version.ref = "gson" }

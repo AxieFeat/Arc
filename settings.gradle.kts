@@ -9,26 +9,11 @@ dependencyResolutionManagement {
 }
 
 pluginManagement {
+    includeBuild("build-logic")
+
     repositories {
         mavenCentral()
-        maven(url = "https://jitpack.io")
         gradlePluginPortal()
-        repositories {
-            maven {
-                name = "Ci-Cd"
-                url = uri("https://gitlab.qubique.pw/api/v4/groups/4/-/packages/maven")
-                credentials(HttpHeaderCredentials::class) {
-                    value = System.getenv("CI_JOB_TOKEN").also {
-                        name = "Job-Token"
-                    } ?: System.getenv("QUBIQUE_GITLAB_PRIVATE_TOKEN").also {
-                        name = "Private-Token"
-                    } ?: throw RuntimeException("Token not found!")
-                }
-                authentication {
-                    create<HttpHeaderAuthentication>("header")
-                }
-            }
-        }
     }
 }
 
