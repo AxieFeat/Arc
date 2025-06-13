@@ -1,15 +1,16 @@
 package arc.device
 
 import arc.OSPlatform
+import oshi.PlatformEnum
 import oshi.SystemInfo
 
 internal object ArcDevice : Device {
 
     private val systemInfo = SystemInfo()
 
-    override val os: OSPlatform = OSPlatform.fromString(systemInfo.operatingSystem.family.lowercase()).also {
+    override val os: OSPlatform = SystemInfo.getCurrentPlatform().toOsPlatform().also {
         if(it == OSPlatform.UNKNOWN) {
-            println("OS not supported: ${systemInfo.operatingSystem.family.lowercase()}")
+            println("OS not supported: ${SystemInfo.getCurrentPlatform().name}")
         }
     }
 
@@ -23,5 +24,16 @@ internal object ArcDevice : Device {
     override val serial: String = systemInfo.hardware.computerSystem.serialNumber
     override val uuid: String = systemInfo.hardware.computerSystem.hardwareUUID
     override val manufacturer: String = systemInfo.hardware.computerSystem.manufacturer
+
+    private fun PlatformEnum.toOsPlatform(): OSPlatform {
+        return when(this) {
+            PlatformEnum.WINDOWS -> OSPlatform.WINDOWS
+            PlatformEnum.LINUX -> OSPlatform.LINUX
+            PlatformEnum.MACOS -> OSPlatform.MACOS
+            PlatformEnum.ANDROID -> OSPlatform.ANDROID
+
+            else -> OSPlatform.UNKNOWN
+        }
+    }
 
 }
