@@ -46,20 +46,32 @@ abstract class AbstractGlfwWindow(
 
     override var isVsync: Boolean = true
         set(value) {
-            field = value
+            if(value && !field) {
+                glfwSwapInterval(GLFW_FALSE)
+            } else if(!value && field) {
+                glfwSwapInterval(GLFW_TRUE)
+            }
 
-            glfwSwapInterval(if(value) GLFW_TRUE else GLFW_FALSE)
+            field = value
         }
 
     override var isShowCursor: Boolean = true
         set(value) {
-            field = value
+            if(value && !field) {
+                glfwSetInputMode(
+                    handle,
+                    GLFW_CURSOR,
+                    GLFW_CURSOR_DISABLED
+                )
+            } else if(!value && field) {
+                glfwSetInputMode(
+                    handle,
+                    GLFW_CURSOR,
+                    GLFW_CURSOR_NORMAL
+                )
+            }
 
-            glfwSetInputMode(
-                handle,
-                GLFW_CURSOR,
-                if (field) GLFW_CURSOR_NORMAL else GLFW_CURSOR_DISABLED
-            )
+            field = value
         }
 
     init {

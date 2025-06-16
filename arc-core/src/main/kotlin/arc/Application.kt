@@ -9,7 +9,7 @@ import org.jetbrains.annotations.ApiStatus
 import java.io.File
 
 /**
- * This interface represents Application of game engine.
+ * This interface represents the Application of game engine.
  *
  * Sample of initializing application:
  * ```kotlin
@@ -89,7 +89,7 @@ interface Application {
     fun openFolder(folder: File)
 
     /**
-     * Take screenshot of screen.
+     * Take a screenshot of screen.
      *
      * @param folder Folder, where save it.
      * @param name Name of screenshot (With extension).
