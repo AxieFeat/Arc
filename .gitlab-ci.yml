@@ -1,2 +1,0 @@
-include:
-  - component: $CI_SERVER_FQDN/ci-cd/ci-cd-components/gradle-components-library@0.2.3
