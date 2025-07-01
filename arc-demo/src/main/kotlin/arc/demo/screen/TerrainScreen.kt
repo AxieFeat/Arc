@@ -60,6 +60,7 @@ object TerrainScreen : Screen("terrain") {
         buffer.build()
     }
 
+    // Stars from minecraft 1.8
     val starsBuffer = drawer.begin(DrawerMode.TRIANGLES, VertexFormatContainer.positionColor, 19000).use { buffer ->
         val random = Random(10842L)
 
