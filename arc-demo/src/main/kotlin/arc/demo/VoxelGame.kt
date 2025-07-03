@@ -33,7 +33,11 @@ object VoxelGame : WindowHandler {
         // Set window handler to this instance.
         application.window.handler = this
 
-        setScreen(FractalScreen)
+        // Demo with julia fractal.
+//        setScreen(FractalScreen)
+
+        // Demo with minecraft-like game.
+        setScreen(TerrainScreen)
 
 //        val asset = classpath("arc/sound/pigstep.ogg").asFileAsset()
 //        val sound = SoundLoader.of(SoundFormat.OGG).load(asset)
