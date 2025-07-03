@@ -20,7 +20,7 @@ fun Project.applyPublishing() {
 
             repositories.maven {
                 this.name = "GitHubPackages"
-                this.url = uri("https://github.com/AxieFeat/Arc/")
+                this.url = uri("https://maven.pkg.github.com/AxieFeat/Arc")
                 this.credentials {
                     this.username = System.getenv("GITHUB_ACTOR")
                     this.password = System.getenv("GITHUB_TOKEN")
