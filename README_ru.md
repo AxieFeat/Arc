@@ -16,7 +16,7 @@ Arc Engine - это гибкий 3D/2D игровой движок, разраб
 
 ### Структура проекта
 - **arc-core**: Основные интерфейсы API движка
-- **arc-common**: Общая реализация основных функций (математика, окно, звук)
+- **arc-common**: Общая реализация основных функций (математика, окно и т.п.)
 - **arc-opengl**: Реализация движка на основе OpenGL
 - **arc-vulkan**: Реализация движка на основе Vulkan
 - **arc-extensions**: Различные расширения движка
@@ -36,24 +36,41 @@ Arc Engine - это гибкий 3D/2D игровой движок, разраб
 - Видеокарта, совместимая с OpenGL/Vulkan
 
 ### Установка
-1. Добавьте зависимость в ваш проект:
+
+1. Укажите репозиторий проекта Arc:
 ```kotlin
-dependencies {
-    // Если вы хотите использовать API в уже готовой игре.
-    implementation("arc.engine:arc-core:1.0")
-  
-  
-    // Или если вы хотите создать свою игру - выберите бэкенд-реализацию движка.
-    implementation("arc.engine:arc-opengl:1.0") // Для OpenGL
-    implementation("arc.engine:arc-vulkan:1.0") // Для Vulkan
+repositories {
+    maven("https://maven.pkg.github.com/AxieFeat/Arc") {
+        credentials {
+            // GitHub Packages требует авторизации :(
+            
+            username = System.getenv("GITHUB_ACTOR") // Переменная окружения с вашим логином GitHub
+            password = System.getenv("GITHUB_TOKEN") // Переменная с вашим токеном GitHub
+        }
+    }
 }
 ```
 
-2. Добавьте желаемые расширения:
+2. Добавьте зависимость в ваш проект:
 ```kotlin
 dependencies {
-    implementation("arc.engine:arc-input-glfw:1.0") // Для управления через GLFW.
-    implementation("arc.engine:arc-audio-openal:1.0") // Для звуковой системы.
+    // Хеш коммита можно взять из истории - https://github.com/AxieFeat/Arc/commits/master/
+    
+    // Если вы хотите использовать API в уже готовой игре.
+    implementation("arc.engine:arc-core:<первые 7 символов хеша коммита>")
+  
+  
+    // Или если вы хотите создать свою игру - выберите бэкенд-реализацию движка.
+    implementation("arc.engine:arc-opengl:<первые 7 символов хеша коммита>") // Для OpenGL
+    implementation("arc.engine:arc-vulkan:<первые 7 символов хеша коммита>") // Для Vulkan
+}
+```
+
+3. Добавьте желаемые расширения:
+```kotlin
+dependencies {
+    implementation("arc.engine:arc-input-glfw:<первые 7 символов хеша коммита>") // Для управления через GLFW.
+    implementation("arc.engine:arc-audio-openal:<первые 7 символов хеша коммита>") // Для звуковой системы.
     // Добавьте другие расширения по необходимости
 }
 ```

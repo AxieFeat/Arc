@@ -16,7 +16,7 @@ Arc Engine is a flexible 3D/2D game engine designed to be implementation-agnosti
 
 ### Project Structure
 - **arc-core**: Main engine API interfaces
-- **arc-common**: Common implementation of core features (math, window, sound)
+- **arc-common**: Common implementation of core features (math, window, etc.)
 - **arc-opengl**: OpenGL-based engine implementation
 - **arc-vulkan**: Vulkan-based engine implementation
 - **arc-extensions**: Various engine extensions
@@ -36,24 +36,41 @@ Arc Engine is a flexible 3D/2D game engine designed to be implementation-agnosti
 - OpenGL/Vulkan compatible graphics card
 
 ### Setup
-1. Add the dependency to your project:
+
+1. Specify the Arc repository:
 ```kotlin
-dependencies {
-    // If you want to use API in an already done game.
-    implementation("arc.engine:arc-core:1.0")
-
-
-    // Or if you want to create your own game - Select a backend implementation of engine.
-    implementation("arc.engine:arc-opengl:1.0") // For OpenGL
-    implementation("arc.engine:arc-vulkan:1.0") // For Vulkan
+repositories {
+    maven("https://maven.pkg.github.com/AxieFeat/Arc") {
+        credentials {
+            // GitHub Packages requires authentication :(
+            
+            username = System.getenv("GITHUB_ACTOR") // System environment variable with your GitHub login
+            password = System.getenv("GITHUB_TOKEN") // System environment variable with your GitHub token
+        }
+    }
 }
 ```
 
-2. Add desired extensions:
+2. Add the dependency to your project:
 ```kotlin
 dependencies {
-    implementation("arc.engine:arc-input-glfw:1.0") // For control's via GLFW.
-    implementation("arc.engine:arc-audio-openal:1.0") // For sound system.
+    // Hash of commit can be taked from history - https://github.com/AxieFeat/Arc/commits/master/
+    
+    // If you want to use API in an already done game.
+    implementation("arc.engine:arc-core:<first 7 symbols of commit hash>")
+
+
+    // Or if you want to create your own game - select a backend implementation of engine.
+    implementation("arc.engine:arc-opengl:<first 7 symbols of commit hash>") // For OpenGL
+    implementation("arc.engine:arc-vulkan:<first 7 symbols of commit hash>") // For Vulkan
+}
+```
+
+3. Add desired extensions:
+```kotlin
+dependencies {
+    implementation("arc.engine:arc-input-glfw:<first 7 symbols of commit hash>") // For control's via GLFW.
+    implementation("arc.engine:arc-audio-openal:<first 7 symbols of commit hash>") // For sound system.
     // Add other extensions as needed
 }
 ```
@@ -75,7 +92,7 @@ fun main() {
 
     // Find application in current context (OpenGL implementation)
     val application: Application = Application.find()
-    application.init(Configuration.create())
+    application.init()
 
     // Get shader and compile it
     val shader: ShaderInstance = getShaderInstance()
