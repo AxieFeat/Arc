@@ -18,6 +18,11 @@ enum class SoundFormat {
     /**
      * `.mp3` sounds.
      */
-    MP3
+    MP3,
+
+    /**
+     * `.flac` sounds.
+     */
+    FLAC
 
 }

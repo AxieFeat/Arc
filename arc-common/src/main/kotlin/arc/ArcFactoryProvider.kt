@@ -1,18 +1,18 @@
 package arc
 
 import arc.asset.*
-import arc.graphics.ArcCamera
+import arc.graphics.JomlCamera
 import arc.graphics.NativeDrawBuffer
 import arc.graphics.Camera
 import arc.graphics.DrawBuffer
-import arc.graphics.vertex.ArcVertexFormat
-import arc.graphics.vertex.ArcVertexFormatElement
+import arc.graphics.vertex.SimpleVertexFormat
+import arc.graphics.vertex.SimpleVertexFormatElement
 import arc.graphics.vertex.VertexFormat
 import arc.graphics.vertex.VertexFormatElement
 import arc.math.*
-import arc.shader.ArcShaderSettings
+import arc.shader.SimpleShaderSettings
 import arc.shader.ShaderSettings
-import arc.util.ArcColor
+import arc.util.SimpleColor
 import arc.util.Color
 import arc.util.factory.FactoryProvider
 import arc.util.factory.TypeNotFoundException
@@ -54,29 +54,29 @@ object ArcFactoryProvider : FactoryProvider {
 
     @JvmStatic
     fun bootstrap() {
-        register<Point2i.Factory>(ArcPoint2i.Factory)
-        register<Point3i.Factory>(ArcPoint3i.Factory)
-        register<Point2d.Factory>(ArcPoint2d.Factory)
-        register<Point3d.Factory>(ArcPoint3d.Factory)
+        register<Point2i.Factory>(SimplePoint2i.Factory)
+        register<Point3i.Factory>(SimplePoint3i.Factory)
+        register<Point2d.Factory>(SimplePoint2d.Factory)
+        register<Point3d.Factory>(SimplePoint3d.Factory)
 
-        register<AABB.Factory>(ArcAABB.Factory)
-        register<Ray.Factory>(ArcRay.Factory)
+        register<AABB.Factory>(SimpleAABB.Factory)
+        register<Ray.Factory>(SimpleRay.Factory)
 
-        register<Vec2f.Factory>(ArcVec2f.Factory)
-        register<Vec3f.Factory>(ArcVec3f.Factory)
+        register<Vec2f.Factory>(SimpleVec2f.Factory)
+        register<Vec3f.Factory>(SimpleVec3f.Factory)
 
-        register<Color.Factory>(ArcColor.Factory)
-        register<Camera.Factory>(ArcCamera.Factory)
+        register<Color.Factory>(SimpleColor.Factory)
+        register<Camera.Factory>(JomlCamera.Factory)
 
-        register<VertexFormat.Builder>({ ArcVertexFormat.Builder() })
-        register<VertexFormatElement.Factory>(ArcVertexFormatElement.Factory)
+        register<VertexFormat.Builder>({ SimpleVertexFormat.Builder() })
+        register<VertexFormatElement.Factory>(SimpleVertexFormatElement.Factory)
         register<DrawBuffer.Factory>(NativeDrawBuffer.Factory)
-        register<ShaderSettings.Factory>(ArcShaderSettings.Factory)
+        register<ShaderSettings.Factory>(SimpleShaderSettings.Factory)
 
-        register<RuntimeAsset.Factory>(ArcRuntimeAsset.Factory)
-        register<FileAsset.Factory>(ArcFileAsset.Factory)
-        register<AssetStack.Factory>(ArcAssetStack.Factory)
-        register<MutableAssetStack.Factory>(ArcAssetStack.MutableFactory)
+        register<RuntimeAsset.Factory>(SimpleRuntimeAsset.Factory)
+        register<FileAsset.Factory>(SimpleFileAsset.Factory)
+        register<AssetStack.Factory>(SimpleAssetStack.Factory)
+        register<MutableAssetStack.Factory>(SimpleAssetStack.MutableFactory)
     }
 
     private fun modifyField(clazz: Class<*>, name: String, value: Any) {

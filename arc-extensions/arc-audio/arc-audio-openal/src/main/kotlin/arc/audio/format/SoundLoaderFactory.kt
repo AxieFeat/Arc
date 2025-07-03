@@ -10,6 +10,7 @@ internal object SoundLoaderFactory : SoundLoader.Factory {
             SoundFormat.OGG -> OggSoundLoader
             SoundFormat.WAV -> WavSoundLoader
             SoundFormat.MP3 -> Mp3SoundLoader
+            SoundFormat.FLAC -> FlacSoundLoader
         }
     }
 

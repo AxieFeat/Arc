@@ -2,11 +2,11 @@ dependencies {
     implementation(projects.arcOpengl)
     implementation(projects.arcVulkan)
 
-    implementation(projects.arcExtensions.arcProfiler.arcProfilerCommon)
+    implementation(projects.arcExtensions.arcProfiler.arcProfilerSimple)
     implementation(projects.arcExtensions.arcDisplay.arcDisplayOpengl)
     implementation(projects.arcExtensions.arcAudio.arcAudioOpenal)
-    implementation(projects.arcExtensions.arcModel.arcModelCommon)
-    implementation(projects.arcExtensions.arcFont.arcFontCommon)
+    implementation(projects.arcExtensions.arcModel.arcModelSimple)
+    implementation(projects.arcExtensions.arcFont.arcFontSimple)
     implementation(projects.arcExtensions.arcInput.arcInputGlfw)
 
     lwjgl(libs.lwjgl.lib)

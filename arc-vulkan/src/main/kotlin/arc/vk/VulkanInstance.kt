@@ -9,7 +9,7 @@ import org.lwjgl.system.MemoryUtil
 import org.lwjgl.vulkan.*
 
 // The class name is VulkanInstance because in LWJGL exists VkInstance
-class VulkanInstance(
+internal class VulkanInstance(
     useValidationLayer: Boolean = false
 ) {
 

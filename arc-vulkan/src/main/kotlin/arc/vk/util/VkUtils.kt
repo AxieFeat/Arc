@@ -2,7 +2,7 @@ package arc.vk.util
 
 import org.lwjgl.vulkan.VK10
 
-object VkUtils {
+internal object VkUtils {
 
     @JvmStatic
     fun vkCheck(err: Int, errMsg: String) {

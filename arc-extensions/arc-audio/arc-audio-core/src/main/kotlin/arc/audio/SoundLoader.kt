@@ -62,6 +62,12 @@ interface SoundLoader {
         val MP3 = of(SoundFormat.MP3)
 
         /**
+         * [SoundFormat.FLAC] loader.
+         */
+        @JvmField
+        val FLAC = of(SoundFormat.FLAC)
+
+        /**
          * Get instance of loader for specific format.
          *
          * @param format Format for getting loader.

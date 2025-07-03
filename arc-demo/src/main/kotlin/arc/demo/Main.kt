@@ -2,10 +2,10 @@ package arc.demo
 
 import arc.ArcFactoryProvider
 import arc.audio.AlAudioExtension
-import arc.font.CommonFontExtension
+import arc.font.SimpleFontExtension
 import arc.gl.OpenGL
 import arc.input.GlfwInputExtension
-import arc.model.CommonModelExtension
+import arc.model.SimpleModelExtension
 import arc.vk.Vulkan
 
 fun main() {
@@ -26,8 +26,8 @@ fun main() {
     // Load extensions.
     GlfwInputExtension.bootstrap(provider)
     AlAudioExtension.bootstrap(provider)
-    CommonModelExtension.bootstrap(provider)
-    CommonFontExtension.bootstrap(provider)
+    SimpleModelExtension.bootstrap(provider)
+    SimpleFontExtension.bootstrap(provider)
 
     VoxelGame.start()
 }

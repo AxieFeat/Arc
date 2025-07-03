@@ -8,7 +8,7 @@ import org.lwjgl.system.MemoryStack
 import org.lwjgl.vulkan.*
 
 // The class name is VulkanPhysicalDevice because in LWJGL exists VkPhysicalDevice
-class VulkanPhysicalDevice private constructor(
+internal class VulkanPhysicalDevice private constructor(
     val vkPhysicalDevice: VkPhysicalDevice
 ) : Cleanable {
 
