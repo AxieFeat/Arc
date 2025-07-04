@@ -174,7 +174,7 @@ For more detailed examples, check the `arc-demo` module.
 
 The engine does not imply direct use of LWJGL methods and internal implementations, for this reason all implementations
 are **internal** classes. Users should use **only the functionality of `arc-core`** *(or other core modules)*. Using
-internal implementations is highly undesirable, and dependencies like `arc.engine:arc-opengl:1.0` should
+internal implementations is highly undesirable, and dependencies like `arc.engine:arc-opengl` should
 be specified only in the GAME, to initialize the OpenGL (in this case) context with a single line.
 
 ### Project Structure

@@ -5,13 +5,19 @@ import arc.gl.graphics.GlRenderSystem
 import arc.graphics.EmptyShaderInstance
 import arc.shader.ShaderInstance
 import arc.shader.ShaderSettings
+import arc.shader.UniformBuffer
 import arc.shader.UniformProvider
 import org.joml.Matrix4f
 import org.joml.Vector2f
 import org.joml.Vector3f
 import org.joml.Vector4f
+import org.lwjgl.opengl.ARBUniformBufferObject.GL_INVALID_INDEX
+import org.lwjgl.opengl.ARBUniformBufferObject.glBindBufferBase
 import org.lwjgl.opengl.GL20.*
 import org.lwjgl.opengl.GL30.glGetUniformLocation
+import org.lwjgl.opengl.GL31.GL_UNIFORM_BUFFER
+import org.lwjgl.opengl.GL31.glGetUniformBlockIndex
+import org.lwjgl.opengl.GL31.glUniformBlockBinding
 import org.lwjgl.system.MemoryStack
 
 internal data class GlShaderInstance(
@@ -91,6 +97,14 @@ internal data class GlShaderInstance(
     override fun setUniform(name: String, value: Vector2f) {
         uniform(name) {
             glUniform2f(this, value.x, value.y)
+        }
+    }
+
+    override fun uploadUniformBuffer(name: String, buffer: UniformBuffer) {
+        val blockIndex = glGetUniformBlockIndex(id, name)
+        if (blockIndex != GL_INVALID_INDEX) {
+            glUniformBlockBinding(id, blockIndex, 0)
+            glBindBufferBase(GL_UNIFORM_BUFFER, 0, buffer.id)
         }
     }
 

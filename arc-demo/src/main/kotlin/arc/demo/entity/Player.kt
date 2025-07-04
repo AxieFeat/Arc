@@ -55,7 +55,7 @@ class Player(
 
     private var isGrounded = false
 
-    private val playerSize = Vector3f(0.3f, 0.9f, 0.3f)
+    private val playerSize = Vector3f(0.6f, 1.79f, 0.6f)
     private val gravity = -20f
     private val jumpVelocity = 8f
     private val terminalVelocity = -50f
@@ -76,6 +76,9 @@ class Player(
                     val block = world.getBlock(x, y, z) ?: continue
                     if (aabb.intersects(block.aabb)) {
                         return true
+                    } else {
+                        println("Player = (${aabb.min.x}, ${aabb.min.y}, ${aabb.min.z}) (${aabb.max.x}, ${aabb.max.y}, ${aabb.max.z})")
+                        println("Block = (${block.aabb.min.x}, ${block.aabb.min.y}, ${block.aabb.min.z}) (${block.aabb.max.x}, ${block.aabb.max.y}, ${block.aabb.max.z})")
                     }
                 }
             }
@@ -111,12 +114,12 @@ class Player(
     }
 
     fun handleInput(delta: Float) {
-        val application = VoxelGame.application
-        val input = application.keyboard
+        val mouse = VoxelGame.application.mouse
+        val keyboard = VoxelGame.application.keyboard
 
-        speed = if (input.isPressed(KeyCode.KEY_LCONTROL)) 7f else 4f
+        speed = if (keyboard.isPressed(KeyCode.KEY_LCONTROL)) 7f else 4f
         speed *= if(fly) 10f else 1f
-        targetFov = if (input.isPressed(KeyCode.KEY_LCONTROL)) fov * fovModifier else fov
+        targetFov = if (keyboard.isPressed(KeyCode.KEY_LCONTROL)) fov * fovModifier else fov
         currentFov += (targetFov - currentFov) * min(1f, fovLerpSpeed * delta)
         camera.fov = currentFov
 
@@ -124,14 +127,14 @@ class Player(
         val cameraRight = Vector3f(-cameraForward.z, 0f, cameraForward.x).normalize()
 
         val moveDir = Vector3f()
-        if (input.isPressed(KeyCode.KEY_W)) moveDir.add(cameraForward)
-        if (input.isPressed(KeyCode.KEY_S)) moveDir.sub(cameraForward)
-        if (input.isPressed(KeyCode.KEY_A)) moveDir.add(cameraRight.negate())
-        if (input.isPressed(KeyCode.KEY_D)) moveDir.sub(cameraRight.negate())
+        if (keyboard.isPressed(KeyCode.KEY_W)) moveDir.add(cameraForward)
+        if (keyboard.isPressed(KeyCode.KEY_S)) moveDir.sub(cameraForward)
+        if (keyboard.isPressed(KeyCode.KEY_A)) moveDir.add(cameraRight.negate())
+        if (keyboard.isPressed(KeyCode.KEY_D)) moveDir.sub(cameraRight.negate())
 
         if (fly) {
-            if (input.isPressed(KeyCode.KEY_SPACE)) moveDir.y += 1f
-            if (input.isPressed(KeyCode.KEY_LSHIFT)) moveDir.y -= 1f
+            if (keyboard.isPressed(KeyCode.KEY_SPACE)) moveDir.y += 1f
+            if (keyboard.isPressed(KeyCode.KEY_LSHIFT)) moveDir.y -= 1f
 
             if (moveDir.lengthSquared() > 0f) {
                 moveDir.normalize().mul(speed)
@@ -146,7 +149,7 @@ class Player(
             velocity.x = moveDir.x
             velocity.z = moveDir.z
 
-            if (isGrounded && input.isPressed(KeyCode.KEY_SPACE)) {
+            if (isGrounded && keyboard.isPressed(KeyCode.KEY_SPACE)) {
                 velocity.y = jumpVelocity
                 isGrounded = false
             }
@@ -180,13 +183,13 @@ class Player(
         }
 
         if (CameraControlBind.status) {
-            val mouseDeltaX = application.mouse.displayVec.x
-            val mouseDeltaY = application.mouse.displayVec.y
+            val mouseDeltaX = mouse.displayVec.x
+            val mouseDeltaY = mouse.displayVec.y
 
             camera.rotate(-mouseDeltaY * sensitivity, mouseDeltaX * sensitivity, 0f)
         }
 
-        if (application.mouse.isPressed(KeyCode.MOUSE_LEFT)) {
+        if (mouse.isPressed(KeyCode.MOUSE_LEFT)) {
             breakCooldown -= delta
             if (breakCooldown <= 0f) {
                 breakBlock()
@@ -194,7 +197,7 @@ class Player(
             }
         } else breakCooldown = 0f
 
-        if (application.mouse.isPressed(KeyCode.MOUSE_RIGHT)) {
+        if (mouse.isPressed(KeyCode.MOUSE_RIGHT)) {
             placeCooldown -= delta
             if (placeCooldown <= 0f) {
                 placeBlock()
@@ -203,7 +206,7 @@ class Player(
         } else placeCooldown = 0f
 
         camera.update()
-        application.mouse.reset()
+        mouse.reset()
     }
 
     fun shouldRender(chunk: Chunk, distance: Int = viewDistance): Boolean {

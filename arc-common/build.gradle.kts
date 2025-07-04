@@ -1,5 +1,3 @@
-import org.gradle.kotlin.dsl.dependencies
-
 dependencies {
     api(projects.arcCore)
 

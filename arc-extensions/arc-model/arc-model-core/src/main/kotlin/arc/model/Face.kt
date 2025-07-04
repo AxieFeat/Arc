@@ -1,5 +1,7 @@
 package arc.model
 
+import org.joml.Vector3f
+
 /**
  * Represents a directional face in a 3D coordinate system.
  *
@@ -12,18 +14,16 @@ package arc.model
  * - `WEST`: The negative X-axis direction.
  * - `UP`: The positive Y-axis direction.
  * - `DOWN`: The negative Y-axis direction.
- *
- * This enum is often used in the context of 3D modeling,
- * chunk-based environments, or cube-based structures to identify
- * specific faces of an object.
  */
-enum class Face {
+enum class Face(
+    val normal: Vector3f
+) {
 
-    NORTH,
-    EAST,
-    SOUTH,
-    WEST,
-    UP,
-    DOWN
+    NORTH(Vector3f(0f, 0f, -1f)),
+    EAST(Vector3f(1f, 0f, 0f)),
+    SOUTH(Vector3f(0f, 0f, 1f)),
+    WEST(Vector3f(-1f, 0f, 0f)),
+    UP(Vector3f(0f, 1f, 0f)),
+    DOWN(Vector3f(0f, -1f, 0f))
 
 }

@@ -65,8 +65,8 @@ class WorldModelDispatcher(
                     val (x2, y2, z2) = cube.to
 
                     cube.faces.forEach { (face, cubeFace) ->
-                        val (dx, dy, dz) = getNeighborOffset(face)
-                        if (isBlocked(posX + dx, posY + dy, posZ + dz)) return@forEach
+                        val (dx, dy, dz) = face.normal
+                        if (isBlocked(posX + dx.toInt(), posY + dy.toInt(), posZ + dz.toInt())) return@forEach
 
                         val uMin = cubeFace.uvMin.x.toFloat() / atlas.width
                         val vMin = cubeFace.uvMin.y.toFloat() / atlas.height
@@ -173,15 +173,6 @@ class WorldModelDispatcher(
 
     private fun isBlocked(x: Int, y: Int, z: Int): Boolean {
         return world.getBlock(x, y, z) != null
-    }
-
-    private fun getNeighborOffset(face: Face): Triple<Int, Int, Int> = when (face) {
-        Face.UP -> Triple(0, 1, 0)
-        Face.DOWN -> Triple(0, -1, 0)
-        Face.NORTH -> Triple(0, 0, -1)
-        Face.SOUTH -> Triple(0, 0, 1)
-        Face.WEST -> Triple(-1, 0, 0)
-        Face.EAST -> Triple(1, 0, 0)
     }
 
     private fun faceAOOffsets(face: Face): Array<IntArray> = when (face) {

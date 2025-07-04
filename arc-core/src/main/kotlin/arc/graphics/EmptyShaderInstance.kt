@@ -2,6 +2,7 @@ package arc.graphics
 
 import arc.shader.ShaderInstance
 import arc.shader.ShaderSettings
+import arc.shader.UniformBuffer
 import arc.shader.UniformProvider
 import org.joml.Matrix4f
 import org.joml.Vector2f
@@ -29,6 +30,7 @@ object EmptyShaderInstance : ShaderInstance {
     override fun setUniform(name: String, value: Vector4f) {}
     override fun setUniform(name: String, value: Vector3f) {}
     override fun setUniform(name: String, value: Vector2f) {}
+    override fun uploadUniformBuffer(name: String, buffer: UniformBuffer) {}
 
     override fun compileShaders() {}
 

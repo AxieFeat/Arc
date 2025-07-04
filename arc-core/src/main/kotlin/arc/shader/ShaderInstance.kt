@@ -94,6 +94,14 @@ interface ShaderInstance : Bindable, Cleanable {
     fun setUniform(name: String, value: Vector2f)
 
     /**
+     * Uploads uniform buffer for this shader.
+     *
+     * @param name Name of uniform block in shader.
+     * @param buffer Buffer to upload.
+     */
+    fun uploadUniformBuffer(name: String, buffer: UniformBuffer)
+
+    /**
      * Compiles the vertex and fragment shaders for this shader instance.
      */
     fun compileShaders()
