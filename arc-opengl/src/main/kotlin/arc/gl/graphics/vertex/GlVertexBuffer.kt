@@ -27,7 +27,7 @@ internal data class GlVertexBuffer(
 
     init {
         bind()
-        glBufferData(GL_ARRAY_BUFFER, size.toLong(), GL_STREAM_DRAW)
+        glBufferData(GL_ARRAY_BUFFER, size.toLong(), GL_DYNAMIC_DRAW)
         unbind()
 
         write(buffer, vertices)

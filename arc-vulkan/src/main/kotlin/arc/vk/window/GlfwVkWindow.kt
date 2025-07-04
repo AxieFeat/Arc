@@ -13,7 +13,6 @@ import org.lwjgl.vulkan.KHRSurface
 import kotlin.properties.Delegates
 import kotlin.use
 
-@Suppress("UNUSED_PARAMETER", "unused")
 internal class GlfwVkWindow(
     name: String,
     handler: WindowHandler,

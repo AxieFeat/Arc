@@ -10,11 +10,6 @@ import arc.graphics.Drawer
 interface Scene {
 
     /**
-     * Drawer that this scene uses.
-     */
-    val drawer: Drawer
-
-    /**
      * Camera of this scene.
      */
     val camera: Camera

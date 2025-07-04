@@ -2,7 +2,6 @@ package arc.graphics.scene
 
 import arc.Application
 import arc.graphics.Camera
-import arc.graphics.Drawer
 
 abstract class AbstractScene(
     val application: Application,
@@ -12,7 +11,6 @@ abstract class AbstractScene(
     private var fpsCounter = 0
     private var debugUpdateTime: Long = TimeUtil.getTime(application.window)
 
-    override val drawer: Drawer = application.renderSystem.drawer
     override val camera: Camera = Camera.of(45f, application.window.width.toFloat(), application.window.height.toFloat())
     override var fps: Int = 0
     override var delta: Float = 0f

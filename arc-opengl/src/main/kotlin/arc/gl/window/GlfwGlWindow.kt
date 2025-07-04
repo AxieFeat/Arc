@@ -10,7 +10,6 @@ import org.lwjgl.glfw.GLFW.glfwPollEvents
 import org.lwjgl.glfw.GLFW.glfwSwapBuffers
 import org.lwjgl.glfw.GLFW.glfwWindowHint
 
-@Suppress("UNUSED_PARAMETER", "unused")
 internal class GlfwGlWindow(
     name: String,
     handler: WindowHandler,

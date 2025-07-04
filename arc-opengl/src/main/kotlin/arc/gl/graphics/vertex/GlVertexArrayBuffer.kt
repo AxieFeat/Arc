@@ -4,11 +4,7 @@ import arc.graphics.DrawerMode
 import arc.graphics.vertex.VertexArrayBuffer
 import arc.graphics.vertex.VertexFormat
 import arc.graphics.vertex.VertexType
-import org.lwjgl.opengl.GL11.*
-import org.lwjgl.opengl.GL15.*
-import org.lwjgl.opengl.GL20.glEnableVertexAttribArray
-import org.lwjgl.opengl.GL20.glVertexAttribPointer
-import org.lwjgl.opengl.GL30.*
+import org.lwjgl.opengl.GL41.*
 import org.lwjgl.system.MemoryUtil
 import java.nio.ByteBuffer
 

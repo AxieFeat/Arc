@@ -3,10 +3,7 @@ package arc.gl.graphics
 import arc.graphics.vertex.VertexArrayBuffer
 import arc.graphics.vertex.VertexBuffer
 import arc.graphics.vertex.VertexType
-import org.lwjgl.opengl.GL11.GL_FLOAT
-import org.lwjgl.opengl.GL20.glEnableVertexAttribArray
-import org.lwjgl.opengl.GL20.glVertexAttribPointer
-import org.lwjgl.opengl.GL30.*
+import org.lwjgl.opengl.GL41.*
 
 internal object GlVertexUploader {
 

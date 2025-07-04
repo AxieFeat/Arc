@@ -13,11 +13,7 @@ import org.joml.Vector3f
 import org.joml.Vector4f
 import org.lwjgl.opengl.ARBUniformBufferObject.GL_INVALID_INDEX
 import org.lwjgl.opengl.ARBUniformBufferObject.glBindBufferBase
-import org.lwjgl.opengl.GL20.*
-import org.lwjgl.opengl.GL30.glGetUniformLocation
-import org.lwjgl.opengl.GL31.GL_UNIFORM_BUFFER
-import org.lwjgl.opengl.GL31.glGetUniformBlockIndex
-import org.lwjgl.opengl.GL31.glUniformBlockBinding
+import org.lwjgl.opengl.GL41.*
 import org.lwjgl.system.MemoryStack
 
 internal data class GlShaderInstance(

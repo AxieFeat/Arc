@@ -6,7 +6,7 @@ import org.lwjgl.glfw.GLFW.*
 import org.lwjgl.glfw.GLFWErrorCallback
 import org.lwjgl.system.MemoryUtil
 
-@Suppress("UNUSED_PARAMETER", "unused")
+@Suppress("UNUSED_PARAMETER")
 abstract class AbstractGlfwWindow(
     name: String,
     override var handler: WindowHandler,
@@ -148,6 +148,7 @@ abstract class AbstractGlfwWindow(
     }
 
     companion object {
+        @JvmStatic
         private fun bootCrash(code: Int, text: Long) {
             throw WindowException("GLFW error $code: ${MemoryUtil.memUTF8(text)}")
         }

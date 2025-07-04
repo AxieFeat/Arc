@@ -16,6 +16,8 @@ import org.joml.Vector2f
 
 object FractalScreen : Screen("fractal") {
 
+    private val drawer = application.renderSystem.drawer
+
     var needUpdate = true
 
     val frameBuffer = FrameBuffer.create(

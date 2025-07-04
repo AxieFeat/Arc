@@ -1,7 +1,7 @@
 package arc.gl
 
 import arc.AbstractApplicationBackend
-import org.lwjgl.opengl.GL11.*
+import org.lwjgl.opengl.GL41.*
 
 internal object GlApplicationBackend : AbstractApplicationBackend("opengl") {
 

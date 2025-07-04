@@ -30,6 +30,8 @@ import kotlin.math.*
 
 object TerrainScreen : Screen("terrain") {
 
+    private val drawer = application.renderSystem.drawer
+
     private val world = World()
     private val player = Player(world, camera)
 

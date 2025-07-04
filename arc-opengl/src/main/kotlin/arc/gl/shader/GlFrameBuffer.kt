@@ -1,11 +1,12 @@
 package arc.gl.shader
 
 import arc.gl.graphics.GlDrawer
+import arc.graphics.DrawBuffer
 import arc.graphics.DrawerMode
 import arc.graphics.vertex.VertexFormat
 import arc.graphics.vertex.VertexFormatElement
 import arc.shader.FrameBuffer
-import org.lwjgl.opengl.GL32.*
+import org.lwjgl.opengl.GL41.*
 import org.lwjgl.system.MemoryUtil
 
 internal class GlFrameBuffer(
@@ -119,15 +120,17 @@ internal class GlFrameBuffer(
             .add(VertexFormatElement.UV)
             .build()
 
-        private val buffer = GlDrawer.begin(DrawerMode.TRIANGLES, vertexFormat, 256).apply {
-            addVertex(-1f, 1f, 0f).setTexture(0f, 1f)
-            addVertex(-1f, -1f, 0f).setTexture(0f, 0f)
-            addVertex(1f, -1f, 0f).setTexture(1f, 0f)
+        private val buffer = DrawBuffer.of(DrawerMode.TRIANGLES, vertexFormat, 256).use {
+            it.addVertex(-1f, 1f, 0f).setTexture(0f, 1f)
+            it.addVertex(-1f, -1f, 0f).setTexture(0f, 0f)
+            it.addVertex(1f, -1f, 0f).setTexture(1f, 0f)
 
-            addVertex(-1f, 1f, 0f).setTexture(0f, 1f)
-            addVertex(1f, -1f, 0f).setTexture(1f, 0f)
-            addVertex(1f, 1f, 0f).setTexture(1f, 1f)
-        }.use { it.build() }
+            it.addVertex(-1f, 1f, 0f).setTexture(0f, 1f)
+            it.addVertex(1f, -1f, 0f).setTexture(1f, 0f)
+            it.addVertex(1f, 1f, 0f).setTexture(1f, 1f)
+
+            it.build()
+        }
     }
 
     object Factory : FrameBuffer.Factory {

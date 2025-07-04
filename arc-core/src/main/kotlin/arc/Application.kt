@@ -4,7 +4,6 @@ import arc.annotations.TypeFactory
 import arc.files.LocationSpace
 import arc.graphics.RenderSystem
 import arc.window.Window
-import arc.window.WindowException
 import org.jetbrains.annotations.ApiStatus
 import java.io.File
 
@@ -41,10 +40,7 @@ interface Application {
 
     /**
      * Window of this application.
-     *
-     * @throws WindowException If a window is not initialized yet.
      */
-    @get:Throws(WindowException::class)
     val window: Window
 
     /**

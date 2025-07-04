@@ -76,9 +76,6 @@ class Player(
                     val block = world.getBlock(x, y, z) ?: continue
                     if (aabb.intersects(block.aabb)) {
                         return true
-                    } else {
-                        println("Player = (${aabb.min.x}, ${aabb.min.y}, ${aabb.min.z}) (${aabb.max.x}, ${aabb.max.y}, ${aabb.max.z})")
-                        println("Block = (${block.aabb.min.x}, ${block.aabb.min.y}, ${block.aabb.min.z}) (${block.aabb.max.x}, ${block.aabb.max.y}, ${block.aabb.max.z})")
                     }
                 }
             }

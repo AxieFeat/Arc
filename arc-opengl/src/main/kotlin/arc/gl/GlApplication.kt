@@ -9,9 +9,7 @@ import arc.graphics.RenderSystem
 import arc.window.EmptyWindowHandler
 import arc.window.Window
 import org.lwjgl.opengl.GL
-import org.lwjgl.opengl.GL11.GL_RGBA
-import org.lwjgl.opengl.GL11.GL_UNSIGNED_BYTE
-import org.lwjgl.opengl.GL41
+import org.lwjgl.opengl.GL41.*
 import org.lwjgl.system.MemoryUtil
 import java.awt.image.BufferedImage
 import java.io.File
@@ -51,8 +49,8 @@ internal object GlApplication : AbstractApplication() {
         val bufferSize = width * height * 4
         val buffer = MemoryUtil.memAlloc(bufferSize)
 
-        GL41.glReadBuffer(GL41.GL_FRONT)
-        GL41.glReadPixels(0, 0, width, height, GL_RGBA, GL_UNSIGNED_BYTE, buffer)
+        glReadBuffer(GL_FRONT)
+        glReadPixels(0, 0, width, height, GL_RGBA, GL_UNSIGNED_BYTE, buffer)
 
         val image = BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB)
 

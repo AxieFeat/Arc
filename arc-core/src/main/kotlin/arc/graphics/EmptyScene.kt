@@ -9,8 +9,6 @@ import arc.graphics.scene.Scene
  */
 object EmptyScene : Scene {
 
-    override val drawer: Drawer
-        get() = throw UnsupportedOperationException("Can not find drawer in empty scene!")
     override val camera: Camera = Camera.of(60f, 0f, 0f)
     override val fps: Int = 0
     override val delta: Float = 0f
