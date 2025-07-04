@@ -10,8 +10,6 @@ import arc.graphics.Camera
 import arc.input.KeyCode
 import arc.input.keyboard
 import arc.input.mouse
-import arc.math.Point3d
-import arc.math.Vec3f
 import arc.math.AABB
 import org.joml.Vector3f
 import kotlin.math.abs
@@ -22,13 +20,13 @@ class Player(
     val camera: Camera,
 ) {
 
-    var position: Point3d = Point3d.of(0.0, 0.0, 0.0)
+    var position: Vector3f = Vector3f()
     set(value) {
         field = value
-        camera.position = position.withXYZ(
-            x = position.x,
-            y = position.y + 1.65,
-            z = position.z
+        camera.position.set(
+            position.x,
+            position.y + 1.65f,
+            position.z
         )
     }
     private val velocity = Vector3f(0f, 0f, 0f)
@@ -57,14 +55,14 @@ class Player(
 
     private var isGrounded = false
 
-    private val playerSize = Vec3f.of(0.3f, 0.9f, 0.3f)
+    private val playerSize = Vector3f(0.3f, 0.9f, 0.3f)
     private val gravity = -20f
     private val jumpVelocity = 8f
     private val terminalVelocity = -50f
 
     private fun getPlayerAABB(pos: Vector3f): AABB {
-        val min = Vec3f.of(pos.x - playerSize.x, pos.y, pos.z - playerSize.z)
-        val max = Vec3f.of(pos.x + playerSize.x, pos.y + playerSize.y, pos.z + playerSize.z)
+        val min = Vector3f(pos.x - playerSize.x, pos.y, pos.z - playerSize.z)
+        val max = Vector3f(pos.x + playerSize.x, pos.y + playerSize.y, pos.z + playerSize.z)
         return AABB.of(min, max)
     }
 
@@ -139,14 +137,7 @@ class Player(
                 moveDir.normalize().mul(speed)
             }
 
-            val pos = Vector3f(position.x.toFloat(), position.y.toFloat(), position.z.toFloat())
-            pos.add(moveDir.mul(delta))
-
-            position = Point3d.of(
-                pos.x.toDouble(),
-                pos.y.toDouble(),
-                pos.z.toDouble()
-            )
+            position = position.add(moveDir.mul(delta))
         } else {
             if (moveDir.lengthSquared() > 0f) {
                 moveDir.normalize().mul(speed)
@@ -159,8 +150,6 @@ class Player(
                 velocity.y = jumpVelocity
                 isGrounded = false
             }
-
-            val pos = Vector3f(position.x.toFloat(), position.y.toFloat(), position.z.toFloat())
 
             val maxStep = 0.05f
             var remainingTime = delta
@@ -177,22 +166,17 @@ class Player(
                     velocity.z * step
                 )
 
-                val resolved = resolveCollision(pos, movement)
-                pos.add(resolved)
+                val resolved = resolveCollision(position, movement)
+
+                position = position.add(resolved)
             }
 
-            if (collides(getPlayerAABB(pos))) {
+            if (collides(getPlayerAABB(position))) {
                 for (i in 1..5) {
-                    pos.y += 0.1f
-                    if (!collides(getPlayerAABB(pos))) break
+                    position.y += 0.1f
+                    if (!collides(getPlayerAABB(position))) break
                 }
             }
-
-            position = Point3d.of(
-                pos.x.toDouble(),
-                pos.y.toDouble(),
-                pos.z.toDouble()
-            )
         }
 
         if (CameraControlBind.status) {

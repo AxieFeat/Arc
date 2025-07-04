@@ -1,7 +1,6 @@
 package arc.model
 
 import arc.Arc
-import arc.math.Point3i
 import arc.model.animation.Animation
 import arc.model.cube.Cube
 import arc.model.group.ElementGroup

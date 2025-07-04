@@ -6,6 +6,7 @@ import arc.annotations.TypeFactory
 import arc.util.pattern.Copyable
 import org.jetbrains.annotations.ApiStatus
 import org.jetbrains.annotations.Contract
+import org.joml.Vector3f
 
 /**
  * Represents a 3D ray defined by an origin and a direction.
@@ -16,12 +17,12 @@ interface Ray : Copyable<Ray> {
     /**
      * The origin point of the ray.
      */
-    val origin: Vec3f
+    val origin: Vector3f
 
     /**
      * The direction vector of the ray.
      */
-    val direction: Vec3f
+    val direction: Vector3f
 
     /**
      * Create new instance of [Ray] with new [origin] point.
@@ -33,7 +34,7 @@ interface Ray : Copyable<Ray> {
      * @return New instance of [Ray].
      */
     @Contract("_ -> New")
-    fun withOrigin(origin: Vec3f): Ray = withOriginAndDirection(origin = origin)
+    fun withOrigin(origin: Vector3f): Ray = withOriginAndDirection(origin = origin)
 
     /**
      * Create new instance of [Ray] with new [direction] point.
@@ -45,7 +46,7 @@ interface Ray : Copyable<Ray> {
      * @return New instance of [Ray].
      */
     @Contract("_ -> New")
-    fun withDirection(direction: Vec3f): Ray = withOriginAndDirection(direction = direction)
+    fun withDirection(direction: Vector3f): Ray = withOriginAndDirection(direction = direction)
 
     /**
      * Create new instance of [Ray] with new [origin] and [direction] point.
@@ -59,8 +60,8 @@ interface Ray : Copyable<Ray> {
      */
     @Contract("_, _ -> New")
     fun withOriginAndDirection(
-        origin: Vec3f = this.origin,
-        direction: Vec3f = this.direction
+        origin: Vector3f = this.origin,
+        direction: Vector3f = this.direction
     ): Ray = of(origin, direction)
 
     /**
@@ -70,7 +71,7 @@ interface Ray : Copyable<Ray> {
      *
      * @return Vector with result point.
      */
-    fun getEndPoint(distance: Float): Vec3f
+    fun getEndPoint(distance: Float): Vector3f
 
     /**
      * Create a copy of this ray.
@@ -79,14 +80,14 @@ interface Ray : Copyable<Ray> {
      */
     override fun copy(): Ray
 
-    operator fun component1(): Vec3f = origin
-    operator fun component2(): Vec3f = direction
+    operator fun component1(): Vector3f = origin
+    operator fun component2(): Vector3f = direction
 
     @ApiStatus.Internal
     @TypeFactory
     interface Factory {
 
-        fun create(origin: Vec3f, direction: Vec3f): Ray
+        fun create(origin: Vector3f, direction: Vector3f): Ray
 
     }
 
@@ -96,7 +97,7 @@ interface Ray : Copyable<Ray> {
          * [Ray] with zero values.
          */
         @JvmField
-        val ZERO = of(Vec3f.of(0f, 0f, 0f), Vec3f.of(0f, 0f, 0f))
+        val ZERO = of(Vector3f(), Vector3f())
 
         /**
          * Create new instance of [Ray].
@@ -107,7 +108,7 @@ interface Ray : Copyable<Ray> {
          * @return New instance of [Ray].
          */
         @JvmStatic
-        fun of(origin: Vec3f, direction: Vec3f): Ray {
+        fun of(origin: Vector3f, direction: Vector3f): Ray {
             return Arc.factory<Factory>().create(origin, direction)
         }
 

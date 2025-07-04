@@ -1,10 +1,10 @@
 package arc.model
 
-import arc.math.Vec3f
 import arc.model.animation.Animation
 import arc.model.cube.Cube
 import arc.model.group.ElementGroup
 import arc.model.texture.ModelTexture
+import org.joml.Vector3f
 
 internal data class SimpleModel(
     override val cubes: List<Cube> = emptyList(),
@@ -30,42 +30,42 @@ internal data class SimpleModel(
 
             when (face) {
                 Face.NORTH -> {
-                    if (Vec3f.of(0f, 0f, from.z).epsilonEquals(Vec3f.of(0f, 0f, oTo.z), epsilon) &&
+                    if (Vector3f(0f, 0f, from.z).equals(Vector3f(0f, 0f, oTo.z), epsilon) &&
                         rangesOverlap(from.x, to.x, oFrom.x, oTo.x) &&
                         rangesOverlap(from.y, to.y, oFrom.y, oTo.y)
                     ) return true
                 }
 
                 Face.SOUTH -> {
-                    if (Vec3f.of(0f, 0f, to.z).epsilonEquals(Vec3f.of(0f, 0f, oFrom.z), epsilon) &&
+                    if (Vector3f(0f, 0f, to.z).equals(Vector3f(0f, 0f, oFrom.z), epsilon) &&
                         rangesOverlap(from.x, to.x, oFrom.x, oTo.x) &&
                         rangesOverlap(from.y, to.y, oFrom.y, oTo.y)
                     ) return true
                 }
 
                 Face.WEST -> {
-                    if (Vec3f.of(from.x, 0f, 0f).epsilonEquals(Vec3f.of(oTo.x, 0f, 0f), epsilon) &&
+                    if (Vector3f(from.x, 0f, 0f).equals(Vector3f(oTo.x, 0f, 0f), epsilon) &&
                         rangesOverlap(from.z, to.z, oFrom.z, oTo.z) &&
                         rangesOverlap(from.y, to.y, oFrom.y, oTo.y)
                     ) return true
                 }
 
                 Face.EAST -> {
-                    if (Vec3f.of(to.x, 0f, 0f).epsilonEquals(Vec3f.of(oFrom.x, 0f, 0f), epsilon) &&
+                    if (Vector3f(to.x, 0f, 0f).equals(Vector3f(oFrom.x, 0f, 0f), epsilon) &&
                         rangesOverlap(from.z, to.z, oFrom.z, oTo.z) &&
                         rangesOverlap(from.y, to.y, oFrom.y, oTo.y)
                     ) return true
                 }
 
                 Face.DOWN -> {
-                    if (Vec3f.of(0f, from.y, 0f).epsilonEquals(Vec3f.of(0f, oTo.y, 0f), epsilon) &&
+                    if (Vector3f(0f, from.y, 0f).equals(Vector3f(0f, oTo.y, 0f), epsilon) &&
                         rangesOverlap(from.x, to.x, oFrom.x, oTo.x) &&
                         rangesOverlap(from.z, to.z, oFrom.z, oTo.z)
                     ) return true
                 }
 
                 Face.UP -> {
-                    if (Vec3f.of(0f, to.y, 0f).epsilonEquals(Vec3f.of(0f, oFrom.y, 0f), epsilon) &&
+                    if (Vector3f(0f, to.y, 0f).equals(Vector3f(0f, oFrom.y, 0f), epsilon) &&
                         rangesOverlap(from.x, to.x, oFrom.x, oTo.x) &&
                         rangesOverlap(from.z, to.z, oFrom.z, oTo.z)
                     ) return true

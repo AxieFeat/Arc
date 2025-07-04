@@ -2,8 +2,8 @@ package arc.window
 
 import arc.Arc
 import arc.annotations.TypeFactory
-import arc.math.Point2i
 import org.jetbrains.annotations.ApiStatus
+import org.joml.Vector2i
 
 /**
  * This interface represents a window of the application.
@@ -44,7 +44,7 @@ interface Window {
     /**
      * Represents the position of the window in a 2D coordinate space.
      */
-    val position: Point2i
+    val position: Vector2i
 
     /**
      * Get elapsed time since a window is initialized.

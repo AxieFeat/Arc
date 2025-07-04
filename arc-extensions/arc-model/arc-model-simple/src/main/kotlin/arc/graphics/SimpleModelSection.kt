@@ -11,6 +11,9 @@ import arc.util.Color
 import org.joml.Math
 import org.joml.Matrix4f
 import org.joml.Quaternionf
+import org.joml.component1
+import org.joml.component2
+import org.joml.component3
 
 internal data class SimpleModelSection(
     private val drawer: Drawer,

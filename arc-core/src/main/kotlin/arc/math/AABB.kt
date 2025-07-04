@@ -5,6 +5,7 @@ import arc.annotations.ImmutableType
 import arc.annotations.TypeFactory
 import org.jetbrains.annotations.ApiStatus
 import org.jetbrains.annotations.Contract
+import org.joml.Vector3f
 
 /**
  * Represents an axis-aligned bounding box (AABB).
@@ -20,19 +21,19 @@ interface AABB {
      *
      * Represents the lower corner of the box in 3D space, defined by its smallest x, y, and z values.
      */
-    val min: Vec3f
+    val min: Vector3f
 
     /**
      * The maximum point of this axis-aligned bounding box.
      *
      * Represents the upper corner of the box in 3D space, defined by its largest x, y, and z values.
      */
-    val max: Vec3f
+    val max: Vector3f
 
     /**
      * The center point of this axis-aligned bounding box.
      */
-    val center: Vec3f
+    val center: Vector3f
 
     /**
      * Create new instance of [AABB] with new [min], [max] and [center] points.
@@ -47,9 +48,9 @@ interface AABB {
      */
     @Contract("_, _, _ -> New")
     fun withMinMaxCenter(
-        min: Vec3f = this.min,
-        max: Vec3f = this.max,
-        center: Vec3f = this.center,
+        min: Vector3f = this.min,
+        max: Vector3f = this.max,
+        center: Vector3f = this.center,
     ): AABB = of(min, max, center)
 
     /**
@@ -62,7 +63,7 @@ interface AABB {
      * @return New instance of [AABB].
      */
     @Contract("_ -> New")
-    fun withMin(min: Vec3f): AABB = withMinMaxCenter(min = min)
+    fun withMin(min: Vector3f): AABB = withMinMaxCenter(min = min)
 
     /**
      * Create new instance of [AABB] with new [max] point.
@@ -74,7 +75,7 @@ interface AABB {
      * @return New instance of [AABB].
      */
     @Contract("_ -> New")
-    fun withMax(max: Vec3f): AABB = withMinMaxCenter(max = max)
+    fun withMax(max: Vector3f): AABB = withMinMaxCenter(max = max)
 
     /**
      * Create new instance of [AABB] with new [center] point.
@@ -86,7 +87,7 @@ interface AABB {
      * @return New instance of [AABB].
      */
     @Contract("_ -> New")
-    fun withCenter(center: Vec3f): AABB = withMinMaxCenter(center = center)
+    fun withCenter(center: Vector3f): AABB = withMinMaxCenter(center = center)
 
     /**
      * Checks if a given point lies within this axis-aligned bounding box.
@@ -95,7 +96,7 @@ interface AABB {
      *
      * @return True if the point is inside this AABB, false otherwise.
      */
-    fun contains(point: Vec3f): Boolean
+    fun contains(point: Vector3f): Boolean
 
     /**
      * Checks if another axis-aligned bounding box intersects with this one.
@@ -106,15 +107,15 @@ interface AABB {
      */
     fun intersects(other: AABB): Boolean
 
-    operator fun component1(): Vec3f = min
-    operator fun component2(): Vec3f = max
-    operator fun component3(): Vec3f = center
+    operator fun component1(): Vector3f = min
+    operator fun component2(): Vector3f = max
+    operator fun component3(): Vector3f = center
 
     @ApiStatus.Internal
     @TypeFactory
     interface Factory {
 
-        fun create(min: Vec3f, max: Vec3f, center: Vec3f): AABB
+        fun create(min: Vector3f, max: Vector3f, center: Vector3f): AABB
 
     }
 
@@ -124,7 +125,7 @@ interface AABB {
          * [AABB] with zero values.
          */
         @JvmField
-        val ZERO = of(Vec3f.of(0f, 0f, 0f), Vec3f.of(0f, 0f, 0f))
+        val ZERO = of(Vector3f(0f, 0f, 0f), Vector3f(0f, 0f, 0f))
 
         /**
          * Creates a new instance of an axis-aligned bounding box (AABB) using the given minimum and maximum points.
@@ -138,9 +139,9 @@ interface AABB {
         @JvmOverloads
         @JvmStatic
         fun of(
-            min: Vec3f,
-            max: Vec3f,
-            center: Vec3f = Vec3f.of(
+            min: Vector3f,
+            max: Vector3f,
+            center: Vector3f = Vector3f(
                 (min.x + max.x) * 0.5f,
                 (min.y + max.y) * 0.5f,
                 (min.z + max.z) * 0.5f

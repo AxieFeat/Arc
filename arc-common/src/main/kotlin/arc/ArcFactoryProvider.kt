@@ -54,17 +54,9 @@ object ArcFactoryProvider : FactoryProvider {
 
     @JvmStatic
     fun bootstrap() {
-        register<Point2i.Factory>(SimplePoint2i.Factory)
-        register<Point3i.Factory>(SimplePoint3i.Factory)
-        register<Point2d.Factory>(SimplePoint2d.Factory)
-        register<Point3d.Factory>(SimplePoint3d.Factory)
-
-        register<AABB.Factory>(SimpleAABB.Factory)
-        register<Ray.Factory>(SimpleRay.Factory)
-
-        register<Vec2f.Factory>(SimpleVec2f.Factory)
-        register<Vec3f.Factory>(SimpleVec3f.Factory)
-
+        register<Ray.Factory>(JomlRay.Factory)
+        register<AABB.Factory>(JomlAABB.Factory)
+        
         register<Color.Factory>(SimpleColor.Factory)
         register<Camera.Factory>(JomlCamera.Factory)
 

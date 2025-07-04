@@ -2,14 +2,11 @@ package arc.model.group
 
 import arc.Arc
 import arc.annotations.ImmutableType
-import arc.math.Point3d
-import arc.math.Vec3f
-import arc.model.animation.Animation
 import arc.model.animation.Animator
 import arc.model.cube.Cube
 import arc.util.pattern.Copyable
-import arc.util.pattern.Identifiable
 import org.jetbrains.annotations.ApiStatus
+import org.joml.Vector3f
 import java.util.UUID
 
 /**
@@ -31,7 +28,7 @@ interface ElementGroup : Copyable<ElementGroup> {
     /**
      * Pivot point for rotation.
      */
-    val pivot: Vec3f
+    val pivot: Vector3f
 
     @ApiStatus.Internal
     interface Builder : arc.util.pattern.Builder<ElementGroup> {
@@ -41,8 +38,8 @@ interface ElementGroup : Copyable<ElementGroup> {
         fun addCube(vararg cube: Cube): Builder = addCube(*cube.map { it.uuid }.toTypedArray())
         fun addCube(vararg cube: UUID): Builder
 
-        fun setPivot(pivot: Vec3f): Builder
-        fun setPivot(x: Float, y: Float, z: Float): Builder = setPivot(Vec3f.of(x, y, z))
+        fun setPivot(pivot: Vector3f): Builder
+        fun setPivot(x: Float, y: Float, z: Float): Builder = setPivot(Vector3f(x, y, z))
 
     }
 

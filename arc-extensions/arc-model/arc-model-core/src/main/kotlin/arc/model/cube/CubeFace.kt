@@ -2,9 +2,9 @@ package arc.model.cube
 
 import arc.Arc
 import arc.annotations.ImmutableType
-import arc.math.Point2i
 import arc.model.Model
 import org.jetbrains.annotations.ApiStatus
+import org.joml.Vector2i
 
 /**
  * Represents a single face of a cube in a 3D model.
@@ -20,14 +20,14 @@ interface CubeFace {
      *
      * @see CubeFace
      */
-    val uvMin: Point2i
+    val uvMin: Vector2i
 
     /**
      * Represents the max UV coordinates for a cube face's texture mapping.
      *
      * @see CubeFace
      */
-    val uvMax: Point2i
+    val uvMax: Vector2i
 
     /**
      * Rotation of texture.
@@ -43,11 +43,11 @@ interface CubeFace {
     @ApiStatus.Internal
     interface Builder : arc.util.pattern.Builder<CubeFace> {
 
-        fun setUvMin(uvMin: Point2i): Builder
-        fun setUvMin(u: Int, v: Int): Builder = setUvMin(Point2i.of(u, v))
+        fun setUvMin(uvMin: Vector2i): Builder
+        fun setUvMin(u: Int, v: Int): Builder = setUvMin(Vector2i(u, v))
 
-        fun setUvMax(uvMax: Point2i): Builder
-        fun setUvMax(u: Int, v: Int): Builder = setUvMax(Point2i.of(u, v))
+        fun setUvMax(uvMax: Vector2i): Builder
+        fun setUvMax(u: Int, v: Int): Builder = setUvMax(Vector2i(u, v))
 
         fun rotation(rotation: Float): Builder
 

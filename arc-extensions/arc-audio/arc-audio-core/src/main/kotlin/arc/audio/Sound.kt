@@ -1,6 +1,6 @@
 package arc.audio
 
-import arc.math.Point3d
+import org.joml.Vector3f
 
 /**
  * Represents a sound that can be played, stopped, and managed.
@@ -37,7 +37,7 @@ interface Sound {
     /**
      * Position value of this sound.
      */
-    var position: Point3d
+    var position: Vector3f
 
     /**
      * Is this sound looping.
@@ -55,7 +55,7 @@ interface Sound {
      * @param loop Loop sound?
      * @param end Will be called after ending playing this sound.
      */
-    fun play(volume: Float = this.volume, pitch: Float = this.pitch, position: Point3d = this.position, loop: Boolean = this.isLoop, end: Sound.() -> Unit = {})
+    fun play(volume: Float = this.volume, pitch: Float = this.pitch, position: Vector3f = this.position, loop: Boolean = this.isLoop, end: Sound.() -> Unit = {})
 
     /**
      * Stops the currently playing sound.

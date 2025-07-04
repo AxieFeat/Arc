@@ -3,11 +3,11 @@ package arc.graphics
 import arc.Arc
 import arc.annotations.TypeFactory
 import arc.culling.Frustum
-import arc.math.Point3d
 import arc.math.Ray
 import org.jetbrains.annotations.ApiStatus
 import org.joml.Matrix4f
 import org.joml.Quaternionf
+import org.joml.Vector3f
 
 /**
  * This interface represents a camera in 3d space.
@@ -52,7 +52,7 @@ interface Camera {
     /**
      * Position of camera in 3d space.
      */
-    var position: Point3d
+    var position: Vector3f
 
     /**
      * Rotation of camera.

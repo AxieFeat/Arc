@@ -1,18 +1,17 @@
 package arc.input.mouse
 
 import arc.input.*
-import arc.math.Point2d
-import arc.math.Vec2f
 import arc.window.Window
+import org.joml.Vector2f
 import org.lwjgl.glfw.GLFW
 
 internal object GlfwMouseInput : MouseInput {
 
     lateinit var window: Window
     override val bindingProcessor: BindingProcessor = GlfwBindingProcessor()
-    override var previousPosition: Point2d = Point2d.ZERO
-    override var position: Point2d = Point2d.ZERO
-    override var displayVec: Vec2f = Vec2f.ZERO
+    override var previousPosition: Vector2f = Vector2f()
+    override var position: Vector2f = Vector2f()
+    override var displayVec: Vector2f = Vector2f()
 
     override fun isPressed(key: KeyCode): Boolean {
         if(key.keyType != KeyType.MOUSE) return false
@@ -41,17 +40,17 @@ internal object GlfwMouseInput : MouseInput {
     }
 
     override fun reset() {
-        displayVec = displayVec.withXY(0f, 0f)
+        displayVec.zero()
     }
 
     fun positionUpdate(x: Double, y: Double) {
-        previousPosition = Point2d.of(position.x, position.y)
+        previousPosition.set(position.x, position.y)
 
-        position = position.withXY(x, y)
+        position.set(x, y)
 
-        displayVec = displayVec.withXY(
-            (position.x - previousPosition.x).toFloat(),
-            (position.y - previousPosition.y).toFloat()
+        displayVec.set(
+            position.x - previousPosition.x,
+            position.y - previousPosition.y
         )
     }
 

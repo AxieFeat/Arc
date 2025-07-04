@@ -1,12 +1,14 @@
 package arc.math
 
-internal data class SimpleAABB(
-    override val min: Vec3f,
-    override val max: Vec3f,
-    override val center: Vec3f
+import org.joml.Vector3f
+
+internal data class JomlAABB(
+    override val min: Vector3f,
+    override val max: Vector3f,
+    override val center: Vector3f
 ) : AABB {
 
-    override fun contains(point: Vec3f): Boolean {
+    override fun contains(point: Vector3f): Boolean {
         return point.x in min.x..max.x &&
                 point.y in min.y..max.y &&
                 point.z in min.z..max.z
@@ -19,8 +21,8 @@ internal data class SimpleAABB(
     }
 
     object Factory : AABB.Factory {
-        override fun create(min: Vec3f, max: Vec3f, center: Vec3f): AABB {
-            return SimpleAABB(min, max, center)
+        override fun create(min: Vector3f, max: Vector3f, center: Vector3f): AABB {
+            return JomlAABB(min, max, center)
         }
     }
 }

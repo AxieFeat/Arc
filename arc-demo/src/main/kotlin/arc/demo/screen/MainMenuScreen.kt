@@ -8,7 +8,6 @@ import arc.files.classpath
 import arc.input.KeyCode
 import arc.input.keyboard
 import arc.input.mouse
-import arc.math.Point3d
 import arc.texture.TextureAtlas
 import org.joml.Vector3f
 
@@ -33,7 +32,7 @@ object MainMenuScreen : Screen("main-menu") {
         camera.fov = 65f
         camera.zNear = 0.0001f
         camera.zFar = 10000000000000000000000000000000000f
-        camera.position = Point3d.of(0.0, 0.0, 0.0)
+        camera.position = Vector3f()
         camera.update()
 
         application.renderSystem.enableCull()
@@ -91,7 +90,7 @@ object MainMenuScreen : Screen("main-menu") {
             newZ -= up.z * speed
         }
 
-        camera.position = Point3d.of(newX, newY, newZ)
+        camera.position.set(newX, newY, newZ)
 
         if (application.mouse.isPressed(KeyCode.MOUSE_LEFT)) {
             this.sensitivity = 65f * delta

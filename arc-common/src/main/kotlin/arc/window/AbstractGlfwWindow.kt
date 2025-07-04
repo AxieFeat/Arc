@@ -1,6 +1,6 @@
 package arc.window
 
-import arc.math.Point2i
+import org.joml.Vector2i
 import org.lwjgl.glfw.Callbacks
 import org.lwjgl.glfw.GLFW.*
 import org.lwjgl.glfw.GLFWErrorCallback
@@ -20,7 +20,7 @@ abstract class AbstractGlfwWindow(
     override val backend: WindowBackend = GlfwWindowBackend
 
     override var handle: Long = 0
-    override var position: Point2i = Point2i.of(0, 0)
+    override var position: Vector2i = Vector2i(0, 0)
     override var isFocus: Boolean = true
 
     override var name: String = name
@@ -117,7 +117,7 @@ abstract class AbstractGlfwWindow(
     }
 
     private fun onMove(handle: Long, x: Int, y: Int) {
-        this.position = position.withXY(x, y)
+        position.set(x, y)
 
         handler.windowMove(x, y)
     }

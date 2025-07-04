@@ -1,7 +1,6 @@
 package arc.graphics
 
 import arc.math.AABB
-import arc.math.Vec3f
 import arc.model.Model
 import arc.model.cube.Cube
 import arc.shader.ShaderInstance
@@ -18,7 +17,7 @@ internal data class SimpleModelHandler(
     private val matrix = Matrix4f()
     private val rotation = Quaternionf()
 
-    private var cachedAabb = AABB.of(Vec3f.ZERO, Vec3f.ZERO)
+    private var cachedAabb = AABB.of(Vector3f(), Vector3f())
     private var matrixDirty = true
 
     override val aabb: AABB
@@ -149,8 +148,8 @@ internal data class SimpleModelHandler(
 
 
         cachedAabb = AABB.of(
-            min = Vec3f.of(minX, minY, minZ),
-            max = Vec3f.of(maxX, maxY, maxZ),
+            min = Vector3f(minX, minY, minZ),
+            max = Vector3f(maxX, maxY, maxZ),
         )
     }
 

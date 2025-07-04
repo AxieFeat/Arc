@@ -1,28 +1,28 @@
 package arc.model.cube
 
-import arc.math.Point2i
+import org.joml.Vector2i
 
 internal data class SimpleCubeFace(
-    override val uvMin: Point2i = Point2i.of(0, 0),
-    override val uvMax: Point2i = Point2i.of(0, 0),
+    override val uvMin: Vector2i = Vector2i(),
+    override val uvMax: Vector2i = Vector2i(),
     override val rotation: Float = 0f,
     override val isCullable: Boolean = true
 ) : CubeFace {
 
     class Builder : CubeFace.Builder {
 
-        private var uvMin = Point2i.of(0, 0)
-        private var uvMax = Point2i.of(0, 0)
+        private var uvMin = Vector2i()
+        private var uvMax = Vector2i()
         private var rotation = 0f
         private var isCullable = true
 
-        override fun setUvMin(uvMin: Point2i): CubeFace.Builder {
+        override fun setUvMin(uvMin: Vector2i): CubeFace.Builder {
             this.uvMin = uvMin
 
             return this
         }
 
-        override fun setUvMax(uvMax: Point2i): CubeFace.Builder {
+        override fun setUvMax(uvMax: Vector2i): CubeFace.Builder {
             this.uvMax = uvMax
 
             return this

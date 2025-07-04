@@ -1,14 +1,10 @@
 package arc.demo.world.chunk
 
 import arc.demo.VoxelGame
-import arc.demo.lighting.LightMap
-import arc.demo.lighting.LightSolver
 import arc.demo.world.WorldModelDispatcher
 import arc.demo.world.block.Block
 import arc.math.AABB
-import arc.math.Vec3f
 import arc.model.Model
-import org.joml.Math
 import org.joml.Vector3f
 
 class ChunkSection(
@@ -18,8 +14,8 @@ class ChunkSection(
     val blocks = arrayOfNulls<Block>(16 * 16 * 16)
     var dispatcher: WorldModelDispatcher? = null
     val aabb = AABB.of(
-        Vec3f.of((chunk.x * 16).toFloat(), (chunk.sections.indexOf(this) * 16).toFloat() + 16f, (chunk.z * 16).toFloat()),
-        Vec3f.of((chunk.x * 16).toFloat() + 16f, (chunk.sections.indexOf(this) * 16).toFloat() + 32f, (chunk.z * 16).toFloat() + 16f)
+        Vector3f((chunk.x * 16).toFloat(), (chunk.sections.indexOf(this) * 16).toFloat() + 16f, (chunk.z * 16).toFloat()),
+        Vector3f((chunk.x * 16).toFloat() + 16f, (chunk.sections.indexOf(this) * 16).toFloat() + 32f, (chunk.z * 16).toFloat() + 16f)
     )
 
     var isLoaded = false
@@ -47,8 +43,8 @@ class ChunkSection(
                 worldZ,
                 model,
                 AABB.of(
-                    Vec3f.of(worldX.toFloat(), worldY.toFloat(), worldZ.toFloat()),
-                    Vec3f.of(worldX.toFloat() + 1f, worldY.toFloat() + 1f, worldZ.toFloat() + 1f)
+                    Vector3f(worldX.toFloat(), worldY.toFloat(), worldZ.toFloat()),
+                    Vector3f(worldX.toFloat() + 1f, worldY.toFloat() + 1f, worldZ.toFloat() + 1f)
                 )
             )
         }

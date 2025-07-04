@@ -2,10 +2,10 @@ package arc.model.animation
 
 import arc.Arc
 import arc.annotations.ImmutableType
-import arc.math.Vec3f
 import arc.util.InterpolationMode
 import arc.util.pattern.Copyable
 import org.jetbrains.annotations.ApiStatus
+import org.joml.Vector3f
 
 /**
  * This interface represents keyframe of animation
@@ -31,7 +31,7 @@ interface Keyframe : Copyable<Keyframe> {
     /**
      * Points for changing elements.
      */
-    val dataPoints: Vec3f
+    val dataPoints: Vector3f
 
     @ApiStatus.Internal
     interface Builder : arc.util.pattern.Builder<Keyframe> {
@@ -40,7 +40,7 @@ interface Keyframe : Copyable<Keyframe> {
         fun setInterpolation(interpolation: InterpolationMode): Builder
         fun setTime(time: Float): Builder
 
-        fun setDataPoints(dataPoints: Vec3f): Builder = setDataPoints(dataPoints.x, dataPoints.y, dataPoints.z)
+        fun setDataPoints(dataPoints: Vector3f): Builder = setDataPoints(dataPoints.x, dataPoints.y, dataPoints.z)
         fun setDataPoints(x: Float, y: Float, z: Float): Builder
 
     }

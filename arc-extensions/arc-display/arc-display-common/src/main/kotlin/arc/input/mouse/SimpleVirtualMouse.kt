@@ -3,16 +3,15 @@ package arc.input.mouse
 import arc.display.Display
 import arc.graphics.Camera
 import arc.input.KeyCode
-import arc.math.Point2d
-import arc.math.Vec2f
+import org.joml.Vector2f
 
 internal data class SimpleVirtualMouse(
     override val display: Display
 ) : VirtualMouseInput {
 
-    override var previousPosition: Point2d = Point2d.ZERO
-    override var position: Point2d = Point2d.ZERO
-    override var displayVec: Vec2f = Vec2f.ZERO
+    override var previousPosition: Vector2f = Vector2f()
+    override var position: Vector2f = Vector2f()
+    override var displayVec: Vector2f = Vector2f()
     override fun reset() {
 
     }

@@ -5,8 +5,8 @@ import arc.annotations.TypeFactory
 import arc.display.Display
 import arc.graphics.Camera
 import arc.input.BindingProcessor
-import arc.math.Point2d
 import org.jetbrains.annotations.ApiStatus
+import org.joml.Vector2f
 
 /**
  * This interface represents virtual mouse. It means, that X and Y coords of this mouse is not real.
@@ -21,7 +21,7 @@ interface VirtualMouseInput : MouseInput {
      *
      * It will be (-1, -1), if camera not see to display.
      */
-    override var position: Point2d
+    override var position: Vector2f
 
     /**
      * Display of this virtual mouse.

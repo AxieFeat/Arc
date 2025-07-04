@@ -1,6 +1,6 @@
 package arc.audio
 
-import arc.math.Point3d
+import org.joml.Vector3f
 import org.lwjgl.openal.AL10.*
 import java.nio.ShortBuffer
 
@@ -35,10 +35,10 @@ internal class AlSound(
             alSourcef(source, AL_PITCH, field)
         }
 
-    override var position: Point3d = Point3d.ZERO
+    override var position: Vector3f = Vector3f()
         set(value) {
             field = value
-            alSource3f(source, AL_POSITION, field.x.toFloat(), field.y.toFloat(), field.z.toFloat())
+            alSource3f(source, AL_POSITION, field.x, field.y, field.z)
         }
 
     override var isLoop: Boolean = false
@@ -47,7 +47,7 @@ internal class AlSound(
             alSourcei(source, AL_LOOPING, if (field) AL_TRUE else AL_FALSE)
         }
 
-    override fun play(volume: Float, pitch: Float, position: Point3d, loop: Boolean, end: Sound.() -> Unit) {
+    override fun play(volume: Float, pitch: Float, position: Vector3f, loop: Boolean, end: Sound.() -> Unit) {
         this.volume = volume
         this.pitch = pitch
         this.position = position

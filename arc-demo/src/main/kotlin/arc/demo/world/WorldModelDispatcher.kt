@@ -13,6 +13,9 @@ import arc.texture.TextureAtlas
 import arc.util.Color
 import arc.util.pattern.Cleanable
 import org.joml.Matrix4f
+import org.joml.component1
+import org.joml.component2
+import org.joml.component3
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.Executors
 

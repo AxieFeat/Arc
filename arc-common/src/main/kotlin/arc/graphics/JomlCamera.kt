@@ -2,9 +2,7 @@ package arc.graphics
 
 import arc.culling.JomlFrustum
 import arc.culling.Frustum
-import arc.math.Point3d
 import arc.math.Ray
-import arc.math.Vec3f
 import org.joml.Math
 import org.joml.Matrix4f
 import org.joml.Quaternionf
@@ -16,13 +14,13 @@ internal data class JomlCamera(
     override var windowHeight: Float,
 ) : Camera {
 
-    override var ray: Ray = Ray.of(Vec3f.of(0f, 0f, 0f), Vec3f.of(0f, 0f, 0f))
+    override var ray: Ray = Ray.of(Vector3f(), Vector3f())
 
     override var view: Matrix4f = Matrix4f()
     override var projection: Matrix4f = Matrix4f()
     override val combined: Matrix4f = Matrix4f()
 
-    override var position: Point3d = Point3d.of(0.0, 0.0, 0.0)
+    override var position: Vector3f = Vector3f(0f, 0f, 0f)
     override var rotation: Quaternionf = Quaternionf()
     override var zNear: Float = 0.1f
     override var zFar: Float = 1000f
@@ -55,19 +53,18 @@ internal data class JomlCamera(
         projection.identity()
             .perspective(Math.toRadians(fov), aspect, zNear, zFar)
 
-        val cameraPos = Vector3f(position.x.toFloat(), position.y.toFloat(), position.z.toFloat())
-        val cameraTarget = Vector3f(cameraPos).add(front)
+        val cameraTarget = Vector3f(position).add(front)
 
-        view.identity().lookAt(cameraPos, cameraTarget, up)
+        view.identity().lookAt(position, cameraTarget, up)
         combined.set(projection).mul(view)
 
         this.ray = ray.withOriginAndDirection(
-            origin = Vec3f.of(
-                cameraPos.x,
-                cameraPos.y,
-                cameraPos.z
+            origin = Vector3f(
+                position.x,
+                position.y,
+                position.z
             ),
-            direction = Vec3f.of(
+            direction = Vector3f(
                 front.x,
                 front.y,
                 front.z
@@ -93,7 +90,7 @@ internal data class JomlCamera(
         projection.identity()
         combined.set(projection).mul(view)
         rotation.identity()
-        position = Point3d.of(0.0, 0.0, 0.0)
+        position = Vector3f(0f, 0f, 0f)
         pitch = 0f
         yaw = 0f
         roll = 0f
