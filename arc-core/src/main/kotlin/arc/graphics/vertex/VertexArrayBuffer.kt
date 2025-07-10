@@ -1,6 +1,6 @@
 package arc.graphics.vertex
 
-import arc.Arc
+import arc.Arc.single
 import arc.annotations.TypeFactory
 import arc.graphics.DrawerMode
 import org.jetbrains.annotations.ApiStatus
@@ -45,7 +45,7 @@ interface VertexArrayBuffer : VertexBuffer {
          */
         @JvmStatic
         fun of(mode: DrawerMode, format: VertexFormat, buffer: ByteBuffer, vertices: Int): VertexArrayBuffer {
-            return Arc.factory<Factory>().create(mode, format, buffer, vertices)
+            return single<Factory>().create(mode, format, buffer, vertices)
         }
 
     }

@@ -1,6 +1,6 @@
 package arc.asset
 
-import arc.Arc
+import arc.Arc.single
 import arc.annotations.ImmutableType
 import arc.annotations.TypeFactory
 import org.jetbrains.annotations.ApiStatus
@@ -49,7 +49,7 @@ interface FileAsset : StringAsset {
          */
         @JvmStatic
         fun from(file: File): FileAsset {
-            return Arc.factory<Factory>().create(file)
+            return single<Factory>().create(file)
         }
 
     }

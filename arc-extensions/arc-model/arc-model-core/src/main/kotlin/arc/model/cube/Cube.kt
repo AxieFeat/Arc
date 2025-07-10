@@ -1,6 +1,6 @@
 package arc.model.cube
 
-import arc.Arc
+import arc.Arc.factory
 import arc.math.AABB
 import arc.model.Face
 import arc.util.Color
@@ -110,7 +110,7 @@ interface Cube : Copyable<Cube>, Identifiable {
          */
         @JvmStatic
         fun builder(): Builder {
-            return Arc.factory<Builder>()
+            return factory<Builder>()
         }
 
     }

@@ -1,6 +1,6 @@
 package arc.model
 
-import arc.Arc
+import arc.Arc.factory
 import arc.model.animation.Animation
 import arc.model.cube.Cube
 import arc.model.group.ElementGroup
@@ -115,7 +115,7 @@ interface Model : Copyable<Model> {
          */
         @JvmStatic
         fun builder(): Builder {
-            return Arc.factory<Builder>()
+            return factory<Builder>()
         }
 
     }

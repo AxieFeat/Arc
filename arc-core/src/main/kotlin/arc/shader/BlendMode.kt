@@ -1,6 +1,6 @@
 package arc.shader
 
-import arc.Arc
+import arc.Arc.single
 import arc.annotations.ImmutableType
 import arc.annotations.TypeFactory
 import org.jetbrains.annotations.ApiStatus
@@ -63,7 +63,7 @@ interface BlendMode {
             dstAlphaFactor: Int = 0,
             blendFunc: Int = 32774,
         ): BlendMode {
-            return Arc.factory<Factory>().create(separateBlend, opaque, srcColorFactor, srcAlphaFactor, dstColorFactor, dstAlphaFactor, blendFunc)
+            return single<Factory>().create(separateBlend, opaque, srcColorFactor, srcAlphaFactor, dstColorFactor, dstAlphaFactor, blendFunc)
         }
 
     }

@@ -1,7 +1,7 @@
 package arc.demo
 
 import arc.Application
-import arc.ArcFactoryProvider
+import arc.ArcObjectProvider
 import arc.asset.asRuntimeAsset
 import arc.gl.OpenGL
 import arc.graphics.DrawBuffer
@@ -15,8 +15,8 @@ import arc.util.Color
 
 fun main() {
     // Bootstrap the implementations
-    ArcFactoryProvider.install()
-    ArcFactoryProvider.bootstrap()
+    ArcObjectProvider.install()
+    ArcObjectProvider.bootstrap()
 
     // Preload OpenGL
     OpenGL.preload()

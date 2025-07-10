@@ -1,6 +1,6 @@
 package arc.util
 
-import arc.Arc
+import arc.Arc.single
 import arc.annotations.ImmutableType
 import arc.annotations.TypeFactory
 import arc.util.pattern.Copyable
@@ -140,7 +140,7 @@ interface Color : Copyable<Color>, Interpolatable<Color> {
             green: @Range(from = 0, to = 255) Int = 255,
             blue:  @Range(from = 0, to = 255) Int = 255,
             alpha: @Range(from = 0, to = 1) Double = 1.0
-        ): Color = Arc.factory<Factory>().create(red, green, blue, alpha)
+        ): Color = single<Factory>().create(red, green, blue, alpha)
 
     }
 

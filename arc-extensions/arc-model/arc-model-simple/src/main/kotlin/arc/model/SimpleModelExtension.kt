@@ -11,8 +11,8 @@ import arc.model.group.SimpleElementGroup
 import arc.model.group.ElementGroup
 import arc.model.texture.SimpleModelTexture
 import arc.model.texture.ModelTexture
-import arc.util.factory.FactoryProvider
-import arc.util.factory.register
+import arc.util.provider.ObjectProvider
+import arc.util.provider.register
 
 /**
  * This object class represents factory provider for models `arc-model` extension.
@@ -25,7 +25,7 @@ object SimpleModelExtension {
      * @param provider Provider for configuring.
      */
     @JvmStatic
-    fun bootstrap(provider: FactoryProvider) {
+    fun bootstrap(provider: ObjectProvider) {
         // Parts of model.
         provider.register<Model.Builder>({ SimpleModel.Builder() })
         provider.register<Cube.Builder>({ SimpleCube.Builder() })

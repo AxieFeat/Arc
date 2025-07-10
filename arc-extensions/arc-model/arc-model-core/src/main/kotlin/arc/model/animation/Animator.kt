@@ -1,6 +1,6 @@
 package arc.model.animation
 
-import arc.Arc
+import arc.Arc.factory
 import arc.annotations.ImmutableType
 import arc.model.group.ElementGroup
 import arc.util.pattern.Copyable
@@ -41,7 +41,7 @@ interface Animator : Copyable<Animator> {
          */
         @JvmStatic
         fun builder(): Builder {
-            return Arc.factory<Builder>()
+            return factory<Builder>()
         }
 
     }

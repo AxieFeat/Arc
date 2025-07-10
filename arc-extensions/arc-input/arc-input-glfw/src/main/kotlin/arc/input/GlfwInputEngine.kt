@@ -77,8 +77,8 @@ object GlfwInputEngine : InputEngine {
         return status
     }
 
-    object Factory : InputEngine.Factory {
-        override fun create(): InputEngine {
+    object Provider : InputEngine.Provider {
+        override fun provide(): InputEngine {
             return GlfwInputEngine
         }
     }

@@ -1,6 +1,6 @@
 package arc.profiler
 
-import arc.Arc
+import arc.Arc.single
 import arc.annotations.TypeFactory
 import arc.profiler.section.ActiveSection
 import arc.profiler.section.RootSection
@@ -51,7 +51,7 @@ interface Profiler {
          */
         @JvmStatic
         fun create(): Profiler {
-            return Arc.factory<Factory>().create()
+            return single<Factory>().create()
         }
 
     }

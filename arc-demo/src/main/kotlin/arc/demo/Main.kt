@@ -1,6 +1,6 @@
 package arc.demo
 
-import arc.ArcFactoryProvider
+import arc.ArcObjectProvider
 import arc.audio.AlAudioExtension
 import arc.font.SimpleFontExtension
 import arc.gl.OpenGL
@@ -10,8 +10,8 @@ import arc.vk.Vulkan
 
 fun main() {
     // Preload factories.
-    ArcFactoryProvider.install()
-    ArcFactoryProvider.bootstrap()
+    ArcObjectProvider.install()
+    ArcObjectProvider.bootstrap()
 
     // Select implementation by property.
     when(System.getProperty("arc.application")) {
@@ -21,7 +21,7 @@ fun main() {
         else -> OpenGL.preload()
     }
 
-    val provider = ArcFactoryProvider
+    val provider = ArcObjectProvider
 
     // Load extensions.
     GlfwInputExtension.bootstrap(provider)

@@ -1,7 +1,6 @@
 package arc.input
 
-import arc.Arc
-import arc.annotations.TypeFactory
+import arc.Arc.single
 import arc.input.keyboard.KeyboardInput
 import arc.input.mouse.MouseInput
 import org.jetbrains.annotations.ApiStatus
@@ -22,10 +21,9 @@ interface InputEngine {
     val keyboard: KeyboardInput
 
     @ApiStatus.Internal
-    @TypeFactory
-    interface Factory {
+    interface Provider {
 
-        fun create(): InputEngine
+        fun provide(): InputEngine
 
     }
 
@@ -38,7 +36,7 @@ interface InputEngine {
          */
         @JvmStatic
         fun find(): InputEngine {
-            return Arc.factory<Factory>().create()
+            return single<Provider>().provide()
         }
 
     }

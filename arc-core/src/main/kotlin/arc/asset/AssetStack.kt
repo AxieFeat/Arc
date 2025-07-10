@@ -1,6 +1,6 @@
 package arc.asset
 
-import arc.Arc
+import arc.Arc.single
 import arc.annotations.ImmutableType
 import arc.annotations.TypeFactory
 import org.jetbrains.annotations.ApiStatus
@@ -43,7 +43,7 @@ interface AssetStack<T : AssetLike> : Iterable<T> {
          */
         @JvmStatic
         fun <T : AssetLike> of(assets: Set<T> = setOf()): AssetStack<T> {
-            return Arc.factory<Factory>().create(assets)
+            return single<Factory>().create(assets)
         }
 
         /**

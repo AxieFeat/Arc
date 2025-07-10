@@ -1,6 +1,6 @@
 package arc.shader
 
-import arc.Arc
+import arc.Arc.single
 import arc.annotations.TypeFactory
 import org.jetbrains.annotations.ApiStatus
 
@@ -117,7 +117,7 @@ interface FrameBuffer {
          */
         @JvmStatic
         fun create(width: Int, height: Int, useDepth: Boolean): FrameBuffer {
-            return Arc.factory<Factory>().create(width, height, useDepth)
+            return single<Factory>().create(width, height, useDepth)
         }
 
     }

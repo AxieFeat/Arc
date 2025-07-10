@@ -1,6 +1,6 @@
 package arc.window
 
-import arc.Arc
+import arc.Arc.single
 import arc.annotations.TypeFactory
 import org.jetbrains.annotations.ApiStatus
 import org.joml.Vector2i
@@ -142,7 +142,7 @@ interface Window {
             height: Int,
             isResizable: Boolean = true,
         ): Window {
-            return Arc.factory<Factory>().create(name, handler, width, height, isResizable)
+            return single<Factory>().create(name, handler, width, height, isResizable)
         }
 
     }

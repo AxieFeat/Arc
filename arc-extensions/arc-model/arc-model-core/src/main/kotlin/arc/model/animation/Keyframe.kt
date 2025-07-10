@@ -1,6 +1,6 @@
 package arc.model.animation
 
-import arc.Arc
+import arc.Arc.factory
 import arc.annotations.ImmutableType
 import arc.util.InterpolationMode
 import arc.util.pattern.Copyable
@@ -54,7 +54,7 @@ interface Keyframe : Copyable<Keyframe> {
          */
         @JvmStatic
         fun builder(): Builder {
-            return Arc.factory<Builder>()
+            return factory<Builder>()
         }
 
     }

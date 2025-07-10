@@ -53,8 +53,8 @@ internal object AlSoundEngine : SoundEngine {
         sound.pause()
     }
 
-    object Factory : SoundEngine.Factory {
-        override fun create(): SoundEngine {
+    object Provider : SoundEngine.Provider {
+        override fun provide(): SoundEngine {
             return AlSoundEngine
         }
     }

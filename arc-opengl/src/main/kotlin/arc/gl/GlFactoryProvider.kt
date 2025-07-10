@@ -1,7 +1,7 @@
 package arc.gl
 
 import arc.Application
-import arc.ArcFactoryProvider
+import arc.ArcObjectProvider
 import arc.gl.graphics.vertex.GlVertexArrayBuffer
 import arc.gl.graphics.vertex.GlVertexBuffer
 import arc.gl.shader.GlBlendMode
@@ -18,17 +18,17 @@ import arc.shader.ShaderInstance
 import arc.shader.UniformBuffer
 import arc.texture.TextureAtlasLoader
 import arc.texture.TextureLoader
-import arc.util.factory.register
+import arc.util.provider.register
 import arc.window.Window
 
 internal object GlFactoryProvider {
 
-    private val provider = ArcFactoryProvider
+    private val provider = ArcObjectProvider
 
     @JvmStatic
     fun bootstrap(overwrite: Boolean = false) {
         try {
-            provider.register<Application.Factory>(GlApplication.Factory, overwrite)
+            provider.register<Application.Provider>(GlApplication.Provider, overwrite)
 
             provider.register<Window.Factory>(GlfwGlWindow.Factory)
 

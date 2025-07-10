@@ -1,6 +1,6 @@
 package arc.model.animation
 
-import arc.Arc
+import arc.Arc.factory
 import arc.annotations.ImmutableType
 import arc.util.pattern.Copyable
 import org.jetbrains.annotations.ApiStatus
@@ -62,7 +62,7 @@ interface Animation : Copyable<Animation> {
          */
         @JvmStatic
         fun builder(): Builder {
-            return Arc.factory<Builder>()
+            return factory<Builder>()
         }
 
     }

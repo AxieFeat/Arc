@@ -14,42 +14,43 @@ import arc.shader.SimpleShaderSettings
 import arc.shader.ShaderSettings
 import arc.util.SimpleColor
 import arc.util.Color
-import arc.util.factory.FactoryProvider
-import arc.util.factory.TypeNotFoundException
-import arc.util.factory.register
+import arc.util.provider.ObjectProvider
+import arc.util.provider.TypeNotFoundException
+import arc.util.provider.register
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap
 import java.lang.reflect.Field
 
-object ArcFactoryProvider : FactoryProvider {
+@Suppress("UNCHECKED_CAST")
+object ArcObjectProvider : ObjectProvider {
 
     private val singletons = Object2ObjectOpenHashMap<Class<*>, Any>()
-    private val providers = Object2ObjectOpenHashMap<Class<*>, () -> Any>()
+    private val factories = Object2ObjectOpenHashMap<Class<*>, () -> Any>()
 
-    @Suppress("UNCHECKED_CAST")
-    override fun <T> provide(type: Class<T>): T {
-        providers[type]?.let { return it.invoke() as T }
-
-        return singletons[type] as? T ?: throw TypeNotFoundException("Type $type has no factory registered!")
+    override fun <T> provideSingle(type: Class<T>): T {
+        return singletons[type] as? T ?: throw TypeNotFoundException("Type $type has no object registered!")
     }
 
-    override fun <T> register(type: Class<T>, factory: T, overwrite: Boolean) {
-        require(overwrite || (!singletons.containsKey(type) && !providers.containsKey(type))) {
-            "Duplicate registration for type $type!"
-        }
-        singletons[type] = factory
+    override fun <T> provideFactory(type: Class<T>): T {
+        return (factories[type] ?: throw TypeNotFoundException("Type $type has no factory registered!")).invoke() as T
     }
 
-    @Suppress("UNCHECKED_CAST")
-    override fun <T> register(type: Class<T>, provider: () -> T, overwrite: Boolean) {
-        require(overwrite || (!singletons.containsKey(type) && !providers.containsKey(type))) {
+    override fun <T> register(type: Class<T>, obj: T, overwrite: Boolean) {
+        require(overwrite || (!singletons.containsKey(type) && !factories.containsKey(type))) {
             "Duplicate registration for type $type!"
         }
-        providers[type] = provider as (() -> Any)
+        singletons[type] = obj
+    }
+
+    override fun <T> register(type: Class<T>, factory: () -> T, overwrite: Boolean) {
+        require(overwrite || (!singletons.containsKey(type) && !factories.containsKey(type))) {
+            "Duplicate registration for type $type!"
+        }
+        factories[type] = factory as (() -> Any)
     }
 
     @JvmStatic
     fun install() {
-        modifyField(Arc::class.java, "factoryProvider", this)
+        modifyField(Arc::class.java, "objectProvider", this)
     }
 
     @JvmStatic

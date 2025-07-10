@@ -1,6 +1,6 @@
 package arc.model.cube
 
-import arc.Arc
+import arc.Arc.factory
 import arc.annotations.ImmutableType
 import arc.model.Model
 import org.jetbrains.annotations.ApiStatus
@@ -64,7 +64,7 @@ interface CubeFace {
          */
         @JvmStatic
         fun builder(): Builder {
-            return Arc.factory<Builder>()
+            return factory<Builder>()
         }
 
     }

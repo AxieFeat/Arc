@@ -1,6 +1,6 @@
 package arc.graphics.vertex
 
-import arc.Arc
+import arc.Arc.single
 import arc.annotations.ImmutableType
 import arc.annotations.TypeFactory
 import org.jetbrains.annotations.ApiStatus
@@ -86,7 +86,7 @@ interface VertexFormatElement {
             usage: VertexUsage,
             count: Int,
         ): VertexFormatElement {
-            return Arc.factory<Factory>().create(name, index, type, usage, count)
+            return single<Factory>().create(name, index, type, usage, count)
         }
 
     }

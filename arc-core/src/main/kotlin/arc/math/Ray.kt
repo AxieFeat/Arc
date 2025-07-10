@@ -1,6 +1,6 @@
 package arc.math
 
-import arc.Arc
+import arc.Arc.single
 import arc.annotations.ImmutableType
 import arc.annotations.TypeFactory
 import arc.util.pattern.Copyable
@@ -109,7 +109,7 @@ interface Ray : Copyable<Ray> {
          */
         @JvmStatic
         fun of(origin: Vector3f, direction: Vector3f): Ray {
-            return Arc.factory<Factory>().create(origin, direction)
+            return single<Factory>().create(origin, direction)
         }
 
     }

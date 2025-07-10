@@ -1,6 +1,6 @@
 package arc.math
 
-import arc.Arc
+import arc.Arc.single
 import arc.annotations.ImmutableType
 import arc.annotations.TypeFactory
 import org.jetbrains.annotations.ApiStatus
@@ -146,7 +146,7 @@ interface AABB {
                 (min.y + max.y) * 0.5f,
                 (min.z + max.z) * 0.5f
             )
-        ): AABB = Arc.factory<Factory>().create(min, max, center)
+        ): AABB = single<Factory>().create(min, max, center)
 
     }
 

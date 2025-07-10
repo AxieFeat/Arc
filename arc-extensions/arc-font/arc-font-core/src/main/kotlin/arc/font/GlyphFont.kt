@@ -1,6 +1,6 @@
 package arc.font
 
-import arc.Arc
+import arc.Arc.single
 import arc.annotations.TypeFactory
 import arc.graphics.Drawer
 import arc.graphics.vertex.VertexBuffer
@@ -91,7 +91,7 @@ interface GlyphFont : Bindable, Cleanable {
          */
         @JvmStatic
         fun from(drawer: Drawer, glyphs: List<Glyph>): GlyphFont {
-            return Arc.factory<Factory>().create(drawer, glyphs)
+            return single<Factory>().create(drawer, glyphs)
         }
 
     }

@@ -1,6 +1,6 @@
 package arc
 
-import arc.annotations.TypeFactory
+import arc.Arc.single
 import arc.files.LocationSpace
 import arc.graphics.RenderSystem
 import arc.window.Window
@@ -101,10 +101,9 @@ interface Application {
     fun close()
 
     @ApiStatus.Internal
-    @TypeFactory
-    interface Factory {
+    interface Provider {
 
-        fun create(): Application
+        fun provide(): Application
 
     }
 
@@ -117,7 +116,7 @@ interface Application {
          */
         @JvmStatic
         fun find(): Application {
-            return Arc.factory<Factory>().create()
+            return single<Provider>().provide()
         }
 
     }

@@ -1,6 +1,6 @@
 package arc.audio
 
-import arc.Arc
+import arc.Arc.single
 import arc.annotations.TypeFactory
 import arc.asset.AssetLike
 import org.jetbrains.annotations.ApiStatus
@@ -76,7 +76,7 @@ interface SoundLoader {
          */
         @JvmStatic
         fun of(format: SoundFormat): SoundLoader {
-            return Arc.factory<Factory>().create(format)
+            return single<Factory>().create(format)
         }
 
     }

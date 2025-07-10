@@ -1,6 +1,6 @@
 package arc.display
 
-import arc.Arc
+import arc.Arc.single
 import arc.annotations.TypeFactory
 import arc.graphics.Camera
 import arc.graphics.EmptyShaderInstance
@@ -80,7 +80,7 @@ interface Display : Cleanable, Bindable {
          */
         @JvmStatic
         fun of(width: Int, height: Int): Display {
-            return Arc.factory<Factory>().create(width, height)
+            return single<Factory>().create(width, height)
         }
 
     }

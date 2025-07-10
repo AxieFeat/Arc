@@ -1,7 +1,7 @@
 package arc.graphics
 
 import arc.Application
-import arc.Arc
+import arc.Arc.single
 import arc.annotations.TypeFactory
 import arc.math.AABB
 import arc.model.Model
@@ -112,7 +112,7 @@ interface ModelHandler : Cleanable {
             drawer: Drawer = Application.find().renderSystem.drawer,
             model: Model
         ): ModelHandler {
-            return Arc.factory<Factory>().create(drawer, model)
+            return single<Factory>().create(drawer, model)
         }
 
     }

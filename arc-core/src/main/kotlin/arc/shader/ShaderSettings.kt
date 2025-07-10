@@ -1,6 +1,6 @@
 package arc.shader
 
-import arc.Arc
+import arc.Arc.single
 import arc.annotations.ImmutableType
 import arc.annotations.TypeFactory
 import arc.asset.StringAsset
@@ -48,7 +48,7 @@ interface ShaderSettings {
             uniforms: List<String> = listOf(),
             blendMode: BlendMode = BlendMode.of()
         ): ShaderSettings {
-            return Arc.factory<Factory>().create(uniforms, blendMode)
+            return single<Factory>().create(uniforms, blendMode)
         }
 
         /**

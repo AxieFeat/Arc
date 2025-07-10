@@ -1,7 +1,7 @@
 package arc.font
 
-import arc.util.factory.FactoryProvider
-import arc.util.factory.register
+import arc.util.provider.ObjectProvider
+import arc.util.provider.register
 
 /**
  * This object class represents factory provider for `arc-font` extension.
@@ -14,7 +14,7 @@ object SimpleFontExtension {
      * @param provider Provider for configuring.
      */
     @JvmStatic
-    fun bootstrap(provider: FactoryProvider) {
+    fun bootstrap(provider: ObjectProvider) {
         provider.register<GlyphFont.Factory>(SimpleGlyphFont.Factory)
     }
 

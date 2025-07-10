@@ -1,8 +1,8 @@
 package arc.profiler
 
-import arc.ArcFactoryProvider
-import arc.util.factory.FactoryProvider
-import arc.util.factory.register
+import arc.ArcObjectProvider
+import arc.util.provider.ObjectProvider
+import arc.util.provider.register
 
 /**
  * This object class represents factory provider for `arc-profiler` extension.
@@ -15,7 +15,7 @@ object SimpleProfilerExtension {
      * @param provider Provider for configuring.
      */
     @JvmStatic
-    fun bootstrap(provider: FactoryProvider = ArcFactoryProvider) {
+    fun bootstrap(provider: ObjectProvider = ArcObjectProvider) {
         provider.register<Profiler.Factory>(SimpleProfiler.Factory)
     }
 

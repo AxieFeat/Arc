@@ -1,6 +1,6 @@
 package arc.texture
 
-import arc.Arc
+import arc.Arc.single
 import arc.annotations.TypeFactory
 import arc.asset.AssetLike
 import arc.texture.BufferUtil.createDirectByteBuffer
@@ -109,7 +109,7 @@ interface TextureAtlasLoader : TextureLoader {
          */
         @JvmStatic
         fun of(format: TextureFormat): TextureAtlasLoader {
-            return Arc.factory<Factory>().create(format)
+            return single<Factory>().create(format)
         }
 
     }

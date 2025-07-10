@@ -1,7 +1,6 @@
 package arc.audio
 
-import arc.Arc
-import arc.annotations.TypeFactory
+import arc.Arc.single
 import org.jetbrains.annotations.ApiStatus
 
 /**
@@ -59,10 +58,9 @@ interface SoundEngine {
     fun pause(sound: Sound)
 
     @ApiStatus.Internal
-    @TypeFactory
-    interface Factory {
+    interface Provider {
 
-        fun create(): SoundEngine
+        fun provide(): SoundEngine
 
     }
 
@@ -75,7 +73,7 @@ interface SoundEngine {
          */
         @JvmStatic
         fun find(): SoundEngine {
-            return Arc.factory<Factory>().create()
+            return single<Provider>().provide()
         }
 
     }

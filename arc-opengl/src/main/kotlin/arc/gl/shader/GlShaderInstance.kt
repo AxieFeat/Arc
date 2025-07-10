@@ -146,7 +146,6 @@ internal data class GlShaderInstance(
             fragmentShaderId
         )
 
-
         glDeleteShader(
             vertexShaderId
         )

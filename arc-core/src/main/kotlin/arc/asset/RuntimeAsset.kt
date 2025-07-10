@@ -1,6 +1,6 @@
 package arc.asset
 
-import arc.Arc
+import arc.Arc.single
 import arc.annotations.TypeFactory
 import org.jetbrains.annotations.ApiStatus
 
@@ -31,7 +31,7 @@ interface RuntimeAsset : StringAsset {
          */
         @JvmStatic
         fun from(bytes: ByteArray): RuntimeAsset {
-            return Arc.factory<Factory>().create(bytes)
+            return single<Factory>().create(bytes)
         }
 
         /**

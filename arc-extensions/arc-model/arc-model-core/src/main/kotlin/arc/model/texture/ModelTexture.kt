@@ -1,6 +1,6 @@
 package arc.model.texture
 
-import arc.Arc
+import arc.Arc.factory
 import arc.annotations.ImmutableType
 import arc.texture.Texture
 import arc.texture.TextureAtlas
@@ -43,7 +43,7 @@ interface ModelTexture {
          */
         @JvmStatic
         fun builder(): Builder {
-            return Arc.factory<Builder>()
+            return factory<Builder>()
         }
 
     }

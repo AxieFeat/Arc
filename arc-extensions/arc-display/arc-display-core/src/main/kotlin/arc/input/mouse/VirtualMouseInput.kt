@@ -1,6 +1,6 @@
 package arc.input.mouse
 
-import arc.Arc
+import arc.Arc.single
 import arc.annotations.TypeFactory
 import arc.display.Display
 import arc.graphics.Camera
@@ -46,8 +46,8 @@ interface VirtualMouseInput : MouseInput {
     companion object {
 
         @JvmStatic
-        fun create(display: Display): VirtualMouseInput {
-            return Arc.factory<Factory>().create(display)
+        fun of(display: Display): VirtualMouseInput {
+            return single<Factory>().create(display)
         }
 
     }

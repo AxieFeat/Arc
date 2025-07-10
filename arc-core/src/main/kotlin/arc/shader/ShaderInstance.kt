@@ -1,6 +1,6 @@
 package arc.shader
 
-import arc.Arc
+import arc.Arc.single
 import arc.annotations.TypeFactory
 import arc.asset.StringAsset
 import arc.util.pattern.Bindable
@@ -135,7 +135,7 @@ interface ShaderInstance : Bindable, Cleanable {
             fragmentShader: StringAsset,
             shaderSettings: ShaderSettings = ShaderSettings.of()
         ): ShaderInstance {
-            return Arc.factory<Factory>().create(vertexShader, fragmentShader, shaderSettings)
+            return single<Factory>().create(vertexShader, fragmentShader, shaderSettings)
         }
 
     }

@@ -1,26 +1,19 @@
 package arc.vk
 
 import arc.Application
-import arc.ArcFactoryProvider
-import arc.graphics.vertex.VertexArrayBuffer
-import arc.graphics.vertex.VertexBuffer
-import arc.shader.BlendMode
-import arc.shader.FrameBuffer
-import arc.shader.ShaderInstance
-import arc.texture.TextureAtlasLoader
-import arc.texture.TextureLoader
-import arc.util.factory.register
+import arc.ArcObjectProvider
+import arc.util.provider.register
 import arc.vk.window.GlfwVkWindow
 import arc.window.Window
 
 internal object VkFactoryProvider {
 
-    private val provider = ArcFactoryProvider
+    private val provider = ArcObjectProvider
 
     @JvmStatic
     fun bootstrap(overwrite: Boolean = false) {
         try {
-            provider.register<Application.Factory>(VkApplication.Factory, overwrite)
+            provider.register<Application.Provider>(VkApplication.Provider, overwrite)
 
             provider.register<Window.Factory>(GlfwVkWindow.Factory)
 

@@ -6,7 +6,7 @@ import arc.Application
 import java.io.File
 
 /**
- * You should use these functions only after the [Application] is initialized in the [arc.util.factory.FactoryProvider],
+ * You should use these functions only after the [Application] is initialized in the [arc.util.provider.ObjectProvider],
  * otherwise you may get unexpected errors.
  */
 @JvmSynthetic

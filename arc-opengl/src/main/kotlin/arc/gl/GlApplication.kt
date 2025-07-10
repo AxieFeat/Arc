@@ -76,8 +76,8 @@ internal object GlApplication : AbstractApplication() {
         window.close()
     }
 
-    internal object Factory : Application.Factory {
-        override fun create(): Application {
+    internal object Provider : Application.Provider {
+        override fun provide(): Application {
             return GlApplication
         }
     }

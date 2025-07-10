@@ -1,7 +1,6 @@
 package arc.graphics.vertex
 
-import arc.Arc
-import arc.annotations.TypeFactory
+import arc.Arc.factory
 import org.jetbrains.annotations.ApiStatus
 
 /**
@@ -147,7 +146,7 @@ interface VertexFormat {
          */
         @JvmStatic
         fun builder(): Builder {
-            return Arc.factory<Builder>()
+            return factory<Builder>()
         }
 
     }

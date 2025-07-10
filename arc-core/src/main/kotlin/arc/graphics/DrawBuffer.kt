@@ -1,6 +1,6 @@
 package arc.graphics
 
-import arc.Arc
+import arc.Arc.single
 import arc.annotations.TypeFactory
 import arc.graphics.vertex.VertexArrayBuffer
 import arc.graphics.vertex.VertexBuffer
@@ -96,7 +96,7 @@ interface DrawBuffer : VertexConsumer, Cleanable {
          */
         @JvmStatic
         fun of(mode: DrawerMode, format: VertexFormat, bufferSize: Int = 256): DrawBuffer {
-            return Arc.factory<Factory>().create(mode, format, bufferSize)
+            return single<Factory>().create(mode, format, bufferSize)
         }
 
     }

@@ -1,6 +1,6 @@
 package arc.shader
 
-import arc.Arc
+import arc.Arc.single
 import arc.annotations.TypeFactory
 import arc.util.pattern.Bindable
 import arc.util.pattern.Cleanable
@@ -148,7 +148,7 @@ interface UniformBuffer : Cleanable, Bindable {
          */
         @JvmStatic
         fun of(size: Int): UniformBuffer {
-            return Arc.factory<Factory>().create(size)
+            return single<Factory>().create(size)
         }
 
     }

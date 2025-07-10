@@ -19,7 +19,7 @@ internal data class GlDisplay(
 
     override val matrix: Matrix4f = Matrix4f()
 
-    override val mouse: VirtualMouseInput = VirtualMouseInput.create(this)
+    override val mouse: VirtualMouseInput = VirtualMouseInput.of(this)
 
     private val frameBuffer = FrameBuffer.create(
         width = width,
