@@ -39,7 +39,8 @@ internal object GlApplication : AbstractApplication() {
 
     override fun screenshot(folder: File, name: String) {
         val screenshotFile = File(folder, name)
-        if (screenshotFile.exists()) throw IllegalArgumentException("Can not take screenshot. File with name '$name' already exists!")
+
+        check(!screenshotFile.exists()) { "Can not take screenshot. File with name '$name' already exists!" }
 
         screenshotFile.createNewFile()
 

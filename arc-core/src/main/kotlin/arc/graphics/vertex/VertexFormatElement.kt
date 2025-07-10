@@ -60,12 +60,12 @@ interface VertexFormatElement {
 
     companion object {
 
-        @JvmField val POSITION = create("POSITION", 0, VertexType.FLOAT, VertexUsage.POSITION, 3)
-        @JvmField val COLOR = create("COLOR", 0, VertexType.UBYTE, VertexUsage.COLOR, 4)
-        @JvmField val UV = create("UV", 0, VertexType.FLOAT, VertexUsage.UV, 2)
-        @JvmField val OVERLAY = create("OVERLAY", 1, VertexType.SHORT, VertexUsage.UV, 2)
-        @JvmField val NORMAL = create("NORMAL", 0, VertexType.BYTE, VertexUsage.NORMAL, 3)
-        @JvmField val PADDING = create("PADDING", 0, VertexType.BYTE, VertexUsage.PADDING, 1)
+        @JvmField val POSITION = of("POSITION", 0, VertexType.FLOAT, VertexUsage.POSITION, 3)
+        @JvmField val COLOR = of("COLOR", 0, VertexType.UBYTE, VertexUsage.COLOR, 4)
+        @JvmField val UV = of("UV", 0, VertexType.FLOAT, VertexUsage.UV, 2)
+        @JvmField val OVERLAY = of("OVERLAY", 1, VertexType.SHORT, VertexUsage.UV, 2)
+        @JvmField val NORMAL = of("NORMAL", 0, VertexType.BYTE, VertexUsage.NORMAL, 3)
+        @JvmField val PADDING = of("PADDING", 0, VertexType.BYTE, VertexUsage.PADDING, 1)
 
         /**
          * Creates a new instance of [VertexFormatElement] with the specified properties.
@@ -79,7 +79,7 @@ interface VertexFormatElement {
          * @return A newly created [VertexFormatElement] with the defined properties.
          */
         @JvmStatic
-        fun create(
+        fun of(
             name: String,
             index: Int,
             type: VertexType,

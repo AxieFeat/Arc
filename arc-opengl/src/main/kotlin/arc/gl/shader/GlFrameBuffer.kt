@@ -107,8 +107,8 @@ internal class GlFrameBuffer(
             0
         }
 
-        if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
-            throw RuntimeException("Framebuffer is not complete!")
+        check(glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE) {
+            "Framebuffer is not complete!"
         }
 
         glBindFramebuffer(GL_FRAMEBUFFER, 0)

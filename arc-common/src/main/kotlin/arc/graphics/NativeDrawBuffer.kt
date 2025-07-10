@@ -130,11 +130,13 @@ internal data class NativeDrawBuffer(
     }
 
     private fun endVertex(): NativeDrawBuffer {
-        if(elementsToFill > 0) throw IllegalArgumentException("Can not build vertex! Missing element in vertex: ${
-            leftElements().joinToString(
-                ", "
-            ) { it.name }
-        }!")
+        require(elementsToFill <= 0) {
+            "Can not build vertex! Missing element in vertex: ${
+                leftElements().joinToString(
+                    ", "
+                ) { it.name }
+            }!"
+        }
 
         elementsToFill = format.count
 

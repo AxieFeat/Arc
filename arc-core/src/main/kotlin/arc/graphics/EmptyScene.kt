@@ -14,7 +14,6 @@ object EmptyScene : Scene {
     override val delta: Float = 0f
     override var isShowCursor: Boolean = true
 
-    override fun render() {
+    override fun render() {}
 
-    }
 }

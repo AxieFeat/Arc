@@ -85,7 +85,7 @@ interface Camera {
     fun update()
 
     /**
-     * Update an aspect in camera with new height and width.
+     * Update an aspect in camera with new height and width of a window.
      */
     fun updateAspect(width: Int, height: Int)
 

@@ -121,8 +121,8 @@ internal data class GlShaderInstance(
         glShaderSource(shaderId, shaderCode)
         glCompileShader(shaderId)
 
-        if (glGetShaderi(shaderId, GL_COMPILE_STATUS) == 0) {
-            throw RuntimeException("Error compiling Shader code: " + glGetShaderInfoLog(shaderId, 1024))
+        check(glGetShaderi(shaderId, GL_COMPILE_STATUS) != 0) {
+            "Error compiling Shader code: ${glGetShaderInfoLog(shaderId, 1024)}"
         }
 
         glAttachShader(id, shaderId)

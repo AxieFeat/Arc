@@ -8,7 +8,6 @@ import org.jetbrains.annotations.Range
 /**
  * This interface represents the manager of rendering.
  */
-@Suppress("INAPPLICABLE_JVM_NAME")
 interface RenderSystem {
 
     /**

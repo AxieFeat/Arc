@@ -9,6 +9,7 @@ dependencies {
     implementation(projects.arcExtensions.arcFont.arcFontSimple)
     implementation(projects.arcExtensions.arcInput.arcInputGlfw)
 
+    // YOU MUSTN'T IMPLEMENT LWJGL IN REAL PROJECT, IT'S ONLY FOR TESTING FEATURES
     lwjgl(libs.lwjgl.lib)
     lwjgl(libs.lwjgl.glfw)
     lwjgl(libs.lwjgl.openal)

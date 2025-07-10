@@ -33,7 +33,7 @@ abstract class AbstractApplication : Application {
     }
 
     override fun openFolder(folder: File) {
-        if (!folder.isDirectory) throw IllegalArgumentException("File is not a directory.")
+        check(folder.isDirectory) { "File is not a directory." }
 
         Thread {
             val result = when (backend.device.os) {

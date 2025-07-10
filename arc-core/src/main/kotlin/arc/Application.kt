@@ -78,10 +78,10 @@ interface Application {
      *
      * @param folder The folder to be opened. It must be a valid directory.
      *
-     * @throws IllegalArgumentException If provided [folder] is not directory.
+     * @throws IllegalStateException If provided [folder] is not directory.
      * @throws UnsupportedOperationException If any error occurs when trying to open a directory.
      */
-    @Throws(IllegalArgumentException::class, UnsupportedOperationException::class)
+    @Throws(IllegalStateException::class, UnsupportedOperationException::class)
     fun openFolder(folder: File)
 
     /**
@@ -90,9 +90,9 @@ interface Application {
      * @param folder Folder, where save it.
      * @param name Name of screenshot (With extension).
      *
-     * @throws IllegalArgumentException If screenshot with [name] already exist in [folder].
+     * @throws IllegalStateException If screenshot with [name] already exist in [folder].
      */
-    @Throws(IllegalArgumentException::class)
+    @Throws(IllegalStateException::class)
     fun screenshot(folder: File, name: String)
 
     /**
