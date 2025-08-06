@@ -24,8 +24,8 @@ internal object VkApplication : AbstractApplication() {
         this.window = Window.of(
             name = "",
             handler = EmptyWindowHandler,
-            height = 420,
-            width = 720
+            width = 720,
+            height = 420
         ) as? GlfwVkWindow ?: throw IllegalStateException("Window is not GlfwVkWindow. Why?")
 
         instance = VulkanInstance()

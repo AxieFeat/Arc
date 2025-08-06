@@ -9,7 +9,7 @@ import java.nio.ByteBuffer
 import kotlin.jvm.Throws
 
 /**
- * This interface represents unform buffer for shaders.
+ * This interface represents a uniform buffer for shaders.
  *
  * In this example, we create a buffer for the array of light sources.
  *

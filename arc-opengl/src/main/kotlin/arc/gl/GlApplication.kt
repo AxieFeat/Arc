@@ -26,8 +26,8 @@ internal object GlApplication : AbstractApplication() {
         this.window = Window.of(
             name = "",
             handler = EmptyWindowHandler,
-            height = 420,
-            width = 720
+            width = 720,
+            height = 420
         ) as? GlfwGlWindow ?: throw IllegalStateException("Window is not GlfwGlWindow. Why?")
 
         this.renderSystem = GlRenderSystem

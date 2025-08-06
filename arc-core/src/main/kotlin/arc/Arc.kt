@@ -11,9 +11,10 @@ object Arc {
     @JvmStatic
     internal var objectProvider: ObjectProvider? = null
 
-    // Not use before factory provider initialized.
+    // Not use before object provider initialized.
     @JvmStatic
-    fun factoryProvider(): ObjectProvider = objectProvider!!
+    fun factoryProvider(): ObjectProvider = objectProvider
+        ?: throw UnsupportedOperationException("Cound not find ObjectProvider. Please call ArcObjectProvider.install() for initializing.")
 
     /**
      * Get single instance of [T].

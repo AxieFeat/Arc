@@ -17,7 +17,6 @@ internal data class JomlRay(
         override fun create(origin: Vector3f, direction: Vector3f): Ray {
             return JomlRay(origin, direction)
         }
-
     }
 
 }

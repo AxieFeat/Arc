@@ -15,9 +15,9 @@ interface ObjectProvider {
      * @param T The object type.
      * @param type the class of the type.
      *
-     * @throws TypeNotFoundException If there is no object registered for the given type.
-     *
      * @return The object.
+     *
+     * @throws TypeNotFoundException If there is no object registered for the given type.
      */
     @Throws(TypeNotFoundException::class)
     fun <T> provideSingle(type: Class<T>): T
@@ -30,9 +30,9 @@ interface ObjectProvider {
      * @param T The factory type.
      * @param type the class of the type.
      *
-     * @throws TypeNotFoundException If there is no factory registered for the given type.
-     *
      * @return The object.
+     *
+     * @throws TypeNotFoundException If there is no factory registered for the given type.
      */
     fun <T> provideFactory(type: Class<T>): T
 
