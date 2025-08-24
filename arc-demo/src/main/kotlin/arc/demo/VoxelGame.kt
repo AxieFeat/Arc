@@ -2,18 +2,14 @@ package arc.demo
 
 import arc.Application
 import arc.audio.SoundEngine
-import arc.demo.screen.FractalScreen
+import arc.demo.screen.DarkVeilScreen
+import arc.demo.screen.FaultyTerminalScreen
+import arc.demo.screen.GalaxyScreen
+import arc.demo.screen.PlasmaScreen
 import arc.demo.screen.Screen
-import arc.demo.screen.TerrainScreen
 import arc.demo.shader.ShaderContainer
-import arc.files.absolute
-import arc.files.classpath
 import arc.graphics.vertex.VertexFormat
 import arc.input.GlfwInputEngine
-import arc.input.KeyCode
-import arc.input.bind
-import arc.input.keyboard
-import arc.input.onPress
 import arc.window.WindowHandler
 import kotlin.system.exitProcess
 
@@ -37,7 +33,9 @@ object VoxelGame : WindowHandler {
 //        setScreen(FractalScreen)
 
         // Demo with minecraft-like game.
-        setScreen(TerrainScreen)
+//        setScreen(TerrainScreen)
+
+        setScreen(FaultyTerminalScreen)
 
 //        val asset = classpath("arc/sound/pigstep.ogg").asFileAsset()
 //        val sound = SoundLoader.of(SoundFormat.OGG).load(asset)

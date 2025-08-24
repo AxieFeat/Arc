@@ -6,6 +6,7 @@ import arc.asset.StringAsset
 import arc.util.pattern.Bindable
 import arc.util.pattern.Cleanable
 import org.jetbrains.annotations.ApiStatus
+import org.joml.Matrix3f
 import org.joml.Matrix4f
 import org.joml.Vector2f
 import org.joml.Vector3f
@@ -46,6 +47,14 @@ interface ShaderInstance : Bindable, Cleanable {
     fun addProvider(provider: UniformProvider)
 
     /**
+     * Set bool uniform for this shader.
+     *
+     * @param name Name in shader.
+     * @param value Value to set.
+     */
+    fun setUniform(name: String, value: Boolean)
+
+    /**
      * Set int uniform for this shader.
      *
      * @param name Name in shader.
@@ -60,6 +69,14 @@ interface ShaderInstance : Bindable, Cleanable {
      * @param value Value to set.
      */
     fun setUniform(name: String, value: Float)
+
+    /**
+     * Set mat3x3 uniform for this shader.
+     *
+     * @param name Name in shader.
+     * @param value Value to set.
+     */
+    fun setUniform(name: String, value: Matrix3f)
 
     /**
      * Set mat4x4 uniform for this shader.

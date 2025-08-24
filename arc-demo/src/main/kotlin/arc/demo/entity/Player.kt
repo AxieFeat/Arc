@@ -74,7 +74,9 @@ class Player(
             for (y in min.y.toInt()..max.y.toInt()) {
                 for (z in min.z.toInt()..max.z.toInt()) {
                     val block = world.getBlock(x, y, z) ?: continue
-                    if (aabb.intersects(block.aabb)) {
+                    val aabb = block.aabb ?: continue
+
+                    if (aabb.intersects(aabb)) {
                         return true
                     }
                 }

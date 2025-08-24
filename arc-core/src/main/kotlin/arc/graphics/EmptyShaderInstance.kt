@@ -4,6 +4,7 @@ import arc.shader.ShaderInstance
 import arc.shader.ShaderSettings
 import arc.shader.UniformBuffer
 import arc.shader.UniformProvider
+import org.joml.Matrix3f
 import org.joml.Matrix4f
 import org.joml.Vector2f
 import org.joml.Vector3f
@@ -24,8 +25,10 @@ object EmptyShaderInstance : ShaderInstance {
 
     override fun addProvider(provider: UniformProvider) {}
 
+    override fun setUniform(name: String, value: Boolean) {}
     override fun setUniform(name: String, value: Int) {}
     override fun setUniform(name: String, value: Float) {}
+    override fun setUniform(name: String, value: Matrix3f) {}
     override fun setUniform(name: String, value: Matrix4f) {}
     override fun setUniform(name: String, value: Vector4f) {}
     override fun setUniform(name: String, value: Vector3f) {}

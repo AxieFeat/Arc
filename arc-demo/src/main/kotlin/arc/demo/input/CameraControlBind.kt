@@ -6,7 +6,7 @@ import arc.input.KeyCode
 
 object CameraControlBind : Binding {
 
-    override val id: String = "arc.demo.camera-controll"
+    override val id: String = "arc.demo.camera-control"
     override val key: KeyCode = KeyCode.KEY_E
 
     var status: Boolean = true

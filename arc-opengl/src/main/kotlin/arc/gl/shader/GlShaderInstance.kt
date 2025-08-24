@@ -7,6 +7,7 @@ import arc.shader.ShaderInstance
 import arc.shader.ShaderSettings
 import arc.shader.UniformBuffer
 import arc.shader.UniformProvider
+import org.joml.Matrix3f
 import org.joml.Matrix4f
 import org.joml.Vector2f
 import org.joml.Vector3f
@@ -58,12 +59,28 @@ internal data class GlShaderInstance(
         providers.add(provider)
     }
 
+    override fun setUniform(name: String, value: Boolean) {
+        setUniform(name, if(value) 1 else 0)
+    }
+
     override fun setUniform(name: String, value: Int) {
         uniform(name) { glUniform1i(this, value) }
     }
 
     override fun setUniform(name: String, value: Float) {
         uniform(name) { glUniform1f(this, value) }
+    }
+
+    override fun setUniform(name: String, value: Matrix3f) {
+        uniform(name) {
+            MemoryStack.stackPush().use { stack ->
+                glUniformMatrix3fv(
+                    this,
+                    false,
+                    value[stack.mallocFloat(12)]
+                )
+            }
+        }
     }
 
     override fun setUniform(name: String, value: Matrix4f) {

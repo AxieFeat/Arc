@@ -47,9 +47,9 @@ abstract class AbstractGlfwWindow(
     override var isVsync: Boolean = true
         set(value) {
             if(value && !field) {
-                glfwSwapInterval(GLFW_FALSE)
-            } else if(!value && field) {
                 glfwSwapInterval(GLFW_TRUE)
+            } else if(!value && field) {
+                glfwSwapInterval(GLFW_FALSE)
             }
 
             field = value

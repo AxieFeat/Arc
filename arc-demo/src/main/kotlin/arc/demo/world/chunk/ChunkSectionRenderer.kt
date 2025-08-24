@@ -1,92 +1,127 @@
-package arc.demo.world
+package arc.demo.world.chunk
 
-import arc.demo.world.block.Block
+import arc.Application
+import arc.demo.world.block.Blocks
 import arc.graphics.DrawBuffer
-import arc.graphics.Drawer
 import arc.graphics.DrawerMode
-import arc.graphics.vertex.VertexArrayBuffer
 import arc.graphics.vertex.VertexBuffer
 import arc.graphics.vertex.VertexFormat
 import arc.graphics.vertex.VertexFormatElement
 import arc.model.Face
 import arc.texture.TextureAtlas
 import arc.util.Color
-import arc.util.pattern.Cleanable
-import org.joml.Matrix4f
+import org.joml.Vector3f
 import org.joml.component1
 import org.joml.component2
 import org.joml.component3
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.Executors
 
-class WorldModelDispatcher(
-    val world: World,
-    val drawer: Drawer,
-    var cubes: Array<Block?>,
-    val texture: TextureAtlas,
+class ChunkSectionRenderer(
+    val section: ChunkSection,
     val ambientOcclusion: Boolean = true
-) : Cleanable {
+) {
 
-    companion object {
-        private val executor = Executors.newFixedThreadPool(4)
-    }
+    private val world = section.chunk.world
 
-    private val matrix = Matrix4f()
-    private val aoFactor = 0.15f
-
-    private val vertexFormat = VertexFormat.builder()
-        .add(VertexFormatElement.POSITION)
-        .add(VertexFormatElement.UV)
-        .add(VertexFormatElement.COLOR)
-        .build()
-
-    private var vertexBuffer: VertexBuffer? = generateBuffer(texture).join().use { it.build() }
+    private var buffer: CompletableFuture<DrawBuffer?> = CompletableFuture<DrawBuffer?>()
+    private var vertexBuffer: VertexBuffer? = null
 
     fun render() {
-        vertexBuffer?.let {
-            texture.bind()
-            drawer.draw(it)
+        if(buffer.isDone) {
+            val buf = buffer.join()
+
+            if(buf != null) {
+                if(vertexBuffer == null) {
+                    vertexBuffer = buf.build()
+                }
+                Blocks.blocksAtlas.bind()
+                drawer.draw(vertexBuffer!!)
+            }
         }
     }
 
-    private fun generateBuffer(atlas: TextureAtlas): CompletableFuture<DrawBuffer> {
-        val completableFuture = CompletableFuture<DrawBuffer>()
+    private fun generateBuffer(atlas: TextureAtlas): CompletableFuture<DrawBuffer?> {
+        val completableFuture = CompletableFuture<DrawBuffer?>()
 
         executor.submit {
-            val buffer = drawer.begin(DrawerMode.TRIANGLES, vertexFormat, cubes.size * 250)
 
-            cubes.filterNotNull().forEach { block ->
-                val posX = block.x
-                val posY = block.y
-                val posZ = block.z
+            if (section.isEmpty) {
+                completableFuture.complete(null)
+                return@submit
+            }
 
-                block.model.cubes.forEach { cube ->
-                    val (x1, y1, z1) = cube.from
-                    val (x2, y2, z2) = cube.to
+            val blocks = section.chunk.getSectionBlocks(section.y)
 
-                    cube.faces.forEach { (face, cubeFace) ->
-                        val (dx, dy, dz) = face.normal
-                        if (isBlocked(posX + dx.toInt(), posY + dy.toInt(), posZ + dz.toInt())) return@forEach
+            val buffer = drawer.begin(
+                DrawerMode.TRIANGLES,
+                vertexFormat,
+                VertexFormatElement.POSITION.size +
+                        VertexFormatElement.UV.size +
+                        VertexFormatElement.COLOR.size
+                        * 6 // Faces of cube
+                        * 4096 // Blocks in one Section
+                        * 16 // Count of section in one chunk
+                        * 32 // Count of chunks  TODO: Player view distance here
+            )
 
-                        val uMin = cubeFace.uvMin.x.toFloat() / atlas.width
-                        val vMin = cubeFace.uvMin.y.toFloat() / atlas.height
-                        val uMax = cubeFace.uvMax.x.toFloat() / atlas.width
-                        val vMax = cubeFace.uvMax.y.toFloat() / atlas.height
+            for (y in 0..15) {
+                for (z in 0..15) {
+                    for (x in 0..15) {
 
-                        val light = when (face) {
-                            Face.UP -> 1.0f
-                            Face.DOWN -> 0.75f
-                            Face.NORTH -> 0.8f
-                            Face.SOUTH -> 0.9f
-                            Face.WEST -> 0.85f
-                            Face.EAST -> 0.95f
+                        val block = blocks[y][z][x]
+
+                        if (block.model == null) continue
+
+                        val worldX = section.chunk.x * 16 + x
+                        val worldY = section.y * 16 + y
+                        val worldZ = section.chunk.z * 16 + z
+
+                        val model = block.model
+
+                        model.cubes.forEach { cube ->
+                            val (x1, y1, z1) = Vector3f(cube.from).add(
+                                worldX.toFloat(),
+                                worldY.toFloat(),
+                                worldZ.toFloat()
+                            )
+                            val (x2, y2, z2) = Vector3f(cube.to).add(
+                                worldX.toFloat(),
+                                worldY.toFloat(),
+                                worldZ.toFloat()
+                            )
+
+                            cube.faces.forEach { (face, cubeFace) ->
+                                val (dx, dy, dz) = face.normal
+                                if (isBlocked(
+                                        worldX + dx.toInt(),
+                                        worldY + dy.toInt(),
+                                        worldZ + dz.toInt()
+                                    )
+                                ) return@forEach
+
+                                val uMin = cubeFace.uvMin.x.toFloat() / atlas.width
+                                val vMin = cubeFace.uvMin.y.toFloat() / atlas.height
+                                val uMax = cubeFace.uvMax.x.toFloat() / atlas.width
+                                val vMax = cubeFace.uvMax.y.toFloat() / atlas.height
+
+                                val light = when (face) {
+                                    Face.UP -> 1.0f
+                                    Face.DOWN -> 0.75f
+                                    Face.NORTH -> 0.8f
+                                    Face.SOUTH -> 0.9f
+                                    Face.WEST -> 0.85f
+                                    Face.EAST -> 0.95f
+                                }
+
+                                val ao =
+                                    if (ambientOcclusion) calculateAO(face, worldX, worldY, worldZ) else FloatArray(8)
+
+                                val vertices = getFaceVertices(face, x1, y1, z1, x2, y2, z2, ao, light)
+
+                                addQuad(buffer, uMin, vMin, uMax, vMax, vertices)
+                            }
                         }
-
-                        val ao = if (ambientOcclusion) calculateAO(face, posX, posY, posZ) else FloatArray(8)
-
-                        val vertices = getFaceVertices(face, x1, y1, z1, x2, y2, z2, ao, light)
-
-                        addQuad(buffer, uMin, vMin, uMax, vMax, vertices)
                     }
                 }
             }
@@ -95,6 +130,15 @@ class WorldModelDispatcher(
         }
 
         return completableFuture
+    }
+
+    fun rebuild() {
+        if(buffer.isDone) {
+            buffer.join()?.cleanup()
+        }
+        vertexBuffer?.cleanup()
+        vertexBuffer = null
+        buffer = generateBuffer(Blocks.blocksAtlas)
     }
 
     private fun calculateAO(face: Face, x: Int, y: Int, z: Int): FloatArray {
@@ -158,7 +202,7 @@ class WorldModelDispatcher(
         fun color(v: Float) = Color.of(toColorValue(v), toColorValue(v), toColorValue(v))
 
         fun addVertex(x: Float, y: Float, z: Float, u: Float, v: Float, light: Float) {
-            buffer.addVertex(matrix, x, y, z)
+            buffer.addVertex(x, y, z)
                 .setTexture(u, v)
                 .setColor(color(light))
         }
@@ -172,7 +216,7 @@ class WorldModelDispatcher(
     }
 
     private fun isBlocked(x: Int, y: Int, z: Int): Boolean {
-        return world.getBlock(x, y, z) != null
+        return false
     }
 
     private fun faceAOOffsets(face: Face): Array<IntArray> = when (face) {
@@ -202,16 +246,17 @@ class WorldModelDispatcher(
         else -> 0
     }
 
-    fun rebuild(cubes: Array<Block?>) {
-        this.cubes = cubes
+    companion object {
+        private val executor = Executors.newFixedThreadPool(8)
 
-        vertexBuffer = generateBuffer(texture).join().use {
-            if (it.vertexCount > 0) it.build() else null
-        }
-    }
+        private val vertexFormat = VertexFormat.builder()
+            .add(VertexFormatElement.POSITION)
+            .add(VertexFormatElement.UV)
+            .add(VertexFormatElement.COLOR)
+            .build()
 
-    override fun cleanup() {
-        texture.cleanup()
-        vertexBuffer?.cleanup()
+        private const val aoFactor = 0.15f
+
+        private val drawer = Application.find().renderSystem.drawer
     }
 }

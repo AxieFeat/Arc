@@ -44,11 +44,13 @@ internal object GlfwMouseInput : MouseInput {
     }
 
     fun positionUpdate(x: Double, y: Double) {
-        previousPosition.set(position.x, position.y)
+        if(position.x == x.toFloat() && position.y == y.toFloat()) return
 
-        position.set(x, y)
+        previousPosition = previousPosition.set(position.x, position.y)
 
-        displayVec.set(
+        position = position.set(x, y)
+
+        displayVec = displayVec.set(
             position.x - previousPosition.x,
             position.y - previousPosition.y
         )

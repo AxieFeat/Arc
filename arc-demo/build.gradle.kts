@@ -17,4 +17,5 @@ dependencies {
     lwjgl(libs.lwjgl.opengl)
 
     implementation("de.articdive:jnoise-pipeline:4.1.0")
+    implementation(libs.fastutil)
 }

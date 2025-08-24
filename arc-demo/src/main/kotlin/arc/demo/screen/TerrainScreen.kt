@@ -7,6 +7,7 @@ import arc.demo.input.CameraControlBind
 import arc.demo.input.ScreenshotBind
 import arc.demo.shader.ShaderContainer
 import arc.demo.shader.VertexFormatContainer
+import arc.demo.world.block.Blocks
 import arc.demo.world.World
 import arc.demo.world.block.Block
 import arc.files.classpath
@@ -30,10 +31,11 @@ import kotlin.math.*
 
 object TerrainScreen : Screen("terrain") {
 
-    private val drawer = application.renderSystem.drawer
+    init {
+        Blocks // We should load texture in blocks list
+    }
 
-    private val world = World()
-    private val player = Player(world, camera)
+    private val drawer = application.renderSystem.drawer
 
     private val font = FontLoader.load(classpath("arc/font/Monocraft.json").asFileAsset())
     private val matrix = Matrix4f().ortho(0f, application.window.width.toFloat(), 0f, application.window.height.toFloat(), -1f, 1f)
@@ -119,6 +121,9 @@ object TerrainScreen : Screen("terrain") {
         buffer.build()
     }
 
+    private val world = World()
+    private val player = Player(world, camera)
+
     init {
         isShowCursor = false
         application.keyboard.bind(CameraControlBind)
@@ -126,13 +131,13 @@ object TerrainScreen : Screen("terrain") {
 
         application.renderSystem.enableCull()
 
-        application.window.isVsync = true
+        application.window.isVsync = false
 
-        player.viewDistance = 8
-        player.memoryDistance = 16
+        player.viewDistance = 5
+        player.memoryDistance = 5
 
         player.position = Vector3f(0f, 50f, 0f)
-        player.fly = false
+        player.fly = true
 
 //        for(x in 0..8) {
 //            for(y in 0..8) {
@@ -171,7 +176,7 @@ object TerrainScreen : Screen("terrain") {
         val block = raycastForBlock()
 
         if(block != null) {
-            world.setBlockAndUpdateChunk(block.x, block.y, block.z, null)
+            world.setBlockAndUpdate(block.x, block.y, block.z, Blocks.AIR)
         }
     }
 
@@ -186,7 +191,7 @@ object TerrainScreen : Screen("terrain") {
         val targetY = y + ny
         val targetZ = z + nz
 
-        world.setBlockAndUpdateChunk(targetX.toInt(), targetY.toInt(), targetZ.toInt())
+        world.setBlockAndUpdate(targetX.toInt(), targetY.toInt(), targetZ.toInt(), Blocks.STONE)
     }
 
     private fun renderCrosshair() {
@@ -297,7 +302,7 @@ object TerrainScreen : Screen("terrain") {
 
         while (distanceTraveled <= maxDistance) {
             val block = world.getBlock(x, y, z)
-            if (block != null) {
+            if (block != Blocks.AIR) {
                 return RaycastHit(x, y, z, lastStepFace, block)
             }
 
