@@ -1,5 +1,6 @@
 dependencies {
     implementation(projects.arcOpengl)
+    implementation(projects.arcOpengles)
     implementation(projects.arcVulkan)
 
     implementation(projects.arcExtensions.arcProfiler.arcProfilerSimple)

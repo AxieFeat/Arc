@@ -6,82 +6,76 @@ import arc.demo.world.block.Block
 import arc.demo.world.block.Blocks
 import arc.graphics.Camera
 
-
 class Chunk(
     val world: World,
     val x: Int,
-    val z: Int,
+    val z: Int
 ) {
+    // 0..15 секций по высоте => мир высотой 256
+    val sections: Array<ChunkSection?> = arrayOfNulls(16)
 
-    private val sections = arrayOfNulls<ChunkSection>(16)
-    private val paletteMap = mutableMapOf<Block, Short>()
-    private val indexToBlock = mutableMapOf<Short, Block>()
+    // Палитра на чанк: Block -> Short и обратно
+    private val blockToIndex = HashMap<Block, Short>(64)
+    private val indexToBlock = HashMap<Short, Block>(64)
     private var nextPaletteId: Short = 0
 
+    // Хук для системы рендера: вы можете подвязать пересборку мешей секции
+    var onSectionChanged: ((ChunkSection) -> Unit)? = null
+
     init {
+        // Гарантируем, что AIR = 0
         addToPalette(Blocks.AIR)
     }
 
-    fun getSectionBlocks(sectionY: Int): Array<Array<Array<Block>>> {
-        return getSection(sectionY).getAllBlocks(indexToBlock)
-    }
-
-    fun getBlock(x: Int, y: Int, z: Int): Block {
-        val sectionY = y shr 4
-        val section = getSection(sectionY)
-        val paletteIndex = section.getBlockIndex(x, y and 15, z)
-        return indexToBlock[paletteIndex] ?: Blocks.AIR
-    }
-
-    fun setBlock(x: Int, y: Int, z: Int, block: Block) {
-        val sectionY = y shr 4
-        val section = getSection(sectionY)
-        val paletteIndex = addToPalette(block)
-        section.setBlockIndex(x, y and 15, z, paletteIndex)
-    }
-
-    fun setBlockAndUpdate(x: Int, y: Int, z: Int, block: Block) {
-        val sectionY = y shr 4
-        val section = getSection(sectionY)
-        val paletteIndex = addToPalette(block)
-        section.setBlockIndex(x, y and 15, z, paletteIndex)
-        section.update()
-    }
-
     fun getSection(sectionY: Int): ChunkSection {
-        require(sectionY in 0..15) { "Section Y must be between 0 and 15" }
-
-        return sections[sectionY] ?: ChunkSection(this, sectionY).also { sections[sectionY] = it }
+        require(sectionY in 0..15) { "sectionY must be in 0..15" }
+        val existing = sections[sectionY]
+        if (existing != null) return existing
+        val created = ChunkSection(this, sectionY)
+        sections[sectionY] = created
+        return created
     }
+
+    fun getBlock(localX: Int, worldY: Int, localZ: Int): Block {
+        require(localX in 0..15 && localZ in 0..15 && worldY in 0..255)
+        val secY = worldY shr 4
+        val ly = worldY and 15
+        val section = sections[secY] ?: return Blocks.AIR
+        val p = section.getBlockIndex(localX, ly, localZ)
+        return getBlockByPaletteIndex(p)
+    }
+
+    fun setBlock(localX: Int, worldY: Int, localZ: Int, block: Block) {
+        require(localX in 0..15 && localZ in 0..15 && worldY in 0..255)
+        val secY = worldY shr 4
+        val ly = worldY and 15
+        val section = getSection(secY)
+        val idx = addToPalette(block)
+        section.setBlockIndex(localX, ly, localZ, idx)
+    }
+
+    fun setBlockAndNotify(localX: Int, worldY: Int, localZ: Int, block: Block) {
+        require(localX in 0..15 && localZ in 0..15 && worldY in 0..255)
+        val secY = worldY shr 4
+        val ly = worldY and 15
+        val section = getSection(secY)
+        val idx = addToPalette(block)
+        section.setBlockIndexAndUpdate(localX, ly, localZ, idx)
+    }
+
+    fun getBlockByPaletteIndex(index: Short): Block =
+        indexToBlock[index] ?: Blocks.AIR
 
     private fun addToPalette(block: Block): Short {
-        if (paletteMap.containsKey(block)) {
-            return paletteMap[block]!!
-        }
-
+        blockToIndex[block]?.let { return it }
         val id = nextPaletteId++
-        paletteMap.put(block, id)
-        indexToBlock.put(id, block)
+        blockToIndex[block] = id
+        indexToBlock[id] = block
         return id
     }
 
-    fun update() {
-        sections.forEach {
-            it?.update()
-        }
+    fun forEachNonEmptySection(action: (ChunkSection) -> Unit) {
+        sections.forEach { s -> if (s != null && !s.isEmpty) action(s) }
     }
-
-    fun render(camera: Camera, player: Player) {
-        sections.forEach { section ->
-            if (section != null && !section.isEmpty) {
-                if (player.shouldRender(this)) {
-
-                    if (camera.frustum.isBoxInFrustum(section.aabb)) {
-                        section.renderer.render()
-                    }
-                }
-            }
-        }
-    }
-
 }
+

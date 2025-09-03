@@ -20,7 +20,7 @@ object GalaxyScreen : Screen("galaxy") {
             layout (location = 0) in vec3 Position;
             layout (location = 1) in vec2 uv;
             
-            varying vec2 vUv;
+            out vec2 vUv;
             
             void main() {
                 vUv = uv;
@@ -51,12 +51,14 @@ object GalaxyScreen : Screen("galaxy") {
             uniform float uAutoCenterRepulsion;
             uniform bool uTransparent;
             
-            varying vec2 vUv;
+            in vec2 vUv;
             
             #define NUM_LAYER 4.0
             #define STAR_COLOR_CUTOFF 0.2
             #define MAT45 mat2(0.7071, -0.7071, 0.7071, 0.7071)
             #define PERIOD 3.0
+            
+            out vec4 FragColor; 
             
             float Hash21(vec2 p) {
               p = fract(p * vec2(123.34, 456.21));
@@ -178,9 +180,9 @@ object GalaxyScreen : Screen("galaxy") {
                 float alpha = length(col);
                 alpha = smoothstep(0.0, 0.3, alpha); // Enhance contrast
                 alpha = min(alpha, 1.0); // Clamp to maximum 1.0
-                gl_FragColor = vec4(col, alpha);
+                FragColor = vec4(col, alpha);
               } else {
-                gl_FragColor = vec4(col, 1.0);
+                FragColor = vec4(col, 1.0);
               }
             }
         """.trimIndent().asRuntimeAsset()

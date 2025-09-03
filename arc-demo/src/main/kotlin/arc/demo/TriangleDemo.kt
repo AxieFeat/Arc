@@ -4,6 +4,7 @@ import arc.Application
 import arc.ArcObjectProvider
 import arc.asset.asRuntimeAsset
 import arc.gl.OpenGL
+import arc.gles.OpenGLES
 import arc.graphics.DrawBuffer
 import arc.graphics.DrawerMode
 import arc.graphics.RenderSystem
@@ -19,7 +20,7 @@ fun main() {
     ArcObjectProvider.bootstrap()
 
     // Preload OpenGL
-    OpenGL.preload()
+    OpenGLES.preload()
 
     // Find application in current context (OpenGL implementation)
     val application: Application = Application.find()
@@ -49,31 +50,42 @@ fun main() {
 
 private fun getShaderInstance(): ShaderInstance {
     val vertexShader = """
-        #version 410
+       #version 300 es
+precision highp float;
 
-        layout (location = 0) in vec3 Position;
-        layout (location = 1) in vec4 Color;
+out vec4 vertexColor;
 
-        out vec4 vertexColor;
+void main() {
+    // Захардкоженный треугольник
+    vec3 positions[3] = vec3[3](
+        vec3(0.0,  0.5, 0.0),
+        vec3(-0.5, -0.5, 0.0),
+        vec3(0.5, -0.5, 0.0)
+    );
+    
+    vec4 colors[3] = vec4[3](
+        vec4(1.0, 0.0, 0.0, 1.0), // красный
+        vec4(0.0, 1.0, 0.0, 1.0), // зеленый
+        vec4(0.0, 0.0, 1.0, 1.0)  // синий
+    );
+    
+    gl_Position = vec4(positions[gl_VertexID], 1.0);
+    vertexColor = colors[gl_VertexID];
+}
 
-        void main()
-        {
-            gl_Position = vec4(Position, 1.0);
-
-            vertexColor = Color;
-        } 
         """.trimIndent().asRuntimeAsset()
 
     val fragmentShader = """
-        #version 410
+        #version 300 es
+precision mediump float;
 
-        in vec4 vertexColor;
-        out vec4 FragColor;
+in vec4 vertexColor;
+out vec4 FragColor;
 
-        void main()
-        {
-            FragColor = vertexColor;
-        }
+void main() {
+    FragColor = vertexColor;
+}
+
         """.trimIndent().asRuntimeAsset()
 
     return ShaderInstance.of(

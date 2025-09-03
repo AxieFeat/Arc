@@ -26,6 +26,7 @@ class ChunkSection(
         )
     )
 
+    // Храним renderer прямо в секции
     val renderer = ChunkSectionRenderer(this)
 
     fun getBlockIndex(x: Int, y: Int, z: Int): Short {
@@ -62,6 +63,7 @@ class ChunkSection(
     }
 
     fun update() {
+        // Триггерим перестройку буфера текущей секции
         renderer.rebuild()
     }
 

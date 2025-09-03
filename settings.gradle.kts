@@ -28,6 +28,7 @@ include("arc-annotation-processor")
 include("arc-core")
 include("arc-common")
 include("arc-opengl")
+include("arc-opengles")
 include("arc-vulkan")
 
 include("arc-extensions")

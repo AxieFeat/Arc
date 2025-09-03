@@ -7,6 +7,7 @@ import arc.demo.screen.FaultyTerminalScreen
 import arc.demo.screen.GalaxyScreen
 import arc.demo.screen.PlasmaScreen
 import arc.demo.screen.Screen
+import arc.demo.screen.TerrainScreen
 import arc.demo.shader.ShaderContainer
 import arc.graphics.vertex.VertexFormat
 import arc.input.GlfwInputEngine
@@ -24,7 +25,7 @@ object VoxelGame : WindowHandler {
 
         GlfwInputEngine.hook(application.window)
 
-        loadShaders()
+//        loadShaders()
 
         // Set window handler to this instance.
         application.window.handler = this
@@ -33,8 +34,6 @@ object VoxelGame : WindowHandler {
 //        setScreen(FractalScreen)
 
         // Demo with minecraft-like game.
-//        setScreen(TerrainScreen)
-
         setScreen(FaultyTerminalScreen)
 
 //        val asset = classpath("arc/sound/pigstep.ogg").asFileAsset()

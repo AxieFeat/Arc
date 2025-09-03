@@ -1,13 +1,18 @@
-package arc.gl.shader
+package arc.gles.shader
 
 import arc.shader.UniformBuffer
-import org.lwjgl.opengl.ARBUniformBufferObject.GL_UNIFORM_BUFFER
-import org.lwjgl.opengl.GL41.*
+import org.lwjgl.opengles.GLES20.GL_DYNAMIC_DRAW
+import org.lwjgl.opengles.GLES20.glBindBuffer
+import org.lwjgl.opengles.GLES20.glBufferData
+import org.lwjgl.opengles.GLES20.glBufferSubData
+import org.lwjgl.opengles.GLES20.glDeleteBuffers
+import org.lwjgl.opengles.GLES20.glGenBuffers
+import org.lwjgl.opengles.GLES30.GL_UNIFORM_BUFFER
 import org.lwjgl.system.MemoryUtil.memAlloc
 import org.lwjgl.system.MemoryUtil.memFree
 import java.nio.ByteBuffer
 
-internal class GlUniformBuffer(
+internal class GlesUniformBuffer(
     override val size: Int
 ) : UniformBuffer {
 
@@ -51,7 +56,7 @@ internal class GlUniformBuffer(
 
     object Factory : UniformBuffer.Factory {
         override fun create(size: Int): UniformBuffer {
-            return GlUniformBuffer(size)
+            return GlesUniformBuffer(size)
         }
     }
 

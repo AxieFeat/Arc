@@ -92,21 +92,6 @@ interface RenderSystem {
     fun disableBlend()
 
     /**
-     * Sets the polygon rasterization mode for rasterizing polygons in the rendering pipeline.
-     *
-     * @param face Specifies which face(s) of the polygons the mode applies to.
-     * @param mode Specifies the drawing mode to use for the polygons.
-     */
-    fun polygonMode(face: Int, mode: Int)
-
-    /**
-     * Clears the depth buffer to the specified depth value.
-     *
-     * @param depth The depth value to clear the depth buffer to.
-     */
-    fun clearDepth(depth: Double)
-
-    /**
      * Configures the color mask for rendering operations.
      *
      * @param red The red component of the color.

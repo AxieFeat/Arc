@@ -37,7 +37,8 @@ object PlasmaScreen : Screen("plasma") {
             uniform float uOpacity;
             uniform vec2 uMouse;
             uniform float uMouseInteractive;
-            out vec4 fragColor;
+            
+            out vec4 FragColor; 
             
             void mainImage(out vec4 o, vec2 C) {
               vec2 center = iResolution.xy * 0.5;
@@ -83,7 +84,7 @@ object PlasmaScreen : Screen("plasma") {
               vec3 finalColor = mix(rgb, customColor, step(0.5, uUseCustomColor));
               
               float alpha = length(rgb) * uOpacity;
-              fragColor = vec4(finalColor, alpha);
+              FragColor = vec4(finalColor, alpha);
             }
         """.trimIndent().asRuntimeAsset()
     ).also { it.compileShaders() }

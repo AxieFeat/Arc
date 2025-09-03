@@ -28,13 +28,14 @@ class ChunkSectionRenderer(
     private var vertexBuffer: VertexBuffer? = null
 
     fun render() {
-        if(buffer.isDone) {
+        if (buffer.isDone) {
             val buf = buffer.join()
 
-            if(buf != null) {
-                if(vertexBuffer == null) {
+            if (buf != null) {
+                if (vertexBuffer == null) {
                     vertexBuffer = buf.build()
                 }
+                // Текстура: предполагается единый атлас для всех блоков (как и раньше).
                 Blocks.blocksAtlas.bind()
                 drawer.draw(vertexBuffer!!)
             }
@@ -51,54 +52,50 @@ class ChunkSectionRenderer(
                 return@submit
             }
 
-            val blocks = section.chunk.getSectionBlocks(section.y)
+            // Прогнозируем ёмкость без заведомого перерасхода: базовая оценка на секцию
+            // В среднем далеко не все грани видимы, поэтому возьмём умеренную величину.
+            val estimatedTriangles = 16 * 16 * 16 /*voxels*/ * 3 /*~среднее видимых граней*/ * 2 /*треугольника на грань*/
+            val buffer = drawer.begin(DrawerMode.TRIANGLES, vertexFormat, max(estimatedTriangles, 8192))
 
-            val buffer = drawer.begin(
-                DrawerMode.TRIANGLES,
-                vertexFormat,
-                VertexFormatElement.POSITION.size +
-                        VertexFormatElement.UV.size +
-                        VertexFormatElement.COLOR.size
-                        * 6 // Faces of cube
-                        * 4096 // Blocks in one Section
-                        * 16 // Count of section in one chunk
-                        * 32 // Count of chunks  TODO: Player view distance here
-            )
+            val chunk = section.chunk
+            val baseX = chunk.x * 16
+            val baseY = section.y * 16
+            val baseZ = chunk.z * 16
 
-            for (y in 0..15) {
-                for (z in 0..15) {
-                    for (x in 0..15) {
+            // Временный буфер под вершины одного квада, чтобы не аллоцировать массивы
+            val v = FloatArray(4 * 4) // x,y,z,light на 4 вершины
 
-                        val block = blocks[y][z][x]
+            for (ly in 0..15) {
+                val worldY = baseY + ly
+                for (lz in 0..15) {
+                    val worldZ = baseZ + lz
+                    for (lx in 0..15) {
+                        val worldX = baseX + lx
 
-                        if (block.model == null) continue
+                        val paletteIndex = section.getBlockIndex(lx, ly, lz)
+                        if (paletteIndex.toInt() == 0) continue // AIR по палитре
 
-                        val worldX = section.chunk.x * 16 + x
-                        val worldY = section.y * 16 + y
-                        val worldZ = section.chunk.z * 16 + z
-
+                        val block = chunk.getBlockByPaletteIndex(paletteIndex)
                         val model = block.model
 
+                        // Для каждого куба модели — добавляем видимые грани
                         model.cubes.forEach { cube ->
-                            val (x1, y1, z1) = Vector3f(cube.from).add(
-                                worldX.toFloat(),
-                                worldY.toFloat(),
-                                worldZ.toFloat()
-                            )
-                            val (x2, y2, z2) = Vector3f(cube.to).add(
-                                worldX.toFloat(),
-                                worldY.toFloat(),
-                                worldZ.toFloat()
-                            )
+                            // Локальные границы куба с учётом мирового оффсета
+                            val x1 = cube.from.x + worldX
+                            val y1 = cube.from.y + worldY
+                            val z1 = cube.from.z + worldZ
+                            val x2 = cube.to.x + worldX
+                            val y2 = cube.to.y + worldY
+                            val z2 = cube.to.z + worldZ
 
                             cube.faces.forEach { (face, cubeFace) ->
-                                val (dx, dy, dz) = face.normal
-                                if (isBlocked(
-                                        worldX + dx.toInt(),
-                                        worldY + dy.toInt(),
-                                        worldZ + dz.toInt()
-                                    )
-                                ) return@forEach
+                                val n = face.normal
+                                val nx = n.x.toInt()
+                                val ny = n.y.toInt()
+                                val nz = n.z.toInt()
+
+                                // Куллинг по соседу
+                                if (isBlocked(worldX + nx, worldY + ny, worldZ + nz)) return@forEach
 
                                 val uMin = cubeFace.uvMin.x.toFloat() / atlas.width
                                 val vMin = cubeFace.uvMin.y.toFloat() / atlas.height
@@ -114,12 +111,49 @@ class ChunkSectionRenderer(
                                     Face.EAST -> 0.95f
                                 }
 
-                                val ao =
-                                    if (ambientOcclusion) calculateAO(face, worldX, worldY, worldZ) else FloatArray(8)
+                                val ao = if (ambientOcclusion) calculateAO(face, worldX, worldY, worldZ) else null
 
-                                val vertices = getFaceVertices(face, x1, y1, z1, x2, y2, z2, ao, light)
+                                // Заполняем 4 вершины квада без выделения массивов
+                                when (face) {
+                                    Face.UP -> {
+                                        setV(v, 0, x1, y2, z1, light, ao, 2, 3, 4)
+                                        setV(v, 1, x1, y2, z2, light, ao, 2, 1, 5)
+                                        setV(v, 2, x2, y2, z2, light, ao, 0, 1, 6)
+                                        setV(v, 3, x2, y2, z1, light, ao, 0, 3, 7)
+                                    }
+                                    Face.DOWN -> {
+                                        setV(v, 0, x1, y1, z2, light, ao, 2, 1, 5)
+                                        setV(v, 1, x1, y1, z1, light, ao, 2, 3, 4)
+                                        setV(v, 2, x2, y1, z1, light, ao, 0, 3, 7)
+                                        setV(v, 3, x2, y1, z2, light, ao, 0, 1, 6)
+                                    }
+                                    Face.NORTH -> {
+                                        setV(v, 0, x1, y1, z1, light, ao, 2, 3, 4)
+                                        setV(v, 1, x1, y2, z1, light, ao, 0, 3, 7)
+                                        setV(v, 2, x2, y2, z1, light, ao, 0, 1, 6)
+                                        setV(v, 3, x2, y1, z1, light, ao, 2, 1, 5)
+                                    }
+                                    Face.SOUTH -> {
+                                        setV(v, 0, x2, y1, z2, light, ao, 2, 1, 5)
+                                        setV(v, 1, x2, y2, z2, light, ao, 0, 1, 6)
+                                        setV(v, 2, x1, y2, z2, light, ao, 0, 3, 7)
+                                        setV(v, 3, x1, y1, z2, light, ao, 2, 3, 4)
+                                    }
+                                    Face.WEST -> {
+                                        setV(v, 0, x1, y1, z2, light, ao, 1, 2, 5)
+                                        setV(v, 1, x1, y2, z2, light, ao, 0, 1, 6)
+                                        setV(v, 2, x1, y2, z1, light, ao, 0, 3, 7)
+                                        setV(v, 3, x1, y1, z1, light, ao, 2, 3, 4)
+                                    }
+                                    Face.EAST -> {
+                                        setV(v, 0, x2, y1, z1, light, ao, 2, 3, 4)
+                                        setV(v, 1, x2, y2, z1, light, ao, 0, 3, 7)
+                                        setV(v, 2, x2, y2, z2, light, ao, 0, 1, 6)
+                                        setV(v, 3, x2, y1, z2, light, ao, 2, 1, 5)
+                                    }
+                                }
 
-                                addQuad(buffer, uMin, vMin, uMax, vMax, vertices)
+                                addQuad(buffer, uMin, vMin, uMax, vMax, v)
                             }
                         }
                     }
@@ -133,7 +167,7 @@ class ChunkSectionRenderer(
     }
 
     fun rebuild() {
-        if(buffer.isDone) {
+        if (buffer.isDone) {
             buffer.join()?.cleanup()
         }
         vertexBuffer?.cleanup()
@@ -148,75 +182,44 @@ class ChunkSectionRenderer(
         }
     }
 
-    private fun getFaceVertices(
-        face: Face,
-        x1: Float, y1: Float, z1: Float,
-        x2: Float, y2: Float, z2: Float,
-        ao: FloatArray,
-        light: Float
-    ): Array<FloatArray> = when (face) {
-        Face.UP -> arrayOf(
-            floatArrayOf(x1, y2, z1, light * (1f - ao[2] - ao[3] - ao[4])),
-            floatArrayOf(x1, y2, z2, light * (1f - ao[2] - ao[1] - ao[5])),
-            floatArrayOf(x2, y2, z2, light * (1f - ao[0] - ao[1] - ao[6])),
-            floatArrayOf(x2, y2, z1, light * (1f - ao[0] - ao[3] - ao[7]))
-        )
-        Face.DOWN -> arrayOf(
-            floatArrayOf(x1, y1, z2, light * (1f - ao[2] - ao[1] - ao[5])),
-            floatArrayOf(x1, y1, z1, light * (1f - ao[2] - ao[3] - ao[4])),
-            floatArrayOf(x2, y1, z1, light * (1f - ao[0] - ao[3] - ao[7])),
-            floatArrayOf(x2, y1, z2, light * (1f - ao[0] - ao[1] - ao[6]))
-        )
-        Face.NORTH -> arrayOf(
-            floatArrayOf(x1, y1, z1, light * (1f - ao[2] - ao[3] - ao[4])),
-            floatArrayOf(x1, y2, z1, light * (1f - ao[0] - ao[3] - ao[7])),
-            floatArrayOf(x2, y2, z1, light * (1f - ao[0] - ao[1] - ao[6])),
-            floatArrayOf(x2, y1, z1, light * (1f - ao[2] - ao[1] - ao[5]))
-        )
-        Face.SOUTH -> arrayOf(
-            floatArrayOf(x2, y1, z2, light * (1f - ao[2] - ao[1] - ao[5])),
-            floatArrayOf(x2, y2, z2, light * (1f - ao[0] - ao[1] - ao[6])),
-            floatArrayOf(x1, y2, z2, light * (1f - ao[0] - ao[3] - ao[7])),
-            floatArrayOf(x1, y1, z2, light * (1f - ao[2] - ao[3] - ao[4]))
-        )
-        Face.WEST -> arrayOf(
-            floatArrayOf(x1, y1, z2, light * (1f - ao[1] - ao[2] - ao[5])),
-            floatArrayOf(x1, y2, z2, light * (1f - ao[0] - ao[1] - ao[6])),
-            floatArrayOf(x1, y2, z1, light * (1f - ao[0] - ao[3] - ao[7])),
-            floatArrayOf(x1, y1, z1, light * (1f - ao[2] - ao[3] - ao[4]))
-        )
-        Face.EAST -> arrayOf(
-            floatArrayOf(x2, y1, z1, light * (1f - ao[2] - ao[3] - ao[4])),
-            floatArrayOf(x2, y2, z1, light * (1f - ao[0] - ao[3] - ao[7])),
-            floatArrayOf(x2, y2, z2, light * (1f - ao[0] - ao[1] - ao[6])),
-            floatArrayOf(x2, y1, z2, light * (1f - ao[2] - ao[1] - ao[5]))
-        )
+    // Упаковываем координаты + освещение в один временный массив без аллокаций
+    private fun setV(dst: FloatArray, i: Int, x: Float, y: Float, z: Float, baseLight: Float, ao: FloatArray?, a: Int, b: Int, c: Int) {
+        val light = if (ao == null) baseLight else baseLight * (1f - ao[a] - ao[b] - ao[c])
+        val o = i * 4
+        dst[o] = x
+        dst[o + 1] = y
+        dst[o + 2] = z
+        dst[o + 3] = light
     }
 
     private fun addQuad(
         buffer: DrawBuffer,
         uMin: Float, vMin: Float, uMax: Float, vMax: Float,
-        vertices: Array<FloatArray>
+        v: FloatArray // 4 вершины по 4 значения (x,y,z,light)
     ) {
-        fun toColorValue(v: Float) = (v.coerceIn(0f, 1f) * 255).toInt()
-        fun color(v: Float) = Color.of(toColorValue(v), toColorValue(v), toColorValue(v))
+        fun toColorValue(f: Float) = (f.coerceIn(0f, 1f) * 255f).toInt()
+        fun color(f: Float) = Color.of(toColorValue(f), toColorValue(f), toColorValue(f))
 
-        fun addVertex(x: Float, y: Float, z: Float, u: Float, v: Float, light: Float) {
-            buffer.addVertex(x, y, z)
-                .setTexture(u, v)
-                .setColor(color(light))
+        fun add(i: Int, u: Float, vTex: Float) {
+            val o = i * 4
+            buffer.addVertex(v[o], v[o + 1], v[o + 2])
+                .setTexture(u, vTex)
+                .setColor(color(v[o + 3]))
         }
 
-        addVertex(vertices[0][0], vertices[0][1], vertices[0][2], uMin, vMax, vertices[0][3])
-        addVertex(vertices[1][0], vertices[1][1], vertices[1][2], uMin, vMin, vertices[1][3])
-        addVertex(vertices[2][0], vertices[2][1], vertices[2][2], uMax, vMin, vertices[2][3])
-        addVertex(vertices[2][0], vertices[2][1], vertices[2][2], uMax, vMin, vertices[2][3])
-        addVertex(vertices[3][0], vertices[3][1], vertices[3][2], uMax, vMax, vertices[3][3])
-        addVertex(vertices[0][0], vertices[0][1], vertices[0][2], uMin, vMax, vertices[0][3])
+        // Треугольник 1
+        add(0, uMin, vMax)
+        add(1, uMin, vMin)
+        add(2, uMax, vMin)
+        // Треугольник 2
+        add(2, uMax, vMin)
+        add(3, uMax, vMax)
+        add(0, uMin, vMax)
     }
 
     private fun isBlocked(x: Int, y: Int, z: Int): Boolean {
-        return false
+        val neighbor = world.getBlock(x, y, z)
+        return !neighbor.isAir && neighbor.opaque
     }
 
     private fun faceAOOffsets(face: Face): Array<IntArray> = when (face) {
@@ -248,6 +251,10 @@ class ChunkSectionRenderer(
 
     companion object {
         private val executor = Executors.newFixedThreadPool(8)
+
+        private fun max(a: Int, b: Int): Int {
+            return if (a > b) a else b
+        }
 
         private val vertexFormat = VertexFormat.builder()
             .add(VertexFormatElement.POSITION)

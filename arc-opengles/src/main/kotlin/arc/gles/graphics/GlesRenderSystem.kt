@@ -1,19 +1,34 @@
-package arc.gl.graphics
+package arc.gles.graphics
 
-import arc.gl.GlApplication
+import arc.gles.GlesApplication
 import arc.graphics.*
 import arc.graphics.scene.Scene
 import arc.shader.ShaderInstance
 import arc.texture.EmptyTexture
 import arc.texture.Texture
-import org.lwjgl.opengl.GL41.*
+import org.lwjgl.opengles.GLES20.GL_BLEND
+import org.lwjgl.opengles.GLES20.GL_COLOR_BUFFER_BIT
+import org.lwjgl.opengles.GLES20.GL_CULL_FACE
+import org.lwjgl.opengles.GLES20.GL_DEPTH_BUFFER_BIT
+import org.lwjgl.opengles.GLES20.GL_DEPTH_TEST
+import org.lwjgl.opengles.GLES20.GL_TEXTURE_2D
+import org.lwjgl.opengles.GLES20.glBlendEquation
+import org.lwjgl.opengles.GLES20.glBlendFunc
+import org.lwjgl.opengles.GLES20.glBlendFuncSeparate
+import org.lwjgl.opengles.GLES20.glClear
+import org.lwjgl.opengles.GLES20.glClearColor
+import org.lwjgl.opengles.GLES20.glColorMask
+import org.lwjgl.opengles.GLES20.glDepthMask
+import org.lwjgl.opengles.GLES20.glDisable
+import org.lwjgl.opengles.GLES20.glEnable
+import org.lwjgl.opengles.GLES20.glViewport
 
-internal object GlRenderSystem : RenderSystem {
+internal object GlesRenderSystem : RenderSystem {
 
     override var shader: ShaderInstance = EmptyShaderInstance
     override var texture: Texture = EmptyTexture
 
-    override val drawer: Drawer = GlDrawer
+    override val drawer: Drawer = GlesDrawer
 
     @set:JvmName("_setScene")
     override var scene: Scene = EmptyScene
@@ -29,7 +44,7 @@ internal object GlRenderSystem : RenderSystem {
     }
 
     override fun beginFrame() {
-        GlApplication.window.pollEvents()
+        GlesApplication.window.pollEvents()
 
         clear(GL_COLOR_BUFFER_BIT or GL_DEPTH_BUFFER_BIT)
         resetViewport()
@@ -40,7 +55,7 @@ internal object GlRenderSystem : RenderSystem {
         shader = EmptyShaderInstance
         texture.unbind()
         texture = EmptyTexture
-        GlApplication.window.swapBuffers()
+        GlesApplication.window.swapBuffers()
     }
 
     override fun setScene(scene: Scene) {
@@ -84,7 +99,7 @@ internal object GlRenderSystem : RenderSystem {
     }
 
     override fun resetViewport() {
-        setViewport(0, 0, GlApplication.window.width, GlApplication.window.height)
+        setViewport(0, 0, GlesApplication.window.width, GlesApplication.window.height)
     }
 
     override fun clearColor(red: Float, green: Float, blue: Float, alpha: Float) {

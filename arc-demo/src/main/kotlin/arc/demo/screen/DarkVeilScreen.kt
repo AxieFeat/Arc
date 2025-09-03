@@ -73,6 +73,8 @@ object DarkVeilScreen : Screen("dark-veil") {
                 return vec4(buf[0].x,buf[0].y,buf[0].z,1.);
             }
             
+            out vec4 FragColor;
+            
             void mainImage(out vec4 fragColor,in vec2 fragCoord){
                 vec2 uv=fragCoord/uResolution.xy*2.-1.;
                 uv.y*=-1.;
@@ -86,7 +88,7 @@ object DarkVeilScreen : Screen("dark-veil") {
                 float scanline_val=sin(gl_FragCoord.y*uScanFreq)*0.5+0.5;
                 col.rgb*=1.-(scanline_val*scanline_val)*uScan;
                 col.rgb+=(rand(gl_FragCoord.xy+uTime)-0.5)*uNoise;
-                gl_FragColor=vec4(clamp(col.rgb,0.0,1.0),1.0);
+                FragColor=vec4(clamp(col.rgb,0.0,1.0),1.0);
             }
         """.trimIndent().asRuntimeAsset()
     ).also { it.compileShaders() }
