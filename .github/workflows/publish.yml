@@ -19,9 +19,10 @@ jobs:
       - name: Validate Gradle Wrapper
         run: ./gradlew --version
       - name: Detekt
-        run: ./gradlew detekt --stacktrace
+        run: ./gradlew detekt
 
   publish:
+    needs: detekt
     runs-on: ubuntu-latest
     permissions:
       contents: read
