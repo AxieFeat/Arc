@@ -35,5 +35,4 @@ internal object OshiDevice : Device {
             else -> OSPlatform.UNKNOWN
         }
     }
-
 }

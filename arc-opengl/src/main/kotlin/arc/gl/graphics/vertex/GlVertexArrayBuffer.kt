@@ -4,11 +4,30 @@ import arc.graphics.DrawerMode
 import arc.graphics.vertex.VertexArrayBuffer
 import arc.graphics.vertex.VertexFormat
 import arc.graphics.vertex.VertexType
-import org.lwjgl.opengl.GL41.*
+import org.lwjgl.opengl.ARBVertexArrayObject.glBindVertexArray
+import org.lwjgl.opengl.ARBVertexArrayObject.glDeleteVertexArrays
+import org.lwjgl.opengl.ARBVertexArrayObject.glGenVertexArrays
+import org.lwjgl.opengl.GL11.GL_FLOAT
+import org.lwjgl.opengl.GL11.GL_INT
+import org.lwjgl.opengl.GL11.GL_SHORT
+import org.lwjgl.opengl.GL11.GL_UNSIGNED_BYTE
+import org.lwjgl.opengl.GL15.GL_ARRAY_BUFFER
+import org.lwjgl.opengl.GL15.GL_STREAM_DRAW
+import org.lwjgl.opengl.GL15.glBindBuffer
+import org.lwjgl.opengl.GL15.glBufferData
+import org.lwjgl.opengl.GL15.glDeleteBuffers
+import org.lwjgl.opengl.GL15.glGenBuffers
+import org.lwjgl.opengl.GL15.glUnmapBuffer
+import org.lwjgl.opengl.GL20.glEnableVertexAttribArray
+import org.lwjgl.opengl.GL20.glVertexAttribPointer
+import org.lwjgl.opengl.GL30.GL_MAP_UNSYNCHRONIZED_BIT
+import org.lwjgl.opengl.GL30.GL_MAP_WRITE_BIT
+import org.lwjgl.opengl.GL30.glMapBufferRange
+import org.lwjgl.opengl.GL30.glVertexAttribIPointer
 import org.lwjgl.system.MemoryUtil
 import java.nio.ByteBuffer
 
-internal data class GlVertexArrayBuffer(
+internal class GlVertexArrayBuffer(
     override val mode: DrawerMode,
     override val format: VertexFormat,
     private val buffer: ByteBuffer,
@@ -46,10 +65,14 @@ internal data class GlVertexArrayBuffer(
             glEnableVertexAttribArray(index)
 
             when (element.type) {
-                VertexType.FLOAT -> glVertexAttribPointer(index, element.count, GL_FLOAT, false, format.nextOffset, offset.toLong())
-                VertexType.UINT, VertexType.INT -> glVertexAttribIPointer(index, element.count, GL_INT, format.nextOffset, offset.toLong())
-                VertexType.USHORT, VertexType.SHORT -> glVertexAttribPointer(index, element.count, GL_SHORT, false, format.nextOffset, offset.toLong())
-                VertexType.UBYTE, VertexType.BYTE -> glVertexAttribPointer(index, element.count, GL_UNSIGNED_BYTE, true, format.nextOffset, offset.toLong())
+                VertexType.FLOAT ->
+                    glVertexAttribPointer(index, element.count, GL_FLOAT, false, format.nextOffset, offset.toLong())
+                VertexType.UINT, VertexType.INT ->
+                    glVertexAttribIPointer(index, element.count, GL_INT, format.nextOffset, offset.toLong())
+                VertexType.USHORT, VertexType.SHORT ->
+                    glVertexAttribPointer(index, element.count, GL_SHORT, false, format.nextOffset, offset.toLong())
+                VertexType.UBYTE, VertexType.BYTE ->
+                    glVertexAttribPointer(index, element.count, GL_UNSIGNED_BYTE, true, format.nextOffset, offset.toLong())
             }
 
             offset += element.size
@@ -90,9 +113,9 @@ internal data class GlVertexArrayBuffer(
     }
 
     object Factory : VertexArrayBuffer.Factory {
+
         override fun create(mode: DrawerMode, format: VertexFormat, buffer: ByteBuffer, vertices: Int): VertexArrayBuffer {
             return GlVertexArrayBuffer(mode, format, buffer, vertices)
         }
     }
-
 }

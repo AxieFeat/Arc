@@ -1,0 +1,21 @@
+root = true
+
+[*]
+charset = utf-8
+indent_style = space
+indent_size = 4
+trim_trailing_whitespace = true
+insert_final_newline = true
+
+ij_continuation_indent_size = 8
+ij_smart_tabs = true
+
+[*.{json,conf}]
+indent_size = 2
+insert_final_newline = false
+
+[*.{yaml,yml}]
+indent_size = 2
+
+[{*.xml,Dockerfile}]
+insert_final_newline = false

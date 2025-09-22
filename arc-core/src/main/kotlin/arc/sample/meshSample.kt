@@ -36,7 +36,9 @@ internal fun meshSample() {
 
     // For rendering you need Vertex and Fragment shaders (This assumes you have them in files/runtime, but you can view sample for shaders).
 
-    val space = application.locationSpace // We can use classpath(), absolute() and local() functions without instance, but in this example we use instance.
+    // We can use classpath(), absolute() and local() functions without space instance, but in this example we use instance.
+    val space = application.locationSpace
+
     val shader = ShaderInstance.of(
         FileAsset.from(space.classpath("arc/shader/example.vsh")),
         FileAsset.from(space.classpath("arc/shader/example.fsh")),

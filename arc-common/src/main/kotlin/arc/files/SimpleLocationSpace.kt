@@ -38,5 +38,4 @@ internal object SimpleLocationSpace : LocationSpace {
     override fun local(path: String): File {
         return File(applicationDirectory, path)
     }
-
 }

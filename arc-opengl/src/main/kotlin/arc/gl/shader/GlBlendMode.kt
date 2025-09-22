@@ -40,10 +40,6 @@ internal data class GlBlendMode(
         }
     }
 
-    companion object {
-        private var lastApplied: BlendMode? = null
-    }
-
     object Factory : BlendMode.Factory {
         override fun create(
             separateBlend: Boolean,
@@ -59,4 +55,8 @@ internal data class GlBlendMode(
 
     }
 
+    companion object {
+
+        private var lastApplied: BlendMode? = null
+    }
 }

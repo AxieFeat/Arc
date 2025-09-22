@@ -17,5 +17,4 @@ object GlfwInputExtension {
     fun bootstrap(provider: ObjectProvider) {
         provider.register<InputEngine.Provider>(GlfwInputEngine.Provider)
     }
-
 }

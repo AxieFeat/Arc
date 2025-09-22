@@ -17,7 +17,6 @@ interface RuntimeAsset : StringAsset {
     interface Factory {
 
         fun create(bytes: ByteArray): RuntimeAsset
-
     }
 
     companion object {
@@ -43,7 +42,5 @@ interface RuntimeAsset : StringAsset {
          */
         @JvmStatic
         fun from(text: String): RuntimeAsset = from(text.toByteArray())
-
     }
-
 }

@@ -19,5 +19,4 @@ object AlAudioExtension {
         provider.register<SoundEngine.Provider>(AlSoundEngine.Provider)
         provider.register<SoundLoader.Factory>(SoundLoaderFactory)
     }
-
 }

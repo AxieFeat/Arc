@@ -13,5 +13,4 @@ interface Copyable<T> {
      * @return A new instance of the same type with the same properties as the original.
      */
     fun copy(): T
-
 }

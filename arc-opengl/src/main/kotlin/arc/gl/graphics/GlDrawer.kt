@@ -17,5 +17,4 @@ internal object GlDrawer : Drawer {
 
         GlVertexUploader.draw(buffer)
     }
-
 }

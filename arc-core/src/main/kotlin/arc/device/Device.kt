@@ -1,7 +1,6 @@
 package arc.device
 
 import arc.OSPlatform
-import arc.annotations.ImmutableType
 
 /**
  * Represents the characteristics and specifications of a device.
@@ -62,5 +61,4 @@ interface Device {
      * Manufacturer of a device.
      */
     val manufacturer: String
-
 }

@@ -88,7 +88,6 @@ interface TextureLoader {
     interface Factory {
 
         fun create(format: TextureFormat): TextureLoader
-
     }
 
     companion object {
@@ -116,8 +115,5 @@ interface TextureLoader {
         fun of(format: TextureFormat): TextureLoader {
             return single<Factory>().create(format)
         }
-
     }
-
-
 }

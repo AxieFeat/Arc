@@ -76,7 +76,6 @@ interface GlyphFont : Bindable, Cleanable {
     interface Factory {
 
         fun create(drawer: Drawer, glyphs: List<Glyph>): GlyphFont
-
     }
 
     companion object {
@@ -93,7 +92,5 @@ interface GlyphFont : Bindable, Cleanable {
         fun from(drawer: Drawer, glyphs: List<Glyph>): GlyphFont {
             return single<Factory>().create(drawer, glyphs)
         }
-
     }
-
 }

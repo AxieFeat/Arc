@@ -24,7 +24,7 @@ internal fun shaderInstanceSample() {
         gl_Position = vec4(Position, 1.0);
 
         vertexColor = Color;
-    } 
+    }
     """.trimIndent().asRuntimeAsset()
 
     val fragmentShader = """

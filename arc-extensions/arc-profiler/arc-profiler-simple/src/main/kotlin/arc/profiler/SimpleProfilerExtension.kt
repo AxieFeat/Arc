@@ -18,5 +18,4 @@ object SimpleProfilerExtension {
     fun bootstrap(provider: ObjectProvider = ArcObjectProvider) {
         provider.register<Profiler.Factory>(SimpleProfiler.Factory)
     }
-
 }

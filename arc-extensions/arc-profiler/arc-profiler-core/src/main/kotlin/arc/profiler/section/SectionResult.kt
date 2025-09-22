@@ -22,5 +22,4 @@ interface SectionResult : Section {
      * Duration of this section in nanoseconds.
      */
     val duration: Long
-
 }

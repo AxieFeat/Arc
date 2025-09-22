@@ -6,7 +6,40 @@ import arc.graphics.DrawerMode
 import arc.graphics.vertex.VertexFormat
 import arc.graphics.vertex.VertexFormatElement
 import arc.shader.FrameBuffer
-import org.lwjgl.opengl.GL41.*
+import org.lwjgl.opengl.GL11.GL_COLOR_BUFFER_BIT
+import org.lwjgl.opengl.GL11.GL_DEPTH_BUFFER_BIT
+import org.lwjgl.opengl.GL11.GL_LINEAR
+import org.lwjgl.opengl.GL11.GL_RGBA
+import org.lwjgl.opengl.GL11.GL_TEXTURE_2D
+import org.lwjgl.opengl.GL11.GL_TEXTURE_MAG_FILTER
+import org.lwjgl.opengl.GL11.GL_TEXTURE_MIN_FILTER
+import org.lwjgl.opengl.GL11.GL_UNSIGNED_BYTE
+import org.lwjgl.opengl.GL11.glBindTexture
+import org.lwjgl.opengl.GL11.glClear
+import org.lwjgl.opengl.GL11.glClearColor
+import org.lwjgl.opengl.GL11.glDeleteTextures
+import org.lwjgl.opengl.GL11.glGenTextures
+import org.lwjgl.opengl.GL11.glTexImage2D
+import org.lwjgl.opengl.GL11.glTexParameteri
+import org.lwjgl.opengl.GL11.glViewport
+import org.lwjgl.opengl.GL13.GL_TEXTURE0
+import org.lwjgl.opengl.GL13.glActiveTexture
+import org.lwjgl.opengl.GL14.GL_DEPTH_COMPONENT24
+import org.lwjgl.opengl.GL30.GL_COLOR_ATTACHMENT0
+import org.lwjgl.opengl.GL30.GL_DEPTH_ATTACHMENT
+import org.lwjgl.opengl.GL30.GL_FRAMEBUFFER
+import org.lwjgl.opengl.GL30.GL_FRAMEBUFFER_COMPLETE
+import org.lwjgl.opengl.GL30.GL_RENDERBUFFER
+import org.lwjgl.opengl.GL30.glBindFramebuffer
+import org.lwjgl.opengl.GL30.glBindRenderbuffer
+import org.lwjgl.opengl.GL30.glCheckFramebufferStatus
+import org.lwjgl.opengl.GL30.glDeleteFramebuffers
+import org.lwjgl.opengl.GL30.glDeleteRenderbuffers
+import org.lwjgl.opengl.GL30.glFramebufferRenderbuffer
+import org.lwjgl.opengl.GL30.glFramebufferTexture2D
+import org.lwjgl.opengl.GL30.glGenFramebuffers
+import org.lwjgl.opengl.GL30.glGenRenderbuffers
+import org.lwjgl.opengl.GL30.glRenderbufferStorage
 import org.lwjgl.system.MemoryUtil
 
 internal class GlFrameBuffer(
@@ -115,6 +148,7 @@ internal class GlFrameBuffer(
     }
 
     companion object {
+
         private val vertexFormat = VertexFormat.builder()
             .add(VertexFormatElement.POSITION)
             .add(VertexFormatElement.UV)
@@ -134,6 +168,7 @@ internal class GlFrameBuffer(
     }
 
     object Factory : FrameBuffer.Factory {
+
         override fun create(width: Int, height: Int, useDepth: Boolean): FrameBuffer {
             return GlFrameBuffer(width, height, useDepth)
         }

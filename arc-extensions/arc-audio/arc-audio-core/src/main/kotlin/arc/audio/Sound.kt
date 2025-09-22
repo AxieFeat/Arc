@@ -55,7 +55,13 @@ interface Sound {
      * @param loop Loop sound?
      * @param end Will be called after ending playing this sound.
      */
-    fun play(volume: Float = this.volume, pitch: Float = this.pitch, position: Vector3f = this.position, loop: Boolean = this.isLoop, end: Sound.() -> Unit = {})
+    fun play(
+        volume: Float = this.volume,
+        pitch: Float = this.pitch,
+        position: Vector3f = this.position,
+        loop: Boolean = this.isLoop,
+        end: Sound.() -> Unit = {}
+    )
 
     /**
      * Stops the currently playing sound.
@@ -67,5 +73,4 @@ interface Sound {
      * Pause playing sound.
      */
     fun pause()
-
 }

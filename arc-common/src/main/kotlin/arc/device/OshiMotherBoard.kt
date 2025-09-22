@@ -10,5 +10,4 @@ internal data class OshiMotherBoard(
     override val model: String = systemInfo.hardware.computerSystem.baseboard.model
     override val version: String = systemInfo.hardware.computerSystem.baseboard.version
     override val manufacturer: String = systemInfo.hardware.computerSystem.baseboard.manufacturer
-
 }

@@ -1,6 +1,6 @@
 package arc.graphics.vertex
 
-internal data class SimpleVertexFormat(
+internal class SimpleVertexFormat(
     override val elements: MutableList<VertexFormatElement> = mutableListOf(),
     override val offsets: MutableList<Int> = mutableListOf(),
 ) : VertexFormat {
@@ -19,8 +19,12 @@ internal data class SimpleVertexFormat(
         offsets.add(this.nextOffset)
 
         when (vertexFormatElement.usage) {
-            VertexUsage.NORMAL -> this.normalElementOffset = this.nextOffset
-            VertexUsage.COLOR -> this.colorElementOffset = this.nextOffset
+            VertexUsage.NORMAL -> {
+                this.normalElementOffset = this.nextOffset
+            }
+            VertexUsage.COLOR -> {
+                this.colorElementOffset = this.nextOffset
+            }
             VertexUsage.UV -> {
                 while (uvOffsetsById.size <= vertexFormatElement.index) {
                     uvOffsetsById.add(-1)

@@ -12,6 +12,10 @@ import kotlin.math.ceil
 import kotlin.math.max
 import kotlin.math.sqrt
 
+@Suppress(
+    "MagicNumber", // TODO Move to constants later
+    "DestructuringDeclarationWithTooManyEntries" // Why deconstruction of AtlasData for Detekt is error?
+)
 internal class SimpleGlyphFont(
     override val drawer: Drawer,
     override val glyphs: List<Glyph>
@@ -27,6 +31,7 @@ internal class SimpleGlyphFont(
         this.glyphUVs = uvData
     }
 
+    @Suppress("LoopWithTooManyJumpStatements") // TODO Maybe refactor later
     override fun prepare(matrix: Matrix4f, text: String): VertexBuffer {
         return drawer.begin(DrawerMode.TRIANGLES, format, text.length * 100).use { buffer ->
             var cursorX = 0f
@@ -78,6 +83,14 @@ internal class SimpleGlyphFont(
             return SimpleGlyphFont(drawer, glyphs)
         }
     }
+
+    @Suppress("ArrayInDataClass")
+    private data class AtlasData(
+        val pixels: IntArray,
+        val width: Int,
+        val height: Int,
+        val uvMap: Map<Glyph, GlyphUV>
+    )
 
     companion object {
         private val format = VertexFormat.builder()
@@ -145,12 +158,5 @@ internal class SimpleGlyphFont(
 
             return TextureAtlas.raw(buffer, width, height)
         }
-
-        private data class AtlasData(
-            val pixels: IntArray,
-            val width: Int,
-            val height: Int,
-            val uvMap: Map<Glyph, GlyphUV>
-        )
     }
 }

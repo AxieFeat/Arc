@@ -1,12 +1,32 @@
 package arc.gl.graphics
 
 import arc.gl.GlApplication
-import arc.graphics.*
+import arc.graphics.Drawer
+import arc.graphics.EmptyScene
+import arc.graphics.EmptyShaderInstance
+import arc.graphics.RenderSystem
 import arc.graphics.scene.Scene
 import arc.shader.ShaderInstance
 import arc.texture.EmptyTexture
 import arc.texture.Texture
-import org.lwjgl.opengl.GL41.*
+import org.lwjgl.opengl.ARBImaging.glBlendEquation
+import org.lwjgl.opengl.GL11.GL_BLEND
+import org.lwjgl.opengl.GL11.GL_COLOR_BUFFER_BIT
+import org.lwjgl.opengl.GL11.GL_CULL_FACE
+import org.lwjgl.opengl.GL11.GL_DEPTH_BUFFER_BIT
+import org.lwjgl.opengl.GL11.GL_DEPTH_TEST
+import org.lwjgl.opengl.GL11.GL_TEXTURE_2D
+import org.lwjgl.opengl.GL11.glBlendFunc
+import org.lwjgl.opengl.GL11.glClear
+import org.lwjgl.opengl.GL11.glClearColor
+import org.lwjgl.opengl.GL11.glClearDepth
+import org.lwjgl.opengl.GL11.glColorMask
+import org.lwjgl.opengl.GL11.glDepthMask
+import org.lwjgl.opengl.GL11.glDisable
+import org.lwjgl.opengl.GL11.glEnable
+import org.lwjgl.opengl.GL11.glPolygonMode
+import org.lwjgl.opengl.GL11.glViewport
+import org.lwjgl.opengl.GL14.glBlendFuncSeparate
 
 internal object GlRenderSystem : RenderSystem {
 

@@ -12,5 +12,4 @@ object Vulkan {
     fun preload() {
         VkFactoryProvider.bootstrap()
     }
-
 }

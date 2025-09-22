@@ -8,8 +8,13 @@ import arc.gl.window.GlfwGlWindow
 import arc.graphics.RenderSystem
 import arc.window.EmptyWindowHandler
 import arc.window.Window
+import arc.window.WindowException
 import org.lwjgl.opengl.GL
-import org.lwjgl.opengl.GL41.*
+import org.lwjgl.opengl.GL11.GL_FRONT
+import org.lwjgl.opengl.GL11.GL_RGBA
+import org.lwjgl.opengl.GL11.GL_UNSIGNED_BYTE
+import org.lwjgl.opengl.GL11.glReadBuffer
+import org.lwjgl.opengl.GL11.glReadPixels
 import org.lwjgl.system.MemoryUtil
 import java.awt.image.BufferedImage
 import java.io.File
@@ -19,18 +24,26 @@ internal object GlApplication : AbstractApplication() {
 
     override val backend: ApplicationBackend = GlApplicationBackend
 
-    override lateinit var window: GlfwGlWindow
-    override lateinit var renderSystem: RenderSystem
+    private var _window: GlfwGlWindow? = null
+    private var _renderSystem: GlRenderSystem? = null
+
+    override val window: GlfwGlWindow
+        get() = checkNotNull(_window) {
+            "Window is not initialized yet. Accessing it before Application.init() is not allowed." }
+    override val renderSystem: RenderSystem
+        get() = checkNotNull(_renderSystem) {
+            "RenderSystem is not initialized yet. Accessing it before Application.init() is not allowed."
+        }
 
     override fun init() {
-        this.window = Window.of(
+        _window = Window.of(
             name = "",
             handler = EmptyWindowHandler,
             width = 720,
             height = 420
-        ) as? GlfwGlWindow ?: throw IllegalStateException("Window is not GlfwGlWindow. Why?")
+        ) as? GlfwGlWindow ?: throw WindowException("Window is not GlfwGlWindow. Why?")
 
-        this.renderSystem = GlRenderSystem
+        _renderSystem = GlRenderSystem
 
         window.create()
 

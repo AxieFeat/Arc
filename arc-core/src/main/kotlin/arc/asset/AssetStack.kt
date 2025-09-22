@@ -23,7 +23,6 @@ interface AssetStack<T : AssetLike> : Iterable<T> {
     interface Factory {
 
         fun <T : AssetLike> create(assets: Set<T>): AssetStack<T>
-
     }
 
     companion object {
@@ -37,6 +36,7 @@ interface AssetStack<T : AssetLike> : Iterable<T> {
         /**
          * Create a new stack of assets.
          *
+         * @param T Type of asset.
          * @param assets Assets of stack.
          *
          * @return New instance of [AssetStack].
@@ -49,13 +49,12 @@ interface AssetStack<T : AssetLike> : Iterable<T> {
         /**
          * Create a new stack of assets.
          *
+         * @param T Type of asset.
          * @param asset Assets of stack.
          *
          * @return New instance of [AssetStack].
          */
         @JvmStatic
         fun <T : AssetLike> of(vararg asset: T): AssetStack<T> = of(asset.toSet())
-
     }
-
 }

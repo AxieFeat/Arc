@@ -26,5 +26,4 @@ interface MotherBoard {
      * Manufacturer of MotherBoard.
      */
     val manufacturer: String
-
 }

@@ -19,5 +19,4 @@ interface RootSection : ActiveSection {
      * @return Instance of [TreeSectionResult].
      */
     override fun end(): TreeSectionResult
-
 }

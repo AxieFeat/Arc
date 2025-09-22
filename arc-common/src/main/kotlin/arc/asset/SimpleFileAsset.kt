@@ -13,9 +13,9 @@ internal data class SimpleFileAsset(
         get() = file.readText()
 
     object Factory : FileAsset.Factory {
+
         override fun create(file: File): FileAsset {
             return SimpleFileAsset(file)
         }
     }
-
 }

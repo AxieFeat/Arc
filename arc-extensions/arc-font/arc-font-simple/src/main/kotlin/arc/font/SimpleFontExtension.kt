@@ -17,5 +17,4 @@ object SimpleFontExtension {
     fun bootstrap(provider: ObjectProvider) {
         provider.register<GlyphFont.Factory>(SimpleGlyphFont.Factory)
     }
-
 }

@@ -1,6 +1,6 @@
 package arc.profiler.section
 
-internal data class SimpleActiveSection(
+internal class SimpleActiveSection(
     override val name: String,
     override var startTime: Long = System.nanoTime(),
     override val child: MutableList<ActiveSection> = mutableListOf()

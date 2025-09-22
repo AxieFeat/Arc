@@ -5,7 +5,14 @@ import arc.vk.VulkanInstance
 import arc.vk.util.VkUtils.vkCheck
 import org.lwjgl.PointerBuffer
 import org.lwjgl.system.MemoryStack
-import org.lwjgl.vulkan.*
+import org.lwjgl.vulkan.KHRSwapchain
+import org.lwjgl.vulkan.VK10
+import org.lwjgl.vulkan.VkExtensionProperties
+import org.lwjgl.vulkan.VkPhysicalDevice
+import org.lwjgl.vulkan.VkPhysicalDeviceFeatures
+import org.lwjgl.vulkan.VkPhysicalDeviceMemoryProperties
+import org.lwjgl.vulkan.VkPhysicalDeviceProperties
+import org.lwjgl.vulkan.VkQueueFamilyProperties
 
 // The class name is VulkanPhysicalDevice because in LWJGL exists VkPhysicalDevice
 internal class VulkanPhysicalDevice private constructor(

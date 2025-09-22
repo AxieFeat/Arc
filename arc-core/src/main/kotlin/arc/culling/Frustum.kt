@@ -24,5 +24,4 @@ interface Frustum {
      * @param camera Camera for updating frustum.
      */
     fun update(camera: Camera)
-
 }

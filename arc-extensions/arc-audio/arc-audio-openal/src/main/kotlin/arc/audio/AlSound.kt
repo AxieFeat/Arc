@@ -1,7 +1,25 @@
 package arc.audio
 
 import org.joml.Vector3f
-import org.lwjgl.openal.AL10.*
+import org.lwjgl.openal.AL10.AL_BUFFER
+import org.lwjgl.openal.AL10.AL_FALSE
+import org.lwjgl.openal.AL10.AL_GAIN
+import org.lwjgl.openal.AL10.AL_LOOPING
+import org.lwjgl.openal.AL10.AL_PITCH
+import org.lwjgl.openal.AL10.AL_PLAYING
+import org.lwjgl.openal.AL10.AL_POSITION
+import org.lwjgl.openal.AL10.AL_SOURCE_STATE
+import org.lwjgl.openal.AL10.AL_TRUE
+import org.lwjgl.openal.AL10.alBufferData
+import org.lwjgl.openal.AL10.alGenBuffers
+import org.lwjgl.openal.AL10.alGenSources
+import org.lwjgl.openal.AL10.alGetSourcei
+import org.lwjgl.openal.AL10.alSource3f
+import org.lwjgl.openal.AL10.alSourcePause
+import org.lwjgl.openal.AL10.alSourcePlay
+import org.lwjgl.openal.AL10.alSourceStop
+import org.lwjgl.openal.AL10.alSourcef
+import org.lwjgl.openal.AL10.alSourcei
 import java.nio.ShortBuffer
 
 /**
@@ -64,7 +82,7 @@ internal class AlSound(
                     end()
                     break
                 }
-                Thread.sleep(10)
+                Thread.sleep(SOUND_STATUS_CHECK_INTERVAL)
             }
         }.start()
     }
@@ -81,5 +99,10 @@ internal class AlSound(
 
         alSourcePause(source)
         isPaused = true
+    }
+
+    companion object {
+
+        const val SOUND_STATUS_CHECK_INTERVAL = 10L // ms
     }
 }

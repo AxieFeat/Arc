@@ -15,5 +15,4 @@ interface KeyboardInput : InputDevice {
 
     override val name: String
         get() = "keyboard"
-
 }

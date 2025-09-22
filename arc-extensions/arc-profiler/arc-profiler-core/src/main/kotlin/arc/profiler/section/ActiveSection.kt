@@ -40,5 +40,4 @@ interface ActiveSection : Section {
      * Reset this section.
      */
     fun reset()
-
 }

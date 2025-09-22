@@ -61,7 +61,6 @@ interface VertexBuffer : Bindable, Cleanable {
     interface Factory {
 
         fun create(mode: DrawerMode, format: VertexFormat, buffer: ByteBuffer, vertices: Int): VertexBuffer
-
     }
 
     companion object {
@@ -80,7 +79,5 @@ interface VertexBuffer : Bindable, Cleanable {
         fun of(mode: DrawerMode, format: VertexFormat, buffer: ByteBuffer, vertices: Int): VertexBuffer {
             return single<Factory>().create(mode, format, buffer, vertices)
         }
-
     }
-
 }

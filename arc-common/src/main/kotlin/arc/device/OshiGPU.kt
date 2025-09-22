@@ -11,5 +11,4 @@ internal data class OshiGPU(
     override val vRam: Long = graphicsCard.vRam
     override val vendor: String = graphicsCard.vendor
     override val info: String = graphicsCard.versionInfo
-
 }

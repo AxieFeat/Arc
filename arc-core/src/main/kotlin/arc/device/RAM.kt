@@ -28,5 +28,4 @@ interface RAM {
      * Total size of SWAP. In bytes.
      */
     val swapTotal: Long
-
 }

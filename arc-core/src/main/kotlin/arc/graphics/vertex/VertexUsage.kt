@@ -9,7 +9,7 @@ package arc.graphics.vertex
  *
  * @property usageName Descriptive name for the type of vertex usage.
  */
-@Suppress("MemberVisibilityCanBePrivate")
+@Suppress("UndocumentedPublicProperty") // TODO And documentation.
 enum class VertexUsage(
     val usageName: String
 ) {
@@ -19,5 +19,4 @@ enum class VertexUsage(
     COLOR("Vertex Color"),
     UV("UV"),
     PADDING("Padding");
-
 }

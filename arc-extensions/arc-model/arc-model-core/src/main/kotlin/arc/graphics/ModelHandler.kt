@@ -94,7 +94,6 @@ interface ModelHandler : Cleanable {
     interface Factory {
 
         fun create(drawer: Drawer, model: Model): ModelHandler
-
     }
 
     companion object {
@@ -114,7 +113,5 @@ interface ModelHandler : Cleanable {
         ): ModelHandler {
             return single<Factory>().create(drawer, model)
         }
-
     }
-
 }

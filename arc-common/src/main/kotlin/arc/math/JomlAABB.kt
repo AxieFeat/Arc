@@ -21,6 +21,7 @@ internal data class JomlAABB(
     }
 
     object Factory : AABB.Factory {
+
         override fun create(min: Vector3f, max: Vector3f, center: Vector3f): AABB {
             return JomlAABB(min, max, center)
         }

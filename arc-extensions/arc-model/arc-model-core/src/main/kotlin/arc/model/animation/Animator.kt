@@ -29,7 +29,6 @@ interface Animator : Copyable<Animator> {
         fun setTarget(target: String): Builder
 
         fun addKeyframe(vararg keyframe: Keyframe): Builder
-
     }
 
     companion object {
@@ -43,7 +42,5 @@ interface Animator : Copyable<Animator> {
         fun builder(): Builder {
             return factory<Builder>()
         }
-
     }
-
 }

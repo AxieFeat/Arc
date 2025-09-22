@@ -38,9 +38,9 @@ internal class GlfwGlWindow(
     }
 
     object Factory : Window.Factory {
+
         override fun create(name: String, handler: WindowHandler, width: Int, height: Int, isResizable: Boolean): Window {
             return GlfwGlWindow(name, handler, width, height, isResizable)
         }
     }
-
 }

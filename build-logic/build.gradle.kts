@@ -6,7 +6,7 @@ plugins {
 dependencies {
     implementation(libs.plugin.kotlin)
     implementation(libs.plugin.ksp)
-    implementation(gradleApi())
+    implementation(libs.plugin.detekt)
 }
 
 kotlin {

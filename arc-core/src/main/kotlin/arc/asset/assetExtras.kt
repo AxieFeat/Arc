@@ -26,3 +26,25 @@ fun File.asFileAsset(): FileAsset = FileAsset.from(this)
  */
 @JvmSynthetic
 fun File.asRuntimeAsset(): RuntimeAsset = RuntimeAsset.from(this.readBytes())
+
+/**
+ * Create a new stack of assets.
+ *
+ * @param T Type of asset.
+ * @param asset Assets of stack.
+ *
+ * @return New instance of [AssetStack].
+ */
+@JvmSynthetic
+fun <T : AssetLike> assetStackOf(vararg asset: T): AssetStack<T> = AssetStack.of(asset.toSet())
+
+/**
+ * Create a new mutable stack of assets.
+ *
+ * @param T Type of asset.
+ * @param asset Assets of stack.
+ *
+ * @return New instance of [MutableAssetStack].
+ */
+@JvmSynthetic
+fun <T : AssetLike> mutableAssetStackOf(vararg asset: T): MutableAssetStack<T> = MutableAssetStack.of(asset.toSet())

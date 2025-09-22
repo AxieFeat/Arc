@@ -30,5 +30,4 @@ internal object VkFactoryProvider {
             throw RuntimeException("Can not initialize Vulkan Application, because some application already initialized!", e)
         }
     }
-    
 }

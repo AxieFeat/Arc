@@ -101,7 +101,6 @@ interface FrameBuffer {
     interface Factory {
 
         fun create(width: Int, height: Int, useDepth: Boolean): FrameBuffer
-
     }
 
     companion object {
@@ -119,6 +118,5 @@ interface FrameBuffer {
         fun create(width: Int, height: Int, useDepth: Boolean): FrameBuffer {
             return single<Factory>().create(width, height, useDepth)
         }
-
     }
 }

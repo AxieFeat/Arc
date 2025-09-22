@@ -55,9 +55,9 @@ interface VertexFormatElement {
             usage: VertexUsage,
             count: Int,
         ): VertexFormatElement
-
     }
 
+    @Suppress("UndocumentedPublicProperty") // TODO Add documentation for standard elements.
     companion object {
 
         @JvmField val POSITION = of("POSITION", 0, VertexType.FLOAT, VertexUsage.POSITION, 3)
@@ -88,7 +88,5 @@ interface VertexFormatElement {
         ): VertexFormatElement {
             return single<Factory>().create(name, index, type, usage, count)
         }
-
     }
-
 }

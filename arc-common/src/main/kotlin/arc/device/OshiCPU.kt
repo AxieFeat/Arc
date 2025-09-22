@@ -12,5 +12,4 @@ internal data class OshiCPU(
     override val vendor: String = systemInfo.hardware.processor.processorIdentifier.vendor
     override val architecture: String = systemInfo.hardware.processor.processorIdentifier.microarchitecture
     override val model: String = systemInfo.hardware.processor.processorIdentifier.model
-
 }

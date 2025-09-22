@@ -35,7 +35,6 @@ interface FileAsset : StringAsset {
     interface Factory {
 
         fun create(file: File): FileAsset
-
     }
 
     companion object {
@@ -51,7 +50,5 @@ interface FileAsset : StringAsset {
         fun from(file: File): FileAsset {
             return single<Factory>().create(file)
         }
-
     }
-
 }

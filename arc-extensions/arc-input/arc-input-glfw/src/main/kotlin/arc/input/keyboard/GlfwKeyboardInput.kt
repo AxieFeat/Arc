@@ -1,20 +1,26 @@
 package arc.input.keyboard
 
-import arc.input.*
+import arc.input.Binding
+import arc.input.BindingProcessor
+import arc.input.GlfwBindingProcessor
+import arc.input.GlfwInputEngine
+import arc.input.KeyCode
+import arc.input.KeyType
+import arc.input.MultiBinding
 import arc.window.Window
 import org.lwjgl.glfw.GLFW
 
 internal object GlfwKeyboardInput : KeyboardInput {
 
-    lateinit var window: Window
+    var window: Window? = null
     override val bindingProcessor: BindingProcessor = GlfwBindingProcessor()
 
     override fun isPressed(key: KeyCode): Boolean {
         if(key.keyType != KeyType.KEY) return false
 
         try {
-            if(GLFW.glfwGetKey(window.handle, key.id) == GLFW.GLFW_PRESS ||
-                GLFW.glfwGetKey(window.handle, key.id) == GLFW.GLFW_REPEAT) return true
+            if(GLFW.glfwGetKey(window!!.handle, key.id) == GLFW.GLFW_PRESS ||
+                GLFW.glfwGetKey(window!!.handle, key.id) == GLFW.GLFW_REPEAT) return true
         } catch (ignore: Throwable) {}
 
         return false
@@ -24,13 +30,14 @@ internal object GlfwKeyboardInput : KeyboardInput {
         if(key.keyType != KeyType.KEY) return false
 
         try {
-            if(GLFW.glfwGetKey(window.handle, key.id) == GLFW.GLFW_RELEASE ||
-                GLFW.glfwGetKey(window.handle, key.id) == GLFW.GLFW_REPEAT) return true
+            if(GLFW.glfwGetKey(window!!.handle, key.id) == GLFW.GLFW_RELEASE ||
+                GLFW.glfwGetKey(window!!.handle, key.id) == GLFW.GLFW_REPEAT) return true
         } catch (ignore: Throwable) {}
 
         return false
     }
 
+    @Suppress("OptionalWhenBraces")
     fun keyUpdate(key: KeyCode, pressed: Boolean) {
         if(key.keyType != KeyType.KEY) return
 
@@ -39,13 +46,16 @@ internal object GlfwKeyboardInput : KeyboardInput {
 
                 GlfwInputEngine.executor.submit {
                     when (binding) {
-                        is Binding -> {
-                            if (binding.key == key || binding.key == KeyCode.ANY || binding.key == KeyCode.ANY_KEY) {
-                                if (pressed) {
-                                    binding.onPress(key)
-                                } else {
-                                    binding.onRelease(key)
-                                }
+                        is Binding if (
+                                binding.key == key ||
+                                binding.key == KeyCode.ANY ||
+                                binding.key == KeyCode.ANY_KEY
+                            ) -> {
+
+                            if (pressed) {
+                                binding.onPress(key)
+                            } else {
+                                binding.onRelease(key)
                             }
                         }
 
@@ -56,9 +66,7 @@ internal object GlfwKeyboardInput : KeyboardInput {
                         }
                     }
                 }
-
             }
         }
     }
-
 }

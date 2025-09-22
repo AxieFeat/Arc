@@ -107,8 +107,19 @@ interface AABB {
      */
     fun intersects(other: AABB): Boolean
 
+    /**
+     * Get [min] component.
+     */
     operator fun component1(): Vector3f = min
+
+    /**
+     * Get [max] component.
+     */
     operator fun component2(): Vector3f = max
+
+    /**
+     * Get [center] component.
+     */
     operator fun component3(): Vector3f = center
 
     @ApiStatus.Internal
@@ -116,7 +127,6 @@ interface AABB {
     interface Factory {
 
         fun create(min: Vector3f, max: Vector3f, center: Vector3f): AABB
-
     }
 
     companion object {
@@ -147,7 +157,5 @@ interface AABB {
                 (min.z + max.z) * 0.5f
             )
         ): AABB = single<Factory>().create(min, max, center)
-
     }
-
 }

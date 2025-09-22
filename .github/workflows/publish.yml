@@ -26,6 +26,9 @@ jobs:
       - name: Validate Gradle Wrapper
         run: ./gradlew --version
 
+      - name: Detekt
+        run: ./gradlew detekt --stacktrace
+
       - name: Publish
         run: ./gradlew publish --no-daemon --stacktrace
         env:

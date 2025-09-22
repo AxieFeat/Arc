@@ -1,7 +1,9 @@
 package arc.profiler
 
-import arc.profiler.section.*
+import arc.profiler.section.ActiveSection
+import arc.profiler.section.RootSection
 import arc.profiler.section.SimpleRootSection
+import arc.profiler.section.TreeSectionResult
 
 internal data class SimpleProfiler(
     override val root: RootSection = SimpleRootSection(),
@@ -16,10 +18,9 @@ internal data class SimpleProfiler(
     }
 
     object Factory : Profiler.Factory {
+
         override fun create(): Profiler {
             return SimpleProfiler()
         }
     }
-
-
 }

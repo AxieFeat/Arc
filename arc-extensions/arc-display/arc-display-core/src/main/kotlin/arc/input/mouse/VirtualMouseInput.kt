@@ -40,7 +40,6 @@ interface VirtualMouseInput : MouseInput {
     interface Factory {
 
         fun create(display: Display): VirtualMouseInput
-
     }
 
     companion object {
@@ -49,7 +48,5 @@ interface VirtualMouseInput : MouseInput {
         fun of(display: Display): VirtualMouseInput {
             return single<Factory>().create(display)
         }
-
     }
-
 }

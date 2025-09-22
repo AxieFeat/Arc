@@ -7,7 +7,7 @@ package arc.graphics.vertex
  * @property typeName A descriptive name of the vertex type.
  * @property id Id in render system.
  */
-@Suppress("MemberVisibilityCanBePrivate")
+@Suppress("UndocumentedPublicProperty") // TODO And documentation.
 enum class VertexType(
     val size: Int,
     val typeName: String,
@@ -21,5 +21,4 @@ enum class VertexType(
     SHORT(2, "Short", 5122),
     UINT(4, "Unsigned Int", 5125),
     INT(4, "Int", 5124);
-
 }

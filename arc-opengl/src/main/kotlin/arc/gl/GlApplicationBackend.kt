@@ -1,7 +1,9 @@
 package arc.gl
 
 import arc.AbstractApplicationBackend
-import org.lwjgl.opengl.GL41.*
+import org.lwjgl.opengl.GL11.GL_RENDERER
+import org.lwjgl.opengl.GL11.GL_VERSION
+import org.lwjgl.opengl.GL11.glGetString
 
 internal object GlApplicationBackend : AbstractApplicationBackend("opengl") {
 
@@ -17,5 +19,4 @@ internal object GlApplicationBackend : AbstractApplicationBackend("opengl") {
         get() = iGpuKeywords.any { keyword ->
             glRenderer.contains(keyword, ignoreCase = true)
         }
-
 }

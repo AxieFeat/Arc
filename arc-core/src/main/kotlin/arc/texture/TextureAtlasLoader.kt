@@ -83,7 +83,6 @@ interface TextureAtlasLoader : TextureLoader {
     interface Factory {
 
         fun create(format: TextureFormat): TextureAtlasLoader
-
     }
 
     companion object {
@@ -111,7 +110,5 @@ interface TextureAtlasLoader : TextureLoader {
         fun of(format: TextureFormat): TextureAtlasLoader {
             return single<Factory>().create(format)
         }
-
     }
-
 }

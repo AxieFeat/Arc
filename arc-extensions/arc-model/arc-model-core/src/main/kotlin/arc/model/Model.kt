@@ -103,7 +103,6 @@ interface Model : Copyable<Model> {
         fun addAnimation(vararg animation: Animation): Builder
 
         fun setTexture(texture: ModelTexture): Builder
-
     }
 
     companion object {
@@ -117,7 +116,5 @@ interface Model : Copyable<Model> {
         fun builder(): Builder {
             return factory<Builder>()
         }
-
     }
-
 }

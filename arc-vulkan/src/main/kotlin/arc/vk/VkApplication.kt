@@ -8,32 +8,51 @@ import arc.vk.device.VulkanPhysicalDevice
 import arc.vk.window.GlfwVkWindow
 import arc.window.EmptyWindowHandler
 import arc.window.Window
+import arc.window.WindowException
 import java.io.File
 
 internal object VkApplication : AbstractApplication() {
 
     override val backend: ApplicationBackend = VkApplicationBackend
 
-    override lateinit var window: GlfwVkWindow
-    override lateinit var renderSystem: RenderSystem
+    private var _window: GlfwVkWindow? = null
+    private var _renderSystem: RenderSystem? = null
 
-    lateinit var instance: VulkanInstance
-    lateinit var physicalDevice: VulkanPhysicalDevice
+    override val window: GlfwVkWindow
+        get() = checkNotNull(_window) {
+            "Window is not initialized yet. Accessing it before Application.init() is not allowed." }
+    override val renderSystem: RenderSystem
+        get() = checkNotNull(_renderSystem) {
+            "RenderSystem is not initialized yet. Accessing it before Application.init() is not allowed."
+        }
+
+    private var _instance: VulkanInstance? = null
+    private var _physicalDevice: VulkanPhysicalDevice? = null
+
+    val instance: VulkanInstance
+        get() = checkNotNull(_instance) {
+            "VulkanInstance is not initialized yet. Accessing it before Application.init() is not allowed."
+        }
+    val physicalDevice: VulkanPhysicalDevice
+        get() = checkNotNull(_physicalDevice) {
+            "VulkanPhysicalDevice is not initialized yet. Accessing it before Application.init() is not allowed."
+        }
 
     override fun init() {
-        this.window = Window.of(
+        _window = Window.of(
             name = "",
             handler = EmptyWindowHandler,
             width = 720,
             height = 420
-        ) as? GlfwVkWindow ?: throw IllegalStateException("Window is not GlfwVkWindow. Why?")
+        ) as? GlfwVkWindow ?: throw WindowException("Window is not GlfwVkWindow. Why?")
 
-        instance = VulkanInstance()
-        physicalDevice = VulkanPhysicalDevice.createPhysicalDevice(instance)
+        _instance = VulkanInstance()
+        _physicalDevice = VulkanPhysicalDevice.createPhysicalDevice(instance)
 
         window.create()
     }
 
+    @Suppress("EmptyFunctionBlock") // TODO Remove when function will be implemented.
     override fun screenshot(folder: File, name: String) {
 
     }
@@ -43,9 +62,9 @@ internal object VkApplication : AbstractApplication() {
     }
 
     internal object Provider : Application.Provider {
+
         override fun provide(): Application {
             return VkApplication
         }
     }
-
 }

@@ -6,7 +6,11 @@ import arc.input.keyboard.KeyboardInput
 import arc.input.mouse.GlfwMouseInput
 import arc.input.mouse.MouseInput
 import arc.window.Window
-import org.lwjgl.glfw.GLFW.*
+import org.lwjgl.glfw.GLFW.GLFW_PRESS
+import org.lwjgl.glfw.GLFW.glfwSetCursorPosCallback
+import org.lwjgl.glfw.GLFW.glfwSetKeyCallback
+import org.lwjgl.glfw.GLFW.glfwSetMouseButtonCallback
+import org.lwjgl.glfw.GLFW.glfwSetScrollCallback
 import java.util.concurrent.Executors
 
 @Suppress("unused")
@@ -14,7 +18,7 @@ object GlfwInputEngine : InputEngine {
 
     internal val executor = Executors.newFixedThreadPool(4)
 
-    private lateinit var window: Window
+    private var window: Window? = null
 
     override val mouse: MouseInput
         get() = GlfwMouseInput
@@ -51,13 +55,13 @@ object GlfwInputEngine : InputEngine {
     }
 
     private fun onCursorMove(handle: Long, x: Double, y: Double) {
-        window.handler.cursorMove(x, y)
+        window?.handler?.cursorMove(x, y)
 
         GlfwMouseInput.positionUpdate(x, y)
     }
 
     private fun onScroll(handle: Long, xOffset: Double, yOffset: Double) {
-        window.handler.scroll(xOffset, yOffset)
+        window?.handler?.scroll(xOffset, yOffset)
 
         GlfwMouseInput.scrollUpdate(xOffset, yOffset)
     }
@@ -78,9 +82,9 @@ object GlfwInputEngine : InputEngine {
     }
 
     object Provider : InputEngine.Provider {
+
         override fun provide(): InputEngine {
             return GlfwInputEngine
         }
     }
-
 }

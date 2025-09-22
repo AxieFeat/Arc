@@ -13,5 +13,4 @@ interface Builder<T> {
      * @return An instance of type [T].
      */
     fun build(): T
-
 }

@@ -4,6 +4,8 @@ internal data class SimpleRuntimeAsset(
     override val bytes: ByteArray
 ) : RuntimeAsset {
 
+    override val text: String = bytes.decodeToString()
+
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
@@ -17,12 +19,10 @@ internal data class SimpleRuntimeAsset(
         return bytes.contentHashCode()
     }
 
-    override val text: String = bytes.decodeToString()
-
     object Factory : RuntimeAsset.Factory {
+
         override fun create(bytes: ByteArray): RuntimeAsset {
             return SimpleRuntimeAsset(bytes)
         }
     }
-
 }

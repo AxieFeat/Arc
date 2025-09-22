@@ -41,7 +41,6 @@ interface Profiler {
          * Create new instance of [Profiler].
          */
         fun create(): Profiler
-
     }
 
     companion object {
@@ -53,7 +52,5 @@ interface Profiler {
         fun create(): Profiler {
             return single<Factory>().create()
         }
-
     }
-
 }

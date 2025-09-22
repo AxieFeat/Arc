@@ -8,5 +8,4 @@ abstract class AbstractApplicationBackend(
 ) : ApplicationBackend {
 
     override val device: Device = OshiDevice
-
 }

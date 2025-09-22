@@ -23,4 +23,16 @@ interface Interpolatable<T> {
     @Throws(IllegalArgumentException::class)
     fun interpolate(other: T,  progress: @Range(from = 0, to = 1) Float): Interpolatable<T>
 
+    companion object {
+
+        /**
+         * Minimum value for [Interpolatable.interpolate] function.
+         */
+        const val MIN_INTERPOLATE_VALUE = 0.0f
+
+        /**
+         * Maximum value for [Interpolatable.interpolate] function.
+         */
+        const val MAX_INTERPOLATE_VALUE = 1.0f
+    }
 }

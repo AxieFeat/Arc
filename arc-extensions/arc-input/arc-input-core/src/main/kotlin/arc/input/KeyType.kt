@@ -9,5 +9,4 @@ enum class KeyType {
     MOUSE,
 
     UNKNOWN
-
 }

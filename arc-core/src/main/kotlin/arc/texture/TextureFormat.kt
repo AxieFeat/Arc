@@ -14,5 +14,4 @@ enum class TextureFormat {
      * Raw format for render system.
      */
     RAW
-
 }

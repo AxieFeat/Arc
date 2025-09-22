@@ -30,6 +30,7 @@ interface ElementGroup : Copyable<ElementGroup> {
      */
     val pivot: Vector3f
 
+    @Suppress("SpreadOperator")
     @ApiStatus.Internal
     interface Builder : arc.util.pattern.Builder<ElementGroup> {
 
@@ -40,7 +41,6 @@ interface ElementGroup : Copyable<ElementGroup> {
 
         fun setPivot(pivot: Vector3f): Builder
         fun setPivot(x: Float, y: Float, z: Float): Builder = setPivot(Vector3f(x, y, z))
-
     }
 
     companion object {
@@ -54,7 +54,5 @@ interface ElementGroup : Copyable<ElementGroup> {
         fun builder(): Builder {
             return factory<Builder>()
         }
-
     }
-
 }

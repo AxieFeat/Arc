@@ -22,5 +22,4 @@ interface Section {
      * Children of this section.
      */
     val child: List<Section>
-
 }

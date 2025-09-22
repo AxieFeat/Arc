@@ -55,5 +55,4 @@ interface LocationSpace {
      * @see FileLocation.LOCAL
      */
     fun local(path: String): File
-
 }

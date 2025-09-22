@@ -28,5 +28,4 @@ interface ApplicationBackend {
      */
     @get:JvmName("isIGpu")
     val isIGpu: Boolean
-
 }

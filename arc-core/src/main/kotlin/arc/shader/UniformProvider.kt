@@ -17,7 +17,7 @@ interface UniformProvider {
      * Add uniform to this provider.
      *
      * @param name Name of uniform.
-     * @param uniform Just uniform.
+     * @param uniform Uniform for providing.
      */
     fun addUniform(name: String, uniform: Uniform)
 
@@ -27,5 +27,4 @@ interface UniformProvider {
      * For providing used information for [ShaderSettings.uniforms].
      */
     fun provide(shader: ShaderInstance)
-
 }

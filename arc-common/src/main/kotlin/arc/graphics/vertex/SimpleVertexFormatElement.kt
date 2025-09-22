@@ -9,6 +9,7 @@ internal data class SimpleVertexFormatElement(
 ) : VertexFormatElement {
 
     object Factory : VertexFormatElement.Factory {
+
         override fun create(
             name: String,
             index: Int,

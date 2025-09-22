@@ -1,6 +1,12 @@
 package arc
 
-import arc.asset.*
+import arc.asset.AssetStack
+import arc.asset.FileAsset
+import arc.asset.MutableAssetStack
+import arc.asset.RuntimeAsset
+import arc.asset.SimpleAssetStack
+import arc.asset.SimpleFileAsset
+import arc.asset.SimpleRuntimeAsset
 import arc.graphics.JomlCamera
 import arc.graphics.NativeDrawBuffer
 import arc.graphics.Camera
@@ -9,7 +15,10 @@ import arc.graphics.vertex.SimpleVertexFormat
 import arc.graphics.vertex.SimpleVertexFormatElement
 import arc.graphics.vertex.VertexFormat
 import arc.graphics.vertex.VertexFormatElement
-import arc.math.*
+import arc.math.AABB
+import arc.math.JomlAABB
+import arc.math.JomlRay
+import arc.math.Ray
 import arc.shader.SimpleShaderSettings
 import arc.shader.ShaderSettings
 import arc.util.SimpleColor
@@ -57,7 +66,7 @@ object ArcObjectProvider : ObjectProvider {
     fun bootstrap() {
         register<Ray.Factory>(JomlRay.Factory)
         register<AABB.Factory>(JomlAABB.Factory)
-        
+
         register<Color.Factory>(SimpleColor.Factory)
         register<Camera.Factory>(JomlCamera.Factory)
 
@@ -73,18 +82,10 @@ object ArcObjectProvider : ObjectProvider {
     }
 
     private fun modifyField(clazz: Class<*>, name: String, value: Any) {
-        try {
-            getField(clazz, name).set(null, value)
-        } catch (exception: Exception) {
-            throw exception
-        }
+        getField(clazz, name).set(null, value)
     }
 
     private fun getField(clazz: Class<*>, name: String): Field {
-        try {
-            return clazz.getDeclaredField(name).apply { isAccessible = true }
-        } catch (exception: Exception) {
-            throw exception
-        }
+        return clazz.getDeclaredField(name).apply { isAccessible = true }
     }
 }

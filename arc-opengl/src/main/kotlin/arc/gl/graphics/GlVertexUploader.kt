@@ -3,7 +3,17 @@ package arc.gl.graphics
 import arc.graphics.vertex.VertexArrayBuffer
 import arc.graphics.vertex.VertexBuffer
 import arc.graphics.vertex.VertexType
-import org.lwjgl.opengl.GL41.*
+import org.lwjgl.opengl.ARBVertexArrayObject.glBindVertexArray
+import org.lwjgl.opengl.ARBVertexArrayObject.glGenVertexArrays
+import org.lwjgl.opengl.GL11.GL_FLOAT
+import org.lwjgl.opengl.GL11.GL_INT
+import org.lwjgl.opengl.GL11.GL_SHORT
+import org.lwjgl.opengl.GL11.GL_UNSIGNED_BYTE
+import org.lwjgl.opengl.GL11.glDrawArrays
+import org.lwjgl.opengl.GL20.glDisableVertexAttribArray
+import org.lwjgl.opengl.GL20.glEnableVertexAttribArray
+import org.lwjgl.opengl.GL20.glVertexAttribPointer
+import org.lwjgl.opengl.GL30.glVertexAttribIPointer
 
 internal object GlVertexUploader {
 
@@ -29,10 +39,14 @@ internal object GlVertexUploader {
             glEnableVertexAttribArray(index)
 
             when (element.type) {
-                VertexType.FLOAT -> glVertexAttribPointer(index, element.count, GL_FLOAT, false, vertexBuffer.format.nextOffset, offset.toLong())
-                VertexType.UINT, VertexType.INT -> glVertexAttribIPointer(index, element.count, GL_INT, vertexBuffer.format.nextOffset, offset.toLong())
-                VertexType.USHORT, VertexType.SHORT -> glVertexAttribPointer(index, element.count, GL_SHORT, false, vertexBuffer.format.nextOffset, offset.toLong())
-                VertexType.UBYTE, VertexType.BYTE -> glVertexAttribPointer(index, element.count, GL_UNSIGNED_BYTE, true, vertexBuffer.format.nextOffset, offset.toLong())
+                VertexType.FLOAT ->
+                    glVertexAttribPointer(index, element.count, GL_FLOAT, false, vertexBuffer.format.nextOffset, offset.toLong())
+                VertexType.UINT, VertexType.INT ->
+                    glVertexAttribIPointer(index, element.count, GL_INT, vertexBuffer.format.nextOffset, offset.toLong())
+                VertexType.USHORT, VertexType.SHORT ->
+                    glVertexAttribPointer(index, element.count, GL_SHORT, false, vertexBuffer.format.nextOffset, offset.toLong())
+                VertexType.UBYTE, VertexType.BYTE ->
+                    glVertexAttribPointer(index, element.count, GL_UNSIGNED_BYTE, true, vertexBuffer.format.nextOffset, offset.toLong())
             }
 
             offset += element.size
@@ -47,4 +61,3 @@ internal object GlVertexUploader {
         glBindVertexArray(0)
     }
 }
-

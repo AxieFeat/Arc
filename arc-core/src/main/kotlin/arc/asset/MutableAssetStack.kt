@@ -30,20 +30,14 @@ interface MutableAssetStack<T : AssetLike> : AssetStack<T> {
     interface Factory {
 
         fun <T : AssetLike> create(assets: Set<T>): MutableAssetStack<T>
-
     }
 
     companion object {
 
         /**
-         * Empty [MutableAssetStack].
-         */
-        @JvmField
-        val EMPTY = of(emptySet())
-
-        /**
          * Create a new stack of assets.
          *
+         * @param T Type of asset.
          * @param assets Assets of stack.
          *
          * @return New instance of [MutableAssetStack].
@@ -56,6 +50,7 @@ interface MutableAssetStack<T : AssetLike> : AssetStack<T> {
         /**
          * Create a new stack of assets.
          *
+         * @param T Type of asset.
          * @param asset Assets of stack.
          *
          * @return New instance of [MutableAssetStack].
@@ -63,6 +58,14 @@ interface MutableAssetStack<T : AssetLike> : AssetStack<T> {
         @JvmStatic
         fun <T : AssetLike> of(vararg asset: T): MutableAssetStack<T> = of(asset.toSet())
 
+        /**
+         * Create a new stack of assets without elements.
+         *
+         * @return New instance of [MutableAssetStack].
+         */
+        @JvmStatic
+        fun empty(): MutableAssetStack<Nothing> {
+            return of(emptySet())
+        }
     }
-
 }

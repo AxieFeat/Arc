@@ -44,7 +44,5 @@ internal data class SimpleElementGroup(
         override fun build(): ElementGroup {
             return SimpleElementGroup(name, cubes.toSet(), pivot)
         }
-
     }
-
 }

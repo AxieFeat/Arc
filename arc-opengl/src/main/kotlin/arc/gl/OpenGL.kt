@@ -12,5 +12,4 @@ object OpenGL {
     fun preload() {
         GlFactoryProvider.bootstrap()
     }
-
 }

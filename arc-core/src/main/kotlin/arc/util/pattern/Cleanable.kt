@@ -14,5 +14,4 @@ interface Cleanable : AutoCloseable {
     override fun close() {
         cleanup()
     }
-
 }

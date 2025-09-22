@@ -83,5 +83,4 @@ interface VertexConsumer {
      * @return Current instance of [VertexConsumer].
      */
     fun setNormal(x: Float, y: Float, z: Float): VertexConsumer
-
 }

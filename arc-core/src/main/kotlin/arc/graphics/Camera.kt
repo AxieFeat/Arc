@@ -99,7 +99,6 @@ interface Camera {
     interface Factory {
 
         fun create(fov: Float, width: Float, height: Float): Camera
-
     }
 
     companion object {
@@ -117,7 +116,5 @@ interface Camera {
         fun of(fov: Float, width: Float, height: Float): Camera {
             return Arc.single<Factory>().create(fov, height, width)
         }
-
     }
-
 }

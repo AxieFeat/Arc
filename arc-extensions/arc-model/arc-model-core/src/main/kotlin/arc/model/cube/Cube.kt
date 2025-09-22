@@ -76,6 +76,7 @@ interface Cube : Copyable<Cube>, Identifiable {
      */
     fun removeFaceIf(filter: Predicate<Map.Entry<Face, CubeFace>>)
 
+    @Suppress("TooManyFunctions")
     @ApiStatus.Internal
     interface Builder : arc.util.pattern.Builder<Cube> {
 
@@ -97,9 +98,7 @@ interface Cube : Copyable<Cube>, Identifiable {
         fun setLightColor(lightColor: Color): Builder
 
         fun addFace(face: Face, cubeFace: CubeFace): Builder
-
     }
-
 
     companion object {
 
@@ -112,7 +111,5 @@ interface Cube : Copyable<Cube>, Identifiable {
         fun builder(): Builder {
             return factory<Builder>()
         }
-
     }
-
 }

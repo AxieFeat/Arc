@@ -1,8 +1,6 @@
 plugins {
     kotlin("jvm")
-    id("com.google.devtools.ksp")
     `java-library`
-    `maven-publish`
 }
 
 kotlin {
@@ -14,3 +12,4 @@ kotlin {
 
 applyAnnotationProcessor()
 applyPublishing()
+applyDetect()

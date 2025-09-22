@@ -1,7 +1,6 @@
 package arc.graphics.scene
 
 import arc.graphics.Camera
-import arc.graphics.Drawer
 
 /**
  * This interface represents a renderable scene of the engine.
@@ -35,5 +34,4 @@ interface Scene {
      * Render this scene.
      */
     fun render()
-
 }

@@ -104,7 +104,6 @@ interface Application {
     interface Provider {
 
         fun provide(): Application
-
     }
 
     companion object {
@@ -118,7 +117,5 @@ interface Application {
         fun find(): Application {
             return single<Provider>().provide()
         }
-
     }
-
 }

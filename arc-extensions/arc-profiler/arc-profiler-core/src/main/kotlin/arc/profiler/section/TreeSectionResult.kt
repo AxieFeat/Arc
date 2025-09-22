@@ -32,5 +32,4 @@ interface TreeSectionResult : SectionResult {
      * @return Pretty string for debug in example.
      */
     fun pretty(level: Int = 0): String
-
 }

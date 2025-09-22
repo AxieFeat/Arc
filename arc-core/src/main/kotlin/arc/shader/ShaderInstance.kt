@@ -132,7 +132,6 @@ interface ShaderInstance : Bindable, Cleanable {
             fragmentShader: StringAsset,
             shaderSettings: ShaderSettings
         ): ShaderInstance
-
     }
 
     companion object {
@@ -154,7 +153,5 @@ interface ShaderInstance : Bindable, Cleanable {
         ): ShaderInstance {
             return single<Factory>().create(vertexShader, fragmentShader, shaderSettings)
         }
-
     }
-
 }

@@ -2,7 +2,10 @@ package arc
 
 /**
  * Enum representing different operating system platforms.
+ *
+ * @param id String identifier for the platform.
  */
+@Suppress("UndocumentedPublicProperty")
 enum class OSPlatform(val id: String) {
 
     WINDOWS("windows"),
@@ -25,6 +28,5 @@ enum class OSPlatform(val id: String) {
         fun fromString(id: String): OSPlatform {
             return entries.find { it.id == id } ?: UNKNOWN
         }
-
     }
 }

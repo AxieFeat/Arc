@@ -59,7 +59,5 @@ internal class GlTextureLoader(
                 TextureFormat.RAW -> RAW
             }
         }
-
     }
-
 }

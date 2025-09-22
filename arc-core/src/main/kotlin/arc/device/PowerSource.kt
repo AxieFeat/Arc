@@ -100,7 +100,7 @@ interface PowerSource {
     val discharging: Boolean
 
     /**
-     * Reports the units of [currentCapacity], [maxCapacity], and [designCapacity]
+     * Reports the units of [currentCapacity], [maxCapacity], and [designCapacity].
      *
      * @return The units of battery capacity.
      */
@@ -178,9 +178,10 @@ interface PowerSource {
     val temperature: Double
 
     /**
-     * Units of Battery Capacity
+     * Units of Battery Capacity.
      */
     enum class CapacityUnits {
+
         /**
          * MilliWattHours (mWh).
          */
@@ -197,5 +198,4 @@ interface PowerSource {
          */
         RELATIVE
     }
-
 }

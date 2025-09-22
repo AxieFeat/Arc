@@ -13,5 +13,4 @@ internal object SoundLoaderFactory : SoundLoader.Factory {
             SoundFormat.FLAC -> FlacSoundLoader
         }
     }
-
 }

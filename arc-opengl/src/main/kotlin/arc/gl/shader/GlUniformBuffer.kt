@@ -2,7 +2,12 @@ package arc.gl.shader
 
 import arc.shader.UniformBuffer
 import org.lwjgl.opengl.ARBUniformBufferObject.GL_UNIFORM_BUFFER
-import org.lwjgl.opengl.GL41.*
+import org.lwjgl.opengl.GL15.GL_DYNAMIC_DRAW
+import org.lwjgl.opengl.GL15.glBindBuffer
+import org.lwjgl.opengl.GL15.glBufferData
+import org.lwjgl.opengl.GL15.glBufferSubData
+import org.lwjgl.opengl.GL15.glDeleteBuffers
+import org.lwjgl.opengl.GL15.glGenBuffers
 import org.lwjgl.system.MemoryUtil.memAlloc
 import org.lwjgl.system.MemoryUtil.memFree
 import java.nio.ByteBuffer
@@ -47,7 +52,7 @@ internal class GlUniformBuffer(
     }
 
     override fun bind() = glBindBuffer(GL_UNIFORM_BUFFER, id)
-    override fun unbind() =glBindBuffer(GL_UNIFORM_BUFFER, 0)
+    override fun unbind() = glBindBuffer(GL_UNIFORM_BUFFER, 0)
 
     object Factory : UniformBuffer.Factory {
         override fun create(size: Int): UniformBuffer {

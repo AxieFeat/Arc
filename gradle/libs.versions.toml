@@ -2,15 +2,16 @@ metadata.format.version = "1.1"
 
 [versions]
 
-kotlin = "2.1.21"
+kotlin = "2.2.20"
 lwjgl = "3.3.6"
 gson = "2.12.1"
 annotations = "26.0.2"
 fastutil = "8.5.15"
 oshi = "6.6.6"
-ksp = "2.1.21-2.0.1"
+ksp = "2.2.20-2.0.3"
 joml = "1.10.8"
 commons-io = "2.18.0"
+detekt = "1.23.8"
 
 [libraries]
 
@@ -35,3 +36,4 @@ lwjgl-openal = { group = "org.lwjgl", name = "lwjgl-openal", version.ref = "lwjg
 # Plugins
 plugin-kotlin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
 plugin-ksp = { group = "com.google.devtools.ksp", name = "symbol-processing-gradle-plugin", version.ref = "ksp" }
+plugin-detekt = { group = "io.gitlab.arturbosch.detekt", name = "detekt-gradle-plugin", version.ref = "detekt" }

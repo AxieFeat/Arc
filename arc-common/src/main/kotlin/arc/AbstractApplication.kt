@@ -33,7 +33,7 @@ abstract class AbstractApplication : Application {
     }
 
     override fun openFolder(folder: File) {
-        check(folder.isDirectory) { "File is not a directory." }
+        require(folder.isDirectory) { "File is not a directory." }
 
         Thread {
             val result = when (backend.device.os) {
@@ -47,5 +47,4 @@ abstract class AbstractApplication : Application {
             if(!result) throw UnsupportedOperationException("Occurred error in the opening folder.")
         }.also { it.isDaemon = true }.start()
     }
-
 }

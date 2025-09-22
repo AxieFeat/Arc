@@ -14,5 +14,4 @@ interface StringAsset : AssetLike {
      * String of this asset.
      */
     val text: String
-
 }

@@ -2,7 +2,7 @@ package arc.profiler.section
 
 import kotlin.math.roundToInt
 
-internal data class SimpleTreeSectionResult(
+internal class SimpleTreeSectionResult(
     override var name: String,
     override var root: TreeSectionResult? = null,
     override var startTime: Long,
@@ -55,6 +55,7 @@ internal data class SimpleTreeSectionResult(
             return percentage.round()
         }
 
+        @Suppress("MagicNumber")
         private fun Double.round(): Double {
             return (this * 100).roundToInt() / 100.0
         }

@@ -17,5 +17,4 @@ internal object GlfwWindowBackend : WindowBackend {
 
             return "${major.first()}.${minor.first()}.${rev.first()}"
         }
-
 }

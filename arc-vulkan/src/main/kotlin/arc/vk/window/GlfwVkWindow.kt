@@ -46,9 +46,9 @@ internal class GlfwVkWindow(
     }
 
     object Factory : Window.Factory {
+
         override fun create(name: String, handler: WindowHandler, width: Int, height: Int, isResizable: Boolean): Window {
             return GlfwVkWindow(name, handler, width, height, isResizable)
         }
     }
-
 }

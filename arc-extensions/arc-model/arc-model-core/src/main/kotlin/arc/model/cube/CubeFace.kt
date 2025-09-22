@@ -52,7 +52,6 @@ interface CubeFace {
         fun rotation(rotation: Float): Builder
 
         fun setCull(cullable: Boolean): Builder
-
     }
 
     companion object {
@@ -66,7 +65,5 @@ interface CubeFace {
         fun builder(): Builder {
             return factory<Builder>()
         }
-
     }
-
 }

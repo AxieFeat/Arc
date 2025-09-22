@@ -8,7 +8,7 @@ enum class KeyCode(
     val id: Int,
     val char: Char? = null,
 ) {
-    
+
     ANY(KeyType.UNKNOWN, -1),
     ANY_KEY(KeyType.KEY, -1),
     ANY_MOUSE(KeyType.MOUSE, -1),
@@ -153,7 +153,5 @@ enum class KeyCode(
         fun fromChar(char: Char): List<KeyCode> {
             return entries.filter { it.char == char }
         }
-
     }
-    
 }

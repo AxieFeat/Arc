@@ -1,6 +1,6 @@
 package arc.profiler.section
 
-internal data class SimpleSectionResult(
+internal class SimpleSectionResult(
     override var name: String,
     override var child: List<SectionResult>,
     override var startTime: Long,
@@ -8,5 +8,4 @@ internal data class SimpleSectionResult(
 ) : SectionResult {
 
     override val duration: Long = endTime - startTime
-
 }

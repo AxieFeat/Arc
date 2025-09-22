@@ -3,8 +3,8 @@ package arc.math
 import org.joml.Vector3f
 
 internal data class JomlRay(
-    override var origin: Vector3f,
-    override var direction: Vector3f
+    override val origin: Vector3f,
+    override val direction: Vector3f
 ) : Ray {
 
     override fun getEndPoint(distance: Float): Vector3f {
@@ -14,9 +14,9 @@ internal data class JomlRay(
     override fun copy(): Ray = JomlRay(origin, direction)
 
     object Factory : Ray.Factory {
+
         override fun create(origin: Vector3f, direction: Vector3f): Ray {
             return JomlRay(origin, direction)
         }
     }
-
 }

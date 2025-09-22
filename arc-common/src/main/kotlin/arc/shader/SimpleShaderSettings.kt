@@ -6,9 +6,9 @@ internal data class SimpleShaderSettings(
 ) : ShaderSettings {
 
     object Factory : ShaderSettings.Factory {
+
         override fun create(uniforms: List<String>, blendMode: BlendMode): ShaderSettings {
             return SimpleShaderSettings(uniforms, blendMode)
         }
     }
-
 }

@@ -25,5 +25,4 @@ enum class Face(
     WEST(Vector3f(-1f, 0f, 0f)),
     UP(Vector3f(0f, 1f, 0f)),
     DOWN(Vector3f(0f, -1f, 0f))
-
 }

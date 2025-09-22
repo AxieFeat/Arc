@@ -45,5 +45,4 @@ interface BindingProcessor {
      * @return Instance of [BindingLike] or null if not found.
      */
     operator fun get(id: String): BindingLike?
-
 }

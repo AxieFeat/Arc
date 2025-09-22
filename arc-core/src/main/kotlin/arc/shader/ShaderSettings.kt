@@ -30,9 +30,9 @@ interface ShaderSettings {
     interface Factory {
 
         fun create(uniforms: List<String>, blendMode: BlendMode): ShaderSettings
-
     }
 
+    @Suppress("MagicNumber") // TODO Remove when lower TODO will be resolved.
     companion object {
 
         /**
@@ -58,6 +58,7 @@ interface ShaderSettings {
          *
          * @return New instance of [ShaderSettings].
          */
+        // TODO Refactor this function... or remove it?
         @JvmStatic
         fun of(asset: StringAsset): ShaderSettings {
 
@@ -167,7 +168,5 @@ interface ShaderSettings {
 
             return result
         }
-
     }
-
 }

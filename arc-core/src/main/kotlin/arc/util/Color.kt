@@ -67,7 +67,16 @@ interface Color : Copyable<Color>, Interpolatable<Color> {
      *
      * @return New instance of [Color].
      */
-    operator fun times(value: Float): Color
+    operator fun times(value: Float): Color = times(value.toDouble())
+
+    /**
+     * Multiply values in color.
+     *
+     * @param value Multiply value.
+     *
+     * @return New instance of [Color].
+     */
+    operator fun times(value: Double): Color
 
     /**
      * Converts the current color instance into its integer representation.
@@ -87,7 +96,6 @@ interface Color : Copyable<Color>, Interpolatable<Color> {
     @ApiStatus.Internal
     interface Factory {
 
-
         @Throws(IllegalArgumentException::class)
         fun create(
             red:   @Range(from = 0, to = 255) Int,
@@ -95,9 +103,9 @@ interface Color : Copyable<Color>, Interpolatable<Color> {
             blue:  @Range(from = 0, to = 255) Int,
             alpha: @Range(from = 0, to = 1) Double
         ): Color
-
     }
 
+    @Suppress("UndocumentedPublicProperty")
     companion object {
 
         @JvmField val BLACK = of(0, 0, 0)
@@ -141,7 +149,5 @@ interface Color : Copyable<Color>, Interpolatable<Color> {
             blue:  @Range(from = 0, to = 255) Int = 255,
             alpha: @Range(from = 0, to = 1) Double = 1.0
         ): Color = single<Factory>().create(red, green, blue, alpha)
-
     }
-
 }

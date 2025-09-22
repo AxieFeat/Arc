@@ -71,7 +71,5 @@ interface Texture : TextureLike {
          */
         @JvmStatic
         fun raw(buffer: ByteBuffer): Texture = TextureLoader.RAW.load(buffer)
-
     }
-
 }

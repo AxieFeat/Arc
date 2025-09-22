@@ -3,6 +3,11 @@ package arc.graphics.scene
 import arc.Application
 import arc.graphics.Camera
 
+/**
+ * This abstract class represents minimal scene implementation.
+ *
+ * @param application Application instance.
+ */
 abstract class AbstractScene(
     val application: Application,
 ) : Scene {
@@ -24,9 +29,9 @@ abstract class AbstractScene(
     protected open fun calculateFps() {
         fpsCounter++
 
-        while (TimeUtil.getTime(application.window) >= this.debugUpdateTime + 1000L) {
+        while (TimeUtil.getTime(application.window) >= this.debugUpdateTime + FPS_UPDATE_INTERVAL) {
             this.fps = this.fpsCounter
-            this.debugUpdateTime += 1000L
+            this.debugUpdateTime += FPS_UPDATE_INTERVAL
             this.fpsCounter = 0
             onFpsUpdate(fps)
         }
@@ -37,6 +42,16 @@ abstract class AbstractScene(
         this.delta = timer.deltaTime
     }
 
+    /**
+     * This method is called when fps is updated. Fps updates every second.
+     */
     open fun onFpsUpdate(fps: Int) {}
 
+    companion object {
+
+        /**
+         * Interval in milliseconds to update fps value.
+         */
+        const val FPS_UPDATE_INTERVAL = 1000L
+    }
 }

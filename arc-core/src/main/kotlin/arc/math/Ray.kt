@@ -80,7 +80,14 @@ interface Ray : Copyable<Ray> {
      */
     override fun copy(): Ray
 
+    /**
+     * Get [origin] component.
+     */
     operator fun component1(): Vector3f = origin
+
+    /**
+     * Get [direction] component.
+     */
     operator fun component2(): Vector3f = direction
 
     @ApiStatus.Internal
@@ -88,7 +95,6 @@ interface Ray : Copyable<Ray> {
     interface Factory {
 
         fun create(origin: Vector3f, direction: Vector3f): Ray
-
     }
 
     companion object {
@@ -111,7 +117,5 @@ interface Ray : Copyable<Ray> {
         fun of(origin: Vector3f, direction: Vector3f): Ray {
             return single<Factory>().create(origin, direction)
         }
-
     }
-
 }

@@ -22,13 +22,16 @@ interface Binding : BindingLike {
     val key: KeyCode
 
     /**
-     * Calls when this key is pressed
+     * Calls when this key is pressed.
+     *
+     * @param key Key that was pressed.
      */
     fun onPress(key: KeyCode) {}
 
     /**
      * Calls when this key is released.
+     *
+     * @param key Key that was released.
      */
     fun onRelease(key: KeyCode) {}
-
 }

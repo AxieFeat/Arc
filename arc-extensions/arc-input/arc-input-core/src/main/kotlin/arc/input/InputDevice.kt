@@ -34,5 +34,4 @@ interface InputDevice : BindingHolder {
      * @param key Key to check.
      */
     fun isReleased(key: KeyCode): Boolean
-
 }

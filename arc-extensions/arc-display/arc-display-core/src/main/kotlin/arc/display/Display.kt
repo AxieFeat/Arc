@@ -44,7 +44,7 @@ interface Display : Cleanable, Bindable {
     fun update(camera: Camera) = mouse.update(camera)
 
     /**
-     * Render this display without any shader (You need it bind your own)
+     * Render this display without any shader (You need it bind your own).
      */
     fun render() = render(EmptyShaderInstance)
 
@@ -65,7 +65,6 @@ interface Display : Cleanable, Bindable {
     interface Factory {
 
         fun create(width: Int, height: Int): Display
-
     }
 
     companion object {
@@ -82,8 +81,5 @@ interface Display : Cleanable, Bindable {
         fun of(width: Int, height: Int): Display {
             return single<Factory>().create(width, height)
         }
-
     }
-
-
 }

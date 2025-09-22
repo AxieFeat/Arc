@@ -33,5 +33,4 @@ interface GPU {
      * Info of GPU. Return "unknown" if not found.
      */
     val info: String
-
 }

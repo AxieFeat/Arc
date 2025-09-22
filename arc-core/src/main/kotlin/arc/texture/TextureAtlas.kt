@@ -66,6 +66,8 @@ interface TextureAtlas : Texture {
          * Create [TextureAtlas] from [AssetLike] object.
          *
          * @param asset Asset for Texture Atlas in raw format.
+         * @param width Width of texture in pixels.
+         * @param height Height of texture in pixels.
          *
          * @return New instance of [TextureAtlas].
          */
@@ -76,6 +78,8 @@ interface TextureAtlas : Texture {
          * Create [TextureAtlas] from a byte array.
          *
          * @param bytes Bytes of texture in raw format.
+         * @param width Width of texture in pixels.
+         * @param height Height of texture in pixels.
          *
          * @return New instance of [TextureAtlas].
          */
@@ -86,12 +90,12 @@ interface TextureAtlas : Texture {
          * Create [TextureAtlas] from byte buffer.
          *
          * @param buffer Byte buffer of texture in raw format.
+         * @param width Width of texture in pixels.
+         * @param height Height of texture in pixels.
          *
          * @return New instance of [TextureAtlas].
          */
         @JvmStatic
         fun raw(buffer: ByteBuffer, width: Int, height: Int): TextureAtlas = TextureAtlasLoader.RAW.load(buffer, width, height)
-
     }
-
 }

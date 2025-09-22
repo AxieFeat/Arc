@@ -28,7 +28,6 @@ interface VertexArrayBuffer : VertexBuffer {
     interface Factory {
 
         fun create(mode: DrawerMode, format: VertexFormat, buffer: ByteBuffer, vertices: Int): VertexArrayBuffer
-
     }
 
     companion object {
@@ -47,7 +46,5 @@ interface VertexArrayBuffer : VertexBuffer {
         fun of(mode: DrawerMode, format: VertexFormat, buffer: ByteBuffer, vertices: Int): VertexArrayBuffer {
             return single<Factory>().create(mode, format, buffer, vertices)
         }
-
     }
-
 }

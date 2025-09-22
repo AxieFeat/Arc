@@ -38,5 +38,4 @@ interface CPU {
      * Model name of CPU.
      */
     val model: String
-
 }

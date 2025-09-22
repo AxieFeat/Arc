@@ -5,13 +5,15 @@ import arc.graphics.Camera
 import arc.input.KeyCode
 import org.joml.Vector2f
 
-internal data class SimpleVirtualMouse(
+internal class SimpleVirtualMouse(
     override val display: Display
 ) : VirtualMouseInput {
 
     override var previousPosition: Vector2f = Vector2f()
     override var position: Vector2f = Vector2f()
     override var displayVec: Vector2f = Vector2f()
+
+    @Suppress("EmptyFunctionBlock") // TODO Implement function.
     override fun reset() {
 
     }
@@ -80,9 +82,9 @@ internal data class SimpleVirtualMouse(
     }
 
     object Factory : VirtualMouseInput.Factory {
+
         override fun create(display: Display): VirtualMouseInput {
             return SimpleVirtualMouse(display)
         }
     }
-
 }

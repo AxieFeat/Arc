@@ -34,5 +34,4 @@ interface Drawer {
      * @param buffer Buffer for rendering.
      */
     fun draw(matrix: Matrix4f, buffer: VertexBuffer)
-
 }

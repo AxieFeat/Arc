@@ -50,7 +50,6 @@ interface Animation : Copyable<Animation> {
         fun setLoopDelay(loopDelay: Float): Builder
         fun setDuration(duration: Float): Builder
         fun addAnimator(vararg animator: Animator): Builder
-
     }
 
     companion object {
@@ -64,7 +63,5 @@ interface Animation : Copyable<Animation> {
         fun builder(): Builder {
             return factory<Builder>()
         }
-
     }
-
 }

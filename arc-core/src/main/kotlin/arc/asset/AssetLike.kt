@@ -12,5 +12,4 @@ interface AssetLike {
      * Bytes of this asset. It can be anything.
      */
     val bytes: ByteArray
-
 }

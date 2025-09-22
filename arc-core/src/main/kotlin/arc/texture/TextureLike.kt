@@ -12,5 +12,4 @@ interface TextureLike : Bindable, Cleanable {
      * ID of this texture in a render system.
      */
     val id: Int
-
 }

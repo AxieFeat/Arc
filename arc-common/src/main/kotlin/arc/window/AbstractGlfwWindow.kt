@@ -2,7 +2,35 @@ package arc.window
 
 import org.joml.Vector2i
 import org.lwjgl.glfw.Callbacks
-import org.lwjgl.glfw.GLFW.*
+import org.lwjgl.glfw.GLFW.GLFW_CURSOR
+import org.lwjgl.glfw.GLFW.GLFW_CURSOR_DISABLED
+import org.lwjgl.glfw.GLFW.GLFW_CURSOR_NORMAL
+import org.lwjgl.glfw.GLFW.GLFW_FALSE
+import org.lwjgl.glfw.GLFW.GLFW_RESIZABLE
+import org.lwjgl.glfw.GLFW.GLFW_TRUE
+import org.lwjgl.glfw.GLFW.GLFW_VISIBLE
+import org.lwjgl.glfw.GLFW.glfwCreateWindow
+import org.lwjgl.glfw.GLFW.glfwDefaultWindowHints
+import org.lwjgl.glfw.GLFW.glfwDestroyWindow
+import org.lwjgl.glfw.GLFW.glfwGetFramebufferSize
+import org.lwjgl.glfw.GLFW.glfwGetTime
+import org.lwjgl.glfw.GLFW.glfwHideWindow
+import org.lwjgl.glfw.GLFW.glfwInit
+import org.lwjgl.glfw.GLFW.glfwSetCursorEnterCallback
+import org.lwjgl.glfw.GLFW.glfwSetCursorPosCallback
+import org.lwjgl.glfw.GLFW.glfwSetErrorCallback
+import org.lwjgl.glfw.GLFW.glfwSetFramebufferSizeCallback
+import org.lwjgl.glfw.GLFW.glfwSetInputMode
+import org.lwjgl.glfw.GLFW.glfwSetScrollCallback
+import org.lwjgl.glfw.GLFW.glfwSetWindowFocusCallback
+import org.lwjgl.glfw.GLFW.glfwSetWindowPosCallback
+import org.lwjgl.glfw.GLFW.glfwSetWindowSize
+import org.lwjgl.glfw.GLFW.glfwSetWindowTitle
+import org.lwjgl.glfw.GLFW.glfwShowWindow
+import org.lwjgl.glfw.GLFW.glfwSwapInterval
+import org.lwjgl.glfw.GLFW.glfwTerminate
+import org.lwjgl.glfw.GLFW.glfwWindowHint
+import org.lwjgl.glfw.GLFW.glfwWindowShouldClose
 import org.lwjgl.glfw.GLFWErrorCallback
 import org.lwjgl.system.MemoryUtil
 
@@ -148,10 +176,10 @@ abstract class AbstractGlfwWindow(
     }
 
     companion object {
+
         @JvmStatic
         private fun bootCrash(code: Int, text: Long) {
             throw WindowException("GLFW error $code: ${MemoryUtil.memUTF8(text)}")
         }
     }
-
 }

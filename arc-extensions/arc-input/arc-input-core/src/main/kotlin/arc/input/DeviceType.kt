@@ -7,5 +7,4 @@ enum class DeviceType {
 
     MOUSE,
     KEYBOARD
-
 }

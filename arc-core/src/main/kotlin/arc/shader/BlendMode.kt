@@ -9,6 +9,7 @@ import org.jetbrains.annotations.ApiStatus
  * This interface represents a blend setting for shader.
  */
 @ImmutableType
+@Suppress("UndocumentedPublicProperty") // TODO Add documentation for blend properties.
 interface BlendMode {
 
     val srcColorFactor: Int
@@ -43,7 +44,6 @@ interface BlendMode {
             dstAlphaFactor: Int,
             blendFunc: Int,
         ): BlendMode
-
     }
 
     companion object {
@@ -65,7 +65,5 @@ interface BlendMode {
         ): BlendMode {
             return single<Factory>().create(separateBlend, opaque, srcColorFactor, srcAlphaFactor, dstColorFactor, dstAlphaFactor, blendFunc)
         }
-
     }
-
 }

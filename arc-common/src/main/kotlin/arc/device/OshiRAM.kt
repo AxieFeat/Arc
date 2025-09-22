@@ -5,6 +5,7 @@ import oshi.SystemInfo
 internal data class OshiRAM(
     private val systemInfo: SystemInfo
 ) : RAM {
+
     override val available: Long
         get() = systemInfo.hardware.memory.available
     override val total: Long

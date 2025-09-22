@@ -83,10 +83,9 @@ internal data class GlDisplay(
     }
 
     object Factory : Display.Factory {
+
         override fun create(width: Int, height: Int): Display {
             return GlDisplay(width, height)
         }
-
     }
-
 }

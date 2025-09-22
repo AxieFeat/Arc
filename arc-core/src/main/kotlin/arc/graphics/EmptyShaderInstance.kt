@@ -15,6 +15,7 @@ import org.joml.Vector4f
  *
  * Can be used as a stub instead of the nullable type.
  */
+@Suppress("EmptyFunctionBlock") // Because it's an empty implementation.
 object EmptyShaderInstance : ShaderInstance {
 
     override val id: Int = -1
@@ -40,5 +41,4 @@ object EmptyShaderInstance : ShaderInstance {
     override fun bind() {}
     override fun unbind() {}
     override fun cleanup() {}
-
 }

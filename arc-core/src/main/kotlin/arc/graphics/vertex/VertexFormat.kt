@@ -62,7 +62,7 @@ interface VertexFormat {
     val normalElementOffset: Int
 
     /**
-     * Count of elements in this format
+     * Count of elements in this format.
      */
     val count: Int
         get() = elements.size
@@ -136,7 +136,6 @@ interface VertexFormat {
          * @return New instance of [VertexFormat] with settings from builder.
          */
         override fun build(): VertexFormat
-
     }
 
     companion object {
@@ -148,7 +147,5 @@ interface VertexFormat {
         fun builder(): Builder {
             return factory<Builder>()
         }
-
     }
-
 }

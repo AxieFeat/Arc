@@ -1,13 +1,19 @@
 package arc.input.mouse
 
-import arc.input.*
+import arc.input.Binding
+import arc.input.BindingProcessor
+import arc.input.GlfwBindingProcessor
+import arc.input.GlfwInputEngine
+import arc.input.KeyCode
+import arc.input.KeyType
+import arc.input.MultiBinding
 import arc.window.Window
 import org.joml.Vector2f
 import org.lwjgl.glfw.GLFW
 
 internal object GlfwMouseInput : MouseInput {
 
-    lateinit var window: Window
+    var window: Window? = null
     override val bindingProcessor: BindingProcessor = GlfwBindingProcessor()
     override var previousPosition: Vector2f = Vector2f()
     override var position: Vector2f = Vector2f()
@@ -17,9 +23,9 @@ internal object GlfwMouseInput : MouseInput {
         if(key.keyType != KeyType.MOUSE) return false
 
         try {
-            if(GLFW.glfwGetMouseButton(window.handle, key.id) == GLFW.GLFW_PRESS ||
-                GLFW.glfwGetMouseButton(window.handle, key.id) == GLFW.GLFW_REPEAT) return true
-        } catch (throwable: Throwable) {
+            if(GLFW.glfwGetMouseButton(window!!.handle, key.id) == GLFW.GLFW_PRESS ||
+                GLFW.glfwGetMouseButton(window!!.handle, key.id) == GLFW.GLFW_REPEAT) return true
+        } catch (ignore: Throwable) {
             return false
         }
 
@@ -30,9 +36,9 @@ internal object GlfwMouseInput : MouseInput {
         if(key.keyType != KeyType.MOUSE) return false
 
         try {
-            if(GLFW.glfwGetMouseButton(window.handle, key.id) == GLFW.GLFW_RELEASE ||
-                GLFW.glfwGetMouseButton(window.handle, key.id) == GLFW.GLFW_REPEAT) return true
-        } catch (throwable: Throwable) {
+            if(GLFW.glfwGetMouseButton(window!!.handle, key.id) == GLFW.GLFW_RELEASE ||
+                GLFW.glfwGetMouseButton(window!!.handle, key.id) == GLFW.GLFW_REPEAT) return true
+        } catch (ignore: Throwable) {
             return false
         }
 
@@ -56,6 +62,7 @@ internal object GlfwMouseInput : MouseInput {
         )
     }
 
+    @Suppress("OptionalWhenBraces")
     fun keyUpdate(key: KeyCode, pressed: Boolean) {
         if(key == KeyCode.MOUSE_SCROLL) return
 
@@ -64,13 +71,16 @@ internal object GlfwMouseInput : MouseInput {
 
                 GlfwInputEngine.executor.submit {
                     when (binding) {
-                        is Binding -> {
-                            if (binding.key == key || binding.key == KeyCode.ANY || binding.key == KeyCode.ANY_MOUSE) {
-                                if (pressed) {
-                                    binding.onPress(key)
-                                } else {
-                                    binding.onRelease(key)
-                                }
+                        is Binding if (
+                                binding.key == key ||
+                                binding.key == KeyCode.ANY ||
+                                binding.key == KeyCode.ANY_MOUSE
+                            ) -> {
+
+                            if (pressed) {
+                                binding.onPress(key)
+                            } else {
+                                binding.onRelease(key)
                             }
                         }
 
@@ -81,28 +91,28 @@ internal object GlfwMouseInput : MouseInput {
                         }
                     }
                 }
-
             }
         }
     }
 
+    @Suppress("OptionalWhenBraces")
     fun scrollUpdate(xOffset: Double, yOffset: Double) {
         GlfwInputEngine.executor.submit {
             bindingProcessor.bindings.forEach { binding ->
 
                 GlfwInputEngine.executor.submit {
                     when (binding) {
-                        is MouseBinding -> {
-                            if (binding.key == KeyCode.MOUSE_SCROLL || binding.key == KeyCode.ANY || binding.key == KeyCode.ANY_MOUSE) {
-                                binding.onScroll(xOffset, yOffset)
-                            }
+                        is MouseBinding if (
+                                binding.key == KeyCode.MOUSE_SCROLL ||
+                                binding.key == KeyCode.ANY ||
+                                binding.key == KeyCode.ANY_MOUSE
+                            ) -> {
+
+                            binding.onScroll(xOffset, yOffset)
                         }
                     }
                 }
-
             }
         }
     }
-
-
 }

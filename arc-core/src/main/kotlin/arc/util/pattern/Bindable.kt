@@ -14,5 +14,4 @@ interface Bindable {
      * Unbinds the resource, deactivating it from the current context.
      */
     fun unbind()
-
 }

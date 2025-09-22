@@ -19,5 +19,4 @@ enum class AnimationChannel {
      * This channel allows change scale of cubes.
      */
     SCALE
-
 }

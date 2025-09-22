@@ -26,5 +26,4 @@ data class Glyph(
      */
     val height: Int
         get() = pattern.size
-
 }

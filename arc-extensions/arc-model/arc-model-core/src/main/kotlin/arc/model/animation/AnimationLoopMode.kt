@@ -19,5 +19,4 @@ enum class AnimationLoopMode {
      * Animation will be played in loop.
      */
     LOOP
-
 }

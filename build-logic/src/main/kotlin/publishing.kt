@@ -14,6 +14,10 @@ import java.util.concurrent.TimeUnit
 val gitCommitHash = "git rev-parse --short=7 HEAD".runCommand()
 
 fun Project.applyPublishing() {
+    if (findProperty("skipPublishing") == "true") return
+
+    plugins.apply("maven-publish")
+
     plugins.withId("maven-publish") {
         val sourcesJar = tasks.register("sourcesJar", Jar::class) {
             archiveClassifier.set("sources")

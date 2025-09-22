@@ -134,7 +134,6 @@ interface UniformBuffer : Cleanable, Bindable {
     interface Factory {
 
         fun create(size: Int): UniformBuffer
-
     }
 
     companion object {
@@ -150,7 +149,5 @@ interface UniformBuffer : Cleanable, Bindable {
         fun of(size: Int): UniformBuffer {
             return single<Factory>().create(size)
         }
-
     }
-
 }

@@ -5,6 +5,7 @@ package arc.texture
  *
  * Can be used as a stub instead of the nullable type.
  */
+@Suppress("EmptyFunctionBlock") // Because it's an empty implementation.
 object EmptyTexture : Texture {
 
     override val id: Int = -1
@@ -14,5 +15,5 @@ object EmptyTexture : Texture {
     override fun unbind() {}
 
     override fun cleanup() {}
-
 }
+

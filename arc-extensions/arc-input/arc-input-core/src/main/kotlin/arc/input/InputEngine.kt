@@ -24,7 +24,6 @@ interface InputEngine {
     interface Provider {
 
         fun provide(): InputEngine
-
     }
 
     companion object {
@@ -38,7 +37,5 @@ interface InputEngine {
         fun find(): InputEngine {
             return single<Provider>().provide()
         }
-
     }
-
 }

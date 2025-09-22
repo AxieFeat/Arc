@@ -80,7 +80,6 @@ interface DrawBuffer : VertexConsumer, Cleanable {
     interface Factory {
 
         fun create(mode: DrawerMode, format: VertexFormat, bufferSize: Int): DrawBuffer
-
     }
 
     companion object {
@@ -98,7 +97,5 @@ interface DrawBuffer : VertexConsumer, Cleanable {
         fun of(mode: DrawerMode, format: VertexFormat, bufferSize: Int = 256): DrawBuffer {
             return single<Factory>().create(mode, format, bufferSize)
         }
-
     }
-
 }

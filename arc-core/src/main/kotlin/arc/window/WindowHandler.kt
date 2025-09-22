@@ -39,5 +39,4 @@ interface WindowHandler {
      * Handles moving of a window.
      */
     fun windowMove(x: Int, y: Int) {}
-
 }

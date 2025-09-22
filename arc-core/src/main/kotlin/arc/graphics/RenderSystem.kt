@@ -3,7 +3,6 @@ package arc.graphics
 import arc.graphics.scene.Scene
 import arc.shader.ShaderInstance
 import arc.texture.Texture
-import org.jetbrains.annotations.Range
 
 /**
  * This interface represents the manager of rendering.
@@ -188,5 +187,4 @@ interface RenderSystem {
      * @param destFactor The destination factor determines how the destination color is scaled in the blending equation.
      */
     fun blendFunc(sourceFactor: Int, destFactor: Int)
-
 }

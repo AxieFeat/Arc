@@ -22,5 +22,4 @@ internal class GlfwBindingProcessor : BindingProcessor {
     override fun get(id: String): BindingLike? {
         return bindings.firstOrNull { it.id == id }
     }
-
 }

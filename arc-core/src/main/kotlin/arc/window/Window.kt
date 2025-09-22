@@ -118,7 +118,6 @@ interface Window {
             height: Int,
             isResizable: Boolean,
         ): Window
-
     }
 
     companion object {
@@ -144,7 +143,5 @@ interface Window {
         ): Window {
             return single<Factory>().create(name, handler, width, height, isResizable)
         }
-
     }
-
 }

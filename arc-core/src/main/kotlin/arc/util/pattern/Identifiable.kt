@@ -11,5 +11,4 @@ interface Identifiable {
      * A universally unique identifier (UUID) associated with the object.
      */
     val uuid: UUID
-
 }

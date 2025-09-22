@@ -6,7 +6,17 @@ import org.lwjgl.PointerBuffer
 import org.lwjgl.glfw.GLFWVulkan
 import org.lwjgl.system.MemoryStack
 import org.lwjgl.system.MemoryUtil
-import org.lwjgl.vulkan.*
+import org.lwjgl.vulkan.EXTDebugUtils
+import org.lwjgl.vulkan.KHRPortabilitySubset
+import org.lwjgl.vulkan.VK10
+import org.lwjgl.vulkan.VK11
+import org.lwjgl.vulkan.VkApplicationInfo
+import org.lwjgl.vulkan.VkDebugUtilsMessengerCallbackDataEXT
+import org.lwjgl.vulkan.VkDebugUtilsMessengerCreateInfoEXT
+import org.lwjgl.vulkan.VkExtensionProperties
+import org.lwjgl.vulkan.VkInstance
+import org.lwjgl.vulkan.VkInstanceCreateInfo
+import org.lwjgl.vulkan.VkLayerProperties
 
 // The class name is VulkanInstance because in LWJGL exists VkInstance
 internal class VulkanInstance(
@@ -128,7 +138,7 @@ internal class VulkanInstance(
     }
 
     private fun getInstanceExtensions(): MutableSet<String?> {
-        val instanceExtensions: MutableSet<String?> = HashSet<String?>()
+        val instanceExtensions: MutableSet<String?> = HashSet()
         MemoryStack.stackPush().use { stack ->
             val numExtensionsBuf = stack.callocInt(1)
             VK10.vkEnumerateInstanceExtensionProperties(null as String?, numExtensionsBuf, null)
@@ -186,6 +196,7 @@ internal class VulkanInstance(
     }
 
     companion object {
+
         const val MESSAGE_SEVERITY_BITMASK: Int =
                 EXTDebugUtils.VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT or
                 EXTDebugUtils.VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT

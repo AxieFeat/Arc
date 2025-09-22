@@ -8,7 +8,7 @@ import org.jetbrains.annotations.ApiStatus
 import org.joml.Vector3f
 
 /**
- * This interface represents keyframe of animation
+ * This interface represents keyframe of animation.
  */
 @ImmutableType
 interface Keyframe : Copyable<Keyframe> {

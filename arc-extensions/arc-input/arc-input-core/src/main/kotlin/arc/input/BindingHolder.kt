@@ -9,5 +9,4 @@ interface BindingHolder {
      * Processor for bindings.
      */
     val bindingProcessor: BindingProcessor
-
 }

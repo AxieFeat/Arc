@@ -2,7 +2,12 @@ package arc.audio
 
 import org.lwjgl.openal.AL
 import org.lwjgl.openal.ALC
-import org.lwjgl.openal.ALC10.*
+import org.lwjgl.openal.ALC10.ALC_REFRESH
+import org.lwjgl.openal.ALC10.alcCloseDevice
+import org.lwjgl.openal.ALC10.alcCreateContext
+import org.lwjgl.openal.ALC10.alcDestroyContext
+import org.lwjgl.openal.ALC10.alcMakeContextCurrent
+import org.lwjgl.openal.ALC10.alcOpenDevice
 import org.lwjgl.system.MemoryUtil.NULL
 import java.nio.ByteBuffer
 
@@ -14,13 +19,12 @@ internal object AlSoundEngine : SoundEngine {
     private var device: Long = NULL
     private var context: Long = NULL
 
+    @Suppress("MagicNumber") // TODO What is 60, 0 means here?
     override fun start() {
         if (isLoaded) return
 
         device = alcOpenDevice(null as ByteBuffer?)
-        if (device == NULL) {
-            throw IllegalStateException("Failed to open OpenAL device")
-        }
+        require(device != NULL) { "Failed to open OpenAL device" }
 
         context = alcCreateContext(device, intArrayOf(ALC_REFRESH, 60, 0))
         alcMakeContextCurrent(context)
@@ -54,9 +58,9 @@ internal object AlSoundEngine : SoundEngine {
     }
 
     object Provider : SoundEngine.Provider {
+
         override fun provide(): SoundEngine {
             return AlSoundEngine
         }
     }
-
 }

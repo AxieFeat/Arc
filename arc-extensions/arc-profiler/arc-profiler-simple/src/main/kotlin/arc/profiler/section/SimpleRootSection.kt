@@ -1,7 +1,7 @@
 package arc.profiler.section
 
-internal data class SimpleRootSection(
-    override var name: String = "root",
+internal class SimpleRootSection(
+    override val name: String = "root",
     override var startTime: Long = System.nanoTime(),
     override val child: MutableList<ActiveSection> = mutableListOf()
 ) : RootSection {
@@ -76,5 +76,4 @@ internal data class SimpleRootSection(
             root.addResult(startSection)
         }
     }
-
 }

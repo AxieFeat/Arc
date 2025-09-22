@@ -1,4 +1,4 @@
-@file:Suppress("DuplicatedCode")
+@file:Suppress("MatchingDeclarationName")
 package arc.sample
 
 import arc.Application
@@ -6,11 +6,13 @@ import arc.asset.FileAsset
 import arc.shader.AbstractUniformProvider
 import arc.shader.ShaderInstance
 import arc.shader.ShaderSettings
+
 import java.io.File
 
 /**
  * For creation uniform provider we recommend kotlin objects and using AbstractUniformProvider class.
  */
+// TODO Update sample.
 internal object UniformProviderSample : AbstractUniformProvider() {
 
     private val application = Application.find()
@@ -20,16 +22,16 @@ internal object UniformProviderSample : AbstractUniformProvider() {
         // For example, we can provide projection and view matrices from the camera.
 
         // In first argument we set name of uniform in shader.
-        addUniform("projectionMatrix") {
+        addUniform("projectionMatrix") { shader, name ->
 
             // This block of code calls in every time, when your bind shader.
 
             // Then we just call function of shader instance for setting uniform.
-            it.setUniform("projectionMatrix", application.renderSystem.scene.camera.projection)
+            shader.setUniform(name, application.renderSystem.scene.camera.projection)
         }
 
-        addUniform("viewMatrix") {
-            it.setUniform("viewMatrix", application.renderSystem.scene.camera.view)
+        addUniform("viewMatrix") { shader, name ->
+            shader.setUniform(name, application.renderSystem.scene.camera.view)
         }
     }
 

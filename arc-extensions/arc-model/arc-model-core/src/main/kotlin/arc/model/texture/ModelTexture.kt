@@ -31,7 +31,6 @@ interface ModelTexture {
     interface Builder : arc.util.pattern.Builder<ModelTexture> {
 
         fun setImage(base64Image: String): Builder
-
     }
 
     companion object {
@@ -45,7 +44,5 @@ interface ModelTexture {
         fun builder(): Builder {
             return factory<Builder>()
         }
-
     }
-
 }

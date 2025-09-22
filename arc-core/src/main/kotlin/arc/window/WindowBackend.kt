@@ -14,5 +14,4 @@ interface WindowBackend {
      * Version of a backend library.
      */
     val version: String
-
 }

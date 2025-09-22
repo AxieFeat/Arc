@@ -5,6 +5,7 @@ package arc.graphics
  *
  * @param id ID in render system.
  */
+@Suppress("UndocumentedPublicProperty") // TODO And documentation for drawing modes.
 enum class DrawerMode(
     val id: Int,
 ) {
@@ -17,5 +18,4 @@ enum class DrawerMode(
 
     @Deprecated("In OpenGL 4.1 QUADS are deprecated drawing mode")
     QUADS(7)
-
 }

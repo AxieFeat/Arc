@@ -8,7 +8,7 @@ package arc.files
 enum class FileLocation {
 
     /**
-     * Location in application classpath, that is, inside the executable jar file
+     * Location in application classpath, that is, inside the executable jar file.
      */
     CLASSPATH,
 
@@ -26,5 +26,4 @@ enum class FileLocation {
      * from the directory where the Application is running.
      */
     LOCAL
-
 }

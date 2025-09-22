@@ -1,0 +1,27 @@
+comments:
+  active: true
+  UndocumentedPublicClass:
+    active: true
+    excludes: ["**/test/**"]
+    ignoreAnnotated: ["ApiStatus.Internal"]
+    ignoreDefaultCompanionObject: true
+  UndocumentedPublicFunction:
+    active: true
+    excludes: ["**/test/**"]
+    ignoreAnnotated: ["ApiStatus.Internal"]
+  UndocumentedPublicProperty:
+    active: true
+    excludes: ["**/test/**"]
+    ignoreAnnotated: ["ApiStatus.Internal", "Catalogue"]
+
+complexity:
+  active: true
+  LongParameterList:
+    functionThreshold: 8
+    constructorThreshold: 8
+  MethodOverloading:
+    threshold: 20
+  TooManyFunctions:
+    ignoreOverridden: true
+    thresholdInFiles: 30
+    thresholdInInterfaces: 40

@@ -1,19 +1,24 @@
 package arc.graphics
 
-import arc.graphics.vertex.*
+import arc.graphics.vertex.VertexArrayBuffer
+import arc.graphics.vertex.VertexBuffer
+import arc.graphics.vertex.VertexFormat
+import arc.graphics.vertex.VertexFormatElement
+import arc.graphics.vertex.VertexUsage
 import arc.util.Color
+import arc.util.SimpleColor
 import org.joml.Matrix4f
 import org.joml.Vector3f
 import org.lwjgl.system.MemoryUtil
 import java.nio.ByteBuffer
 
-internal data class NativeDrawBuffer(
-    override var mode: DrawerMode,
-    override var format: VertexFormat,
+internal class NativeDrawBuffer(
+    override val mode: DrawerMode,
+    override val format: VertexFormat,
     override val bufferSize: Int,
 ) : DrawBuffer {
 
-    override var byteBuffer: ByteBuffer = MemoryUtil.memAlloc(bufferSize * 4)
+    override var byteBuffer: ByteBuffer = MemoryUtil.memAlloc(bufferSize * BYTES_PER_FLOAT)
     private var baseAddress: Long = MemoryUtil.memAddress(byteBuffer)
 
     override var vertexCount = 0
@@ -78,7 +83,7 @@ internal data class NativeDrawBuffer(
             color.red,
             color.green,
             color.blue,
-            (color.alpha * 255).toInt().coerceIn(0, 255)
+            (color.alpha * SimpleColor.MAX_RGB_VALUE).toInt()
         )
     }
 
@@ -108,8 +113,12 @@ internal data class NativeDrawBuffer(
      * Get address for some element.
      */
     private fun beginElement(element: VertexFormatElement): Int {
-        if(elementsToFill <= 0) throw IllegalStateException("Can not begin element: ${element.name}, all elements already configured!")
-        if(vertexFormatElement != element) throw IllegalArgumentException("Can not begin element, waited ${element.name}, but receive ${vertexFormatElement.name}!")
+        check(elementsToFill > 0) {
+            "Can not begin element: ${element.name}, all elements already configured!"
+        }
+        check(vertexFormatElement == element) {
+            "Can not begin element, waited ${element.name}, but receive ${vertexFormatElement.name}!"
+        }
 
         val offset = (vertexCount * format.nextOffset + format.getOffset(vertexFormatIndex))
 
@@ -193,29 +202,35 @@ internal data class NativeDrawBuffer(
         val addr = baseAddress + i
 
         MemoryUtil.memPutFloat(addr, x + xOffset)
-        MemoryUtil.memPutFloat(addr + 4, y + yOffset)
-        MemoryUtil.memPutFloat(addr + 8, z + zOffset)
+        MemoryUtil.memPutFloat(addr + BYTES_PER_FLOAT, y + yOffset)
+        MemoryUtil.memPutFloat(addr + BYTES_PER_FLOAT * 2, z + zOffset)
     }
 
     private fun putColor(i: Int, red: Int, green: Int, blue: Int, alpha: Int) {
         val addr = baseAddress + i
 
-        MemoryUtil.memPutInt(addr, (alpha shl 24) or (blue shl 16) or (green shl 8) or red)
+        MemoryUtil.memPutInt(
+            addr,
+            (alpha shl COLOR_ALPHA_SHIFT) or
+            (blue shl COLOR_BLUE_SHIFT) or
+            (green shl COLOR_GREEN_SHIFT) or
+            (red shl COLOR_RED_SHIFT)
+        )
     }
 
     private fun putTexture(i: Int, u: Float, v: Float) {
         val addr = baseAddress + i
 
         MemoryUtil.memPutFloat(addr, u)
-        MemoryUtil.memPutFloat(addr + 4, v)
+        MemoryUtil.memPutFloat(addr + BYTES_PER_FLOAT, v)
     }
 
     private fun putNormal(i: Int, x: Float, y: Float, z: Float) {
         val addr = baseAddress + i
 
-        MemoryUtil.memPutByte(addr, ((x * Byte.MAX_VALUE).toInt() and 0xFF).toByte())
-        MemoryUtil.memPutByte(addr + 1, ((y * Byte.MAX_VALUE).toInt() and 0xFF).toByte())
-        MemoryUtil.memPutByte(addr + 2, ((z * Byte.MAX_VALUE).toInt() and 0xFF).toByte())
+        MemoryUtil.memPutByte(addr + NORMAL_X_OFFSET, ((x * Byte.MAX_VALUE).toInt() and BYTE_MASK).toByte())
+        MemoryUtil.memPutByte(addr + NORMAL_Y_OFFSET, ((y * Byte.MAX_VALUE).toInt() and BYTE_MASK).toByte())
+        MemoryUtil.memPutByte(addr + NORMAL_Z_OFFSET, ((z * Byte.MAX_VALUE).toInt() and BYTE_MASK).toByte())
     }
 
     object Factory : DrawBuffer.Factory {
@@ -228,6 +243,16 @@ internal data class NativeDrawBuffer(
         // Temp vector for transformation via matrix in addVertex() function
         @JvmStatic
         private val tempVector = Vector3f()
+
+        private const val BYTES_PER_FLOAT = 4
+        private const val COLOR_ALPHA_SHIFT = 24
+        private const val COLOR_BLUE_SHIFT = 16
+        private const val COLOR_GREEN_SHIFT = 8
+        private const val COLOR_RED_SHIFT = 0
+        private const val NORMAL_X_OFFSET = 0
+        private const val NORMAL_Y_OFFSET = 1
+        private const val NORMAL_Z_OFFSET = 2
+        private const val BYTE_MASK = 0xFF
     }
 
     class DrawBufferOverflowException(

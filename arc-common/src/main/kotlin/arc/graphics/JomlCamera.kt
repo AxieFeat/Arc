@@ -8,7 +8,7 @@ import org.joml.Matrix4f
 import org.joml.Quaternionf
 import org.joml.Vector3f
 
-internal data class JomlCamera(
+internal class JomlCamera(
     override var fov: Float,
     override var windowWidth: Float,
     override var windowHeight: Float,
@@ -37,7 +37,7 @@ internal data class JomlCamera(
     override val frustum: Frustum = JomlFrustum()
 
     override fun rotate(pitch: Float, yaw: Float, roll: Float) {
-        this.pitch = (this.pitch + pitch).coerceIn(-89f, 89f)
+        this.pitch = (this.pitch + pitch).coerceIn(MIN_CAMERA_PITCH, MAX_CAMERA_PITCH)
         this.yaw += yaw
 
         rotation.identity()
@@ -101,8 +101,15 @@ internal data class JomlCamera(
     }
 
     object Factory : Camera.Factory {
+
         override fun create(fov: Float, width: Float, height: Float): Camera {
             return JomlCamera(fov, width, height)
         }
+    }
+
+    companion object {
+
+        const val MIN_CAMERA_PITCH = -89f
+        const val MAX_CAMERA_PITCH = 89f
     }
 }

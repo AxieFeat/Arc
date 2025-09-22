@@ -9,5 +9,4 @@ interface BindingLike {
      * ID of this binding.
      */
     val id: String
-
 }

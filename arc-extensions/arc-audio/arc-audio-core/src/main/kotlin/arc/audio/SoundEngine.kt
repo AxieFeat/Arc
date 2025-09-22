@@ -61,7 +61,6 @@ interface SoundEngine {
     interface Provider {
 
         fun provide(): SoundEngine
-
     }
 
     companion object {
@@ -75,7 +74,5 @@ interface SoundEngine {
         fun find(): SoundEngine {
             return single<Provider>().provide()
         }
-
     }
-
 }

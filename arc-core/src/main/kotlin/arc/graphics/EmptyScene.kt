@@ -7,6 +7,7 @@ import arc.graphics.scene.Scene
  *
  * Can be used as a stub instead of the nullable type.
  */
+@Suppress("EmptyFunctionBlock") // Because it's an empty implementation.
 object EmptyScene : Scene {
 
     override val camera: Camera = Camera.of(60f, 0f, 0f)
@@ -15,5 +16,4 @@ object EmptyScene : Scene {
     override var isShowCursor: Boolean = true
 
     override fun render() {}
-
 }

@@ -3,6 +3,7 @@ package arc.gl.shader
 import arc.asset.StringAsset
 import arc.gl.graphics.GlRenderSystem
 import arc.graphics.EmptyShaderInstance
+import arc.graphics.vertex.VertexType
 import arc.shader.ShaderInstance
 import arc.shader.ShaderSettings
 import arc.shader.UniformBuffer
@@ -13,11 +14,40 @@ import org.joml.Vector2f
 import org.joml.Vector3f
 import org.joml.Vector4f
 import org.lwjgl.opengl.ARBUniformBufferObject.GL_INVALID_INDEX
+import org.lwjgl.opengl.ARBUniformBufferObject.GL_UNIFORM_BUFFER
 import org.lwjgl.opengl.ARBUniformBufferObject.glBindBufferBase
-import org.lwjgl.opengl.GL41.*
+import org.lwjgl.opengl.ARBUniformBufferObject.glGetUniformBlockIndex
+import org.lwjgl.opengl.ARBUniformBufferObject.glUniformBlockBinding
+import org.lwjgl.opengl.GL20.GL_COMPILE_STATUS
+import org.lwjgl.opengl.GL20.GL_FRAGMENT_SHADER
+import org.lwjgl.opengl.GL20.GL_LINK_STATUS
+import org.lwjgl.opengl.GL20.GL_VERTEX_SHADER
+import org.lwjgl.opengl.GL20.glAttachShader
+import org.lwjgl.opengl.GL20.glCompileShader
+import org.lwjgl.opengl.GL20.glCreateProgram
+import org.lwjgl.opengl.GL20.glCreateShader
+import org.lwjgl.opengl.GL20.glDeleteProgram
+import org.lwjgl.opengl.GL20.glDeleteShader
+import org.lwjgl.opengl.GL20.glDetachShader
+import org.lwjgl.opengl.GL20.glGetProgramInfoLog
+import org.lwjgl.opengl.GL20.glGetProgrami
+import org.lwjgl.opengl.GL20.glGetShaderInfoLog
+import org.lwjgl.opengl.GL20.glGetShaderi
+import org.lwjgl.opengl.GL20.glGetUniformLocation
+import org.lwjgl.opengl.GL20.glLinkProgram
+import org.lwjgl.opengl.GL20.glShaderSource
+import org.lwjgl.opengl.GL20.glUniform1f
+import org.lwjgl.opengl.GL20.glUniform1i
+import org.lwjgl.opengl.GL20.glUniform2f
+import org.lwjgl.opengl.GL20.glUniform3f
+import org.lwjgl.opengl.GL20.glUniform4f
+import org.lwjgl.opengl.GL20.glUniformMatrix3fv
+import org.lwjgl.opengl.GL20.glUniformMatrix4fv
+import org.lwjgl.opengl.GL20.glUseProgram
 import org.lwjgl.system.MemoryStack
 
-internal data class GlShaderInstance(
+@Suppress("MethodOverloading")
+internal class GlShaderInstance(
     override val vertex: String,
     override val fragment: String,
     override val settings: ShaderSettings
@@ -77,7 +107,7 @@ internal data class GlShaderInstance(
                 glUniformMatrix3fv(
                     this,
                     false,
-                    value[stack.mallocFloat(12)]
+                    value[stack.mallocFloat(MATRIX3F_SIZE)]
                 )
             }
         }
@@ -89,7 +119,7 @@ internal data class GlShaderInstance(
                 glUniformMatrix4fv(
                     this,
                     false,
-                    value[stack.mallocFloat(16)]
+                    value[stack.mallocFloat(MATRIX4F_SIZE)]
                 )
             }
         }
@@ -139,7 +169,7 @@ internal data class GlShaderInstance(
         glCompileShader(shaderId)
 
         check(glGetShaderi(shaderId, GL_COMPILE_STATUS) != 0) {
-            "Error compiling Shader code: ${glGetShaderInfoLog(shaderId, 1024)}"
+            "Error compiling Shader code: ${glGetShaderInfoLog(shaderId, MAX_LOG_LENGTH)}"
         }
 
         glAttachShader(id, shaderId)
@@ -151,7 +181,7 @@ internal data class GlShaderInstance(
         glLinkProgram(id)
 
         check(glGetProgrami(id, GL_LINK_STATUS) != 0) {
-            "Error linking Shader code: ${glGetProgramInfoLog(id, 1024)}"
+            "Error linking Shader code: ${glGetProgramInfoLog(id, MAX_LOG_LENGTH)}"
         }
 
         glDetachShader(
@@ -173,6 +203,7 @@ internal data class GlShaderInstance(
 
 
     object Factory : ShaderInstance.Factory {
+
         override fun create(
             vertexShader: StringAsset,
             fragmentShader: StringAsset,
@@ -182,4 +213,11 @@ internal data class GlShaderInstance(
         }
     }
 
+    companion object {
+
+        private val MATRIX3F_SIZE = VertexType.FLOAT.size * 3
+        private val MATRIX4F_SIZE = VertexType.FLOAT.size * 4
+
+        private const val MAX_LOG_LENGTH = 1024
+    }
 }

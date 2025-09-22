@@ -17,10 +17,10 @@ object FaultyTerminalScreen : Screen("faulty-terminal") {
         vertexShader = """
             #version 410
 
-            layout (location = 0) in vec3 Position;
-            layout (location = 1) in vec2 uv;
+            in vec3 Position;
+            in vec2 uv;
             
-            varying vec2 vUv;
+            out vec2 vUv;
             
             void main() {
                 vUv = uv;
@@ -32,7 +32,7 @@ object FaultyTerminalScreen : Screen("faulty-terminal") {
 
             precision mediump float;
 
-            varying vec2 vUv;
+            in vec2 vUv;
             
             uniform float iTime;
             uniform vec3  iResolution;
@@ -56,6 +56,8 @@ object FaultyTerminalScreen : Screen("faulty-terminal") {
             uniform float uBrightness;
             
             float time;
+            
+            out vec4 FragColor;
             
             float hash21(vec2 p){
               p = fract(p * 234.56);
@@ -221,10 +223,10 @@ object FaultyTerminalScreen : Screen("faulty-terminal") {
                   col += (rnd - 0.5) * (uDither * 0.003922);
                 }
             
-                gl_FragColor = vec4(col, 1.0);
+                FragColor = vec4(col, 1.0);
             }
         """.trimIndent().asRuntimeAsset()
-    ).also { it.compileShaders() }
+    ).also(ShaderInstance::compileShaders)
 
     val buffer = drawer.begin(
         DrawerMode.TRIANGLES,

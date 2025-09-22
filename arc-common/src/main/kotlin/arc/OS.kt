@@ -17,7 +17,7 @@ internal object OS {
         try {
             Runtime.getRuntime().exec(command)
             return true
-        } catch (t: Throwable) {
+        } catch (ignore: Throwable) {
             return false
         }
     }

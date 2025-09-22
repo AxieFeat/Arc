@@ -24,5 +24,4 @@ enum class SoundFormat {
      * `.flac` sounds.
      */
     FLAC
-
 }

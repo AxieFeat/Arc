@@ -11,7 +11,11 @@ object Arc {
     @JvmStatic
     internal var objectProvider: ObjectProvider? = null
 
-    // Not use before object provider initialized.
+    /**
+     * Function for getting [ObjectProvider].
+     *
+     * Not use before object provider initialized.
+     */
     @JvmStatic
     fun factoryProvider(): ObjectProvider = objectProvider
         ?: throw UnsupportedOperationException("Cound not find ObjectProvider. Please call ArcObjectProvider.install() for initializing.")
@@ -37,5 +41,4 @@ object Arc {
     @JvmStatic
     @JvmSynthetic
     inline fun <reified T> factory(): T = factoryProvider().provideFactory(T::class.java)
-
 }

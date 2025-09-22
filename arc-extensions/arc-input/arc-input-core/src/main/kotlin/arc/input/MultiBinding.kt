@@ -24,5 +24,4 @@ interface MultiBinding : BindingLike {
      * Calls when these keys are pressed.
      */
     fun onPress()
-
 }

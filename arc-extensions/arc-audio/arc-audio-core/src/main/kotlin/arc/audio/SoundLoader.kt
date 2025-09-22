@@ -38,7 +38,6 @@ interface SoundLoader {
     interface Factory {
 
         fun create(format: SoundFormat): SoundLoader
-
     }
 
     companion object {
@@ -78,7 +77,5 @@ interface SoundLoader {
         fun of(format: SoundFormat): SoundLoader {
             return single<Factory>().create(format)
         }
-
     }
-
 }
