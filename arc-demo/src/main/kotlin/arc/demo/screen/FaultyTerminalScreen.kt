@@ -17,8 +17,8 @@ object FaultyTerminalScreen : Screen("faulty-terminal") {
         vertexShader = """
             #version 410
 
-            in vec3 Position;
-            in vec2 uv;
+            layout (location = 0) in vec3 Position;
+            layout (location = 1) in vec2 uv;
 
             out vec2 vUv;
 
@@ -287,4 +287,5 @@ object FaultyTerminalScreen : Screen("faulty-terminal") {
     override fun onFpsUpdate(fps: Int) {
         name = "FPS: $fps, Frame time: $frameTime ms"
     }
+
 }

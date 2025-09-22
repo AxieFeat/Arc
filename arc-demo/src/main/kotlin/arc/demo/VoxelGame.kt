@@ -3,6 +3,8 @@ package arc.demo
 import arc.Application
 import arc.audio.SoundEngine
 import arc.demo.screen.FaultyTerminalScreen
+import arc.demo.screen.FractalScreen
+import arc.demo.screen.PlasmaScreen
 import arc.demo.screen.Screen
 import arc.demo.shader.ShaderContainer
 import arc.graphics.vertex.VertexFormat

@@ -15,7 +15,8 @@ Arc Engine is a flexible 3D/2D game engine designed to be implementation-agnosti
 \* Only one implementation can be used at runtime
 
 Basic "cave-game" on this engine. (You can see code in `arc-demo`)
-![Example](image/img.png)
+![House](media/house.png)
+#### [Click here to see more demonstrations.](DEMO.md)
 
 ### Project Structure
 - **arc-core**: Main engine API interfaces
@@ -53,6 +54,7 @@ repositories {
     }
 }
 ```
+...Or alternatively you could use a JitPack, but I don't recommend it for this project.
 
 2. Add the dependency to your project:
 ```kotlin
