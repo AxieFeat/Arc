@@ -14,6 +14,9 @@ Arc Engine - это гибкий 3D/2D игровой движок, разраб
 
 \* Только одна реализация может использоваться во время выполнения
 
+Простая "cave-game" на этом движке. (Вы можете посмотреть код в `arc-demo`)
+![Example](image/img.png)
+
 ### Структура проекта
 - **arc-core**: Основные интерфейсы API движка
 - **arc-common**: Общая реализация основных функций (математика, окно и т.п.)
@@ -43,7 +46,7 @@ repositories {
     maven("https://maven.pkg.github.com/AxieFeat/Arc") {
         credentials {
             // GitHub Packages требует авторизации :(
-            
+
             username = System.getenv("GITHUB_ACTOR") // Переменная окружения с вашим логином GitHub
             password = System.getenv("GITHUB_TOKEN") // Переменная с вашим токеном GitHub
         }
@@ -55,11 +58,11 @@ repositories {
 ```kotlin
 dependencies {
     // Хеш коммита можно взять из истории - https://github.com/AxieFeat/Arc/commits/master/
-    
+
     // Если вы хотите использовать API в уже готовой игре.
     implementation("arc.engine:arc-core:<первые 7 символов хеша коммита>")
-  
-  
+
+
     // Или если вы хотите создать свою игру - выберите бэкенд-реализацию движка.
     implementation("arc.engine:arc-opengl:<первые 7 символов хеша коммита>") // Для OpenGL
     implementation("arc.engine:arc-vulkan:<первые 7 символов хеша коммита>") // Для Vulkan
@@ -130,15 +133,15 @@ private fun getShaderInstance(): ShaderInstance {
             gl_Position = vec4(Position, 1.0);
 
             vertexColor = Color;
-        } 
+        }
         """.trimIndent().asRuntimeAsset()
 
     val fragmentShader = """
         #version 410
-  
+
         in vec4 vertexColor;
         out vec4 FragColor;
-  
+
         void main()
         {
             FragColor = vertexColor;

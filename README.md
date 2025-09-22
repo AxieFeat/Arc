@@ -14,6 +14,9 @@ Arc Engine is a flexible 3D/2D game engine designed to be implementation-agnosti
 
 \* Only one implementation can be used at runtime
 
+Basic "cave-game" on this engine. (You can se code in `arc-demo`)
+![Example](image/img.png)
+
 ### Project Structure
 - **arc-core**: Main engine API interfaces
 - **arc-common**: Common implementation of core features (math, window, etc.)
@@ -43,7 +46,7 @@ repositories {
     maven("https://maven.pkg.github.com/AxieFeat/Arc") {
         credentials {
             // GitHub Packages requires authentication :(
-            
+
             username = System.getenv("GITHUB_ACTOR") // System environment variable with your GitHub login
             password = System.getenv("GITHUB_TOKEN") // System environment variable with your GitHub token
         }
@@ -55,7 +58,7 @@ repositories {
 ```kotlin
 dependencies {
     // Hash of commit can be taked from history - https://github.com/AxieFeat/Arc/commits/master/
-    
+
     // If you want to use API in an already done game.
     implementation("arc.engine:arc-core:<first 7 symbols of commit hash>")
 
@@ -130,7 +133,7 @@ private fun getShaderInstance(): ShaderInstance {
             gl_Position = vec4(Position, 1.0);
 
             vertexColor = Color;
-        } 
+        }
         """.trimIndent().asRuntimeAsset()
 
     val fragmentShader = """

@@ -2,10 +2,7 @@ package arc.demo
 
 import arc.Application
 import arc.audio.SoundEngine
-import arc.demo.screen.DarkVeilScreen
 import arc.demo.screen.FaultyTerminalScreen
-import arc.demo.screen.GalaxyScreen
-import arc.demo.screen.PlasmaScreen
 import arc.demo.screen.Screen
 import arc.demo.shader.ShaderContainer
 import arc.graphics.vertex.VertexFormat
