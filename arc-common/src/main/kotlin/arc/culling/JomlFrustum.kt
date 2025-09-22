@@ -25,5 +25,4 @@ internal class JomlFrustum : Frustum {
     override fun update(camera: Camera) {
         frustumIntersection.set(camera.combined)
     }
-
 }

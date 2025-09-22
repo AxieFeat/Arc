@@ -95,14 +95,12 @@ interface TextureLoader {
         /**
          * [TextureFormat.RAW] loader.
          */
-        @JvmField
-        val RAW = of(TextureFormat.RAW)
+        val RAW by lazy { of(TextureFormat.RAW) }
 
         /**
          * [TextureFormat.PNG] loader.
          */
-        @JvmField
-        val PNG = of(TextureFormat.PNG)
+        val PNG by lazy { of(TextureFormat.PNG) }
 
         /**
          * Get loader for some format.

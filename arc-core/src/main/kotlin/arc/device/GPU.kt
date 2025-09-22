@@ -15,6 +15,14 @@ interface GPU {
     val name: String
 
     /**
+     * Is this an integrated GPU (iGPU) or dedicated GPU (dGPU).
+     *
+     * `true` - integrated GPU (iGPU)
+     * `false` - dedicated GPU (dGPU)
+     */
+    val integrated: Boolean
+
+    /**
      * ID of GPU. Return "unknown" if not found.
      */
     val id: String

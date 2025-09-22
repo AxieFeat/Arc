@@ -6,16 +6,16 @@ import arc.shader.AbstractUniformProvider
 object DefaultUniformProvider : AbstractUniformProvider() {
 
     init {
-        addUniform("projectionMatrix") {
-            it.setUniform("projectionMatrix", VoxelGame.application.renderSystem.scene.camera.projection)
+        addUniform("projectionMatrix") { shader, name ->
+            shader.setUniform(name, VoxelGame.application.renderSystem.scene.camera.projection)
         }
 
-        addUniform("viewMatrix") {
-            it.setUniform("viewMatrix", VoxelGame.application.renderSystem.scene.camera.view)
+        addUniform("viewMatrix") { shader, name ->
+            shader.setUniform(name, VoxelGame.application.renderSystem.scene.camera.view)
         }
 
-        addUniform("Sampler") {
-            it.setUniform("sampler", VoxelGame.application.renderSystem.texture.id)
+        addUniform("Sampler") { shader, name ->
+            shader.setUniform(name, VoxelGame.application.renderSystem.texture.id)
         }
     }
 

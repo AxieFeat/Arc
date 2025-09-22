@@ -22,10 +22,4 @@ interface ApplicationBackend {
      * Represents the device where the application is running.
      */
     val device: Device
-
-    /**
-     * Is the application running in integrated graphics card?
-     */
-    @get:JvmName("isIGpu")
-    val isIGpu: Boolean
 }

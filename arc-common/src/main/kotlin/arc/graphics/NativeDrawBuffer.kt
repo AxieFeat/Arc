@@ -233,6 +233,10 @@ internal class NativeDrawBuffer(
         MemoryUtil.memPutByte(addr + NORMAL_Z_OFFSET, ((z * Byte.MAX_VALUE).toInt() and BYTE_MASK).toByte())
     }
 
+    class DrawBufferOverflowException(
+        message: String
+    ) : RuntimeException(message)
+
     object Factory : DrawBuffer.Factory {
         override fun create(mode: DrawerMode, format: VertexFormat, bufferSize: Int): DrawBuffer {
             return NativeDrawBuffer(mode, format, bufferSize)
@@ -240,10 +244,10 @@ internal class NativeDrawBuffer(
     }
 
     companion object {
+
         // Temp vector for transformation via matrix in addVertex() function
         @JvmStatic
         private val tempVector = Vector3f()
-
         private const val BYTES_PER_FLOAT = 4
         private const val COLOR_ALPHA_SHIFT = 24
         private const val COLOR_BLUE_SHIFT = 16
@@ -254,9 +258,4 @@ internal class NativeDrawBuffer(
         private const val NORMAL_Z_OFFSET = 2
         private const val BYTE_MASK = 0xFF
     }
-
-    class DrawBufferOverflowException(
-        message: String
-    ) : RuntimeException(message)
-
 }

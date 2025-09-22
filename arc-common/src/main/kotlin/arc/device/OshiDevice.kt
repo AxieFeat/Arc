@@ -4,7 +4,11 @@ import arc.OSPlatform
 import oshi.PlatformEnum
 import oshi.SystemInfo
 
-internal object OshiDevice : Device {
+/**
+ * This class is abstract because we can't get `usedGpu` from OSHI library.
+ * You need to implement it in backend renderer.
+ */
+abstract class OshiDevice : Device {
 
     private val systemInfo = SystemInfo()
 
@@ -17,6 +21,10 @@ internal object OshiDevice : Device {
     override val java: String = Runtime.version().version().joinToString(".")
     override val cpu: CPU = OshiCPU(systemInfo)
     override val gpu: List<GPU> = systemInfo.hardware.graphicsCards.map { OshiGPU(it) }
+    override val usedGpu: GPU by lazy {
+        findUsedGpu() ?:
+        checkNotNull(gpu.firstOrNull()) { "Can't find any gpu via Oshi, please report to developer!" }
+    }
     override val powerSources: List<PowerSource> = systemInfo.hardware.powerSources.map { OshiPowerSource(it) }
     override val motherBoard: MotherBoard = OshiMotherBoard(systemInfo)
     override val ram: RAM = OshiRAM(systemInfo)
@@ -35,4 +43,10 @@ internal object OshiDevice : Device {
             else -> OSPlatform.UNKNOWN
         }
     }
+
+    /**
+     * This function should return instance of some [GPU] from [gpu] list that is used by current renderer.
+     * If you can't find used GPU, return null and [usedGpu] will return first GPU from [gpu] list or throw exception if list is empty.
+     */
+    abstract fun findUsedGpu(): GPU?
 }

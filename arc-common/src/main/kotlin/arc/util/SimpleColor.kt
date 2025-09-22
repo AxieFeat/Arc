@@ -61,7 +61,7 @@ internal data class SimpleColor(
         const val MIN_ALPHA_VALUE = 0.0
         const val MAX_ALPHA_VALUE = 1.0
 
-        private const val RGB_PRETTY_RANGE = "$MIN_RGB_VALUE..$MAX_RGB_VALUE"
-        private const val ALPHA_PRETTY_RANGE = "$MIN_ALPHA_VALUE..$MAX_ALPHA_VALUE"
+        private val RGB_PRETTY_RANGE = (MIN_RGB_VALUE..MAX_RGB_VALUE).toString()
+        private val ALPHA_PRETTY_RANGE = (MIN_ALPHA_VALUE..MAX_ALPHA_VALUE).toString()
     }
 }

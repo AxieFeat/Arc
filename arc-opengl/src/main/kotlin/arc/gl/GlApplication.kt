@@ -90,6 +90,7 @@ internal object GlApplication : AbstractApplication() {
     }
 
     internal object Provider : Application.Provider {
+
         override fun provide(): Application {
             return GlApplication
         }

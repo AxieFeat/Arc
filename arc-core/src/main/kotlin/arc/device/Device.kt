@@ -28,6 +28,11 @@ interface Device {
     val gpu: List<GPU>
 
     /**
+     * What GPU is currently used by application for rendering.
+     */
+    val usedGpu: GPU
+
+    /**
      * Powers sources of a device.
      */
     val powerSources: List<PowerSource>
