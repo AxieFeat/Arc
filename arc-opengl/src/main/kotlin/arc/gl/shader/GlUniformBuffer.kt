@@ -55,9 +55,9 @@ internal class GlUniformBuffer(
     override fun unbind() = glBindBuffer(GL_UNIFORM_BUFFER, 0)
 
     object Factory : UniformBuffer.Factory {
+
         override fun create(size: Int): UniformBuffer {
             return GlUniformBuffer(size)
         }
     }
-
 }

@@ -5,6 +5,7 @@ import arc.Application
 import arc.ApplicationBackend
 import arc.graphics.RenderSystem
 import arc.vk.device.VulkanPhysicalDevice
+import arc.vk.graphics.VkRenderSystem
 import arc.vk.window.GlfwVkWindow
 import arc.window.EmptyWindowHandler
 import arc.window.Window
@@ -48,6 +49,8 @@ internal object VkApplication : AbstractApplication() {
 
         _instance = VulkanInstance()
         _physicalDevice = VulkanPhysicalDevice.createPhysicalDevice(instance)
+
+        _renderSystem = VkRenderSystem
 
         window.create()
     }

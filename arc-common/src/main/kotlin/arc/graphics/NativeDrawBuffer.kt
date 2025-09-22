@@ -248,6 +248,7 @@ internal class NativeDrawBuffer(
         // Temp vector for transformation via matrix in addVertex() function
         @JvmStatic
         private val tempVector = Vector3f()
+
         private const val BYTES_PER_FLOAT = 4
         private const val COLOR_ALPHA_SHIFT = 24
         private const val COLOR_BLUE_SHIFT = 16

@@ -14,7 +14,7 @@ Arc Engine is a flexible 3D/2D game engine designed to be implementation-agnosti
 
 \* Only one implementation can be used at runtime
 
-Basic "cave-game" on this engine. (You can se code in `arc-demo`)
+Basic "cave-game" on this engine. (You can see code in `arc-demo`)
 ![Example](image/img.png)
 
 ### Project Structure

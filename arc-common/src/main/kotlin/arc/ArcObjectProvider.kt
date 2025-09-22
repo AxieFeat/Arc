@@ -19,8 +19,10 @@ import arc.math.AABB
 import arc.math.JomlAABB
 import arc.math.JomlRay
 import arc.math.Ray
+import arc.shader.BlendMode
 import arc.shader.SimpleShaderSettings
 import arc.shader.ShaderSettings
+import arc.shader.SimpleBlendMode
 import arc.util.SimpleColor
 import arc.util.Color
 import arc.util.provider.ObjectProvider
@@ -74,6 +76,7 @@ object ArcObjectProvider : ObjectProvider {
         register<VertexFormatElement.Factory>(SimpleVertexFormatElement.Factory)
         register<DrawBuffer.Factory>(NativeDrawBuffer.Factory)
         register<ShaderSettings.Factory>(SimpleShaderSettings.Factory)
+        register<BlendMode.Factory>(SimpleBlendMode.Factory)
 
         register<RuntimeAsset.Factory>(SimpleRuntimeAsset.Factory)
         register<FileAsset.Factory>(SimpleFileAsset.Factory)

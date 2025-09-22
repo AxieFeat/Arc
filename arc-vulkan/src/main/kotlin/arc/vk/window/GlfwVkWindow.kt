@@ -6,6 +6,7 @@ import arc.window.Window
 import arc.window.WindowHandler
 import org.lwjgl.glfw.GLFW.GLFW_CLIENT_API
 import org.lwjgl.glfw.GLFW.GLFW_NO_API
+import org.lwjgl.glfw.GLFW.glfwPollEvents
 import org.lwjgl.glfw.GLFW.glfwWindowHint
 import org.lwjgl.glfw.GLFWVulkan
 import org.lwjgl.system.MemoryStack
@@ -43,6 +44,10 @@ internal class GlfwVkWindow(
     override fun close() {
         super.close()
         KHRSurface.vkDestroySurfaceKHR(VkApplication.physicalDevice.vkPhysicalDevice.instance, surface, null)
+    }
+
+    fun pollEvents() {
+        glfwPollEvents()
     }
 
     object Factory : Window.Factory {

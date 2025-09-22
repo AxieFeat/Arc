@@ -1,16 +1,16 @@
-package arc.gl.shader
+package arc.shader
 
-import arc.gl.graphics.GlRenderSystem
-import arc.shader.BlendMode
+import arc.Application
+import arc.graphics.RenderSystem
 
-internal data class GlBlendMode(
+internal data class SimpleBlendMode(
     override val separateBlend: Boolean,
     override val opaque: Boolean,
     override val srcColorFactor: Int,
     override val srcAlphaFactor: Int,
     override val dstColorFactor: Int,
     override val dstAlphaFactor: Int,
-    override val blendFunc: Int,
+    override val blendFunc: Int
 ) : BlendMode {
 
     override fun apply() {
@@ -19,28 +19,29 @@ internal data class GlBlendMode(
                 lastApplied = this
 
                 if (this.opaque) {
-                    GlRenderSystem.disableBlend()
+                    renderSystem.disableBlend()
                     return
                 }
 
-                GlRenderSystem.enableBlend()
+                renderSystem.enableBlend()
             }
 
-            GlRenderSystem.blendEquation(this.blendFunc)
+            renderSystem.blendEquation(this.blendFunc)
             if (this.separateBlend) {
-                GlRenderSystem.blendFuncSeparate(
+                renderSystem.blendFuncSeparate(
                     this.srcColorFactor,
                     this.dstColorFactor,
                     this.srcAlphaFactor,
                     this.dstAlphaFactor
                 )
             } else {
-                GlRenderSystem.blendFunc(this.srcColorFactor, this.dstColorFactor)
+                renderSystem.blendFunc(this.srcColorFactor, this.dstColorFactor)
             }
         }
     }
 
     object Factory : BlendMode.Factory {
+
         override fun create(
             separateBlend: Boolean,
             opaque: Boolean,
@@ -50,13 +51,13 @@ internal data class GlBlendMode(
             dstAlphaFactor: Int,
             blendFunc: Int
         ): BlendMode {
-            return GlBlendMode(separateBlend, opaque, srcColorFactor, srcAlphaFactor, dstColorFactor, dstAlphaFactor, blendFunc)
+            return SimpleBlendMode(separateBlend, opaque, srcColorFactor, srcAlphaFactor, dstColorFactor, dstAlphaFactor, blendFunc)
         }
-
     }
 
     companion object {
 
         private var lastApplied: BlendMode? = null
+        private val renderSystem: RenderSystem by lazy { Application.find().renderSystem }
     }
 }

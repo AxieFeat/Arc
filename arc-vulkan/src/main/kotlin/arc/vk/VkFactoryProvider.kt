@@ -25,7 +25,6 @@ internal object VkFactoryProvider {
 //
 //            provider.register<FrameBuffer.Factory>(VkFrameBuffer.Factory, overwrite)
 //            provider.register<ShaderInstance.Factory>(VkShaderInstance.Factory, overwrite)
-//            provider.register<BlendMode.Factory>(VkBlendMode.Factory, overwrite)
         } catch (e: IllegalStateException) {
             throw RuntimeException("Can not initialize Vulkan Application, because some application already initialized!", e)
         }

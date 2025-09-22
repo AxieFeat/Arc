@@ -4,7 +4,6 @@ import arc.Application
 import arc.ArcObjectProvider
 import arc.gl.graphics.vertex.GlVertexArrayBuffer
 import arc.gl.graphics.vertex.GlVertexBuffer
-import arc.gl.shader.GlBlendMode
 import arc.gl.shader.GlFrameBuffer
 import arc.gl.shader.GlShaderInstance
 import arc.gl.shader.GlUniformBuffer
@@ -12,7 +11,6 @@ import arc.gl.texture.GlTextureLoader
 import arc.gl.window.GlfwGlWindow
 import arc.graphics.vertex.VertexArrayBuffer
 import arc.graphics.vertex.VertexBuffer
-import arc.shader.BlendMode
 import arc.shader.FrameBuffer
 import arc.shader.ShaderInstance
 import arc.shader.UniformBuffer
@@ -40,7 +38,6 @@ internal object GlFactoryProvider {
 
             provider.register<FrameBuffer.Factory>(GlFrameBuffer.Factory, overwrite)
             provider.register<ShaderInstance.Factory>(GlShaderInstance.Factory, overwrite)
-            provider.register<BlendMode.Factory>(GlBlendMode.Factory, overwrite)
             provider.register<UniformBuffer.Factory>(GlUniformBuffer.Factory, overwrite)
         } catch (e: IllegalStateException) {
             throw RuntimeException("Can not initialize OpenGL Application, because some application already initialized!", e)

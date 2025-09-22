@@ -1,6 +1,7 @@
 package arc.vk
 
 import arc.OSPlatform
+import arc.util.pattern.Cleanable
 import arc.vk.util.VkUtils.vkCheck
 import org.lwjgl.PointerBuffer
 import org.lwjgl.glfw.GLFWVulkan
@@ -21,7 +22,7 @@ import org.lwjgl.vulkan.VkLayerProperties
 // The class name is VulkanInstance because in LWJGL exists VkInstance
 internal class VulkanInstance(
     useValidationLayer: Boolean = false
-) {
+) : Cleanable {
 
     val vkInstance: VkInstance
 
@@ -31,7 +32,7 @@ internal class VulkanInstance(
     init {
         MemoryStack.stackPush().use { stack ->
             // Create application information
-            val appShortName = stack.UTF8("VulkanBook")
+            val appShortName = stack.UTF8("Arc")
             val appInfo = VkApplicationInfo.calloc(stack)
                 .sType(VK10.VK_STRUCTURE_TYPE_APPLICATION_INFO)
                 .pApplicationName(appShortName)
@@ -62,9 +63,7 @@ internal class VulkanInstance(
 
             // GLFW Extension
             val glfwExtensions = GLFWVulkan.glfwGetRequiredInstanceExtensions()
-            if (glfwExtensions == null) {
-                throw RuntimeException("Failed to find the GLFW platform surface extensions")
-            }
+                ?: throw RuntimeException("Failed to find the GLFW platform surface extensions")
 
             val requiredExtensions: PointerBuffer?
 
@@ -126,7 +125,7 @@ internal class VulkanInstance(
         }
     }
 
-    fun cleanup() {
+    override fun cleanup() {
         if (vkDebugHandle != VK10.VK_NULL_HANDLE) {
             EXTDebugUtils.vkDestroyDebugUtilsMessengerEXT(vkInstance, vkDebugHandle, null)
         }
@@ -163,14 +162,14 @@ internal class VulkanInstance(
 
             val propsBuf = VkLayerProperties.calloc(numLayers, stack)
             VK10.vkEnumerateInstanceLayerProperties(numLayersArr, propsBuf)
-            val supportedLayers: MutableList<String?> = ArrayList<String?>()
+            val supportedLayers: MutableList<String?> = ArrayList()
             for (i in 0..<numLayers) {
                 val props = propsBuf.get(i)
                 val layerName = props.layerNameString()
                 supportedLayers.add(layerName)
             }
 
-            val layersToUse: MutableList<String?> = ArrayList<String?>()
+            val layersToUse: MutableList<String?> = ArrayList()
 
             // Main validation layer
             if (supportedLayers.contains("VK_LAYER_KHRONOS_validation")) {
