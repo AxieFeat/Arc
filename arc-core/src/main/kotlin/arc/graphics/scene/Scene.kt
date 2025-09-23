@@ -5,7 +5,6 @@ import arc.graphics.Camera
 /**
  * This interface represents a renderable scene of the engine.
  */
-@Suppress("INAPPLICABLE_JVM_NAME")
 interface Scene {
 
     /**
@@ -26,8 +25,6 @@ interface Scene {
     /**
      * Is cursor showed in a window.
      */
-    @get:JvmName("isShowCursor")
-    @set:JvmName("setShowCursor")
     var isShowCursor: Boolean
 
     /**

@@ -8,7 +8,6 @@ import org.joml.Vector2i
 /**
  * This interface represents a window of the application.
  */
-@Suppress("INAPPLICABLE_JVM_NAME")
 interface Window {
 
     /**
@@ -54,34 +53,26 @@ interface Window {
     /**
      * Indicates whether the window currently has input focus.
      */
-    @get:JvmName("isFocus")
     val isFocus: Boolean
 
     /**
      * Is window can be resized.
      */
-    @get:JvmName("isResizable")
     val isResizable: Boolean
 
     /**
      * Indicates whether the window is currently hidden.
      */
-    @get:JvmName("isHidden")
-    @set:JvmName("setHidden")
     var isHidden: Boolean
 
     /**
      * Indicates whether the window has Vsync.
      */
-    @get:JvmName("isVsync")
-    @set:JvmName("setVsync")
     var isVsync: Boolean
 
     /**
      * Is the cursor viewable in this window?
      */
-    @get:JvmName("isShowCursor")
-    @set:JvmName("setShowCursor")
     var isShowCursor: Boolean
 
     /**

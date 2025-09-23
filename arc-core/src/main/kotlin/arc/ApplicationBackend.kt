@@ -5,7 +5,6 @@ import arc.device.Device
 /**
  * This interface represents info about backend implementation of application.
  */
-@Suppress("INAPPLICABLE_JVM_NAME")
 interface ApplicationBackend {
 
     /**

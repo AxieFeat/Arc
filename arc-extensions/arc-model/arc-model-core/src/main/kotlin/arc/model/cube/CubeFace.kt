@@ -11,7 +11,6 @@ import org.joml.Vector2i
  *
  * @see Cube
  */
-@Suppress("INAPPLICABLE_JVM_NAME")
 @ImmutableType
 interface CubeFace {
 
@@ -37,7 +36,6 @@ interface CubeFace {
     /**
      * Is this value set to false - this face will be ignored by [Model.cullFaces].
      */
-    @get:JvmName("isCulling")
     val isCullable: Boolean
 
     @ApiStatus.Internal
