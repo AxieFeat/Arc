@@ -7,8 +7,10 @@ internal data class OshiGPU(
 ) : GPU {
 
     override val name: String = graphicsCard.name
-    override val integrated: Boolean = iGpuKeywords.any { keyword ->
-        name.trim().contains(keyword, ignoreCase = true)
+    override val isIntegrated: Boolean = iGpuKeywords.any { keyword ->
+        val trimmedName = name.trim()
+        trimmedName.contains(keyword, ignoreCase = true) &&
+                iGpuExcludeKeywords.none { trimmedName.contains(it, ignoreCase = true) }
     }
     override val id: String = graphicsCard.deviceId
     override val vRam: Long = graphicsCard.vRam
@@ -16,6 +18,39 @@ internal data class OshiGPU(
     override val info: String = graphicsCard.versionInfo
 
     companion object {
-        private val iGpuKeywords = listOf("UHD", "Iris", "HD Graphics", "Apple", "Intel")
+        private val iGpuKeywords = listOf(
+            // Intel iGPU's
+            "UHD",
+            "Iris",
+            "HD Graphics",
+
+            // AMD iGPU's
+            "Vega",
+            "Radeon Graphics",
+
+            // Apple iGPU
+            "Apple"
+        )
+
+        private val iGpuExcludeKeywords = listOf(
+            // Nvidia dGPU's
+            "GeForce",
+            "RTX",
+            "GTX",
+            "GT",
+            "Quadro",
+            "Tesla",
+            "TITAN",
+            "GRID",
+
+            // AMD dGPU's
+            "RX",
+            "Radeon Pro",
+            "Radeon Fury",
+            "FirePro",
+
+            // Intel dGPU
+            "Arc"
+        )
     }
 }

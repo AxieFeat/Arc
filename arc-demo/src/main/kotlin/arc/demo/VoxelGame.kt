@@ -3,8 +3,6 @@ package arc.demo
 import arc.Application
 import arc.audio.SoundEngine
 import arc.demo.screen.FaultyTerminalScreen
-import arc.demo.screen.FractalScreen
-import arc.demo.screen.PlasmaScreen
 import arc.demo.screen.Screen
 import arc.demo.shader.ShaderContainer
 import arc.graphics.vertex.VertexFormat
@@ -49,7 +47,7 @@ object VoxelGame : WindowHandler {
         println("Window backend: ${application.window.backend.name.uppercase()} [${application.window.backend.version}]")
         println("=".repeat(30))
 
-        if(application.backend.device.usedGpu.integrated) {
+        if(application.backend.device.usedGpu.isIntegrated) {
             println("Warning! Engine started at iGPU.")
         }
 
