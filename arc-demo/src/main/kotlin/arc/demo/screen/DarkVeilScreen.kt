@@ -13,16 +13,16 @@ object DarkVeilScreen : Screen("dark-veil") {
 
     val shader = ShaderInstance.of(
         vertexShader = """
-            #version 410
+            #version 300 es
 
-            layout (location = 0) in vec3 Position;
+            in vec3 Position;
             
             void main(){
                 gl_Position = vec4(Position, 1.0);
             }
         """.trimIndent().asRuntimeAsset(),
         fragmentShader = """
-            #version 410
+            #version 300 es
 
             #ifdef GL_ES
             precision lowp float;

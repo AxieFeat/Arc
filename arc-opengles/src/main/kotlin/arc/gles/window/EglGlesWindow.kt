@@ -1,22 +1,24 @@
 package arc.gles.window
 
+import arc.gles.window.MacEGLBridge
 import arc.window.AbstractGlfwWindow
 import arc.window.Window
+import arc.window.WindowBackend
 import arc.window.WindowHandler
 import org.lwjgl.egl.EGL10.*
+import org.lwjgl.egl.EGL11.eglSwapInterval
 import org.lwjgl.egl.EGL12.EGL_RENDERABLE_TYPE
 import org.lwjgl.egl.EGL13.EGL_CONTEXT_CLIENT_VERSION
 import org.lwjgl.egl.EGL13.EGL_OPENGL_ES2_BIT
-import org.lwjgl.egl.EGL14.EGL_DEFAULT_DISPLAY
 import org.lwjgl.glfw.GLFW.*
-import org.lwjgl.glfw.GLFWNativeCocoa.glfwGetCocoaView
+import org.lwjgl.glfw.GLFWNativeCocoa.glfwGetCocoaWindow
 import org.lwjgl.glfw.GLFWNativeWin32.glfwGetWin32Window
 import org.lwjgl.glfw.GLFWNativeX11.glfwGetX11Window
 import org.lwjgl.system.MemoryStack
 import org.lwjgl.system.Platform
 import java.nio.IntBuffer
 
-internal class GlfwGlesWindow(
+internal class EglGlesWindow(
     name: String,
     handler: WindowHandler,
     width: Int,
@@ -24,10 +26,23 @@ internal class GlfwGlesWindow(
     isResizable: Boolean
 ) : AbstractGlfwWindow(name, handler, width, height, isResizable) {
 
-    private val display: Long = eglGetDisplay(EGL_DEFAULT_DISPLAY)
+    override val backend: WindowBackend = EglWindowBackend
+
+    private val display: Long = EglWindowBackend.display // TODO Refactor this?
     private var surface: Long = -1
     private var context: Long = -1
     private var config: Long = -1
+
+    override var isVsync: Boolean = true
+        set(value) {
+            if(value && !field) {
+                eglSwapInterval(display, EGL_TRUE)
+            } else if(!value && field) {
+                eglSwapInterval(display, EGL_FALSE)
+            }
+
+            field = value
+        }
 
     init {
         glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API)
@@ -37,13 +52,6 @@ internal class GlfwGlesWindow(
         super.create()
 
         MemoryStack.stackPush().use { stack ->
-            if (display == EGL_NO_DISPLAY) error("No EGL display")
-
-            val major = stack.mallocInt(1)
-            val minor = stack.mallocInt(1)
-
-            require(eglInitialize(display, major, minor)) { "EGL init failed" }
-
             val eglAttribs = stack.mallocInt(17).apply {
                 put(EGL_RED_SIZE); put(8)
                 put(EGL_GREEN_SIZE); put(8)
@@ -80,7 +88,7 @@ internal class GlfwGlesWindow(
             require(context != EGL_NO_CONTEXT) { "eglCreateContext failed: ${eglGetError()}" }
 
             val nativeWindow = when(Platform.get()) {
-                Platform.MACOSX -> glfwGetCocoaView(handle)
+                Platform.MACOSX -> MacEGLBridge.createMetalLayer(glfwGetCocoaWindow(handle))
                 Platform.WINDOWS -> glfwGetWin32Window(handle)
                 Platform.LINUX -> glfwGetX11Window(handle)
                 else -> error("Unsupported platform")
@@ -116,7 +124,7 @@ internal class GlfwGlesWindow(
 
     object Factory : Window.Factory {
         override fun create(name: String, handler: WindowHandler, width: Int, height: Int, isResizable: Boolean): Window {
-            return GlfwGlesWindow(name, handler, width, height, isResizable)
+            return EglGlesWindow(name, handler, width, height, isResizable)
         }
     }
 }

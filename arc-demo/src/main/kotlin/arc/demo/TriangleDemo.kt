@@ -3,7 +3,7 @@ package arc.demo
 import arc.Application
 import arc.ArcObjectProvider
 import arc.asset.asRuntimeAsset
-import arc.gl.OpenGL
+import arc.gles.window.MacEGLBridge
 import arc.gles.OpenGLES
 import arc.graphics.DrawBuffer
 import arc.graphics.DrawerMode
@@ -15,6 +15,8 @@ import arc.shader.ShaderInstance
 import arc.util.Color
 
 fun main() {
+    MacEGLBridge
+
     // Bootstrap the implementations
     ArcObjectProvider.install()
     ArcObjectProvider.bootstrap()

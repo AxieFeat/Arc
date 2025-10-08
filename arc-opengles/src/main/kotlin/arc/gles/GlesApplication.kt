@@ -4,7 +4,7 @@ import arc.AbstractApplication
 import arc.Application
 import arc.ApplicationBackend
 import arc.gles.graphics.GlesRenderSystem
-import arc.gles.window.GlfwGlesWindow
+import arc.gles.window.EglGlesWindow
 import arc.graphics.RenderSystem
 import arc.window.EmptyWindowHandler
 import arc.window.Window
@@ -23,7 +23,7 @@ internal object GlesApplication : AbstractApplication() {
 
     override val backend: ApplicationBackend = GlesApplicationBackend
 
-    override lateinit var window: GlfwGlesWindow
+    override lateinit var window: EglGlesWindow
     override lateinit var renderSystem: RenderSystem
 
     override fun init() {
@@ -32,7 +32,7 @@ internal object GlesApplication : AbstractApplication() {
             handler = EmptyWindowHandler,
             width = 720,
             height = 420
-        ) as? GlfwGlesWindow ?: throw IllegalStateException("Window is not GlfwGlesWindow. Why?")
+        ) as? EglGlesWindow ?: throw IllegalStateException("Window is not GlfwGlesWindow. Why?")
 
         this.renderSystem = GlesRenderSystem
 

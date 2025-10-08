@@ -4,6 +4,7 @@ import arc.Application
 import arc.audio.SoundEngine
 import arc.demo.screen.DarkVeilScreen
 import arc.demo.screen.FaultyTerminalScreen
+import arc.demo.screen.FractalScreen
 import arc.demo.screen.GalaxyScreen
 import arc.demo.screen.PlasmaScreen
 import arc.demo.screen.Screen
@@ -35,6 +36,8 @@ object VoxelGame : WindowHandler {
 
         // Demo with minecraft-like game.
         setScreen(FaultyTerminalScreen)
+
+        application.window.isVsync = false
 
 //        val asset = classpath("arc/sound/pigstep.ogg").asFileAsset()
 //        val sound = SoundLoader.of(SoundFormat.OGG).load(asset)

@@ -30,6 +30,7 @@ include("arc-common")
 include("arc-opengl")
 include("arc-opengles")
 include("arc-vulkan")
+include("arc-native")
 
 include("arc-extensions")
 extension("arc-font",         "core", "simple")

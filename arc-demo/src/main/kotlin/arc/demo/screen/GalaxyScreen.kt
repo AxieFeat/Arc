@@ -15,10 +15,10 @@ object GalaxyScreen : Screen("galaxy") {
 
     val shader = ShaderInstance.of(
         vertexShader = """
-            #version 410
+            #version 300 es
 
-            layout (location = 0) in vec3 Position;
-            layout (location = 1) in vec2 uv;
+            in vec3 Position;
+            in vec2 uv;
             
             out vec2 vUv;
             
@@ -28,7 +28,7 @@ object GalaxyScreen : Screen("galaxy") {
             }
         """.trimIndent().asRuntimeAsset(),
         fragmentShader = """
-            #version 410
+            #version 300 es
 
             precision highp float;
 

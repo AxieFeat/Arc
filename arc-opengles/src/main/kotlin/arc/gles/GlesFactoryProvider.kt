@@ -9,7 +9,7 @@ import arc.gles.shader.GlesFrameBuffer
 import arc.gles.shader.GlesShaderInstance
 import arc.gles.shader.GlesUniformBuffer
 import arc.gles.texture.GlesTextureLoader
-import arc.gles.window.GlfwGlesWindow
+import arc.gles.window.EglGlesWindow
 import arc.graphics.vertex.VertexArrayBuffer
 import arc.graphics.vertex.VertexBuffer
 import arc.shader.BlendMode
@@ -30,7 +30,7 @@ internal object GlesFactoryProvider {
         try {
             provider.register<Application.Provider>(GlesApplication.Provider, overwrite)
 
-            provider.register<Window.Factory>(GlfwGlesWindow.Factory)
+            provider.register<Window.Factory>(EglGlesWindow.Factory)
 
             provider.register<TextureLoader.Factory>(GlesTextureLoader.Factory, overwrite)
             provider.register<TextureAtlasLoader.Factory>(GlesTextureLoader.Factory, overwrite)

@@ -15,16 +15,16 @@ object PlasmaScreen : Screen("plasma") {
 
     val shader = ShaderInstance.of(
         vertexShader = """
-            #version 410
+            #version 300 es
 
-            layout (location = 0) in vec3 Position;
+            in vec3 Position;
             
             void main(){
                 gl_Position = vec4(Position, 1.0);
             }
         """.trimIndent().asRuntimeAsset(),
         fragmentShader = """
-            #version 410
+            #version 300 es
 
             precision highp float;
             uniform vec2 iResolution;
