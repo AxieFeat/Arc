@@ -1,6 +1,5 @@
 package arc.gles.window
 
-import arc.gles.window.MacEGLBridge
 import arc.window.AbstractGlfwWindow
 import arc.window.Window
 import arc.window.WindowBackend
@@ -88,13 +87,13 @@ internal class EglGlesWindow(
             require(context != EGL_NO_CONTEXT) { "eglCreateContext failed: ${eglGetError()}" }
 
             val nativeWindow = when(Platform.get()) {
-                Platform.MACOSX -> MacEGLBridge.createMetalLayer(glfwGetCocoaWindow(handle))
+                Platform.MACOSX -> glfwGetCocoaWindow(handle)
                 Platform.WINDOWS -> glfwGetWin32Window(handle)
                 Platform.LINUX -> glfwGetX11Window(handle)
                 else -> error("Unsupported platform")
             }
 
-            surface = eglCreateWindowSurface(display, config, nativeWindow, null as IntBuffer?)
+            surface = eglCreateWindowSurface(display, config, NativeEGLBridge.getNativeLayer(nativeWindow), null as IntBuffer?)
 
             require(surface != EGL_NO_SURFACE) {
                 "eglCreateWindowSurface failed: 0x${eglGetError().toString(16)}"

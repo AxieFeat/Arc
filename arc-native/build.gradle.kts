@@ -1,9 +1,11 @@
+@file:Suppress("UnstableApiUsage")
+
 plugins {
     id("cpp-library")
 }
 
 library {
-    baseName = "MacEGLBridge"
+    baseName = "NativeEGLBridge"
 
     targetMachines = listOf(
         machines.linux.x86_64,
@@ -13,7 +15,12 @@ library {
         machines.macOS.architecture("arm64")
     )
 
-    source.from(file("src/main/cpp"))
+    source.from(fileTree("src/main/cpp") {
+        include(when {
+            isSystem("Mac") -> "MacEGLBridge.cpp"
+            else -> "StubEGLBridge.cpp" // Fallback for all other systems.
+        })
+    })
 
     privateHeaders.from(file("src/main/headers"))
 }
@@ -21,39 +28,39 @@ library {
 tasks.withType<CppCompile>().configureEach {
     compilerArgs.addAll(toolChain.map { toolChain ->
         val javaHome = System.getProperty("java.home")
-        when {
-            toolChain is Gcc || toolChain is Clang -> {
-                if (System.getProperty("os.name").contains("Mac", ignoreCase = true)) {
-                    listOf(
-                        "-x", "objective-c++",
-                        "-I$javaHome/include",
-                        "-I$javaHome/include/darwin"
-                    )
-                } else if (System.getProperty("os.name").contains("Linux", ignoreCase = true)) {
-                    listOf(
-                        "-I$javaHome/include",
-                        "-I$javaHome/include/linux"
-                    )
-                } else {
-                    emptyList()
-                }
+        when (toolChain) {
+            is Gcc, is Clang -> when {
+                isSystem("Mac") -> listOf(
+                    "-x", "objective-c++",
+                    "-I$javaHome/include",
+                    "-I$javaHome/include/darwin"
+                )
+
+                else -> emptyList()
             }
-            toolChain is VisualCpp -> listOf(
-                "/I$javaHome/include",
-                "/I$javaHome/include/win32"
-            )
+
             else -> emptyList()
         }
     })
 }
 
-
 tasks.withType<LinkSharedLibrary>().configureEach {
     linkerArgs.addAll(toolChain.map { toolChain ->
-        if (toolChain is Clang && System.getProperty("os.name").contains("Mac", ignoreCase = true)) {
-            listOf("-framework", "Cocoa", "-framework", "QuartzCore")
-        } else {
-            emptyList()
+        when {
+            toolChain is Clang && isSystem("Mac") ->
+                listOf("-framework", "Cocoa", "-framework", "QuartzCore")
+
+            else -> emptyList()
         }
     })
 }
+
+/**
+ * This function checks if the current operating system matches the provided system name.
+ *
+ * @param systemName The name of the operating system to check against (e.g., "Mac", "Linux", "Windows")
+ *
+ * @return True if the current operating system matches the provided name, false otherwise.
+ */
+fun isSystem(systemName: String): Boolean =
+    System.getProperty("os.name").contains(systemName, ignoreCase = true)

@@ -2,7 +2,7 @@
 #include <QuartzCore/CAMetalLayer.h>
 #include <jni.h>
 
-extern "C" JNIEXPORT jlong JNICALL Java_arc_gles_window_MacEGLBridge_createMetalLayer
+extern "C" JNIEXPORT jlong JNICALL Java_arc_gles_window_NativeEGLBridge_getNativeLayer
   (JNIEnv* env, jclass clazz, jlong nsWindowPtr)
 {
     NSWindow* nswin = reinterpret_cast<NSWindow*>(static_cast<uintptr_t>(nsWindowPtr));
