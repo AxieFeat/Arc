@@ -3,7 +3,9 @@ plugins {
 }
 
 allprojects {
-    apply(plugin = "arc.engine")
+    if (findProperty("usePlugin") != "false") {
+        apply(plugin = "arc.engine")
+    }
 
     group = rootProject.findProperty("group") ?: throw IllegalStateException("Project group not specified")
     version = rootProject.findProperty("version") ?: throw IllegalStateException("Project version not specified")

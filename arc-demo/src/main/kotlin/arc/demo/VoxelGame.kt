@@ -2,8 +2,13 @@ package arc.demo
 
 import arc.Application
 import arc.audio.SoundEngine
+import arc.demo.screen.DarkVeilScreen
 import arc.demo.screen.FaultyTerminalScreen
+import arc.demo.screen.FractalScreen
+import arc.demo.screen.GalaxyScreen
+import arc.demo.screen.PlasmaScreen
 import arc.demo.screen.Screen
+import arc.demo.screen.TerrainScreen
 import arc.demo.shader.ShaderContainer
 import arc.graphics.vertex.VertexFormat
 import arc.input.GlfwInputEngine
@@ -21,7 +26,7 @@ object VoxelGame : WindowHandler {
 
         GlfwInputEngine.hook(application.window)
 
-        loadShaders()
+//        loadShaders()
 
         // Set window handler to this instance.
         application.window.handler = this
@@ -30,9 +35,9 @@ object VoxelGame : WindowHandler {
 //        setScreen(FractalScreen)
 
         // Demo with minecraft-like game.
-//        setScreen(TerrainScreen)
-
         setScreen(FaultyTerminalScreen)
+
+        application.window.isVsync = false
 
 //        val asset = classpath("arc/sound/pigstep.ogg").asFileAsset()
 //        val sound = SoundLoader.of(SoundFormat.OGG).load(asset)
@@ -42,12 +47,12 @@ object VoxelGame : WindowHandler {
         println("Running with Java ${application.backend.device.java}")
         println("=".repeat(30))
         println("Selected platform: ${application.backend.device.os}")
-        println("CPU | GPU: [ ${application.backend.device.cpu.name.trim()} | ${application.backend.device.usedGpu.name.trim()} ]")
+        println("CPU | GPU: [ ${application.backend.device.cpu.name.trim()} | ${application.backend.device.gpu.firstOrNull()?.name?.trim() ?: "N/A"} ]")
         println("Backend: ${application.backend.name.uppercase()} [${application.backend.version}]")
         println("Window backend: ${application.window.backend.name.uppercase()} [${application.window.backend.version}]")
         println("=".repeat(30))
 
-        if(application.backend.device.usedGpu.isIntegrated) {
+        if(application.backend.isIGpu) {
             println("Warning! Engine started at iGPU.")
         }
 

@@ -13,11 +13,10 @@ enum class LwjglPlatform(val classifier: String) {
 }
 
 /**
- * With this function, you can easily add LWJGL dependencies for multiple platforms.
- * By default, it includes all platforms, but you can specify a subset if needed.
+ * This function allows adding LWJGL dependencies along with their platform-specific natives.
  *
  * @param depend The LWJGL dependency to add.
- * @param platform Platforms for native libraries. Defaults to all platforms.
+ * @param platform The platforms for which to include natives. Defaults to all supported platforms.
  */
 fun DependencyHandler.lwjgl(depend: Provider<MinimalExternalModuleDependency>, vararg platform: LwjglPlatform = LwjglPlatform.values()) {
     add("implementation", depend)

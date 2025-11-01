@@ -1,6 +1,7 @@
 package arc.demo
 
 import arc.ArcObjectProvider
+import arc.gles.OpenGLES
 import arc.audio.AlAudioExtension
 import arc.font.SimpleFontExtension
 import arc.gl.OpenGL
@@ -18,7 +19,7 @@ fun main() {
         "opengl" -> OpenGL.preload()
         "vulkan" -> Vulkan.preload()
 
-        else -> OpenGL.preload()
+        else -> OpenGLES.preload()
     }
 
     val provider = ArcObjectProvider

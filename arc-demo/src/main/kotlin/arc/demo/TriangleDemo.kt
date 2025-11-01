@@ -3,7 +3,7 @@ package arc.demo
 import arc.Application
 import arc.ArcObjectProvider
 import arc.asset.asRuntimeAsset
-import arc.gl.OpenGL
+import arc.gles.OpenGLES
 import arc.graphics.DrawBuffer
 import arc.graphics.DrawerMode
 import arc.graphics.RenderSystem
@@ -19,7 +19,7 @@ fun main() {
     ArcObjectProvider.bootstrap()
 
     // Preload OpenGL
-    OpenGL.preload()
+    OpenGLES.preload()
 
     // Find application in current context (OpenGL implementation)
     val application: Application = Application.find()
@@ -49,10 +49,12 @@ fun main() {
 
 private fun getShaderInstance(): ShaderInstance {
     val vertexShader = """
-        #version 410
+        #version 300 es
+        
+        precision highp float;
 
-        layout (location = 0) in vec3 Position;
-        layout (location = 1) in vec4 Color;
+        in vec3 Position;
+        in vec4 Color;
 
         out vec4 vertexColor;
 
@@ -65,7 +67,9 @@ private fun getShaderInstance(): ShaderInstance {
         """.trimIndent().asRuntimeAsset()
 
     val fragmentShader = """
-        #version 410
+        #version 300 es
+        
+        precision highp float;
 
         in vec4 vertexColor;
         out vec4 FragColor;

@@ -1,10 +1,10 @@
 package arc.demo.world.block
 
-import arc.math.AABB
 import arc.model.Model
 
-abstract class Block(
-    val id: Int,
-    val model: Model?,
-    val aabb: AABB?,
+data class Block(
+    val name: String,
+    val model: Model,
+    val opaque: Boolean = true,
+    val isAir: Boolean = false
 )

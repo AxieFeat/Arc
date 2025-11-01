@@ -7,7 +7,8 @@ Arc Engine is a flexible 3D/2D game engine designed to be implementation-agnosti
 ### Features
 - Modern Kotlin API
 - Implementation-agnostic architecture
-- Ready-to-use OpenGL and Vulkan implementations
+- Ready-to-use OpenGL and Vulkan implementations. Also can be used with Google ANGLE.
+- Module-based design for easy extension and customization.
 - Lightweight and simple - create games with minimal code and shader knowledge
 - Multiple engine implementations in one game*
 - Extensive extension system (Audio, Input, Display, Font, Model, Profiler)
@@ -22,6 +23,7 @@ Basic "cave-game" on this engine. (You can see code in `arc-demo`)
 - **arc-core**: Main engine API interfaces
 - **arc-common**: Common implementation of core features (math, window, etc.)
 - **arc-opengl**: OpenGL-based engine implementation
+- **arc-opengles**: OpenGLES-based engine implementation. In fact created for Google ANGLE.
 - **arc-vulkan**: Vulkan-based engine implementation
 - **arc-extensions**: Various engine extensions
   - **arc-audio**: Audio system with OpenAL implementation
@@ -37,7 +39,7 @@ Basic "cave-game" on this engine. (You can see code in `arc-demo`)
 ### Requirements
 - JDK 21 or higher
 - Any lang for JVM (Kotlin is very recommended)
-- OpenGL/Vulkan compatible graphics card
+- OpenGL/OpenGLES/Direct3D/Vulkan/Metal compatible graphics card
 
 ### Setup
 
@@ -198,6 +200,11 @@ that would somehow refer to any specific implementation.
 ***arc-opengl*** - Engine implementation using OpenGL. In this module, it is desirable to write code
 that will relate only to OpenGL. In this module, you should use naming
 that refers to the fact that classes relate to OpenGL (For example, the prefix Gl at the beginning of class names). Also, if possible,
+all classes should be `internal`.
+
+***arc-opengles*** - Engine implementation using OpenGLES. In fact this module created for using with Google ANGLE. In this module, it is desirable to write code
+that will relate only to OpenGLES. In this module, you should use naming
+that refers to the fact that classes relate to OpenGLES (For example, the prefix Gles at the beginning of class names). Also, if possible,
 all classes should be `internal`.
 
 ***arc-vulkan*** - Engine implementation using Vulkan. In this module, it is desirable to write code

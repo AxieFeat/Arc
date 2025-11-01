@@ -139,13 +139,13 @@ object TerrainScreen : Screen("terrain") {
         player.position = Vector3f(0f, 50f, 0f)
         player.fly = true
 
-//        for(x in 0..8) {
-//            for(y in 0..8) {
-//                world.generateChunkAt(x, y)
-//            }
-//        }
+        for(x in 0..8) {
+            for(y in 0..8) {
+                world.generateChunkAt(x, y)
+            }
+        }
 
-//        world.allChanged()
+        world.rebuild()
     }
 
     override fun doRender() {
@@ -161,7 +161,7 @@ object TerrainScreen : Screen("terrain") {
 
         ShaderContainer.positionTexColor.bind()
         uploadLights(ShaderContainer.positionTexColor, lighting, ubo)
-        world.render(EmptyShaderInstance, player)
+        world.render()
         ShaderContainer.positionTexColor.unbind()
 
         val aabb = generateAABBForHoveredBlock()
@@ -176,7 +176,7 @@ object TerrainScreen : Screen("terrain") {
         val block = raycastForBlock()
 
         if(block != null) {
-            world.setBlockAndUpdate(block.x, block.y, block.z, Blocks.AIR)
+            world.setBlockAndNotify(block.x, block.y, block.z, Blocks.AIR)
         }
     }
 
@@ -191,7 +191,7 @@ object TerrainScreen : Screen("terrain") {
         val targetY = y + ny
         val targetZ = z + nz
 
-        world.setBlockAndUpdate(targetX.toInt(), targetY.toInt(), targetZ.toInt(), Blocks.STONE)
+        world.setBlockAndNotify(targetX.toInt(), targetY.toInt(), targetZ.toInt(), Blocks.STONE)
     }
 
     private fun renderCrosshair() {

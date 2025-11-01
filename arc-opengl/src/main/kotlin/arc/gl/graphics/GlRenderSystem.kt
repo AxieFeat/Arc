@@ -91,14 +91,6 @@ internal object GlRenderSystem : RenderSystem {
         glDisable(GL_BLEND)
     }
 
-    override fun polygonMode(face: Int, mode: Int) {
-        glPolygonMode(face, mode)
-    }
-
-    override fun clearDepth(depth: Double) {
-        glClearDepth(depth)
-    }
-
     override fun colorMask(red: Boolean, green: Boolean, blue: Boolean, alpha: Boolean) {
         glColorMask(red, green, blue, alpha)
     }

@@ -13,16 +13,16 @@ object DarkVeilScreen : Screen("dark-veil") {
 
     val shader = ShaderInstance.of(
         vertexShader = """
-            #version 410
+            #version 300 es
 
-            layout (location = 0) in vec3 Position;
-
+            in vec3 Position;
+            
             void main(){
                 gl_Position = vec4(Position, 1.0);
             }
         """.trimIndent().asRuntimeAsset(),
         fragmentShader = """
-            #version 410
+            #version 300 es
 
             #ifdef GL_ES
             precision lowp float;
@@ -36,13 +36,13 @@ object DarkVeilScreen : Screen("dark-veil") {
             uniform float uWarp;
             #define iTime uTime
             #define iResolution uResolution
-
+            
             vec4 buf[8];
             float rand(vec2 c){return fract(sin(dot(c,vec2(12.9898,78.233)))*43758.5453);}
-
+            
             mat3 rgb2yiq=mat3(0.299,0.587,0.114,0.596,-0.274,-0.322,0.211,-0.523,0.312);
             mat3 yiq2rgb=mat3(1.0,0.956,0.621,1.0,-0.272,-0.647,1.0,-1.106,1.703);
-
+            
             vec3 hueShiftRGB(vec3 col,float deg){
                 vec3 yiq=rgb2yiq*col;
                 float rad=radians(deg);
@@ -50,9 +50,9 @@ object DarkVeilScreen : Screen("dark-veil") {
                 vec3 yiqShift=vec3(yiq.x,yiq.y*cosh-yiq.z*sinh,yiq.y*sinh+yiq.z*cosh);
                 return clamp(yiq2rgb*yiqShift,0.0,1.0);
             }
-
+            
             vec4 sigmoid(vec4 x){return 1./(1.+exp(-x));}
-
+            
             vec4 cppn_fn(vec2 coordinate,float in0,float in1,float in2){
                 buf[6]=vec4(coordinate.x,coordinate.y,0.3948333106474662+in0,0.36+in1);
                 buf[7]=vec4(0.14+in2,sqrt(coordinate.x*coordinate.x+coordinate.y*coordinate.y),0.,0.);
@@ -72,16 +72,16 @@ object DarkVeilScreen : Screen("dark-veil") {
                 buf[0]=sigmoid(buf[0]);
                 return vec4(buf[0].x,buf[0].y,buf[0].z,1.);
             }
-
+            
             out vec4 FragColor;
-
+            
             void mainImage(out vec4 fragColor,in vec2 fragCoord){
                 vec2 uv=fragCoord/uResolution.xy*2.-1.;
                 uv.y*=-1.;
                 uv+=uWarp*vec2(sin(uv.y*6.283+uTime*0.5),cos(uv.x*6.283+uTime*0.5))*0.05;
                 fragColor=cppn_fn(uv,0.1*sin(0.3*uTime),0.1*sin(0.69*uTime),0.1*sin(0.44*uTime));
             }
-
+            
             void main(){
                 vec4 col;mainImage(col,gl_FragCoord.xy);
                 col.rgb=hueShiftRGB(col.rgb,uHueShift);
@@ -133,4 +133,5 @@ object DarkVeilScreen : Screen("dark-veil") {
     override fun onFpsUpdate(fps: Int) {
         name = "FPS: $fps, Frame time: $frameTime ms"
     }
+
 }
