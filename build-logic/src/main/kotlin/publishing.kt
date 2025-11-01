@@ -11,8 +11,13 @@ import org.gradle.kotlin.dsl.the
 import java.io.File
 import java.util.concurrent.TimeUnit
 
-val gitCommitHash = "git rev-parse --short=7 HEAD".runCommand()
+private val gitCommitHash = "git rev-parse --short=7 HEAD".runCommand()
 
+/**
+ * Apply publishing configuration to the project.
+ * This function sets up a Maven publication with the project's main component and a sources JAR.
+ * It also configures the repository to publish to GitHub Packages using environment variables for authentication.
+ */
 fun Project.applyPublishing() {
     plugins.withId("maven-publish") {
         val sourcesJar = tasks.register("sourcesJar", Jar::class) {
@@ -43,6 +48,16 @@ fun Project.applyPublishing() {
     }
 }
 
+/**
+ * Generally this function runs a command in the terminal and returns the output as a string.
+ * It takes an optional working directory parameter, defaulting to the current directory.
+ *
+ * But in fact this function used only for getting git commit hash for versioning in publishing.
+ *
+ * @param workingDir The directory in which to run the command. Defaults to the current directory.
+ *
+ * @return The output of the command as a trimmed string.
+ */
 private fun String.runCommand(workingDir: File = File("./")): String {
     val parts = this.split("\\s".toRegex())
     val proc = ProcessBuilder(*parts.toTypedArray())

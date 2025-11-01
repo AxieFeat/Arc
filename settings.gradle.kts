@@ -23,29 +23,34 @@ plugins {
     id("org.gradle.toolchains.foojay-resolver-convention") version "0.8.0"
 }
 
-include("arc-annotations")
-include("arc-annotation-processor")
-include("arc-core")
-include("arc-common")
-include("arc-opengl")
-include("arc-opengles")
-include("arc-vulkan")
-include("arc-native")
+project("annotations")
+project("annotation-processor")
+project("core")
+project("common")
+project("opengl")
+project("opengles")
+project("vulkan")
+project("native")
 
-include("arc-extensions")
-extension("arc-font",         "core", "simple")
-extension("arc-model",        "core", "simple")
-extension("arc-display",      "core", "common", "opengl")
-extension("arc-audio",        "core", "openal")
-extension("arc-profiler",     "core", "simple")
-extension("arc-input",        "core", "glfw")
+project("extensions")
+extension("font",         "core", "simple")
+extension("model",        "core", "simple")
+extension("display",      "core", "common", "opengl")
+extension("audio",        "core", "openal")
+extension("profiler",     "core", "simple")
+extension("input",        "core", "glfw")
 
-include("arc-demo")
+project("demo")
+
+fun project(module: String) {
+    include("${rootProject.name}-$module")
+}
 
 fun extension(name: String, vararg impl: String) {
-    include("arc-extensions:$name")
+    val extension = "${rootProject.name}-extensions:${rootProject.name}-$name"
+    include(extension)
 
     impl.forEach {
-        include("arc-extensions:$name:$name-$it")
+        include("$extension:${rootProject.name}-$name-$it")
     }
 }

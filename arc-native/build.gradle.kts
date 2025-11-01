@@ -1,3 +1,12 @@
+/**
+ * Google ANGLE not work with GLFW, in this reason we need to create
+ * a small native bridge to create an EGL context from
+ * a GLFW window. It created because LWJGL not provide such functionality out of the box.
+ * This build script configures a C++ library project that compiles native code
+ * to create an EGL bridge for different
+ * operating systems.
+ */
+
 @file:Suppress("UnstableApiUsage")
 
 plugins {

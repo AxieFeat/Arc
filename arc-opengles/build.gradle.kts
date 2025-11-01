@@ -4,7 +4,7 @@ dependencies {
     lwjgl(libs.lwjgl.stb)
     lwjgl(libs.lwjgl.opengles)
     lwjgl(libs.lwjgl.glfw)
-    api(libs.lwjgl.egl)
+    implementation(libs.lwjgl.egl)
 
     implementation(libs.commonsIo)
 }
