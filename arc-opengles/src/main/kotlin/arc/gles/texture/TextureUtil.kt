@@ -28,5 +28,4 @@ internal object TextureUtil {
         )
         glGenerateMipmap(GL_TEXTURE_2D)
     }
-
 }

@@ -15,5 +15,4 @@ object OpenGLES {
         NativeEGLBridge // Call to preload native library
         GlesFactoryProvider.bootstrap()
     }
-
 }

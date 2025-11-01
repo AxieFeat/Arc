@@ -61,5 +61,4 @@ internal class GlesTextureLoader(
         }
 
     }
-
 }

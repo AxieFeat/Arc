@@ -59,5 +59,4 @@ internal class GlesUniformBuffer(
             return GlesUniformBuffer(size)
         }
     }
-
 }

@@ -5,7 +5,6 @@ import arc.Application
 import arc.ApplicationBackend
 import arc.gles.graphics.GlesRenderSystem
 import arc.gles.window.EglGlesWindow
-import arc.graphics.RenderSystem
 import arc.window.EmptyWindowHandler
 import arc.window.Window
 import org.lwjgl.opengles.GLES
@@ -23,18 +22,26 @@ internal object GlesApplication : AbstractApplication() {
 
     override val backend: ApplicationBackend = GlesApplicationBackend
 
-    override lateinit var window: EglGlesWindow
-    override lateinit var renderSystem: RenderSystem
+    private var _window: EglGlesWindow? = null
+    private var _renderSystem: GlesRenderSystem? = null
+
+    override val window: EglGlesWindow
+        get() = checkNotNull(_window) {
+            "Window is not initialized yet. Accessing it before Application.init() is not allowed." }
+    override val renderSystem: GlesRenderSystem
+        get() = checkNotNull(_renderSystem) {
+            "RenderSystem is not initialized yet. Accessing it before Application.init() is not allowed."
+        }
 
     override fun init() {
-        this.window = Window.of(
+        _window = Window.of(
             name = "",
             handler = EmptyWindowHandler,
             width = 720,
             height = 420
         ) as? EglGlesWindow ?: throw IllegalStateException("Window is not GlfwGlesWindow. Why?")
 
-        this.renderSystem = GlesRenderSystem
+        _renderSystem = GlesRenderSystem
 
         window.create()
 

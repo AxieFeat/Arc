@@ -2,13 +2,14 @@ metadata.format.version = "1.1"
 
 [versions]
 
-kotlin = "2.2.20"
+kotlin = "2.2.21"
+ksp = "2.2.21-2.0.4" # Not forget to keep in sync with kotlin version
+
 lwjgl = "3.3.6"
 gson = "2.12.1"
 annotations = "26.0.2"
 fastutil = "8.5.15"
 oshi = "6.6.6"
-ksp = "2.2.20-2.0.3"
 joml = "1.10.8"
 commons-io = "2.18.0"
 detekt = "1.23.8"

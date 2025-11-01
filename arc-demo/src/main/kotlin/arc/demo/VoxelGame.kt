@@ -47,12 +47,12 @@ object VoxelGame : WindowHandler {
         println("Running with Java ${application.backend.device.java}")
         println("=".repeat(30))
         println("Selected platform: ${application.backend.device.os}")
-        println("CPU | GPU: [ ${application.backend.device.cpu.name.trim()} | ${application.backend.device.gpu.firstOrNull()?.name?.trim() ?: "N/A"} ]")
+        println("CPU | GPU: [ ${application.backend.device.cpu.name.trim()} | ${application.backend.device.usedGpu.name.trim()} ]")
         println("Backend: ${application.backend.name.uppercase()} [${application.backend.version}]")
         println("Window backend: ${application.window.backend.name.uppercase()} [${application.window.backend.version}]")
         println("=".repeat(30))
 
-        if(application.backend.isIGpu) {
+        if(application.backend.device.usedGpu.isIntegrated) {
             println("Warning! Engine started at iGPU.")
         }
 

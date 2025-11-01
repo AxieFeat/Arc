@@ -1,7 +1,10 @@
 package arc.gles.graphics
 
 import arc.gles.GlesApplication
-import arc.graphics.*
+import arc.graphics.Drawer
+import arc.graphics.EmptyScene
+import arc.graphics.EmptyShaderInstance
+import arc.graphics.RenderSystem
 import arc.graphics.scene.Scene
 import arc.shader.ShaderInstance
 import arc.texture.EmptyTexture

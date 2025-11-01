@@ -1,8 +1,9 @@
 package arc.gles.shader
 
-import arc.gles.graphics.GlesRenderSystem
 import arc.asset.StringAsset
+import arc.gles.graphics.GlesRenderSystem
 import arc.graphics.EmptyShaderInstance
+import arc.graphics.vertex.VertexType
 import arc.shader.ShaderInstance
 import arc.shader.ShaderSettings
 import arc.shader.UniformBuffer
@@ -45,7 +46,8 @@ import org.lwjgl.opengles.GLES30.glGetUniformBlockIndex
 import org.lwjgl.opengles.GLES30.glUniformBlockBinding
 import org.lwjgl.system.MemoryStack
 
-internal data class GlesShaderInstance(
+@Suppress("MethodOverloading")
+internal class GlesShaderInstance(
     override val vertex: String,
     override val fragment: String,
     override val settings: ShaderSettings
@@ -105,7 +107,7 @@ internal data class GlesShaderInstance(
                 glUniformMatrix3fv(
                     this,
                     false,
-                    value[stack.mallocFloat(12)]
+                    value[stack.mallocFloat(MATRIX3F_SIZE)]
                 )
             }
         }
@@ -117,7 +119,7 @@ internal data class GlesShaderInstance(
                 glUniformMatrix4fv(
                     this,
                     false,
-                    value[stack.mallocFloat(16)]
+                    value[stack.mallocFloat(MATRIX4F_SIZE)]
                 )
             }
         }
@@ -167,7 +169,7 @@ internal data class GlesShaderInstance(
         glCompileShader(shaderId)
 
         check(glGetShaderi(shaderId, GL_COMPILE_STATUS) != 0) {
-            "Error compiling Shader code: ${glGetShaderInfoLog(shaderId, 1024)}"
+            "Error compiling Shader code: ${glGetShaderInfoLog(shaderId, MAX_LOG_LENGTH)}"
         }
 
         glAttachShader(id, shaderId)
@@ -179,7 +181,7 @@ internal data class GlesShaderInstance(
         glLinkProgram(id)
 
         check(glGetProgrami(id, GL_LINK_STATUS) != 0) {
-            "Error linking Shader code: ${glGetProgramInfoLog(id, 1024)}"
+            "Error linking Shader code: ${glGetProgramInfoLog(id, MAX_LOG_LENGTH)}"
         }
 
         glDetachShader(
@@ -201,6 +203,7 @@ internal data class GlesShaderInstance(
 
 
     object Factory : ShaderInstance.Factory {
+
         override fun create(
             vertexShader: StringAsset,
             fragmentShader: StringAsset,
@@ -210,4 +213,11 @@ internal data class GlesShaderInstance(
         }
     }
 
+    companion object {
+
+        private val MATRIX3F_SIZE = VertexType.FLOAT.size * 3
+        private val MATRIX4F_SIZE = VertexType.FLOAT.size * 4
+
+        private const val MAX_LOG_LENGTH = 1024
+    }
 }

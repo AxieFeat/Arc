@@ -64,12 +64,6 @@ object VkRenderSystem : RenderSystem {
     override fun disableBlend() {
     }
 
-    override fun polygonMode(face: Int, mode: Int) {
-    }
-
-    override fun clearDepth(depth: Double) {
-    }
-
     override fun colorMask(red: Boolean, green: Boolean, blue: Boolean, alpha: Boolean) {
     }
 

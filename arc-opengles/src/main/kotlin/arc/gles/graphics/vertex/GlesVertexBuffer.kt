@@ -16,7 +16,7 @@ import org.lwjgl.opengles.GLES30.glUnmapBuffer
 import org.lwjgl.system.MemoryUtil
 import java.nio.ByteBuffer
 
-internal data class GlesVertexBuffer(
+internal class GlesVertexBuffer(
     override val mode: DrawerMode,
     override val format: VertexFormat,
     private val buffer: ByteBuffer,
@@ -26,6 +26,14 @@ internal data class GlesVertexBuffer(
 
     override var id: Int = glGenBuffers()
 
+    init {
+        bind()
+        glBufferData(GL_ARRAY_BUFFER, size.toLong(), GL_DYNAMIC_DRAW)
+        unbind()
+
+        write(buffer, vertices)
+    }
+
     override fun bind() {
         glBindBuffer(GL_ARRAY_BUFFER, id)
     }
@@ -34,13 +42,7 @@ internal data class GlesVertexBuffer(
         glBindBuffer(GL_ARRAY_BUFFER, 0)
     }
 
-    init {
-        bind()
-        glBufferData(GL_ARRAY_BUFFER, size.toLong(), GL_DYNAMIC_DRAW)
-        unbind()
 
-        write(buffer, vertices)
-    }
 
     override fun write(buffer: ByteBuffer, vertices: Int) {
         this.vertices = vertices
@@ -77,5 +79,4 @@ internal data class GlesVertexBuffer(
         }
 
     }
-
 }

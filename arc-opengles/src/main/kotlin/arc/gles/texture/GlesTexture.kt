@@ -30,5 +30,4 @@ internal open class GlesTexture : Texture {
     override fun cleanup() {
         glDeleteTextures(id)
     }
-
 }

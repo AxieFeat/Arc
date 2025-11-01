@@ -17,5 +17,4 @@ internal object GlesDrawer : Drawer {
 
         GlesVertexUploader.draw(buffer)
     }
-
 }

@@ -195,3 +195,5 @@ style:
     active: true
   UseIfInsteadOfWhen:
     active: true
+  UseCheckOrError:
+    active: false

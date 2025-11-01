@@ -27,7 +27,7 @@ import org.lwjgl.opengles.GLES30.glVertexAttribIPointer
 import org.lwjgl.system.MemoryUtil
 import java.nio.ByteBuffer
 
-internal data class GlesVertexArrayBuffer(
+internal class GlesVertexArrayBuffer(
     override val mode: DrawerMode,
     override val format: VertexFormat,
     private val buffer: ByteBuffer,
@@ -65,10 +65,14 @@ internal data class GlesVertexArrayBuffer(
             glEnableVertexAttribArray(index)
 
             when (element.type) {
-                VertexType.FLOAT -> glVertexAttribPointer(index, element.count, GL_FLOAT, false, format.nextOffset, offset.toLong())
-                VertexType.UINT, VertexType.INT -> glVertexAttribIPointer(index, element.count, GL_INT, format.nextOffset, offset.toLong())
-                VertexType.USHORT, VertexType.SHORT -> glVertexAttribPointer(index, element.count, GL_SHORT, false, format.nextOffset, offset.toLong())
-                VertexType.UBYTE, VertexType.BYTE -> glVertexAttribPointer(index, element.count, GL_UNSIGNED_BYTE, true, format.nextOffset, offset.toLong())
+                VertexType.FLOAT ->
+                    glVertexAttribPointer(index, element.count, GL_FLOAT, false, format.nextOffset, offset.toLong())
+                VertexType.UINT, VertexType.INT ->
+                    glVertexAttribIPointer(index, element.count, GL_INT, format.nextOffset, offset.toLong())
+                VertexType.USHORT, VertexType.SHORT ->
+                    glVertexAttribPointer(index, element.count, GL_SHORT, false, format.nextOffset, offset.toLong())
+                VertexType.UBYTE, VertexType.BYTE ->
+                    glVertexAttribPointer(index, element.count, GL_UNSIGNED_BYTE, true, format.nextOffset, offset.toLong())
             }
 
             offset += element.size
@@ -113,5 +117,4 @@ internal data class GlesVertexArrayBuffer(
             return GlesVertexArrayBuffer(mode, format, buffer, vertices)
         }
     }
-
 }
