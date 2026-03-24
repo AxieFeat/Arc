@@ -32,10 +32,10 @@ object VoxelGame : WindowHandler {
         application.window.handler = this
 
         // Demo with julia fractal.
-//        setScreen(FractalScreen)
+        setScreen(FractalScreen)
 
         // Demo with minecraft-like game.
-        setScreen(FaultyTerminalScreen)
+//        setScreen(FaultyTerminalScreen)
 
         application.window.isVsync = false
 

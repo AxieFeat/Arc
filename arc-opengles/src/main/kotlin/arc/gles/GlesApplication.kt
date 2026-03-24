@@ -39,7 +39,7 @@ internal object GlesApplication : AbstractApplication() {
             handler = EmptyWindowHandler,
             width = 720,
             height = 420
-        ) as? EglGlesWindow ?: throw IllegalStateException("Window is not GlfwGlesWindow. Why?")
+        ) as? EglGlesWindow ?: throw IllegalStateException("Window is not EglGlesWindow. Why?")
 
         _renderSystem = GlesRenderSystem
 
