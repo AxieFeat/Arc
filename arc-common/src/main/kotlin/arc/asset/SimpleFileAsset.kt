@@ -4,7 +4,7 @@ import java.io.File
 
 internal data class SimpleFileAsset(
     override val file: File
-) : FileAsset {
+) : AbstractStringAsset(), FileAsset {
 
     override val bytes: ByteArray
         get() = file.readBytes()

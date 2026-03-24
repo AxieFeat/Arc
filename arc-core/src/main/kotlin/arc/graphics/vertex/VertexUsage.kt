@@ -9,7 +9,7 @@ package arc.graphics.vertex
  *
  * @property usageName Descriptive name for the type of vertex usage.
  */
-@Suppress("UndocumentedPublicProperty") // TODO And documentation.
+@Suppress("UndocumentedPublicProperty") // TODO Add documentation.
 enum class VertexUsage(
     val usageName: String
 ) {

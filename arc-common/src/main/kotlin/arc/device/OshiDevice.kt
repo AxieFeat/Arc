@@ -23,7 +23,7 @@ abstract class OshiDevice : Device {
     override val gpu: List<GPU> = systemInfo.hardware.graphicsCards.map { OshiGPU(it) }
     override val usedGpu: GPU by lazy {
         findUsedGpu() ?:
-        checkNotNull(gpu.firstOrNull()) { "Can't find any gpu via Oshi, please report to developer!" }
+        checkNotNull(gpu.firstOrNull()) { GPU_NOT_FOUND }
     }
     override val powerSources: List<PowerSource> = systemInfo.hardware.powerSources.map { OshiPowerSource(it) }
     override val motherBoard: MotherBoard = OshiMotherBoard(systemInfo)
@@ -49,4 +49,9 @@ abstract class OshiDevice : Device {
      * If you can't find used GPU, return null and [usedGpu] will return first GPU from [gpu] list or throw exception if list is empty.
      */
     abstract fun findUsedGpu(): GPU?
+
+    companion object {
+
+        private const val GPU_NOT_FOUND = "Can't find any GPU via Oshi, please report to developer!"
+    }
 }

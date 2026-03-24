@@ -37,12 +37,18 @@ library {
 tasks.withType<CppCompile>().configureEach {
     compilerArgs.addAll(toolChain.map { toolChain ->
         val javaHome = System.getProperty("java.home")
+
         when (toolChain) {
             is Gcc, is Clang -> when {
                 isSystem("Mac") -> listOf(
                     "-x", "objective-c++",
                     "-I$javaHome/include",
                     "-I$javaHome/include/darwin"
+                )
+
+                isSystem("Windows") -> listOf(
+                    "-I$javaHome/include",
+                    "-I$javaHome/include/win32"
                 )
 
                 else -> emptyList()
@@ -58,6 +64,9 @@ tasks.withType<LinkSharedLibrary>().configureEach {
         when {
             toolChain is Clang && isSystem("Mac") ->
                 listOf("-framework", "Cocoa", "-framework", "QuartzCore")
+
+            toolChain is Clang && isSystem("Windows") ->
+                listOf("-fuse-ld=lld", "-nostdlib", "-Wl,-noentry")
 
             else -> emptyList()
         }

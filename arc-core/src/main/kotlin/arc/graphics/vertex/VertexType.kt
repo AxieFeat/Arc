@@ -6,7 +6,7 @@ package arc.graphics.vertex
  * @property size The size in bytes occupied by this vertex type.
  * @property typeName A descriptive name of the vertex type.
  */
-@Suppress("UndocumentedPublicProperty") // TODO And documentation.
+@Suppress("UndocumentedPublicProperty") // TODO Add documentation.
 enum class VertexType(
     val size: Int,
     val typeName: String

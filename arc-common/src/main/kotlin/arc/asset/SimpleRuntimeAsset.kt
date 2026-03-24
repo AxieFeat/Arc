@@ -2,7 +2,7 @@ package arc.asset
 
 internal data class SimpleRuntimeAsset(
     override val bytes: ByteArray
-) : RuntimeAsset {
+) : AbstractStringAsset(), RuntimeAsset {
 
     override val text: String = bytes.decodeToString()
 

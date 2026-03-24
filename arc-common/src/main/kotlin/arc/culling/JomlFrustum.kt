@@ -1,8 +1,8 @@
 package arc.culling
 
-import arc.graphics.Camera
 import arc.math.AABB
 import org.joml.FrustumIntersection
+import org.joml.Matrix4f
 
 internal class JomlFrustum : Frustum {
 
@@ -22,7 +22,7 @@ internal class JomlFrustum : Frustum {
         return frustumIntersection.testAab(minX, minY, minZ, maxX, maxY, maxZ)
     }
 
-    override fun update(camera: Camera) {
-        frustumIntersection.set(camera.combined)
+    override fun update(matrix: Matrix4f) {
+        frustumIntersection.set(matrix)
     }
 }

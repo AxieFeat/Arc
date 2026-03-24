@@ -28,7 +28,8 @@ interface Device {
     val gpu: List<GPU>
 
     /**
-     * What GPU is currently used by application for rendering.
+     * What GPU is currently used by application for rendering. It can not be null, but
+     * if implementation can't determine used GPU, it should return first GPU from [gpu] list.
      */
     val usedGpu: GPU
 

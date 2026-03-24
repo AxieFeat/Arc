@@ -15,6 +15,9 @@ private val application = Application.find()
 /**
  * Get a file from a path.
  *
+ * You should use these functions only after the [Application] is initialized in the [arc.util.provider.ObjectProvider],
+ * otherwise you may get unexpected errors.
+ *
  * @param loc Type of file location.
  * @param path Path to file.
  *
@@ -25,6 +28,9 @@ fun file(loc: FileLocation, path: String): File = application.locationSpace.file
 
 /**
  * Get a file from classpath.
+ *
+ * You should use these functions only after the [Application] is initialized in the [arc.util.provider.ObjectProvider],
+ * otherwise you may get unexpected errors.
  *
  * @param path Path to file.
  *
@@ -38,6 +44,9 @@ fun classpath(path: String): File = application.locationSpace.classpath(path)
 /**
  * Get a file from an absolute path.
  *
+ * You should use these functions only after the [Application] is initialized in the [arc.util.provider.ObjectProvider],
+ * otherwise you may get unexpected errors.
+ *
  * @param path Path to file.
  *
  * @return New instance of [File].
@@ -49,6 +58,9 @@ fun absolute(path: String): File = application.locationSpace.absolute(path)
 
 /**
  * Get a file from directory of current application.
+ *
+ * You should use these functions only after the [Application] is initialized in the [arc.util.provider.ObjectProvider],
+ * otherwise you may get unexpected errors.
  *
  * @param path Path to file.
  *

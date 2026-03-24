@@ -8,7 +8,7 @@ import arc.annotations.ImmutableType
  * @see RuntimeAsset
  */
 @ImmutableType
-interface StringAsset : AssetLike {
+interface StringAsset : AssetLike, CharSequence {
 
     /**
      * String of this asset.

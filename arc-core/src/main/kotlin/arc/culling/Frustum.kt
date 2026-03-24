@@ -2,6 +2,7 @@ package arc.culling
 
 import arc.graphics.Camera
 import arc.math.AABB
+import org.joml.Matrix4f
 
 /**
  * This interface represents frustum culling in render.
@@ -23,5 +24,12 @@ interface Frustum {
      *
      * @param camera Camera for updating frustum.
      */
-    fun update(camera: Camera)
+    fun update(camera: Camera) = update(camera.combined)
+
+    /**
+     * Update frustum with matrix.
+     *
+     * @param matrix Matrix for updating frustum.
+     */
+    fun update(matrix: Matrix4f)
 }

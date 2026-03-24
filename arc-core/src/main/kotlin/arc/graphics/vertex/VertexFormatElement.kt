@@ -57,14 +57,41 @@ interface VertexFormatElement {
         ): VertexFormatElement
     }
 
-    @Suppress("UndocumentedPublicProperty") // TODO Add documentation for standard elements.
     companion object {
 
+        /**
+         * This element exist to define the position of a vertex in 3D space. It uses three floating-point
+         * numbers to represent the X, Y, and Z coordinates.
+         *
+         * This element required for every vertex.
+         */
         @JvmField val POSITION = of("POSITION", 0, VertexType.FLOAT, VertexUsage.POSITION, 3)
+
+        /**
+         * This element defines the color of a vertex using four unsigned byte values, typically representing
+         * the red, green, blue, and alpha (transparency) components.
+         */
         @JvmField val COLOR = of("COLOR", 0, VertexType.UBYTE, VertexUsage.COLOR, 4)
+
+        /**
+         * This element is used to define texture coordinates (UV mapping) for a vertex.
+         * It uses two floating-point numbers to represent the U and V coordinates.
+         */
         @JvmField val UV = of("UV", 0, VertexType.FLOAT, VertexUsage.UV, 2)
+
+        /**
+         * This element is used to define a second set of texture coordinates (UV mapping) for a vertex.
+         */
         @JvmField val OVERLAY = of("OVERLAY", 1, VertexType.SHORT, VertexUsage.UV, 2)
+
+        /**
+         * This element is used to define normal for a vertex.
+         */
         @JvmField val NORMAL = of("NORMAL", 0, VertexType.BYTE, VertexUsage.NORMAL, 3)
+
+        /**
+         * This element is used to define padding in a vertex format.
+         */
         @JvmField val PADDING = of("PADDING", 0, VertexType.BYTE, VertexUsage.PADDING, 1)
 
         /**
