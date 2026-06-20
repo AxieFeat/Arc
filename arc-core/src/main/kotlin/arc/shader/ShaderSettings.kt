@@ -32,7 +32,6 @@ interface ShaderSettings {
          * Create instance of [ShaderSettings].
          *
          * @param uniforms Uniforms for shaders.
-         * @param blendMode Blending mode for shaders.
          *
          * @return New instance of [ShaderSettings].
          */

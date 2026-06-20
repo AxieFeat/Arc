@@ -1,3 +1,9 @@
+plugins {
+    id("arc.publishing")
+//    id("arc.detekt") TODO enable detekt, when got stable
+    id("arc.ksp")
+}
+
 dependencies {
     api(projects.arcCommon)
 

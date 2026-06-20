@@ -30,7 +30,6 @@ project("common")
 project("opengl")
 project("opengles")
 project("vulkan")
-project("native")
 
 project("extensions")
 extension("font",         "core", "simple")
