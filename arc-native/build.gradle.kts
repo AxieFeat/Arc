@@ -11,6 +11,7 @@
 
 plugins {
     id("cpp-library")
+    id("maven-publish")
 }
 
 library {

@@ -1,8 +1,8 @@
 package arc.device
 
 import arc.OSPlatform
-import oshi.PlatformEnum
 import oshi.SystemInfo
+import oshi.util.PlatformEnum
 
 /**
  * This class is abstract because we can't get `usedGpu` from OSHI library.
@@ -12,9 +12,9 @@ abstract class OshiDevice : Device {
 
     private val systemInfo = SystemInfo()
 
-    override val os: OSPlatform = SystemInfo.getCurrentPlatform().toOsPlatform().also {
+    override val os: OSPlatform = PlatformEnum.getCurrentPlatform().toOsPlatform().also {
         if(it == OSPlatform.UNKNOWN) {
-            println("OS not supported: ${SystemInfo.getCurrentPlatform().name}")
+            println("OS not supported: ${PlatformEnum.getCurrentPlatform().name}")
         }
     }
 
