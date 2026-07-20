@@ -13,6 +13,8 @@ oshi = "7.4.0"
 joml = "1.10.9"
 commons-io = "2.22.0"
 detekt = "1.23.8"
+logging = "8.0.4"
+logback = "1.5.38"
 
 [libraries]
 
@@ -23,6 +25,8 @@ ksp = { group = "com.google.devtools.ksp", name = "symbol-processing-api", versi
 joml = { group = "org.joml", name = "joml", version.ref = "joml" }
 oshi = { group = "com.github.oshi", name = "oshi-core", version.ref = "oshi" }
 commonsIo = { group = "commons-io", name = "commons-io", version.ref = "commons-io" }
+logging = { group = "io.github.oshai", name = "kotlin-logging-jvm", version.ref = "logging" }
+logback = { group = "ch.qos.logback", name = "logback-classic", version.ref = "logback" }
 
 lwjgl-lib = { group = "org.lwjgl", name = "lwjgl", version.ref = "lwjgl" }
 lwjgl-glfw = { group = "org.lwjgl", name = "lwjgl-glfw", version.ref = "lwjgl" }
@@ -40,3 +44,7 @@ lwjgl-openal = { group = "org.lwjgl", name = "lwjgl-openal", version.ref = "lwjg
 plugin-kotlin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
 plugin-ksp = { group = "com.google.devtools.ksp", name = "symbol-processing-gradle-plugin", version.ref = "ksp" }
 plugin-detekt = { group = "io.gitlab.arturbosch.detekt", name = "detekt-gradle-plugin", version.ref = "detekt" }
+
+[bundles]
+
+logging = ["logging", "logback"]

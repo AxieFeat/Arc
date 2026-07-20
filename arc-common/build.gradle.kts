@@ -6,9 +6,9 @@ plugins {
 
 dependencies {
     api(projects.arcCore)
+    api(libs.bundles.logging)
 
     lwjgl(libs.lwjgl.lib)
-    lwjgl(libs.lwjgl.glfw)
 
     implementation(libs.fastutil)
     implementation(libs.oshi)

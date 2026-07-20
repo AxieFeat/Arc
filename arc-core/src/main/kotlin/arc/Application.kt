@@ -54,11 +54,6 @@ interface Application {
     val locationSpace: LocationSpace
 
     /**
-     * Represents the current text stored in the system clipboard.
-     */
-    var clipboardText: String
-
-    /**
      * Initializes the application.
      */
     fun init()

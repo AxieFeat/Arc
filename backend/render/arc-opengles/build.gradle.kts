@@ -1,0 +1,17 @@
+plugins {
+    id("arc.publishing")
+    id("arc.detekt")
+    id("arc.ksp")
+}
+
+dependencies {
+    api(projects.arcCommon)
+    implementation(projects.arcEgl)
+
+    lwjgl(libs.lwjgl.stb)
+    lwjgl(libs.lwjgl.opengles)
+    lwjgl(libs.lwjgl.glfw)
+    implementation(libs.lwjgl.egl)
+
+    implementation(libs.commonsIo)
+}

@@ -32,9 +32,14 @@ project("core")
 project("common")
 
 // Render backends
-backend("opengl")
-backend("opengles")
-backend("vulkan")
+render("opengl")
+render("opengles")
+render("vulkan")
+
+// Window backends
+window("glfw")
+window("egl")
+window("sdl")
 
 project("extensions")
 extension("font",         "core", "simple")
@@ -60,11 +65,21 @@ fun project(moduleName: String): String {
 /**
  * Function for including rendering backends subprojects.
  */
-fun backend(moduleName: String) {
+fun render(moduleName: String) {
     val module = project(moduleName)
 
     // We use `settings.project()` because has own `project` function.
-    settings.project(":$module").projectDir = file("backend/$module")
+    settings.project(":$module").projectDir = file("backend/render/$module")
+}
+
+/**
+ * Function for including window backends subprojects.
+ */
+fun window(moduleName: String) {
+    val module = project(moduleName)
+
+    // We use `settings.project()` because has own `project` function.
+    settings.project(":$module").projectDir = file("backend/window/$module")
 }
 
 fun extension(name: String, vararg impl: String) {

@@ -1,16 +1,23 @@
 package arc.device
 
+import io.github.oshai.kotlinlogging.KotlinLogging
 import oshi.hardware.GraphicsCard
 
 internal data class OshiGPU(
     private val graphicsCard: GraphicsCard
 ) : GPU {
 
+    private val logger = KotlinLogging.logger {}
+
     override val name: String = graphicsCard.name
     override val isIntegrated: Boolean = iGpuKeywords.any { keyword ->
         val trimmedName = name.trim()
         trimmedName.contains(keyword, ignoreCase = true) &&
                 iGpuExcludeKeywords.none { trimmedName.contains(it, ignoreCase = true) }
+    }.also {
+        if(it) {
+            logger.warn { "Engine started at iGPU" }
+        }
     }
     override val id: String = graphicsCard.deviceId
     override val vRam: Long = graphicsCard.vRam

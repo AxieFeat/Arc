@@ -11,7 +11,7 @@ typedef long long jlong;
 typedef void* jclass;
 typedef void* JNIEnv;
 
-extern "C" JNIEXPORT jlong JNICALL Java_arc_gles_window_NativeEGLBridge_getNativeLayer
+extern "C" JNIEXPORT jlong JNICALL Java_arc_window_egl_NativeEGLBridge_getNativeLayer
   (JNIEnv* env, jclass clazz, jlong nsWindowPtr)
 {
     return nsWindowPtr;

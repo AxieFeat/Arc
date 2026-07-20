@@ -10,7 +10,6 @@ object ScreenshotBind : Binding {
     override val key: KeyCode = KeyCode.KEY_F
 
     override fun onPress(key: KeyCode) {
-        println("Take screenshot")
         VoxelGame.application.screenshot(classpath("screenshots"), "test.png")
     }
 }

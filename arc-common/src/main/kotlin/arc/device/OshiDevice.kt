@@ -1,6 +1,7 @@
 package arc.device
 
 import arc.OSPlatform
+import io.github.oshai.kotlinlogging.KotlinLogging
 import oshi.SystemInfo
 import oshi.util.PlatformEnum
 
@@ -10,11 +11,12 @@ import oshi.util.PlatformEnum
  */
 abstract class OshiDevice : Device {
 
+    private val logger = KotlinLogging.logger {}
     private val systemInfo = SystemInfo()
 
     override val os: OSPlatform = PlatformEnum.getCurrentPlatform().toOsPlatform().also {
         if(it == OSPlatform.UNKNOWN) {
-            println("OS not supported: ${PlatformEnum.getCurrentPlatform().name}")
+            logger.error { "OS not supported: ${PlatformEnum.getCurrentPlatform().name}" }
         }
     }
 

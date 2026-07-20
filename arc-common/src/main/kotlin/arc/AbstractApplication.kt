@@ -3,20 +3,16 @@ package arc
 import arc.OS.execSafe
 import arc.files.SimpleLocationSpace
 import arc.files.LocationSpace
-import org.lwjgl.glfw.GLFW
+import io.github.oshai.kotlinlogging.KLogger
 import java.io.File
+import kotlin.time.Clock
+import kotlin.time.Instant
 
 abstract class AbstractApplication : Application {
 
     override val locationSpace: LocationSpace = SimpleLocationSpace
-
-    override var clipboardText: String
-        get() {
-            return GLFW.glfwGetClipboardString(window.handle) ?: ""
-        }
-        set(value) {
-            GLFW.glfwSetClipboardString(window.handle, value)
-        }
+    protected abstract val logger: KLogger
+    private var initTime: Instant? = null
 
     override fun openURL(url: String) {
         Thread {
@@ -46,5 +42,22 @@ abstract class AbstractApplication : Application {
 
             if(!result) throw UnsupportedOperationException("Occurred error in the opening folder.")
         }.also { it.isDaemon = true }.start()
+    }
+
+    override fun init() {
+        initTime = Clock.System.now()
+        logger.info { "Initializing application..." }
+        logger.info { "Running with Java ${backend.device.java}" }
+    }
+
+    protected fun printStartedMessage() {
+        logger.info { "Application started" }
+        logger.info { "Selected platform: ${backend.device.os}" }
+        logger.info { "CPU | GPU: [ ${backend.device.cpu} | ${backend.device.gpu} ]" }
+        logger.info { "Render backend: ${backend.name.uppercase()} [${backend.version}]" }
+        logger.info { "Window backend: ${window.backend.name.uppercase()} [${window.backend.version}]" }
+        initTime?.let { time ->
+            logger.info { "Started in ${Clock.System.now().minus(time).inWholeMilliseconds} ms" }
+        }
     }
 }

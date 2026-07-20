@@ -26,6 +26,11 @@ interface Window {
     val backend: WindowBackend
 
     /**
+     * Represents the current text stored in the clipboard of current window.
+     */
+    var clipboardText: String
+
+    /**
      * The name of the window.
      */
     var name: String
@@ -115,6 +120,9 @@ interface Window {
 
         /**
          * Create new instance of [Window].
+         *
+         * In fact, we not recommend use factory of window. Because it can return not correct instance type.
+         * In example, you wait GLFW window, but expected EGL. Check type of returned instance!
          *
          * @param name Name of a window.
          * @param handler Event handler of a window.
