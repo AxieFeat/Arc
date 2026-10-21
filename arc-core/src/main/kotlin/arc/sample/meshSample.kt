@@ -16,7 +16,7 @@ internal fun meshSample() {
     val application = Application.find()
 
     // Now we can create buffer via render system drawer.
-    val buffer: DrawBuffer = application.renderSystem.drawer.begin(
+    val buffer: DrawBuffer = application.renderContext.drawer.begin(
         mode = DrawerMode.TRIANGLES, // We recommend using TRIANGLES. Also, do NOT use QUADS, it's deprecated.
         format = VertexFormat.builder()
             .add(VertexFormatElement.POSITION)
@@ -47,15 +47,15 @@ internal fun meshSample() {
 
     // Create a simple game loop (Just as an example, you should have your own, only one game loop).
     while (!application.window.shouldClose()) {
-        application.renderSystem.beginFrame() // Begin render frame.
+        application.renderContext.beginFrame() // Begin render frame.
 
         shader.bind() // Binds our shader in the current context.
 
         // Now we can render our buffer via drawer.
-        application.renderSystem.drawer.draw(vertexBuffer)
+        application.renderContext.drawer.draw(vertexBuffer)
 
         shader.unbind() // In this case we don't need to unbind the shader, but in real games it is quite important.
 
-        application.renderSystem.endFrame() // End render frame.
+        application.renderContext.endFrame() // End render frame.
     }
 }

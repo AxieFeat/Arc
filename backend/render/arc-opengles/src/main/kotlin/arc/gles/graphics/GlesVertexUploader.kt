@@ -37,7 +37,7 @@ internal object GlesVertexUploader {
 
         var offset = 0
         for ((index, element) in vertexBuffer.format.elements.withIndex()) {
-            glBindAttribLocation(GlesRenderSystem.shader.id, index, element.name)
+            glBindAttribLocation(GlesRenderContext.shader.id, index, element.name)
 
             glEnableVertexAttribArray(index)
             when (element.type) {

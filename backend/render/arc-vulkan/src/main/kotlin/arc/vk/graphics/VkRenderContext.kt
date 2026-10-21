@@ -1,24 +1,19 @@
 package arc.vk.graphics
 
 import arc.graphics.Drawer
-import arc.graphics.EmptyScene
 import arc.graphics.EmptyShaderInstance
-import arc.graphics.RenderSystem
-import arc.graphics.scene.Scene
+import arc.graphics.RenderContext
 import arc.shader.ShaderInstance
 import arc.texture.EmptyTexture
 import arc.texture.Texture
 import arc.vk.VkApplication
 
-object VkRenderSystem : RenderSystem {
+object VkRenderContext : RenderContext {
 
     override var shader: ShaderInstance = EmptyShaderInstance
     override var texture: Texture = EmptyTexture
 
     override val drawer: Drawer = VkDrawer
-
-    @set:JvmName("_setScene")
-    override var scene: Scene = EmptyScene
 
     override fun bindShader(shader: ShaderInstance) {
         this.shader = shader
@@ -40,10 +35,6 @@ object VkRenderSystem : RenderSystem {
         shader = EmptyShaderInstance
         texture.unbind()
         texture = EmptyTexture
-    }
-
-    override fun setScene(scene: Scene) {
-        this.scene = scene
     }
 
     override fun enableDepthTest() {

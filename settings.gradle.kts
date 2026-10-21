@@ -3,6 +3,7 @@
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 rootProject.name = "arc"
+includeBuild("arc-native")
 
 dependencyResolutionManagement {
     repositoriesMode = RepositoriesMode.PREFER_SETTINGS
@@ -30,6 +31,7 @@ project("annotations")
 project("annotation-processor")
 project("core")
 project("common")
+project("extra")
 
 // Render backends
 render("opengl")

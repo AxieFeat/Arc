@@ -35,7 +35,7 @@ object MainMenuScreen : Screen("main-menu") {
         camera.position = Vector3f()
         camera.update()
 
-        application.renderSystem.enableCull()
+        application.renderContext.enableCull()
     }
 
     override fun doRender() {

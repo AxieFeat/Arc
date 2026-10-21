@@ -3,9 +3,9 @@ package arc.gl
 import arc.AbstractApplication
 import arc.Application
 import arc.ApplicationBackend
-import arc.gl.graphics.GlRenderSystem
+import arc.gl.graphics.GlRenderContext
 import arc.gl.window.GlfwGlWindow
-import arc.graphics.RenderSystem
+import arc.graphics.RenderContext
 import arc.window.EmptyWindowHandler
 import io.github.oshai.kotlinlogging.KLogger
 import io.github.oshai.kotlinlogging.KotlinLogging
@@ -27,12 +27,12 @@ internal object GlApplication : AbstractApplication() {
     override val backend: ApplicationBackend = GlApplicationBackend
 
     private var _window: GlfwGlWindow? = null
-    private var _renderSystem: GlRenderSystem? = null
+    private var _renderSystem: GlRenderContext? = null
 
     override val window: GlfwGlWindow
         get() = checkNotNull(_window) {
             "Window is not initialized yet. Accessing it before Application.init() is not allowed." }
-    override val renderSystem: RenderSystem
+    override val renderContext: RenderContext
         get() = checkNotNull(_renderSystem) {
             "RenderSystem is not initialized yet. Accessing it before Application.init() is not allowed."
         }
@@ -47,7 +47,7 @@ internal object GlApplication : AbstractApplication() {
             isResizable = true
         )
 
-        _renderSystem = GlRenderSystem
+        _renderSystem = GlRenderContext
 
         window.create()
 

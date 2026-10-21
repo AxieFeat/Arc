@@ -2,10 +2,8 @@ package arc.gles.graphics
 
 import arc.gles.GlesApplication
 import arc.graphics.Drawer
-import arc.graphics.EmptyScene
 import arc.graphics.EmptyShaderInstance
-import arc.graphics.RenderSystem
-import arc.graphics.scene.Scene
+import arc.graphics.RenderContext
 import arc.shader.ShaderInstance
 import arc.texture.EmptyTexture
 import arc.texture.Texture
@@ -26,15 +24,12 @@ import org.lwjgl.opengles.GLES20.glDisable
 import org.lwjgl.opengles.GLES20.glEnable
 import org.lwjgl.opengles.GLES20.glViewport
 
-internal object GlesRenderSystem : RenderSystem {
+internal object GlesRenderContext : RenderContext {
 
     override var shader: ShaderInstance = EmptyShaderInstance
     override var texture: Texture = EmptyTexture
 
     override val drawer: Drawer = GlesDrawer
-
-    @set:JvmName("_setScene")
-    override var scene: Scene = EmptyScene
 
     override fun bindShader(shader: ShaderInstance) {
         this.shader = shader
@@ -59,10 +54,6 @@ internal object GlesRenderSystem : RenderSystem {
         texture.unbind()
         texture = EmptyTexture
         GlesApplication.window.swapBuffers()
-    }
-
-    override fun setScene(scene: Scene) {
-        this.scene = scene
     }
 
     override fun enableDepthTest() {

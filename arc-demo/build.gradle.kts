@@ -1,4 +1,5 @@
 dependencies {
+    implementation(projects.arcExtra)
     implementation(projects.arcOpengl)
     implementation(projects.arcOpengles)
     implementation(projects.arcVulkan)

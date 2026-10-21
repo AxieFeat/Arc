@@ -1,13 +1,12 @@
 package arc.graphics
 
-import arc.graphics.scene.Scene
 import arc.shader.ShaderInstance
 import arc.texture.Texture
 
 /**
  * This interface represents the manager of rendering.
  */
-interface RenderSystem {
+interface RenderContext {
 
     /**
      * Shader in the current context.
@@ -23,11 +22,6 @@ interface RenderSystem {
      * Drawer of a render system.
      */
     val drawer: Drawer
-
-    /**
-     * Current game scene. Render scene represents all viewable objects in the screen.
-     */
-    val scene: Scene
 
     /**
      * Bind specific shader in current context.
@@ -52,13 +46,6 @@ interface RenderSystem {
      * Completes the rendering process for the current frame.
      */
     fun endFrame()
-
-    /**
-     * Sets the current scene to the provided scene object.
-     *
-     * @param scene The scene to be set as the current scene.
-     */
-    fun setScene(scene: Scene)
 
     /**
      * Enable depth testing for the rendering system.

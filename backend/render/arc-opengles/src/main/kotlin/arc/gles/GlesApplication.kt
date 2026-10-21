@@ -3,7 +3,7 @@ package arc.gles
 import arc.AbstractApplication
 import arc.Application
 import arc.ApplicationBackend
-import arc.gles.graphics.GlesRenderSystem
+import arc.gles.graphics.GlesRenderContext
 import arc.window.EmptyWindowHandler
 import arc.window.egl.EglGlesWindow
 import io.github.oshai.kotlinlogging.KLogger
@@ -26,12 +26,12 @@ internal object GlesApplication : AbstractApplication() {
     override val backend: ApplicationBackend = GlesApplicationBackend
 
     private var _window: EglGlesWindow? = null
-    private var _renderSystem: GlesRenderSystem? = null
+    private var _renderSystem: GlesRenderContext? = null
 
     override val window: EglGlesWindow
         get() = checkNotNull(_window) {
             "Window is not initialized yet. Accessing it before Application.init() is not allowed." }
-    override val renderSystem: GlesRenderSystem
+    override val renderContext: GlesRenderContext
         get() = checkNotNull(_renderSystem) {
             "RenderSystem is not initialized yet. Accessing it before Application.init() is not allowed."
         }
@@ -47,7 +47,7 @@ internal object GlesApplication : AbstractApplication() {
             isResizable = true,
         )
 
-        _renderSystem = GlesRenderSystem
+        _renderSystem = GlesRenderContext
 
         window.create()
 

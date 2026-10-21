@@ -10,10 +10,6 @@ import arc.graphics.vertex.VertexFormatElement
 import arc.model.Face
 import arc.texture.TextureAtlas
 import arc.util.Color
-import org.joml.Vector3f
-import org.joml.component1
-import org.joml.component2
-import org.joml.component3
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.Executors
 
@@ -264,6 +260,6 @@ class ChunkSectionRenderer(
 
         private const val aoFactor = 0.15f
 
-        private val drawer = Application.find().renderSystem.drawer
+        private val drawer = Application.find().renderContext.drawer
     }
 }

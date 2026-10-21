@@ -32,7 +32,7 @@ internal data class GlDisplay(
         .add(VertexFormatElement.UV)
         .build()
 
-    private val buffer = application.renderSystem.drawer.begin(DrawerMode.TRIANGLES, format, 256).use { buffer ->
+    private val buffer = application.renderContext.drawer.begin(DrawerMode.TRIANGLES, format, 256).use { buffer ->
         val minX = 0f
         val minY = 0f
         val maxX = 20f
@@ -59,7 +59,7 @@ internal data class GlDisplay(
 
         frameBuffer.bindTexture()
 
-        application.renderSystem.drawer.draw(buffer)
+        application.renderContext.drawer.draw(buffer)
 
         frameBuffer.unbindTexture()
 

@@ -13,7 +13,7 @@ object CameraControlBind : Binding {
         private set(value) {
             field = value
 
-            VoxelGame.application.renderSystem.scene.isShowCursor = !value
+            VoxelGame.screen?.isShowCursor = !value
         }
 
     override fun onPress(key: KeyCode) {

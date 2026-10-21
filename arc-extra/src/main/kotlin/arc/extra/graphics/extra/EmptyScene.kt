@@ -1,9 +1,9 @@
-package arc.graphics
+package arc.extra.graphics.extra
 
-import arc.graphics.scene.Scene
+import arc.graphics.Camera
 
 /**
- * Empty realization of [arc.graphics.scene.Scene].
+ * Empty realization of [arc.extra.graphics.extra.Scene].
  *
  * Can be used as a stub instead of the nullable type.
  */

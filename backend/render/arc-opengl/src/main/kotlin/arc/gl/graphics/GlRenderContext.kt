@@ -2,10 +2,8 @@ package arc.gl.graphics
 
 import arc.gl.GlApplication
 import arc.graphics.Drawer
-import arc.graphics.EmptyScene
 import arc.graphics.EmptyShaderInstance
-import arc.graphics.RenderSystem
-import arc.graphics.scene.Scene
+import arc.graphics.RenderContext
 import arc.shader.ShaderInstance
 import arc.texture.EmptyTexture
 import arc.texture.Texture
@@ -26,15 +24,12 @@ import org.lwjgl.opengl.GL11.glEnable
 import org.lwjgl.opengl.GL11.glViewport
 import org.lwjgl.opengl.GL14.glBlendFuncSeparate
 
-internal object GlRenderSystem : RenderSystem {
+internal object GlRenderContext : RenderContext {
 
     override var shader: ShaderInstance = EmptyShaderInstance
     override var texture: Texture = EmptyTexture
 
     override val drawer: Drawer = GlDrawer
-
-    @set:JvmName("_setScene")
-    override var scene: Scene = EmptyScene
 
     override fun bindShader(shader: ShaderInstance) {
         this.shader = shader
@@ -59,10 +54,6 @@ internal object GlRenderSystem : RenderSystem {
         texture.unbind()
         texture = EmptyTexture
         GlApplication.window.swapBuffers()
-    }
-
-    override fun setScene(scene: Scene) {
-        this.scene = scene
     }
 
     override fun enableDepthTest() {

@@ -16,7 +16,7 @@ import org.joml.Vector2f
 
 object FractalScreen : Screen("fractal") {
 
-    private val drawer = application.renderSystem.drawer
+    private val drawer = application.renderContext.drawer
 
     var needUpdate = true
 
@@ -43,16 +43,16 @@ object FractalScreen : Screen("fractal") {
             uniform int maxIter;
 
             out vec4 FragColor;
-            
+
             void main() {
                 vec2 fragCoord = gl_FragCoord.xy;
-            
+
                 vec2 uv = (fragCoord - iResolution * 0.5) * scale + center;
                 vec2 z = uv;
                 vec2 c = juliaC;
-            
+
                 int iter = 0;
-            
+
                 for (int i = 0; i < maxIter; i++) {
                     if (dot(z, z) > 4.0) break;
                     z = vec2(
@@ -61,31 +61,31 @@ object FractalScreen : Screen("fractal") {
                     );
                     iter++;
                 }
-            
+
                 float zn = dot(z, z);
-                float smoothIter = (iter == maxIter) 
-                    ? float(maxIter) 
+                float smoothIter = (iter == maxIter)
+                    ? float(maxIter)
                     : float(iter) - log2(log2(zn)) + 4.0;
-            
+
                 float norm = log(1.0 + smoothIter) / log(float(maxIter));
-            
+
                 vec3 color;
                 if (iter == maxIter) {
                     color = vec3(0.0);
                 } else {
                     float t = norm;
-                    
+
                     color.r = 0.2 * sin(10.0 * t + 1.0) + 0.3;
-                    color.g = 0.8 + 0.2 * cos(15.0 * t);      
+                    color.g = 0.8 + 0.2 * cos(15.0 * t);
                     color.b = 0.3 + 0.2 * sin(12.0 * t + 2.0);
-                
+
                     color = clamp(color, 0.0, 1.0);
                     color *= smoothstep(0.0, 1.0, pow(norm, 0.8));
                 }
-            
+
                 vec3 background = vec3(0.05, 0.07, 0.09);
                 color = mix(background, color, 1.0 - exp(-3.0 * norm));
-            
+
                 FragColor = vec4(color, 1.0);
             }
         """.trimIndent().asRuntimeAsset()

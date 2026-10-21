@@ -37,7 +37,7 @@ class CubeEntity(
 
     private val cubeMatrix = Matrix4f()
 
-    private val buffer = application.renderSystem.drawer.begin(DrawerMode.TRIANGLES, vertexFormat, 200).also {
+    private val buffer = application.renderContext.drawer.begin(DrawerMode.TRIANGLES, vertexFormat, 200).also {
         for (i in indices.indices step 6) {
             val (row, col) = texCoords[i / 6]
 
@@ -68,9 +68,9 @@ class CubeEntity(
         shader.bind()
         atlas.bind()
 
-        application.renderSystem.enableDepthTest()
-        application.renderSystem.drawer.draw(vertexBuffer)
-        application.renderSystem.disableDepthTest()
+        application.renderContext.enableDepthTest()
+        application.renderContext.drawer.draw(vertexBuffer)
+        application.renderContext.disableDepthTest()
 
         atlas.unbind()
         shader.unbind()

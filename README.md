@@ -22,6 +22,7 @@ Basic "cave-game" on this engine. (You can see code in `arc-demo`)
 ### Project Structure
 - **arc-core**: Main engine API interfaces
 - **arc-common**: Common implementation of core features (math, window, etc.)
+- **arc-extra**: Extra utilities and helpers for engine usage
 - **arc-opengl**: OpenGL-based engine implementation
 - **arc-opengles**: OpenGLES-based engine implementation. In fact created for Google ANGLE.
 - **arc-vulkan**: Vulkan-based engine implementation

@@ -2,7 +2,7 @@ package arc
 
 import arc.Arc.single
 import arc.files.LocationSpace
-import arc.graphics.RenderSystem
+import arc.graphics.RenderContext
 import arc.window.Window
 import org.jetbrains.annotations.ApiStatus
 import java.io.File
@@ -46,7 +46,7 @@ interface Application {
     /**
      * Render system of application.
      */
-    val renderSystem: RenderSystem
+    val renderContext: RenderContext
 
     /**
      * Location space of application.

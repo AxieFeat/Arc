@@ -1,4 +1,4 @@
-package arc.graphics.scene
+package arc.extra.graphics.extra
 
 import arc.graphics.Camera
 

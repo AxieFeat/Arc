@@ -14,7 +14,7 @@ internal fun drawBufferSample() {
     val application = Application.find()
 
     // Now we can create buffer via render system drawer.
-    val buffer: DrawBuffer = application.renderSystem.drawer.begin(
+    val buffer: DrawBuffer = application.renderContext.drawer.begin(
         mode = DrawerMode.TRIANGLES, // We recommend using TRIANGLES. Also, do NOT use QUADS, it's deprecated.
         format = VertexFormat.builder()
             .add(VertexFormatElement.POSITION)

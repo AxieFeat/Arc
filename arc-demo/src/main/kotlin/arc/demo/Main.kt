@@ -19,7 +19,7 @@ fun main() {
         "opengl" -> OpenGL.preload()
         "vulkan" -> Vulkan.preload()
 
-        else -> OpenGLES.preload()
+        else -> OpenGL.preload()
     }
 
     val provider = ArcObjectProvider

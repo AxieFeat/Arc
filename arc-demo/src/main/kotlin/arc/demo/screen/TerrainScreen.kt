@@ -12,7 +12,6 @@ import arc.demo.world.World
 import arc.demo.world.block.Block
 import arc.files.classpath
 import arc.graphics.DrawerMode
-import arc.graphics.EmptyShaderInstance
 import arc.input.bind
 import arc.input.keyboard
 import arc.math.AABB
@@ -35,7 +34,7 @@ object TerrainScreen : Screen("terrain") {
         Blocks // We should load texture in blocks list
     }
 
-    private val drawer = application.renderSystem.drawer
+    private val drawer = application.renderContext.drawer
 
     private val font = FontLoader.load(classpath("arc/font/Monocraft.json").asFileAsset())
     private val matrix = Matrix4f().ortho(0f, application.window.width.toFloat(), 0f, application.window.height.toFloat(), -1f, 1f)
@@ -129,7 +128,7 @@ object TerrainScreen : Screen("terrain") {
         application.keyboard.bind(CameraControlBind)
         application.keyboard.bind(ScreenshotBind)
 
-        application.renderSystem.enableCull()
+        application.renderContext.enableCull()
 
         application.window.isVsync = false
 
@@ -328,9 +327,9 @@ object TerrainScreen : Screen("terrain") {
     }
 
     private fun renderSky() {
-        application.renderSystem.disableDepthTest()
+        application.renderContext.disableDepthTest()
         renderStars()
-        application.renderSystem.enableDepthTest()
+        application.renderContext.enableDepthTest()
     }
 
     private fun renderStars() {

@@ -6,7 +6,7 @@ import arc.asset.asRuntimeAsset
 import arc.gles.OpenGLES
 import arc.graphics.DrawBuffer
 import arc.graphics.DrawerMode
-import arc.graphics.RenderSystem
+import arc.graphics.RenderContext
 import arc.graphics.vertex.VertexBuffer
 import arc.graphics.vertex.VertexFormat
 import arc.graphics.vertex.VertexFormatElement
@@ -29,28 +29,28 @@ fun main() {
     val shader: ShaderInstance = getShaderInstance()
     shader.compileShaders()
 
-    val renderSystem: RenderSystem = application.renderSystem
+    val renderContext: RenderContext = application.renderContext
 
     // Create buffer with our vertices
     val buffer: VertexBuffer = createBuffer(application)
 
     while (!application.window.shouldClose()) {
         // Begin render frame
-        renderSystem.beginFrame()
+        renderContext.beginFrame()
 
         shader.bind()
-        renderSystem.drawer.draw(buffer)
+        renderContext.drawer.draw(buffer)
         shader.unbind()
 
         // End frame
-        renderSystem.endFrame()
+        renderContext.endFrame()
     }
 }
 
 private fun getShaderInstance(): ShaderInstance {
     val vertexShader = """
         #version 300 es
-        
+
         precision highp float;
 
         in vec3 Position;
@@ -63,12 +63,12 @@ private fun getShaderInstance(): ShaderInstance {
             gl_Position = vec4(Position, 1.0);
 
             vertexColor = Color;
-        } 
+        }
         """.trimIndent().asRuntimeAsset()
 
     val fragmentShader = """
         #version 300 es
-        
+
         precision highp float;
 
         in vec4 vertexColor;
@@ -87,7 +87,7 @@ private fun getShaderInstance(): ShaderInstance {
 }
 
 private fun createBuffer(application: Application): VertexBuffer {
-    val buffer: DrawBuffer = application.renderSystem.drawer.begin(
+    val buffer: DrawBuffer = application.renderContext.drawer.begin(
         DrawerMode.TRIANGLES,
         VertexFormat.builder()
             .add(VertexFormatElement.POSITION)

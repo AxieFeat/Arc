@@ -3,9 +3,9 @@ package arc.vk
 import arc.AbstractApplication
 import arc.Application
 import arc.ApplicationBackend
-import arc.graphics.RenderSystem
+import arc.graphics.RenderContext
 import arc.vk.device.VulkanPhysicalDevice
-import arc.vk.graphics.VkRenderSystem
+import arc.vk.graphics.VkRenderContext
 import arc.vk.window.GlfwVkWindow
 import arc.window.EmptyWindowHandler
 import io.github.oshai.kotlinlogging.KLogger
@@ -19,13 +19,13 @@ internal object VkApplication : AbstractApplication() {
     override val backend: ApplicationBackend = VkApplicationBackend
 
     private var _window: GlfwVkWindow? = null
-    private var _renderSystem: RenderSystem? = null
+    private var _renderContext: RenderContext? = null
 
     override val window: GlfwVkWindow
         get() = checkNotNull(_window) {
             "Window is not initialized yet. Accessing it before Application.init() is not allowed." }
-    override val renderSystem: RenderSystem
-        get() = checkNotNull(_renderSystem) {
+    override val renderContext: RenderContext
+        get() = checkNotNull(_renderContext) {
             "RenderSystem is not initialized yet. Accessing it before Application.init() is not allowed."
         }
 
@@ -55,7 +55,7 @@ internal object VkApplication : AbstractApplication() {
         _instance = VulkanInstance()
         _physicalDevice = VulkanPhysicalDevice.createPhysicalDevice(instance)
 
-        _renderSystem = VkRenderSystem
+        _renderContext = VkRenderContext
 
         window.create()
 

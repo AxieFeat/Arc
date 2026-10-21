@@ -14,7 +14,7 @@ object FontLoader {
 
     fun load(asset: FileAsset): GlyphFont {
         return GlyphFont.from(
-            VoxelGame.application.renderSystem.drawer,
+            VoxelGame.application.renderContext.drawer,
             loadGlyphsFromJson(asset.file)
         )
     }

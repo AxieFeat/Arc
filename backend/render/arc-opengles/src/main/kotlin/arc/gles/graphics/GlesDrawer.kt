@@ -13,7 +13,7 @@ internal object GlesDrawer : Drawer {
     }
 
     override fun draw(matrix: Matrix4f, buffer: VertexBuffer) {
-        GlesRenderSystem.shader.setUniform("modelMatrix", matrix)
+        GlesRenderContext.shader.setUniform("modelMatrix", matrix)
 
         GlesVertexUploader.draw(buffer)
     }

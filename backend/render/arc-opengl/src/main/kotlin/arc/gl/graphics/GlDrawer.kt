@@ -13,7 +13,7 @@ internal object GlDrawer : Drawer {
     }
 
     override fun draw(matrix: Matrix4f, buffer: VertexBuffer) {
-        GlRenderSystem.shader.setUniform("modelMatrix", matrix)
+        GlRenderContext.shader.setUniform("modelMatrix", matrix)
 
         GlVertexUploader.draw(buffer)
     }

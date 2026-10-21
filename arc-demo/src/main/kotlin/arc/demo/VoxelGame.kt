@@ -2,13 +2,9 @@ package arc.demo
 
 import arc.Application
 import arc.audio.SoundEngine
-import arc.demo.screen.DarkVeilScreen
 import arc.demo.screen.FaultyTerminalScreen
 import arc.demo.screen.FractalScreen
-import arc.demo.screen.GalaxyScreen
-import arc.demo.screen.PlasmaScreen
 import arc.demo.screen.Screen
-import arc.demo.screen.TerrainScreen
 import arc.demo.shader.ShaderContainer
 import arc.graphics.vertex.VertexFormat
 import arc.input.GlfwInputEngine
@@ -19,6 +15,7 @@ object VoxelGame : WindowHandler {
 
     val application: Application = Application.find()
     private val soundEngine: SoundEngine = SoundEngine.find()
+    var screen: Screen? = null
 
     fun start() {
         application.init()
@@ -32,7 +29,7 @@ object VoxelGame : WindowHandler {
         application.window.handler = this
 
         // Demo with julia fractal.
-        setScreen(FractalScreen)
+        screen = FaultyTerminalScreen
 
         // Demo with minecraft-like game.
 //        setScreen(FaultyTerminalScreen)
@@ -53,18 +50,14 @@ object VoxelGame : WindowHandler {
         exitProcess(0)
     }
 
-    fun setScreen(screen: Screen) {
-        application.renderSystem.setScene(screen)
-    }
-
     // Infinity game loop.
     private fun loop() {
-        val renderSystem = application.renderSystem
+        val renderSystem = application.renderContext
 
         while (!application.window.shouldClose()) {
             renderSystem.beginFrame()
 
-            renderSystem.scene.render() // Render our scene.
+            screen?.render() // Render our scene.
 
             renderSystem.endFrame()
         }

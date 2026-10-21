@@ -108,7 +108,7 @@ interface ModelHandler : Cleanable {
          */
         @JvmStatic
         fun of(
-            drawer: Drawer = Application.find().renderSystem.drawer,
+            drawer: Drawer = Application.find().renderContext.drawer,
             model: Model
         ): ModelHandler {
             return single<Factory>().create(drawer, model)

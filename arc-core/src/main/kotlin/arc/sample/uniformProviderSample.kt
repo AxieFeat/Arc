@@ -3,6 +3,7 @@ package arc.sample
 
 import arc.Application
 import arc.asset.FileAsset
+import arc.graphics.Camera
 import arc.shader.AbstractUniformProvider
 import arc.shader.ShaderInstance
 import arc.shader.ShaderSettings
@@ -17,6 +18,9 @@ internal object UniformProviderSample : AbstractUniformProvider() {
 
     private val application = Application.find()
 
+    // ONLY for example. In real application you need use camera from your scene.
+    private val camera = Camera.of(1f, 1f , 1f)
+
     // Now we can configure uniforms for providing to shaders.
     init {
         // For example, we can provide projection and view matrices from the camera.
@@ -27,11 +31,11 @@ internal object UniformProviderSample : AbstractUniformProvider() {
             // This block of code calls in every time, when your bind shader.
 
             // Then we just call function of shader instance for setting uniform.
-            shader.setUniform(name, application.renderSystem.scene.camera.projection)
+            shader.setUniform(name, camera.projection)
         }
 
         addUniform("viewMatrix") { shader, name ->
-            shader.setUniform(name, application.renderSystem.scene.camera.view)
+            shader.setUniform(name, camera.view)
         }
     }
 

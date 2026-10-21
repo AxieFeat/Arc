@@ -1,7 +1,7 @@
 package arc.gles.shader
 
 import arc.asset.StringAsset
-import arc.gles.graphics.GlesRenderSystem
+import arc.gles.graphics.GlesRenderContext
 import arc.graphics.EmptyShaderInstance
 import arc.graphics.vertex.VertexType
 import arc.shader.ShaderInstance
@@ -70,7 +70,7 @@ internal class GlesShaderInstance(
 
     override fun bind() {
         glUseProgram(id)
-        GlesRenderSystem.shader = this
+        GlesRenderContext.shader = this
 
         providers.forEach { it.provide(this) }
     }
@@ -78,7 +78,7 @@ internal class GlesShaderInstance(
     override fun unbind() {
         glUseProgram(0)
 
-        GlesRenderSystem.shader = EmptyShaderInstance
+        GlesRenderContext.shader = EmptyShaderInstance
     }
 
     override fun cleanup() {
