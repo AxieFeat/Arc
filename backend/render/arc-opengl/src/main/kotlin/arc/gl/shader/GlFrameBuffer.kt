@@ -1,176 +1,103 @@
 package arc.gl.shader
 
-import arc.gl.graphics.GlDrawer
+import arc.gl.graphics.GlRenderContext
 import arc.graphics.DrawBuffer
 import arc.graphics.DrawerMode
+import arc.graphics.TextureSampling
 import arc.graphics.vertex.VertexFormat
 import arc.graphics.vertex.VertexFormatElement
 import arc.shader.FrameBuffer
 import org.lwjgl.opengl.GL11.GL_COLOR_BUFFER_BIT
 import org.lwjgl.opengl.GL11.GL_DEPTH_BUFFER_BIT
-import org.lwjgl.opengl.GL11.GL_LINEAR
-import org.lwjgl.opengl.GL11.GL_RGBA
-import org.lwjgl.opengl.GL11.GL_TEXTURE_2D
-import org.lwjgl.opengl.GL11.GL_TEXTURE_MAG_FILTER
-import org.lwjgl.opengl.GL11.GL_TEXTURE_MIN_FILTER
-import org.lwjgl.opengl.GL11.GL_UNSIGNED_BYTE
-import org.lwjgl.opengl.GL11.glBindTexture
 import org.lwjgl.opengl.GL11.glClear
-import org.lwjgl.opengl.GL11.glClearColor
-import org.lwjgl.opengl.GL11.glDeleteTextures
-import org.lwjgl.opengl.GL11.glGenTextures
-import org.lwjgl.opengl.GL11.glTexImage2D
-import org.lwjgl.opengl.GL11.glTexParameteri
-import org.lwjgl.opengl.GL11.glViewport
-import org.lwjgl.opengl.GL13.GL_TEXTURE0
-import org.lwjgl.opengl.GL13.glActiveTexture
-import org.lwjgl.opengl.GL14.GL_DEPTH_COMPONENT24
-import org.lwjgl.opengl.GL30.GL_COLOR_ATTACHMENT0
-import org.lwjgl.opengl.GL30.GL_DEPTH_ATTACHMENT
-import org.lwjgl.opengl.GL30.GL_FRAMEBUFFER
-import org.lwjgl.opengl.GL30.GL_FRAMEBUFFER_COMPLETE
-import org.lwjgl.opengl.GL30.GL_RENDERBUFFER
-import org.lwjgl.opengl.GL30.glBindFramebuffer
-import org.lwjgl.opengl.GL30.glBindRenderbuffer
-import org.lwjgl.opengl.GL30.glCheckFramebufferStatus
-import org.lwjgl.opengl.GL30.glDeleteFramebuffers
-import org.lwjgl.opengl.GL30.glDeleteRenderbuffers
-import org.lwjgl.opengl.GL30.glFramebufferRenderbuffer
-import org.lwjgl.opengl.GL30.glFramebufferTexture2D
-import org.lwjgl.opengl.GL30.glGenFramebuffers
-import org.lwjgl.opengl.GL30.glGenRenderbuffers
-import org.lwjgl.opengl.GL30.glRenderbufferStorage
-import org.lwjgl.system.MemoryUtil
 
-internal class GlFrameBuffer(
-    override var width: Int,
-    override var height: Int,
-    override val isUseDepth: Boolean
-) : FrameBuffer {
+/** Legacy facade backed by the scoped target contract. render composites without clearing the destination. */
+internal class GlFrameBuffer(width: Int, height: Int, override val isUseDepth: Boolean) : FrameBuffer {
 
-    private var fboId: Int = 0
-    private var textureId: Int = 0
-    private var depthBufferId: Int = 0
-
-    override val textureWidth: Int = width
-    override val textureHeight: Int = height
-
-    init {
-        createFramebuffer(width, height)
-    }
-
-    override fun bind(viewport: Boolean) {
-        glBindFramebuffer(GL_FRAMEBUFFER, fboId)
-        if (viewport) {
-            glViewport(0, 0, width, height)
-        }
-    }
-
-    override fun unbind() {
-        glBindFramebuffer(GL_FRAMEBUFFER, 0)
-    }
-
-    override fun bindTexture() {
-        glActiveTexture(GL_TEXTURE0)
-        glBindTexture(GL_TEXTURE_2D, textureId)
-    }
-
-    override fun unbindTexture() {
-        glBindTexture(GL_TEXTURE_2D, 0)
-    }
-
-    override fun setColor(red: Float, green: Float, blue: Float, alpha: Float) {
-        glClearColor(red, green, blue, alpha)
-    }
-
-    override fun cleanup() {
-        glDeleteFramebuffers(fboId)
-        glDeleteTextures(textureId)
-        if (isUseDepth) {
-            glDeleteRenderbuffers(depthBufferId)
-        }
-    }
-
-    override fun render(width: Int, height: Int) {
-        glBindFramebuffer(GL_FRAMEBUFFER, 0)
-        glViewport(0, 0, width, height)
-        glClear(GL_COLOR_BUFFER_BIT or GL_DEPTH_BUFFER_BIT)
-
-        bindTexture()
-
-        GlDrawer.draw(buffer)
-
-        unbindTexture()
-    }
-
-    override fun resize(width: Int, height: Int): Boolean {
-        if (width != this.width || height != this.height) {
-            this.width = width
-            this.height = height
-            createFramebuffer(width, height)
-            return true
-        }
-        return false
-    }
-
-    override fun clear() {
-        glClear(GL_COLOR_BUFFER_BIT or (if (isUseDepth) GL_DEPTH_BUFFER_BIT else 0))
-    }
-
-    private fun createFramebuffer(width: Int, height: Int) {
-        cleanup()
-
-        fboId = glGenFramebuffers()
-        glBindFramebuffer(GL_FRAMEBUFFER, fboId)
-
-        textureId = glGenTextures()
-        glBindTexture(GL_TEXTURE_2D, textureId)
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, MemoryUtil.NULL)
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR)
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR)
-        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, textureId, 0)
-
-        depthBufferId = if (isUseDepth) {
-            val rbo = glGenRenderbuffers()
-            glBindRenderbuffer(GL_RENDERBUFFER, rbo)
-            glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, width, height)
-            glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, rbo)
-            rbo
-        } else {
-            0
-        }
-
-        check(glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE) {
-            "Framebuffer is not complete!"
-        }
-
-        glBindFramebuffer(GL_FRAMEBUFFER, 0)
-    }
-
-    companion object {
-
-        private val vertexFormat = VertexFormat.builder()
-            .add(VertexFormatElement.POSITION)
-            .add(VertexFormatElement.UV)
-            .build()
-
-        private val buffer = DrawBuffer.of(DrawerMode.TRIANGLES, vertexFormat, 256).use {
+    private val context = GlRenderContext
+    private val target = context.createRenderTarget(width, height, isUseDepth)
+    private val sampler = lazy { context.createSampler(TextureSampling.LINEAR) }
+    private val geometry = lazy {
+        val format = VertexFormat.builder().add(VertexFormatElement.POSITION).add(VertexFormatElement.UV).build()
+        DrawBuffer.of(DrawerMode.TRIANGLES, format, 30).use {
             it.addVertex(-1f, 1f, 0f).setTexture(0f, 1f)
             it.addVertex(-1f, -1f, 0f).setTexture(0f, 0f)
             it.addVertex(1f, -1f, 0f).setTexture(1f, 0f)
-
             it.addVertex(-1f, 1f, 0f).setTexture(0f, 1f)
             it.addVertex(1f, -1f, 0f).setTexture(1f, 0f)
             it.addVertex(1f, 1f, 0f).setTexture(1f, 1f)
-
             it.build()
         }
+    }
+    private var closed = false
+    override val width get() = target.width
+    override val height get() = target.height
+    override val textureWidth get() = target.width
+    override val textureHeight get() = target.height
+    override fun bind(viewport: Boolean) {
+        checkOpen()
+        context.bindTarget(target)
+        if (viewport) context.setViewport(0, 0, width, height)
+    }
+
+    override fun unbind() {
+        checkOpen()
+        context.bindTarget(null)
+    }
+
+    override fun bindTexture() {
+        checkOpen()
+        context.bindTexture(target.colorTexture)
+    }
+
+    override fun unbindTexture() {
+        checkOpen()
+        target.colorTexture.unbind()
+    }
+
+    override fun setColor(red: Float, green: Float, blue: Float, alpha: Float) {
+        checkOpen()
+        context.clearColor(red, green, blue, alpha)
+    }
+
+    override fun render(width: Int, height: Int) {
+        checkOpen()
+        require(width >= 0 && height >= 0)
+        if (width == 0 || height == 0) return
+        context.beginScopedPass(setOf(0)).use {
+            context.bindTarget(null)
+            context.setViewport(0, 0, width, height)
+            context.bindTexture(target.colorTexture)
+            context.bindSampler(sampler.value)
+            context.drawer.draw(geometry.value)
+        }
+    }
+
+    override fun resize(width: Int, height: Int): Boolean {
+        checkOpen()
+        return target.resize(width, height)
+    }
+
+    override fun clear() {
+        checkOpen()
+        glClear(GL_COLOR_BUFFER_BIT or if (isUseDepth) GL_DEPTH_BUFFER_BIT else 0)
+    }
+
+    override fun cleanup() {
+        if (closed) return
+        if (geometry.isInitialized()) geometry.value.cleanup()
+        if (sampler.isInitialized()) sampler.value.cleanup()
+        target.cleanup()
+        closed = true
+    }
+
+    private fun checkOpen() {
+        check(!closed) { "Framebuffer is closed" }
+        check(context.resourceGeneration == target.resourceGeneration) { "Framebuffer belongs to a stale or missing context" }
     }
 
     object Factory : FrameBuffer.Factory {
 
-        override fun create(width: Int, height: Int, useDepth: Boolean): FrameBuffer {
-            return GlFrameBuffer(width, height, useDepth)
-        }
+        override fun create(width: Int, height: Int, useDepth: Boolean): FrameBuffer = GlFrameBuffer(width, height, useDepth)
     }
 }

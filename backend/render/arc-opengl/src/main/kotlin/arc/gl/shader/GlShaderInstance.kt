@@ -1,6 +1,7 @@
 package arc.gl.shader
 
 import arc.asset.StringAsset
+import arc.gl.graphics.GlContextResource
 import arc.gl.graphics.GlRenderContext
 import arc.graphics.EmptyShaderInstance
 import arc.graphics.vertex.VertexType
@@ -51,24 +52,37 @@ internal class GlShaderInstance(
     override val vertex: String,
     override val fragment: String,
     override val settings: ShaderSettings
-) : ShaderInstance {
+) : GlContextResource(), ShaderInstance {
 
     override var id = 0
     private var vertexShaderId = 0
     private var fragmentShaderId = 0
 
     private val providers = mutableListOf<UniformProvider>()
+    private val uniformLocations = mutableMapOf<String, Int>()
 
     override fun compileShaders() {
+        requireCurrentContext()
+        cleanup()
         id = glCreateProgram()
-
-        vertexShaderId = createShader(vertex, GL_VERTEX_SHADER)
-        fragmentShaderId = createShader(fragment, GL_FRAGMENT_SHADER)
-
-        link()
+        try {
+            vertexShaderId = createShader(vertex, GL_VERTEX_SHADER)
+            fragmentShaderId = createShader(fragment, GL_FRAGMENT_SHADER)
+            link()
+        } catch (failure: Throwable) {
+            if (vertexShaderId != 0) glDeleteShader(vertexShaderId)
+            if (fragmentShaderId != 0) glDeleteShader(fragmentShaderId)
+            cleanup()
+            throw failure
+        } finally {
+            vertexShaderId = 0
+            fragmentShaderId = 0
+        }
     }
 
     override fun bind() {
+        requireCurrentContext()
+        check(id != 0) { "Shader is not compiled or is closed" }
         glUseProgram(id)
         GlRenderContext.shader = this
 
@@ -76,13 +90,18 @@ internal class GlShaderInstance(
     }
 
     override fun unbind() {
+        requireCurrentContext()
         glUseProgram(0)
 
         GlRenderContext.shader = EmptyShaderInstance
     }
 
     override fun cleanup() {
-        glDeleteProgram(id)
+        if (id != 0) {
+            if (isCurrentContext()) glDeleteProgram(id)
+            id = 0
+        }
+        uniformLocations.clear()
     }
 
     override fun addProvider(provider: UniformProvider) {
@@ -90,7 +109,7 @@ internal class GlShaderInstance(
     }
 
     override fun setUniform(name: String, value: Boolean) {
-        setUniform(name, if(value) 1 else 0)
+        setUniform(name, if (value) 1 else 0)
     }
 
     override fun setUniform(name: String, value: Int) {
@@ -144,6 +163,8 @@ internal class GlShaderInstance(
     }
 
     override fun uploadUniformBuffer(name: String, buffer: UniformBuffer) {
+        requireCurrentContext()
+        check(buffer.resourceGeneration == 0L || buffer.resourceGeneration == resourceGeneration) { "Uniform buffer belongs to an old context" }
         val blockIndex = glGetUniformBlockIndex(id, name)
         if (blockIndex != GL_INVALID_INDEX) {
             glUniformBlockBinding(id, blockIndex, 0)
@@ -152,9 +173,11 @@ internal class GlShaderInstance(
     }
 
     private fun uniform(name: String, value: Int.() -> Unit) {
-        val location: Int = glGetUniformLocation(id, name)
+        requireCurrentContext()
+        check(id != 0) { "Shader is not compiled or is closed" }
+        val location: Int = uniformLocations.getOrPut(name) { glGetUniformLocation(id, name) }
 
-        if(location != -1) {
+        if (location != -1) {
             value.invoke(location)
         }
     }
@@ -168,8 +191,10 @@ internal class GlShaderInstance(
         glShaderSource(shaderId, shaderCode)
         glCompileShader(shaderId)
 
-        check(glGetShaderi(shaderId, GL_COMPILE_STATUS) != 0) {
-            "Error compiling Shader code: ${glGetShaderInfoLog(shaderId, MAX_LOG_LENGTH)}"
+        if (glGetShaderi(shaderId, GL_COMPILE_STATUS) == 0) {
+            val message = glGetShaderInfoLog(shaderId, MAX_LOG_LENGTH)
+            glDeleteShader(shaderId)
+            error("Error compiling Shader code: $message")
         }
 
         glAttachShader(id, shaderId)

@@ -1,12 +1,18 @@
 package arc.input
 
 import arc.input.keyboard.GlfwKeyboardInput
-import arc.input.keyboard.GlfwKeyboardInput.isPressed
 import arc.input.keyboard.KeyboardInput
 import arc.input.mouse.GlfwMouseInput
 import arc.input.mouse.MouseInput
+import arc.window.KeyAction
+import arc.window.KeyboardEvent
+import arc.window.PointerButton
+import arc.window.PointerMotion
+import arc.window.PointerWheel
 import arc.window.Window
 import org.lwjgl.glfw.GLFW.GLFW_PRESS
+import org.lwjgl.glfw.GLFW.glfwGetKey
+import org.lwjgl.glfw.GLFW.glfwGetMouseButton
 import org.lwjgl.glfw.GLFW.glfwSetCursorPosCallback
 import org.lwjgl.glfw.GLFW.glfwSetKeyCallback
 import org.lwjgl.glfw.GLFW.glfwSetMouseButtonCallback
@@ -16,15 +22,30 @@ import java.util.concurrent.Executors
 @Suppress("unused")
 object GlfwInputEngine : InputEngine {
 
-    internal val executor = Executors.newFixedThreadPool(4)
+    private val executor by lazy { Executors.newFixedThreadPool(4) { r -> Thread(r, "arc-input-legacy").apply { isDaemon = true } } }
+    var legacyAsyncBindings: Boolean = false
+    internal fun executeBinding(action: () -> Unit) {
+        if (legacyAsyncBindings) executor.submit(action) else action()
+    }
+
+    private var subscription: AutoCloseable? = null
 
     private var window: Window? = null
 
     override val mouse: MouseInput
         get() = GlfwMouseInput
 
-    override  val keyboard: KeyboardInput
+    override val keyboard: KeyboardInput
         get() = GlfwKeyboardInput
+
+    override val physicalKeyboard: KeyboardInput = object : KeyboardInput by GlfwKeyboardInput {
+        override fun isPressed(key: KeyCode) = window?.let { glfwGetKey(it.handle, key.id) == GLFW_PRESS } ?: false
+        override fun isReleased(key: KeyCode) = !isPressed(key)
+    }
+    override val physicalMouse: MouseInput = object : MouseInput by GlfwMouseInput {
+        override fun isPressed(key: KeyCode) = window?.let { glfwGetMouseButton(it.handle, key.id) == GLFW_PRESS } ?: false
+        override fun isReleased(key: KeyCode) = !isPressed(key)
+    }
 
     /**
      * Hook `arc-input-glfw` to some window. You can hook only if window is initialized.
@@ -33,17 +54,36 @@ object GlfwInputEngine : InputEngine {
      */
     @JvmStatic
     fun hook(window: Window) {
+        subscription?.close()
         this.window = window
 
         GlfwMouseInput.window = window
         GlfwKeyboardInput.window = window
 
-        val handle = window.handle
+        subscription = window.events.subscribe(priority = -100) { event ->
+            when (event) {
+                is KeyboardEvent -> if (event.action != KeyAction.REPEAT) GlfwKeyboardInput.keyUpdate(
+                    KeyCode.fromId(event.physicalCode), event.action == KeyAction.PRESS
+                )
 
-        glfwSetKeyCallback(handle, ::onKey)
-        glfwSetMouseButtonCallback(handle, ::onMouseButton)
-        glfwSetCursorPosCallback(handle, ::onCursorMove)
-        glfwSetScrollCallback(handle, ::onScroll)
+                is PointerButton -> if (event.action != KeyAction.REPEAT) GlfwMouseInput.keyUpdate(
+                    KeyCode.fromId(event.button), event.action == KeyAction.PRESS
+                )
+
+                is PointerMotion -> GlfwMouseInput.positionUpdate(event.x, event.y)
+                is PointerWheel -> GlfwMouseInput.scrollUpdate(event.deltaX, event.deltaY)
+            }
+            false
+        }
+    }
+
+    @JvmStatic
+    fun unhook() {
+        subscription?.close()
+        subscription = null
+        window = null
+        GlfwKeyboardInput.window = null
+        GlfwMouseInput.window = null
     }
 
     private fun onKey(handle: Long, key: Int, scancode: Int, action: Int, mods: Int) {
@@ -68,12 +108,12 @@ object GlfwInputEngine : InputEngine {
 
     @JvmStatic
     internal fun checkForAll(keys: Set<KeyCode>, pressed: Boolean): Boolean {
-        if(!pressed) return false
+        if (!pressed) return false
 
         var status = true
 
         keys.forEach { key ->
-            if(!isPressed(key)) {
+            if (!keyboard.isPressed(key) && !mouse.isPressed(key)) {
                 status = false
             }
         }

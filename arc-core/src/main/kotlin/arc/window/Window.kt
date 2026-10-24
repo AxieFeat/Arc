@@ -10,6 +10,17 @@ import org.joml.Vector2i
  */
 interface Window {
 
+    /** Logical cursor/window units and framebuffer pixels are deliberately separate. */
+    val metrics: WindowMetrics
+        get() = WindowMetrics(width, height, width, height, focused = isFocus)
+
+    val events: WindowEvents
+        get() = throw UnsupportedOperationException("This window does not provide ordered events")
+
+    fun setCursor(shape: CursorShape) {
+        throw UnsupportedOperationException("Cursor shapes are not supported by this window")
+    }
+
     /**
      * Represents the unique native handle identifier for the window.
      */

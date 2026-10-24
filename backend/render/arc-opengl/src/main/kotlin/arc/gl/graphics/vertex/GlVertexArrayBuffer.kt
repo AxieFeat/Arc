@@ -1,121 +1,88 @@
 package arc.gl.graphics.vertex
 
+import arc.gl.graphics.GlContextResource
+import arc.gl.graphics.GlRenderContext
 import arc.graphics.DrawerMode
 import arc.graphics.vertex.VertexArrayBuffer
 import arc.graphics.vertex.VertexFormat
 import arc.graphics.vertex.VertexType
-import org.lwjgl.opengl.ARBVertexArrayObject.glBindVertexArray
-import org.lwjgl.opengl.ARBVertexArrayObject.glDeleteVertexArrays
-import org.lwjgl.opengl.ARBVertexArrayObject.glGenVertexArrays
+import java.nio.ByteBuffer
 import org.lwjgl.opengl.GL11.GL_FLOAT
 import org.lwjgl.opengl.GL11.GL_INT
 import org.lwjgl.opengl.GL11.GL_SHORT
 import org.lwjgl.opengl.GL11.GL_UNSIGNED_BYTE
-import org.lwjgl.opengl.GL15.GL_ARRAY_BUFFER
-import org.lwjgl.opengl.GL15.GL_STREAM_DRAW
-import org.lwjgl.opengl.GL15.glBindBuffer
-import org.lwjgl.opengl.GL15.glBufferData
-import org.lwjgl.opengl.GL15.glDeleteBuffers
-import org.lwjgl.opengl.GL15.glGenBuffers
-import org.lwjgl.opengl.GL15.glUnmapBuffer
 import org.lwjgl.opengl.GL20.glEnableVertexAttribArray
 import org.lwjgl.opengl.GL20.glVertexAttribPointer
-import org.lwjgl.opengl.GL30.GL_MAP_UNSYNCHRONIZED_BIT
-import org.lwjgl.opengl.GL30.GL_MAP_WRITE_BIT
-import org.lwjgl.opengl.GL30.glMapBufferRange
+import org.lwjgl.opengl.GL30.glBindVertexArray
+import org.lwjgl.opengl.GL30.glDeleteVertexArrays
+import org.lwjgl.opengl.GL30.glGenVertexArrays
 import org.lwjgl.opengl.GL30.glVertexAttribIPointer
-import org.lwjgl.system.MemoryUtil
-import java.nio.ByteBuffer
 
 internal class GlVertexArrayBuffer(
     override val mode: DrawerMode,
     override val format: VertexFormat,
-    private val buffer: ByteBuffer,
-    override var vertices: Int,
-    override val size: Int = buffer.capacity(),
-) : VertexArrayBuffer {
+    buffer: ByteBuffer,
+    vertices: Int,
+) : GlContextResource(), VertexArrayBuffer {
 
-    override var id: Int = glGenBuffers()
-    override var bindingId: Int = glGenVertexArrays()
+    private val data = GlVertexBuffer(mode, format, buffer, vertices)
+    override val id get() = data.id
+    override val size get() = data.size
+    override val vertices get() = data.vertices
+    override var bindingId = glGenVertexArrays()
+        private set
 
     init {
-        bind()
+        try {
+            GlRenderContext.beginScopedPass(emptySet()).use {
+                bind()
+                data.bind()
+                var offset = 0
+                format.elements.forEachIndexed { index, element ->
+                    glEnableVertexAttribArray(index)
+                    when (element.type) {
+                        VertexType.FLOAT -> glVertexAttribPointer(index, element.count, GL_FLOAT, false, format.nextOffset, offset.toLong())
+                        VertexType.UINT, VertexType.INT -> glVertexAttribIPointer(index, element.count, GL_INT, format.nextOffset, offset.toLong())
+                        VertexType.USHORT, VertexType.SHORT -> glVertexAttribPointer(
+                            index, element.count, GL_SHORT, false, format.nextOffset, offset.toLong()
+                        )
 
-        glBindBuffer(GL_ARRAY_BUFFER, id)
-        glBufferData(GL_ARRAY_BUFFER, size.toLong(), GL_STREAM_DRAW)
-        setupVertexAttributes()
-
-        unbind()
-
-        write(buffer, vertices)
+                        VertexType.UBYTE, VertexType.BYTE -> glVertexAttribPointer(
+                            index, element.count, GL_UNSIGNED_BYTE, true, format.nextOffset, offset.toLong()
+                        )
+                    }
+                    offset += element.size
+                }
+            }
+        } catch (failure: Throwable) {
+            cleanup()
+            throw failure
+        }
     }
 
     override fun bind() {
+        requireCurrentContext()
+        check(bindingId >= 0) { "Vertex array is closed" }
         glBindVertexArray(bindingId)
     }
 
     override fun unbind() {
+        requireCurrentContext()
         glBindVertexArray(0)
     }
 
-    private fun setupVertexAttributes() {
-        var offset = 0
-
-        for ((index, element) in format.elements.withIndex()) {
-            glEnableVertexAttribArray(index)
-
-            when (element.type) {
-                VertexType.FLOAT ->
-                    glVertexAttribPointer(index, element.count, GL_FLOAT, false, format.nextOffset, offset.toLong())
-                VertexType.UINT, VertexType.INT ->
-                    glVertexAttribIPointer(index, element.count, GL_INT, format.nextOffset, offset.toLong())
-                VertexType.USHORT, VertexType.SHORT ->
-                    glVertexAttribPointer(index, element.count, GL_SHORT, false, format.nextOffset, offset.toLong())
-                VertexType.UBYTE, VertexType.BYTE ->
-                    glVertexAttribPointer(index, element.count, GL_UNSIGNED_BYTE, true, format.nextOffset, offset.toLong())
-            }
-
-            offset += element.size
-        }
-    }
-
-    override fun write(buffer: ByteBuffer, vertices: Int) {
-        this.vertices = vertices
-
-        glBindBuffer(GL_ARRAY_BUFFER, id)
-
-        val ptr = glMapBufferRange(
-            GL_ARRAY_BUFFER, 0, buffer.capacity().toLong(),
-            GL_MAP_WRITE_BIT or GL_MAP_UNSYNCHRONIZED_BIT
-        )
-
-        if (ptr != null) {
-            MemoryUtil.memCopy(
-                MemoryUtil.memAddress(buffer),
-                MemoryUtil.memAddress(ptr),
-                buffer.capacity().toLong()
-            )
-            glUnmapBuffer(GL_ARRAY_BUFFER)
-        }
-
-        glBindBuffer(GL_ARRAY_BUFFER, 0)
-    }
-
+    override fun write(buffer: ByteBuffer, vertices: Int) = data.write(buffer, vertices)
     override fun cleanup() {
         if (bindingId >= 0) {
-            glDeleteVertexArrays(bindingId)
+            if (isCurrentContext()) glDeleteVertexArrays(bindingId)
             bindingId = -1
         }
-        if (id >= 0) {
-            glDeleteBuffers(id)
-            id = -1
-        }
+        data.cleanup()
     }
 
     object Factory : VertexArrayBuffer.Factory {
 
-        override fun create(mode: DrawerMode, format: VertexFormat, buffer: ByteBuffer, vertices: Int): VertexArrayBuffer {
-            return GlVertexArrayBuffer(mode, format, buffer, vertices)
-        }
+        override fun create(mode: DrawerMode, format: VertexFormat, buffer: ByteBuffer, vertices: Int): VertexArrayBuffer =
+            GlVertexArrayBuffer(mode, format, buffer, vertices)
     }
 }

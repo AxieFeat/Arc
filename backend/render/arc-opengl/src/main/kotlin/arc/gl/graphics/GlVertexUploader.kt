@@ -5,6 +5,7 @@ import arc.graphics.vertex.VertexBuffer
 import arc.graphics.vertex.VertexType
 import org.lwjgl.opengl.ARBVertexArrayObject.glBindVertexArray
 import org.lwjgl.opengl.ARBVertexArrayObject.glGenVertexArrays
+import org.lwjgl.opengl.GL
 import org.lwjgl.opengl.GL11.GL_FLOAT
 import org.lwjgl.opengl.GL11.GL_INT
 import org.lwjgl.opengl.GL11.GL_SHORT
@@ -14,23 +15,36 @@ import org.lwjgl.opengl.GL20.glDisableVertexAttribArray
 import org.lwjgl.opengl.GL20.glEnableVertexAttribArray
 import org.lwjgl.opengl.GL20.glVertexAttribPointer
 import org.lwjgl.opengl.GL30.glVertexAttribIPointer
+import org.lwjgl.opengl.GLCapabilities
+import java.util.WeakHashMap
 
 internal object GlVertexUploader {
 
-    private val vao = glGenVertexArrays()
+    private val arrays = WeakHashMap<GLCapabilities, Int>()
+    private var vao = 0
+    private var generation = 0L
+    private fun currentVertexArray(): Int {
+        val current = GlContextIdentity.current()
+        check(current != 0L) { "An OpenGL context must be current" }
+        if (current != generation) {
+            generation = current
+            vao = arrays.getOrPut(GL.getCapabilities()) { glGenVertexArrays() }
+        }
+        return vao
+    }
 
     @JvmStatic
     @Throws(RuntimeException::class)
     fun draw(vertexBuffer: VertexBuffer) {
         if (vertexBuffer.vertices == 0) return
 
-        if(vertexBuffer is VertexArrayBuffer) {
+        if (vertexBuffer is VertexArrayBuffer) {
             vertexBuffer.bind()
             glDrawArrays(vertexBuffer.mode.id, 0, vertexBuffer.vertices)
             return
         }
 
-        glBindVertexArray(vao)
+        glBindVertexArray(currentVertexArray())
 
         vertexBuffer.bind()
 
@@ -41,10 +55,13 @@ internal object GlVertexUploader {
             when (element.type) {
                 VertexType.FLOAT ->
                     glVertexAttribPointer(index, element.count, GL_FLOAT, false, vertexBuffer.format.nextOffset, offset.toLong())
+
                 VertexType.UINT, VertexType.INT ->
                     glVertexAttribIPointer(index, element.count, GL_INT, vertexBuffer.format.nextOffset, offset.toLong())
+
                 VertexType.USHORT, VertexType.SHORT ->
                     glVertexAttribPointer(index, element.count, GL_SHORT, false, vertexBuffer.format.nextOffset, offset.toLong())
+
                 VertexType.UBYTE, VertexType.BYTE ->
                     glVertexAttribPointer(index, element.count, GL_UNSIGNED_BYTE, true, vertexBuffer.format.nextOffset, offset.toLong())
             }

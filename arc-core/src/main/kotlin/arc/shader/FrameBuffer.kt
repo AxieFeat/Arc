@@ -72,7 +72,9 @@ interface FrameBuffer {
     fun cleanup()
 
     /**
-     * Render this frame buffer.
+     * Composite this framebuffer onto the default window target without clearing its color/depth.
+     * The current shader supplies the material. The previous graphics state and target are restored afterward.
+     * Callers that previously relied on an implicit clear must clear explicitly before this operation.
      *
      * @param width Viewport width.
      * @param height Viewport height.

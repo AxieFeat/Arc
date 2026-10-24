@@ -8,6 +8,44 @@ import arc.texture.Texture
  */
 interface RenderContext {
 
+    /** Current native-context generation, or zero when no tracked context is current. */
+    val resourceGeneration: Long get() = 0L
+
+    val capabilities: RenderCapabilities get() = RenderCapabilities()
+
+    /**
+     * Saves the current native graphics state without clearing or presenting. Close in LIFO order on the same thread.
+     * Restores target, viewport/scissor, pipeline, textures/samplers, vertex/buffer bindings and raster state even
+     * after drawing throws. Raw graphics work belongs inside this scope; native state is sampled once at entry.
+     * Null [textureUnits] captures all units. Supplying a set reduces driver queries and declares every texture
+     * unit the pass may modify; the previously active unit is also preserved. Arc texture binding uses unit zero.
+     */
+    fun beginScopedPass(textureUnits: Set<Int>? = null): AutoCloseable = unsupportedRenderOperation("Scoped render passes")
+
+    fun setScissor(rectangle: PixelRect?): Unit = unsupportedRenderOperation("Scissor")
+    fun setBlend(state: BlendState): Unit = unsupportedRenderOperation("Typed blending")
+    fun setDepth(state: DepthState): Unit = unsupportedRenderOperation("Typed depth state")
+    fun setCull(mode: CullMode): Unit = unsupportedRenderOperation("Typed culling")
+    fun setRaster(state: RasterState): Unit = unsupportedRenderOperation("Typed raster state")
+    fun setColorWrite(mask: ColorWriteMask) = colorMask(mask.red, mask.green, mask.blue, mask.alpha)
+    fun setStencil(state: StencilState): Unit = unsupportedRenderOperation("Stencil masks")
+
+    fun createSampler(sampling: TextureSampling): TextureSampler = unsupportedRenderOperation("Texture samplers")
+    fun bindSampler(sampler: TextureSampler?, unit: Int = 0): Unit = unsupportedRenderOperation("Texture samplers")
+
+    /** Copies tightly packed top-to-bottom RGBA8 bytes. Caller retains the bytes; the returned texture is owned. */
+    fun createRgbaTexture(width: Int, height: Int, rgba: ByteArray): Texture = unsupportedRenderOperation("RGBA textures")
+
+    fun createRenderTarget(width: Int, height: Int, depthStencil: Boolean = false): RenderTarget =
+        unsupportedRenderOperation("Render targets")
+
+    /** Selects the target without clearing it. Null selects the default window framebuffer. */
+    fun bindTarget(target: RenderTarget?): Unit = unsupportedRenderOperation("Render targets")
+
+    /** Explicitly clears the bound target, respecting scissor/write masks. Requested depth/stencil values are 1/0. */
+    fun clearTarget(red: Float, green: Float, blue: Float, alpha: Float, depth: Boolean = false, stencil: Boolean = false): Unit =
+        unsupportedRenderOperation("Typed target clear")
+
     /**
      * Shader in the current context.
      */
@@ -160,3 +198,6 @@ interface RenderContext {
      */
     fun blendFunc(sourceFactor: Int, destFactor: Int)
 }
+
+private fun unsupportedRenderOperation(operation: String): Nothing =
+    throw UnsupportedOperationException("$operation are unavailable in this render context")

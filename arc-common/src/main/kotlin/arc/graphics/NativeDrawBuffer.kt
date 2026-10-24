@@ -18,8 +18,12 @@ internal class NativeDrawBuffer(
     override val bufferSize: Int,
 ) : DrawBuffer {
 
-    override var byteBuffer: ByteBuffer = MemoryUtil.memAlloc(bufferSize * BYTES_PER_FLOAT)
+    override var byteBuffer: ByteBuffer = MemoryUtil.memAlloc(Math.multiplyExact(bufferSize.also {
+        require(it >= 0) { "Draw buffer capacity must be nonnegative" }
+    }, BYTES_PER_FLOAT))
     private var baseAddress: Long = MemoryUtil.memAddress(byteBuffer)
+    private val tempVector = Vector3f()
+    private var closed = false
 
     override var vertexCount = 0
 
@@ -52,7 +56,10 @@ internal class NativeDrawBuffer(
     }
 
     override fun cleanup() {
+        if (closed) return
         MemoryUtil.memFree(byteBuffer)
+        closed = true
+        baseAddress = 0
     }
 
     override fun addVertex(x: Float, y: Float, z: Float): NativeDrawBuffer {
@@ -113,6 +120,7 @@ internal class NativeDrawBuffer(
      * Get address for some element.
      */
     private fun beginElement(element: VertexFormatElement): Int {
+        check(!closed) { "Draw buffer is closed" }
         check(elementsToFill > 0) {
             "Can not begin element: ${element.name}, all elements already configured!"
         }
@@ -130,10 +138,14 @@ internal class NativeDrawBuffer(
     }
 
     private fun endWriting(): NativeDrawBuffer {
-        endVertex()
+        check(!closed) { "Draw buffer is closed" }
+        if (needEnding) {
+            endVertex()
+            needEnding = false
+        }
 
         byteBuffer.position(0)
-        byteBuffer.limit(this.bufferSize * 4)
+        byteBuffer.limit(activeBytes)
 
         return this
     }
@@ -155,7 +167,7 @@ internal class NativeDrawBuffer(
     }
 
     private fun nextVertexFormatIndex() {
-        if(elementsToFill <= 0) return
+        if (elementsToFill <= 0) return
 
         elementsToFill--
 
@@ -170,11 +182,11 @@ internal class NativeDrawBuffer(
      * Return elements, that yet not completed in the current vertex.
      */
     private fun leftElements(): List<VertexFormatElement> {
-        if(elementsToFill <= 0) return emptyList()
+        if (elementsToFill <= 0) return emptyList()
 
         val result = mutableListOf<VertexFormatElement>()
 
-        for(index in vertexFormatIndex..<vertexFormatIndex + elementsToFill) {
+        for (index in vertexFormatIndex..<vertexFormatIndex + elementsToFill) {
             result.add(format.getElement(index))
         }
 
@@ -183,13 +195,16 @@ internal class NativeDrawBuffer(
 
     private fun ensureCapacity(offset: Int, size: Int) {
         if (offset + size > byteBuffer.capacity()) {
-            throw DrawBufferOverflowException("DrawBuffer overflow!" +
-                    " Required ${(offset + size)} bytes," +
-                    " but capacity is only ${byteBuffer.capacity()} bytes.")
+            throw DrawBufferOverflowException(
+                "DrawBuffer overflow!" +
+                        " Required ${(offset + size)} bytes," +
+                        " but capacity is only ${byteBuffer.capacity()} bytes."
+            )
         }
     }
 
     override fun clear() {
+        check(!closed) { "Draw buffer is closed" }
         byteBuffer.clear()
 
         needEnding = false
@@ -212,9 +227,9 @@ internal class NativeDrawBuffer(
         MemoryUtil.memPutInt(
             addr,
             (alpha shl COLOR_ALPHA_SHIFT) or
-            (blue shl COLOR_BLUE_SHIFT) or
-            (green shl COLOR_GREEN_SHIFT) or
-            (red shl COLOR_RED_SHIFT)
+                    (blue shl COLOR_BLUE_SHIFT) or
+                    (green shl COLOR_GREEN_SHIFT) or
+                    (red shl COLOR_RED_SHIFT)
         )
     }
 
@@ -238,16 +253,13 @@ internal class NativeDrawBuffer(
     ) : RuntimeException(message)
 
     object Factory : DrawBuffer.Factory {
+
         override fun create(mode: DrawerMode, format: VertexFormat, bufferSize: Int): DrawBuffer {
             return NativeDrawBuffer(mode, format, bufferSize)
         }
     }
 
     companion object {
-
-        // Temp vector for transformation via matrix in addVertex() function
-        @JvmStatic
-        private val tempVector = Vector3f()
 
         private const val BYTES_PER_FLOAT = 4
         private const val COLOR_ALPHA_SHIFT = 24

@@ -3,6 +3,7 @@ package arc.shader
 import arc.Arc.single
 import arc.annotations.TypeFactory
 import arc.asset.StringAsset
+import arc.graphics.ContextResource
 import arc.util.pattern.Bindable
 import arc.util.pattern.Cleanable
 import org.jetbrains.annotations.ApiStatus
@@ -17,7 +18,7 @@ import org.joml.Vector4f
  *
  * @sample arc.sample.shaderInstanceSample
  */
-interface ShaderInstance : Bindable, Cleanable {
+interface ShaderInstance : Bindable, Cleanable, ContextResource {
 
     /**
      * ID of this shader in a render system.

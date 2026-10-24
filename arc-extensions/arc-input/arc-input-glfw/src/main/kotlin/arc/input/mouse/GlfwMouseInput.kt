@@ -20,29 +20,15 @@ internal object GlfwMouseInput : MouseInput {
     override var displayVec: Vector2f = Vector2f()
 
     override fun isPressed(key: KeyCode): Boolean {
-        if(key.keyType != KeyType.MOUSE) return false
+        if (key.keyType != KeyType.MOUSE) return false
 
-        try {
-            if(GLFW.glfwGetMouseButton(window!!.handle, key.id) == GLFW.GLFW_PRESS ||
-                GLFW.glfwGetMouseButton(window!!.handle, key.id) == GLFW.GLFW_REPEAT) return true
-        } catch (ignore: Throwable) {
-            return false
-        }
-
-        return false
+        return window?.events?.gameplayButtonDown(key.id) ?: false
     }
 
     override fun isReleased(key: KeyCode): Boolean {
-        if(key.keyType != KeyType.MOUSE) return false
+        if (key.keyType != KeyType.MOUSE) return false
 
-        try {
-            if(GLFW.glfwGetMouseButton(window!!.handle, key.id) == GLFW.GLFW_RELEASE ||
-                GLFW.glfwGetMouseButton(window!!.handle, key.id) == GLFW.GLFW_REPEAT) return true
-        } catch (ignore: Throwable) {
-            return false
-        }
-
-        return false
+        return !isPressed(key)
     }
 
     override fun reset() {
@@ -50,7 +36,7 @@ internal object GlfwMouseInput : MouseInput {
     }
 
     fun positionUpdate(x: Double, y: Double) {
-        if(position.x == x.toFloat() && position.y == y.toFloat()) return
+        if (position.x == x.toFloat() && position.y == y.toFloat()) return
 
         previousPosition = previousPosition.set(position.x, position.y)
 
@@ -64,18 +50,18 @@ internal object GlfwMouseInput : MouseInput {
 
     @Suppress("OptionalWhenBraces")
     fun keyUpdate(key: KeyCode, pressed: Boolean) {
-        if(key == KeyCode.MOUSE_SCROLL) return
+        if (key == KeyCode.MOUSE_SCROLL) return
 
-        GlfwInputEngine.executor.submit {
+        GlfwInputEngine.executeBinding {
             bindingProcessor.bindings.forEach { binding ->
 
-                GlfwInputEngine.executor.submit {
+                GlfwInputEngine.executeBinding {
                     when (binding) {
                         is Binding if (
                                 binding.key == key ||
-                                binding.key == KeyCode.ANY ||
-                                binding.key == KeyCode.ANY_MOUSE
-                            ) -> {
+                                        binding.key == KeyCode.ANY ||
+                                        binding.key == KeyCode.ANY_MOUSE
+                                ) -> {
 
                             if (pressed) {
                                 binding.onPress(key)
@@ -97,16 +83,16 @@ internal object GlfwMouseInput : MouseInput {
 
     @Suppress("OptionalWhenBraces")
     fun scrollUpdate(xOffset: Double, yOffset: Double) {
-        GlfwInputEngine.executor.submit {
+        GlfwInputEngine.executeBinding {
             bindingProcessor.bindings.forEach { binding ->
 
-                GlfwInputEngine.executor.submit {
+                GlfwInputEngine.executeBinding {
                     when (binding) {
                         is MouseBinding if (
                                 binding.key == KeyCode.MOUSE_SCROLL ||
-                                binding.key == KeyCode.ANY ||
-                                binding.key == KeyCode.ANY_MOUSE
-                            ) -> {
+                                        binding.key == KeyCode.ANY ||
+                                        binding.key == KeyCode.ANY_MOUSE
+                                ) -> {
 
                             binding.onScroll(xOffset, yOffset)
                         }

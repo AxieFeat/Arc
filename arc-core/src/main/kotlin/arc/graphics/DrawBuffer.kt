@@ -36,7 +36,8 @@ interface DrawBuffer : VertexConsumer, Cleanable {
     /**
      * Size of buffer.
      *
-     * The buffer size actually allows you to say: "How many vertices and their data can be stored here".
+     * Legacy allocation units: native storage contains bufferSize * 4 bytes, not bufferSize vertices.
+     * Use [activeBytes] and the vertex format stride when sizing uploads.
      */
     val bufferSize: Int
 
@@ -49,6 +50,9 @@ interface DrawBuffer : VertexConsumer, Cleanable {
      * Count of vertices in this buffer.
      */
     val vertexCount: Int
+
+    /** Initialized bytes occupied by complete vertices; independent from allocation capacity. */
+    val activeBytes: Int get() = Math.multiplyExact(vertexCount, format.nextOffset)
 
     /**
      * Represents the drawing mode used for rendering operations within the buffer.
