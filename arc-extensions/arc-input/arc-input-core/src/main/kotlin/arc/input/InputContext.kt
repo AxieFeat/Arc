@@ -3,11 +3,14 @@ package arc.input
 import arc.window.Window
 import arc.window.WindowEvent
 
-/** Ordered input priority and a masked gameplay polling view. Physical polling is separate. */
+/**
+ * Ordered input priority and a masked gameplay polling view. Physical polling is separate.
+ */
 class InputContext private constructor(private val window: Window, val priority: Int) : AutoCloseable {
 
     private val subscriptions = mutableListOf<AutoCloseable>()
     private var closed = false
+
     fun subscribe(listener: (WindowEvent) -> Boolean): AutoCloseable {
         check(!closed)
         val subscription = window.events.subscribe(priority, listener)

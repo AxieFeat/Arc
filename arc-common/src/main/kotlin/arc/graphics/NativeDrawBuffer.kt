@@ -120,7 +120,7 @@ internal class NativeDrawBuffer(
      * Get address for some element.
      */
     private fun beginElement(element: VertexFormatElement): Int {
-        check(!closed) { "Draw buffer is closed" }
+        check(!closed) { CLOSED_MESSAGE }
         check(elementsToFill > 0) {
             "Can not begin element: ${element.name}, all elements already configured!"
         }
@@ -138,7 +138,7 @@ internal class NativeDrawBuffer(
     }
 
     private fun endWriting(): NativeDrawBuffer {
-        check(!closed) { "Draw buffer is closed" }
+        check(!closed) { CLOSED_MESSAGE }
         if (needEnding) {
             endVertex()
             needEnding = false
@@ -204,7 +204,7 @@ internal class NativeDrawBuffer(
     }
 
     override fun clear() {
-        check(!closed) { "Draw buffer is closed" }
+        check(!closed) { CLOSED_MESSAGE }
         byteBuffer.clear()
 
         needEnding = false
@@ -261,6 +261,7 @@ internal class NativeDrawBuffer(
 
     companion object {
 
+        private const val CLOSED_MESSAGE = "Draw buffer is closed"
         private const val BYTES_PER_FLOAT = 4
         private const val COLOR_ALPHA_SHIFT = 24
         private const val COLOR_BLUE_SHIFT = 16

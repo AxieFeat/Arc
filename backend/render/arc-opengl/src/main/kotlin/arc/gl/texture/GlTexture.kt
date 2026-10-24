@@ -2,14 +2,10 @@ package arc.gl.texture
 
 import arc.gl.graphics.GlContextResource
 import arc.texture.Texture
-import org.lwjgl.opengl.GL11.GL_NEAREST
 import org.lwjgl.opengl.GL11.GL_TEXTURE_2D
-import org.lwjgl.opengl.GL11.GL_TEXTURE_MAG_FILTER
-import org.lwjgl.opengl.GL11.GL_TEXTURE_MIN_FILTER
 import org.lwjgl.opengl.GL11.glBindTexture
 import org.lwjgl.opengl.GL11.glDeleteTextures
 import org.lwjgl.opengl.GL11.glGenTextures
-import org.lwjgl.opengl.GL11.glTexParameteri
 import org.lwjgl.opengl.GL13.GL_TEXTURE0
 import org.lwjgl.opengl.GL13.glActiveTexture
 

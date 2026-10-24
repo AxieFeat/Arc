@@ -8,10 +8,30 @@ import arc.texture.Texture
  */
 interface RenderContext {
 
-    /** Current native-context generation, or zero when no tracked context is current. */
+    /**
+     * Current native-context generation, or zero when no tracked context is current.
+     */
     val resourceGeneration: Long get() = 0L
 
+    /**
+     * Operations and limits supported by the current backend instance.
+     */
     val capabilities: RenderCapabilities get() = RenderCapabilities()
+
+    /**
+     * Shader in the current context.
+     */
+    val shader: ShaderInstance
+
+    /**
+     * Texture in the current context.
+     */
+    val texture: Texture
+
+    /**
+     * Drawer of the render system.
+     */
+    val drawer: Drawer
 
     /**
      * Saves the current native graphics state without clearing or presenting. Close in LIFO order on the same thread.
@@ -22,44 +42,72 @@ interface RenderContext {
      */
     fun beginScopedPass(textureUnits: Set<Int>? = null): AutoCloseable = unsupportedRenderOperation("Scoped render passes")
 
+    /**
+     * Restricts drawing to a target-pixel rectangle; null disables rectangular clipping.
+     */
     fun setScissor(rectangle: PixelRect?): Unit = unsupportedRenderOperation("Scissor")
+
+    /**
+     * Replaces the current color and alpha blending configuration.
+     */
     fun setBlend(state: BlendState): Unit = unsupportedRenderOperation("Typed blending")
+
+    /**
+     * Replaces depth testing and depth-write configuration.
+     */
     fun setDepth(state: DepthState): Unit = unsupportedRenderOperation("Typed depth state")
+
+    /**
+     * Selects which polygon faces are discarded.
+     */
     fun setCull(mode: CullMode): Unit = unsupportedRenderOperation("Typed culling")
+
+    /**
+     * Replaces polygon, sample and clip-distance state.
+     */
     fun setRaster(state: RasterState): Unit = unsupportedRenderOperation("Typed raster state")
+
+    /**
+     * Selects which channels of the color attachment may be written.
+     */
     fun setColorWrite(mask: ColorWriteMask) = colorMask(mask.red, mask.green, mask.blue, mask.alpha)
+
+    /**
+     * Replaces stencil testing and update operations for both faces.
+     */
     fun setStencil(state: StencilState): Unit = unsupportedRenderOperation("Stencil masks")
 
+    /**
+     * Creates an owned sampler without modifying texture parameters.
+     */
     fun createSampler(sampling: TextureSampling): TextureSampler = unsupportedRenderOperation("Texture samplers")
+
+    /**
+     * Binds a sampler to a texture unit; null restores texture-owned sampling parameters.
+     */
     fun bindSampler(sampler: TextureSampler?, unit: Int = 0): Unit = unsupportedRenderOperation("Texture samplers")
 
-    /** Copies tightly packed top-to-bottom RGBA8 bytes. Caller retains the bytes; the returned texture is owned. */
+    /**
+     * Copies tightly packed top-to-bottom RGBA8 bytes. Caller retains the bytes; the returned texture is owned.
+     */
     fun createRgbaTexture(width: Int, height: Int, rgba: ByteArray): Texture = unsupportedRenderOperation("RGBA textures")
 
+    /**
+     * Creates an owned RGBA8 target, optionally with a combined depth/stencil attachment.
+     */
     fun createRenderTarget(width: Int, height: Int, depthStencil: Boolean = false): RenderTarget =
         unsupportedRenderOperation("Render targets")
 
-    /** Selects the target without clearing it. Null selects the default window framebuffer. */
+    /**
+     * Selects the target without clearing it. Null selects the default window framebuffer.
+     */
     fun bindTarget(target: RenderTarget?): Unit = unsupportedRenderOperation("Render targets")
 
-    /** Explicitly clears the bound target, respecting scissor/write masks. Requested depth/stencil values are 1/0. */
+    /**
+     * Explicitly clears the bound target, respecting scissor/write masks. Requested depth/stencil values are 1/0.
+     */
     fun clearTarget(red: Float, green: Float, blue: Float, alpha: Float, depth: Boolean = false, stencil: Boolean = false): Unit =
         unsupportedRenderOperation("Typed target clear")
-
-    /**
-     * Shader in the current context.
-     */
-    val shader: ShaderInstance
-
-    /**
-     * Texture in current context.
-     */
-    val texture: Texture
-
-    /**
-     * Drawer of a render system.
-     */
-    val drawer: Drawer
 
     /**
      * Bind specific shader in current context.

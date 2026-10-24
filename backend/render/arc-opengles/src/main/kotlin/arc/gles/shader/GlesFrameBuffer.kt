@@ -11,7 +11,9 @@ import org.lwjgl.opengles.GLES20.GL_COLOR_BUFFER_BIT
 import org.lwjgl.opengles.GLES20.GL_DEPTH_BUFFER_BIT
 import org.lwjgl.opengles.GLES20.glClear
 
-/** Legacy facade backed by the scoped target contract. render composites without clearing the destination. */
+/**
+ * Legacy facade backed by the scoped target contract. render composites without clearing the destination.
+ */
 internal class GlesFrameBuffer(width: Int, height: Int, override val isUseDepth: Boolean) : FrameBuffer {
 
     private val context = GlesRenderContext
@@ -34,6 +36,7 @@ internal class GlesFrameBuffer(width: Int, height: Int, override val isUseDepth:
     override val height get() = target.height
     override val textureWidth get() = target.width
     override val textureHeight get() = target.height
+
     override fun bind(viewport: Boolean) {
         checkOpen()
         context.bindTarget(target)

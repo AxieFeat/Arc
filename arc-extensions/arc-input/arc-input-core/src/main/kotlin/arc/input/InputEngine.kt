@@ -10,7 +10,9 @@ import org.jetbrains.annotations.ApiStatus
  */
 interface InputEngine {
 
-    /** Unmasked physical polling is an explicit opt-in, unsuitable for gameplay behind UI. */
+    /**
+     * Unmasked physical polling is an explicit opt-in, unsuitable for gameplay behind UI.
+     */
     val physicalKeyboard: KeyboardInput get() = keyboard
     val physicalMouse: MouseInput get() = mouse
 

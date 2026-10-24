@@ -42,7 +42,9 @@ interface VertexBuffer : Bindable, Cleanable, ContextResource {
      */
     val vertices: Int
 
-    /** Initialized GPU bytes drawn by this buffer. [size] is allocation capacity in bytes. */
+    /**
+     * Initialized GPU bytes drawn by this buffer. [size] is allocation capacity in bytes.
+     */
     val activeBytes: Int get() = Math.multiplyExact(vertices, format.nextOffset)
 
     /**

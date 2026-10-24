@@ -6,12 +6,15 @@ import org.lwjgl.opengl.GLCapabilities
 import java.util.WeakHashMap
 import java.util.concurrent.atomic.AtomicLong
 
-/** Native reset detection/notification is a host responsibility; replacing capabilities identifies a new context. */
+/**
+ * Native reset detection/notification is a host responsibility; replacing capabilities identifies a new context.
+ */
 internal object GlContextIdentity {
 
     private val identities = WeakHashMap<GLCapabilities, Long>()
     private val next = AtomicLong()
     private val cached = ThreadLocal<Pair<GLCapabilities, Long>>()
+
     fun current(): Long {
         val capabilities = try {
             GL.getCapabilities()
@@ -30,6 +33,7 @@ internal abstract class GlContextResource : ContextResource {
 
     final override val resourceGeneration = GlContextIdentity.current().also { check(it != 0L) { "An OpenGL context must be current" } }
     private val owner = Thread.currentThread()
+
     protected fun isCurrentContext(): Boolean {
         check(Thread.currentThread() === owner) { "Graphics resource operations require the creating thread" }
         return GlContextIdentity.current() == resourceGeneration

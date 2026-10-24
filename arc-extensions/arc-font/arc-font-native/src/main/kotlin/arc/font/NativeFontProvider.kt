@@ -11,7 +11,9 @@ import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.roundToLong
 
-/** Explicit native font factory. The resulting provider belongs to the creating thread. */
+/**
+ * Explicit native font factory. The resulting provider belongs to the creating thread.
+ */
 object NativeFontProvider {
 
     fun of(): FontProvider = FreeTypeFontProvider()
@@ -43,9 +45,11 @@ private class FreeTypeFontProvider : FontProvider {
         checkThread()
         require(id.isNotBlank() && data.isNotEmpty() && faceIndex >= 0 && version >= 0)
         require(id !in faces) { "Font face '$id' is already loaded; use a new identity for replacement" }
+
         val storage = MemoryUtil.memAlloc(data.size)
         storage.put(data).flip()
         var face: FT_Face? = null
+
         try {
             face = MemoryStack.stackPush().use { stack ->
                 val result = stack.mallocPointer(1)
@@ -54,6 +58,7 @@ private class FreeTypeFontProvider : FontProvider {
             }
             val native = NativeFace(id, version, face, storage)
             faces[id] = native
+
             return native
         } catch (failure: Throwable) {
             face?.let { FreeType.FT_Done_Face(it) }
@@ -65,6 +70,7 @@ private class FreeTypeFontProvider : FontProvider {
     override fun cleanup() {
         check(Thread.currentThread() === thread) { "Native font provider must be closed on its owner thread" }
         if (closed) return
+
         faces.values.forEach { it.release() }
         faces.clear()
         FreeType.FT_Done_FreeType(library)
@@ -91,6 +97,7 @@ private class FreeTypeFontProvider : FontProvider {
         private fun setSize(size: Float) {
             require(size.isFinite() && size > 0) { "Font size must be positive and finite" }
             if (size == currentSize) return
+
             checkFreeType(FreeType.FT_Set_Char_Size(face, 0, max(1L, (size * 64.0).roundToLong()), 72, 72), "set size of '$id'")
             currentSize = size
         }
@@ -122,6 +129,7 @@ private class FreeTypeFontProvider : FontProvider {
             val metrics = metrics(size)
             val buffer = HarfBuzz.hb_buffer_create()
             check(buffer != 0L) { "Cannot allocate HarfBuzz buffer" }
+
             try {
                 HarfBuzz.hb_buffer_set_cluster_level(buffer, HarfBuzz.HB_BUFFER_CLUSTER_LEVEL_MONOTONE_GRAPHEMES)
                 HarfBuzz.hb_buffer_add_utf16(buffer, text, 0, text.length)
@@ -129,11 +137,15 @@ private class FreeTypeFontProvider : FontProvider {
                 HarfBuzz.hb_buffer_set_direction(buffer, if (direction == FontDirection.RTL) HarfBuzz.HB_DIRECTION_RTL else HarfBuzz.HB_DIRECTION_LTR)
                 HarfBuzz.hb_buffer_set_language(buffer, HarfBuzz.hb_language_from_string(language))
                 HarfBuzz.hb_shape(hbFont, buffer, null)
+
                 val infos = HarfBuzz.hb_buffer_get_glyph_infos(buffer)
                 val positions = HarfBuzz.hb_buffer_get_glyph_positions(buffer)
                 if (infos == null || positions == null) return ShapedRun(text, direction, size, metrics, emptyList())
+
+                // Glyphs follow visual order, while source cluster ranges follow increasing UTF-16 offsets.
                 val starts = (0 until infos.remaining()).map { infos[it].cluster() }.distinct().sorted()
                 val ends = starts.mapIndexed { index, start -> start to (starts.getOrNull(index + 1) ?: text.length) }.toMap()
+
                 val glyphs = (0 until infos.remaining()).map { index ->
                     val info = infos[index]
                     val position = positions[index]
@@ -143,6 +155,7 @@ private class FreeTypeFontProvider : FontProvider {
                         position.x_offset() / 64f, -position.y_offset() / 64f
                     )
                 }
+
                 return ShapedRun(text, direction, size, metrics, glyphs)
             } finally {
                 HarfBuzz.hb_buffer_destroy(buffer)
@@ -155,6 +168,7 @@ private class FreeTypeFontProvider : FontProvider {
             checkFreeType(FreeType.FT_Load_Glyph(face, glyphId, FreeType.FT_LOAD_DEFAULT), "load glyph $glyphId from '$id'")
             val slot = checkNotNull(face.glyph())
             checkFreeType(FreeType.FT_Render_Glyph(slot, FreeType.FT_RENDER_MODE_NORMAL), "rasterize glyph $glyphId from '$id'")
+
             val bitmap = slot.bitmap()
             val width = bitmap.width()
             val rows = bitmap.rows()
@@ -162,12 +176,16 @@ private class FreeTypeFontProvider : FontProvider {
             require(width.toLong() * rows <= 16L * 1024 * 1024) { "Glyph bitmap exceeds 16MiB budget" }
             if (width == 0 || rows == 0) return RasterGlyph(width, rows, slot.bitmap_left(), slot.bitmap_top(), ByteArray(0))
             check(bitmap.pixel_mode().toInt() == FreeType.FT_PIXEL_MODE_GRAY) { "Unsupported glyph bitmap mode ${bitmap.pixel_mode()}" }
+
             val source = checkNotNull(bitmap.buffer(abs(pitch) * rows))
             val pixels = ByteArray(width * rows)
+
+            // FreeType pitch includes row padding; a negative pitch stores rows in reverse order.
             for (y in 0 until rows) {
                 val sourceRow = if (pitch >= 0) y * pitch else (rows - y - 1) * -pitch
                 for (x in 0 until width) pixels[y * width + x] = source[sourceRow + x]
             }
+
             return RasterGlyph(width, rows, slot.bitmap_left(), slot.bitmap_top(), pixels)
         }
 

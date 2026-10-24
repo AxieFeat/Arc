@@ -212,7 +212,9 @@ internal fun glesToggle(capability: Int, enabled: Boolean) {
     if (enabled) glEnable(capability) else glDisable(capability)
 }
 
-/** One native snapshot per lexical pass. Ordinary draws and state setters never query the driver. */
+/**
+ * One native snapshot per lexical pass. Ordinary draws and state setters never query the driver.
+ */
 internal class GlesRenderStateSnapshot(textureUnits: Set<Int>?) {
 
     private val viewport = integers(GL_VIEWPORT, 4)
@@ -281,6 +283,7 @@ internal class GlesRenderStateSnapshot(textureUnits: Set<Int>?) {
     }.also { glActiveTexture(activeTexture) }
 
     fun restore() {
+        // Restore object bindings before the state that depends on those objects.
         glBindFramebuffer(GL_DRAW_FRAMEBUFFER, drawFramebuffer)
         glBindFramebuffer(GL_READ_FRAMEBUFFER, readFramebuffer)
         glBindRenderbuffer(GL_RENDERBUFFER, renderbuffer)
@@ -296,37 +299,47 @@ internal class GlesRenderStateSnapshot(textureUnits: Set<Int>?) {
         glBindBuffer(GL_UNIFORM_BUFFER, uniformBuffer)
         glBindBuffer(GL_PIXEL_PACK_BUFFER, pixelPackBuffer)
         glBindBuffer(GL_PIXEL_UNPACK_BUFFER, pixelUnpackBuffer)
+
         textures.forEach { bindings ->
             glActiveTexture(GL_TEXTURE0 + bindings.unit)
             bindings.targets.forEach { (target, texture) -> glBindTexture(target, texture) }
             glBindSampler(bindings.unit, bindings.sampler)
         }
         glActiveTexture(activeTexture)
+
+        // Raster, blending, depth and stencil state belong to the caller's pass.
         glViewport(viewport[0], viewport[1], viewport[2], viewport[3])
         glScissor(scissor[0], scissor[1], scissor[2], scissor[3])
         enabled.forEach(::glesToggle)
         glSampleCoverage(sampleCoverage, sampleInvert)
         sampleMasks.forEachIndexed { index, value -> glSampleMaski(index, value) }
+
         glBlendFuncSeparate(blendSource, blendDestination, blendSourceAlpha, blendDestinationAlpha)
         glBlendEquationSeparate(blendEquation, blendAlphaEquation)
         glBlendColor(blendColor[0], blendColor[1], blendColor[2], blendColor[3])
+
         glDepthMask(depthMask)
         glDepthFunc(depthFunction)
         glDepthRangef(depthRange[0], depthRange[1])
         glCullFace(cullFace)
         glFrontFace(frontFace)
         glColorMask(colorMask[0] != 0, colorMask[1] != 0, colorMask[2] != 0, colorMask[3] != 0)
+
         glClearColor(clearColor[0], clearColor[1], clearColor[2], clearColor[3])
         glClearDepthf(clearDepth)
         glClearStencil(clearStencil)
         restoreStencil(GL_FRONT, stencilFront)
         restoreStencil(GL_BACK, stencilBack)
+
         pixelStore.forEach(::glPixelStorei)
     }
 
     private data class TextureBindings(val unit: Int, val targets: List<Pair<Int, Int>>, val sampler: Int)
 
     companion object {
+
+        private const val STENCIL_DEPTH_FAIL_INDEX = 5
+        private const val STENCIL_PASS_INDEX = 6
 
         private val TEXTURE_BINDINGS = listOf(
             GL_TEXTURE_2D to GL_TEXTURE_BINDING_2D,
@@ -336,6 +349,7 @@ internal class GlesRenderStateSnapshot(textureUnits: Set<Int>?) {
         )
 
         private fun integers(parameter: Int, count: Int) = IntArray(count).also { glGetIntegerv(parameter, it) }
+
         private fun floats(parameter: Int, count: Int) = FloatArray(count).also { glGetFloatv(parameter, it) }
 
         private fun stencil(back: Boolean): IntArray = if (back) intArrayOf(
@@ -350,7 +364,7 @@ internal class GlesRenderStateSnapshot(textureUnits: Set<Int>?) {
         private fun restoreStencil(face: Int, state: IntArray) {
             glStencilFuncSeparate(face, state[0], state[1], state[2])
             glStencilMaskSeparate(face, state[3])
-            glStencilOpSeparate(face, state[4], state[5], state[6])
+            glStencilOpSeparate(face, state[4], state[STENCIL_DEPTH_FAIL_INDEX], state[STENCIL_PASS_INDEX])
         }
     }
 }

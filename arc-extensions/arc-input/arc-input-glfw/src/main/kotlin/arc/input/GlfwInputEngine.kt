@@ -24,6 +24,7 @@ object GlfwInputEngine : InputEngine {
 
     private val executor by lazy { Executors.newFixedThreadPool(4) { r -> Thread(r, "arc-input-legacy").apply { isDaemon = true } } }
     var legacyAsyncBindings: Boolean = false
+
     internal fun executeBinding(action: () -> Unit) {
         if (legacyAsyncBindings) executor.submit(action) else action()
     }
@@ -40,10 +41,12 @@ object GlfwInputEngine : InputEngine {
 
     override val physicalKeyboard: KeyboardInput = object : KeyboardInput by GlfwKeyboardInput {
         override fun isPressed(key: KeyCode) = window?.let { glfwGetKey(it.handle, key.id) == GLFW_PRESS } ?: false
+
         override fun isReleased(key: KeyCode) = !isPressed(key)
     }
     override val physicalMouse: MouseInput = object : MouseInput by GlfwMouseInput {
         override fun isPressed(key: KeyCode) = window?.let { glfwGetMouseButton(it.handle, key.id) == GLFW_PRESS } ?: false
+
         override fun isReleased(key: KeyCode) = !isPressed(key)
     }
 

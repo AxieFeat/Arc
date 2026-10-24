@@ -23,6 +23,7 @@ internal object GlVertexUploader {
     private val arrays = WeakHashMap<GLCapabilities, Int>()
     private var vao = 0
     private var generation = 0L
+
     private fun currentVertexArray(): Int {
         val current = GlContextIdentity.current()
         check(current != 0L) { "An OpenGL context must be current" }

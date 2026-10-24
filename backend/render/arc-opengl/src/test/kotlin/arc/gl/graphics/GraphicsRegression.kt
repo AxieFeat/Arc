@@ -12,6 +12,7 @@ import arc.graphics.DrawBuffer
 import arc.graphics.DrawerMode
 import arc.graphics.PixelRect
 import arc.graphics.PolygonMode
+import arc.graphics.RenderTarget
 import arc.graphics.RasterState
 import arc.graphics.StencilOperation
 import arc.graphics.StencilState
@@ -123,7 +124,9 @@ import org.lwjgl.opengl.GL33.glBindSampler
 import org.lwjgl.opengl.GL33.glDeleteSamplers
 import org.lwjgl.opengl.GL33.glGenSamplers
 
-/** Invoke :arc-opengl:graphicsRegression on a desktop with OpenGL 4.1. No optional test framework is required. */
+/**
+ * Invoke :arc-opengl:graphicsRegression on a desktop with OpenGL 4.1. No optional test framework is required.
+ */
 object GraphicsRegression {
 
     @JvmStatic
@@ -232,23 +235,7 @@ object GraphicsRegression {
             val expected = state()
             val failure = runCatching {
                 context.beginScopedPass().use {
-                    context.bindTarget(uiTarget)
-                    glUseProgram(0)
-                    glBindVertexArray(0)
-                    glBindBuffer(GL_ARRAY_BUFFER, 0)
-                    glBindBuffer(GL_UNIFORM_BUFFER, 0)
-                    glBindTexture(GL_TEXTURE_2D, 0)
-                    glBindSampler(1, 0)
-                    glActiveTexture(GL_TEXTURE0)
-                    context.setScissor(null)
-                    context.setViewport(0, 0, 8, 8)
-                    context.setDepth(DepthState())
-                    context.setCull(CullMode.NONE)
-                    context.setBlend(BlendState.DISABLED)
-                    context.setColorWrite(ColorWriteMask.NONE)
-                    context.setStencil(StencilState())
-                    context.setRaster(RasterState())
-                    throw IllegalArgumentException("Expected painter failure")
+                    failDuringPass(uiTarget)
                 }
             }.exceptionOrNull()
             check(failure?.message == "Expected painter failure")
@@ -262,16 +249,7 @@ object GraphicsRegression {
             outer.close()
             outer.close()
         } finally {
-            context.setRaster(RasterState())
-            context.bindTarget(null)
-            glUseProgram(0)
-            glBindVertexArray(0)
-            glBindBuffer(GL_ARRAY_BUFFER, 0)
-            glBindBuffer(GL_UNIFORM_BUFFER, 0)
-            glActiveTexture(GL_TEXTURE0 + 1)
-            glBindTexture(GL_TEXTURE_2D, 0)
-            glBindSampler(1, 0)
-            glActiveTexture(GL_TEXTURE0)
+            resetApplicationBindings()
             glDeleteProgram(program)
             glDeleteVertexArrays(vao)
             buffers.forEach(::glDeleteBuffers)
@@ -280,6 +258,41 @@ object GraphicsRegression {
             target.cleanup()
             uiTarget.cleanup()
         }
+    }
+
+    private fun resetApplicationBindings() {
+        GlRenderContext.setRaster(RasterState())
+        GlRenderContext.bindTarget(null)
+        glUseProgram(0)
+        glBindVertexArray(0)
+        glBindBuffer(GL_ARRAY_BUFFER, 0)
+        glBindBuffer(GL_UNIFORM_BUFFER, 0)
+        glActiveTexture(GL_TEXTURE0 + 1)
+        glBindTexture(GL_TEXTURE_2D, 0)
+        glBindSampler(1, 0)
+        glActiveTexture(GL_TEXTURE0)
+    }
+
+    private fun failDuringPass(target: RenderTarget) {
+        val context = GlRenderContext
+
+        context.bindTarget(target)
+        glUseProgram(0)
+        glBindVertexArray(0)
+        glBindBuffer(GL_ARRAY_BUFFER, 0)
+        glBindBuffer(GL_UNIFORM_BUFFER, 0)
+        glBindTexture(GL_TEXTURE_2D, 0)
+        glBindSampler(1, 0)
+        glActiveTexture(GL_TEXTURE0)
+        context.setScissor(null)
+        context.setViewport(0, 0, 8, 8)
+        context.setDepth(DepthState())
+        context.setCull(CullMode.NONE)
+        context.setBlend(BlendState.DISABLED)
+        context.setColorWrite(ColorWriteMask.NONE)
+        context.setStencil(StencilState())
+        context.setRaster(RasterState())
+        throw IllegalArgumentException("Expected painter failure")
     }
 
     private fun targetAndExactMask() {
@@ -452,7 +465,8 @@ object GraphicsRegression {
             System.nanoTime() - start
         }.sorted()
         println(
-            "Scoped pass unit0 snapshot+restore CPU: p50=${times[49] / 1_000_000.0}ms p95=${times[94] / 1_000_000.0}ms p99=${times[98] / 1_000_000.0}ms (100 samples; not full UI benchmark)"
+            "Scoped pass unit0 snapshot+restore CPU: p50=${times[49] / 1_000_000.0}ms " +
+                    "p95=${times[94] / 1_000_000.0}ms p99=${times[98] / 1_000_000.0}ms (100 samples; not full UI benchmark)"
         )
     }
 

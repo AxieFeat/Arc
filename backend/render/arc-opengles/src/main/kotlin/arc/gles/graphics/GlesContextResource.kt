@@ -6,12 +6,15 @@ import org.lwjgl.opengles.GLESCapabilities
 import java.util.WeakHashMap
 import java.util.concurrent.atomic.AtomicLong
 
-/** Native reset detection/notification is a host responsibility; replacing capabilities identifies a new context. */
+/**
+ * Native reset detection/notification is a host responsibility; replacing capabilities identifies a new context.
+ */
 internal object GlesContextIdentity {
 
     private val identities = WeakHashMap<GLESCapabilities, Long>()
     private val next = AtomicLong(Long.MIN_VALUE)
     private val cached = ThreadLocal<Pair<GLESCapabilities, Long>>()
+
     fun current(): Long {
         val capabilities = try {
             GLES.getCapabilities()
@@ -30,6 +33,7 @@ internal abstract class GlesContextResource : ContextResource {
 
     final override val resourceGeneration = GlesContextIdentity.current().also { check(it != 0L) { "An GLES context must be current" } }
     private val owner = Thread.currentThread()
+
     protected fun isCurrentContext(): Boolean {
         check(Thread.currentThread() === owner) { "Graphics resource operations require the creating thread" }
         return GlesContextIdentity.current() == resourceGeneration

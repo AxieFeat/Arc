@@ -72,6 +72,7 @@ internal class GlVertexArrayBuffer(
     }
 
     override fun write(buffer: ByteBuffer, vertices: Int) = data.write(buffer, vertices)
+
     override fun cleanup() {
         if (bindingId >= 0) {
             if (isCurrentContext()) glDeleteVertexArrays(bindingId)

@@ -51,7 +51,9 @@ interface DrawBuffer : VertexConsumer, Cleanable {
      */
     val vertexCount: Int
 
-    /** Initialized bytes occupied by complete vertices; independent from allocation capacity. */
+    /**
+     * Initialized bytes occupied by complete vertices; independent from allocation capacity.
+     */
     val activeBytes: Int get() = Math.multiplyExact(vertexCount, format.nextOffset)
 
     /**

@@ -100,6 +100,34 @@ internal object GlRenderContext : RenderContext {
             return textureUnitCount
         }
 
+    private var bindingsGeneration = 0L
+    private var currentShader: ShaderInstance = EmptyShaderInstance
+    private var currentTexture: Texture = EmptyTexture
+
+    override var shader: ShaderInstance
+        get() {
+            synchronizeBindings()
+            return currentShader
+        }
+        set(value) {
+            synchronizeBindings()
+            currentShader = value
+        }
+    override var texture: Texture
+        get() {
+            synchronizeBindings()
+            return currentTexture
+        }
+        set(value) {
+            synchronizeBindings()
+            currentTexture = value
+        }
+
+    override val drawer: Drawer = GlDrawer
+
+    private var clipGeneration = 0L
+    private var clipCount = 0
+
     override fun beginScopedPass(textureUnits: Set<Int>?): AutoCloseable {
         val owner = Thread.currentThread()
         val generation = resourceGeneration
@@ -133,8 +161,6 @@ internal object GlRenderContext : RenderContext {
         rectangle?.let { glScissor(it.x, it.y, it.width, it.height) }
     }
 
-    private var clipGeneration = 0L
-    private var clipCount = 0
     override fun setRaster(state: RasterState) {
         if (clipGeneration != resourceGeneration) {
             check(resourceGeneration != 0L) { "An OpenGL context must be current" }
@@ -197,6 +223,7 @@ internal object GlRenderContext : RenderContext {
         GlRenderTarget(width, height, depthStencil)
 
     override fun createSampler(sampling: TextureSampling): TextureSampler = GlTextureSampler(sampling)
+
     override fun createRgbaTexture(width: Int, height: Int, rgba: ByteArray): Texture = GlRgbaTexture(width, height, rgba)
 
     override fun bindSampler(sampler: TextureSampler?, unit: Int) {
@@ -221,9 +248,6 @@ internal object GlRenderContext : RenderContext {
         )
     }
 
-    private var bindingsGeneration = 0L
-    private var currentShader: ShaderInstance = EmptyShaderInstance
-    private var currentTexture: Texture = EmptyTexture
     private fun synchronizeBindings() {
         val generation = resourceGeneration
         if (generation != bindingsGeneration) {
@@ -232,27 +256,6 @@ internal object GlRenderContext : RenderContext {
             currentTexture = EmptyTexture
         }
     }
-
-    override var shader: ShaderInstance
-        get() {
-            synchronizeBindings()
-            return currentShader
-        }
-        set(value) {
-            synchronizeBindings()
-            currentShader = value
-        }
-    override var texture: Texture
-        get() {
-            synchronizeBindings()
-            return currentTexture
-        }
-        set(value) {
-            synchronizeBindings()
-            currentTexture = value
-        }
-
-    override val drawer: Drawer = GlDrawer
 
     override fun bindShader(shader: ShaderInstance) {
         this.shader = shader

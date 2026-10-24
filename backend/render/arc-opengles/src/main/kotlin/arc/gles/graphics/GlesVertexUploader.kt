@@ -25,6 +25,7 @@ internal object GlesVertexUploader {
     private val arrays = WeakHashMap<GLESCapabilities, Int>()
     private var vao = 0
     private var generation = 0L
+
     private fun currentVertexArray(): Int {
         val current = GlesContextIdentity.current()
         check(current != 0L) { "A GLES context must be current" }

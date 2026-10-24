@@ -95,27 +95,6 @@ abstract class AbstractGlfwWindow(
     private var cursorY = 0.0
     private var closed = false
     private val cursors = mutableMapOf<CursorShape, Long>()
-    override fun setCursor(shape: CursorShape) {
-        require(handle != 0L && !closed)
-        if (shape == CursorShape.DEFAULT) {
-            GLFW.glfwSetCursor(handle, 0L)
-            return
-        }
-        val cursor = cursors.getOrPut(shape) {
-            GLFW.glfwCreateStandardCursor(
-                when (shape) {
-                    CursorShape.POINTER -> GLFW.GLFW_HAND_CURSOR
-                    CursorShape.TEXT -> GLFW.GLFW_IBEAM_CURSOR
-                    CursorShape.CROSSHAIR -> GLFW.GLFW_CROSSHAIR_CURSOR
-                    CursorShape.RESIZE_HORIZONTAL -> GLFW.GLFW_HRESIZE_CURSOR
-                    CursorShape.RESIZE_VERTICAL -> GLFW.GLFW_VRESIZE_CURSOR
-                    else -> GLFW.GLFW_ARROW_CURSOR
-                }
-            )
-        }
-        check(cursor != 0L) { "Could not create cursor $shape" }
-        GLFW.glfwSetCursor(handle, cursor)
-    }
 
     override var clipboardText: String
         get() {
@@ -186,6 +165,28 @@ abstract class AbstractGlfwWindow(
         glfwDefaultWindowHints()
         glfwWindowHint(GLFW_VISIBLE, if (isHidden) GLFW_FALSE else GLFW_TRUE)
         glfwWindowHint(GLFW_RESIZABLE, if (isResizable) GLFW_TRUE else GLFW_FALSE)
+    }
+
+    override fun setCursor(shape: CursorShape) {
+        require(handle != 0L && !closed)
+        if (shape == CursorShape.DEFAULT) {
+            GLFW.glfwSetCursor(handle, 0L)
+            return
+        }
+        val cursor = cursors.getOrPut(shape) {
+            GLFW.glfwCreateStandardCursor(
+                when (shape) {
+                    CursorShape.POINTER -> GLFW.GLFW_HAND_CURSOR
+                    CursorShape.TEXT -> GLFW.GLFW_IBEAM_CURSOR
+                    CursorShape.CROSSHAIR -> GLFW.GLFW_CROSSHAIR_CURSOR
+                    CursorShape.RESIZE_HORIZONTAL -> GLFW.GLFW_HRESIZE_CURSOR
+                    CursorShape.RESIZE_VERTICAL -> GLFW.GLFW_VRESIZE_CURSOR
+                    else -> GLFW.GLFW_ARROW_CURSOR
+                }
+            )
+        }
+        check(cursor != 0L) { "Could not create cursor $shape" }
+        GLFW.glfwSetCursor(handle, cursor)
     }
 
     override fun create() {
@@ -323,29 +324,31 @@ abstract class AbstractGlfwWindow(
         mods and GLFW.GLFW_MOD_SHIFT != 0, mods and GLFW.GLFW_MOD_CONTROL != 0, mods and GLFW.GLFW_MOD_ALT != 0, mods and GLFW.GLFW_MOD_SUPER != 0
     )
 
-    private fun symbol(key: Int) = when (key) {
-        GLFW.GLFW_KEY_TAB -> KeySymbol.TAB
-        GLFW.GLFW_KEY_ENTER, GLFW.GLFW_KEY_KP_ENTER -> KeySymbol.ENTER
-        GLFW.GLFW_KEY_SPACE -> KeySymbol.SPACE
-        GLFW.GLFW_KEY_ESCAPE -> KeySymbol.ESCAPE
-        GLFW.GLFW_KEY_LEFT -> KeySymbol.LEFT
-        GLFW.GLFW_KEY_RIGHT -> KeySymbol.RIGHT
-        GLFW.GLFW_KEY_UP -> KeySymbol.UP
-        GLFW.GLFW_KEY_DOWN -> KeySymbol.DOWN
-        GLFW.GLFW_KEY_HOME -> KeySymbol.HOME
-        GLFW.GLFW_KEY_END -> KeySymbol.END
-        GLFW.GLFW_KEY_BACKSPACE -> KeySymbol.BACKSPACE
-        GLFW.GLFW_KEY_DELETE -> KeySymbol.DELETE
-        GLFW.GLFW_KEY_A -> KeySymbol.A
-        GLFW.GLFW_KEY_C -> KeySymbol.C
-        GLFW.GLFW_KEY_V -> KeySymbol.V
-        GLFW.GLFW_KEY_X -> KeySymbol.X
-        GLFW.GLFW_KEY_Y -> KeySymbol.Y
-        GLFW.GLFW_KEY_Z -> KeySymbol.Z
-        else -> KeySymbol.UNKNOWN
-    }
+    private fun symbol(key: Int) = KEY_SYMBOLS[key] ?: KeySymbol.UNKNOWN
 
     companion object {
+
+        private val KEY_SYMBOLS = mapOf(
+            GLFW.GLFW_KEY_TAB to KeySymbol.TAB,
+            GLFW.GLFW_KEY_ENTER to KeySymbol.ENTER,
+            GLFW.GLFW_KEY_KP_ENTER to KeySymbol.ENTER,
+            GLFW.GLFW_KEY_SPACE to KeySymbol.SPACE,
+            GLFW.GLFW_KEY_ESCAPE to KeySymbol.ESCAPE,
+            GLFW.GLFW_KEY_LEFT to KeySymbol.LEFT,
+            GLFW.GLFW_KEY_RIGHT to KeySymbol.RIGHT,
+            GLFW.GLFW_KEY_UP to KeySymbol.UP,
+            GLFW.GLFW_KEY_DOWN to KeySymbol.DOWN,
+            GLFW.GLFW_KEY_HOME to KeySymbol.HOME,
+            GLFW.GLFW_KEY_END to KeySymbol.END,
+            GLFW.GLFW_KEY_BACKSPACE to KeySymbol.BACKSPACE,
+            GLFW.GLFW_KEY_DELETE to KeySymbol.DELETE,
+            GLFW.GLFW_KEY_A to KeySymbol.A,
+            GLFW.GLFW_KEY_C to KeySymbol.C,
+            GLFW.GLFW_KEY_V to KeySymbol.V,
+            GLFW.GLFW_KEY_X to KeySymbol.X,
+            GLFW.GLFW_KEY_Y to KeySymbol.Y,
+            GLFW.GLFW_KEY_Z to KeySymbol.Z,
+        )
 
         @JvmStatic
         private fun bootCrash(code: Int, text: Long) {

@@ -95,6 +95,31 @@ internal object GlesRenderContext : RenderContext {
             return textureUnitCount
         }
 
+    private var bindingsGeneration = 0L
+    private var currentShader: ShaderInstance = EmptyShaderInstance
+    private var currentTexture: Texture = EmptyTexture
+
+    override var shader: ShaderInstance
+        get() {
+            synchronizeBindings()
+            return currentShader
+        }
+        set(value) {
+            synchronizeBindings()
+            currentShader = value
+        }
+    override var texture: Texture
+        get() {
+            synchronizeBindings()
+            return currentTexture
+        }
+        set(value) {
+            synchronizeBindings()
+            currentTexture = value
+        }
+
+    override val drawer: Drawer = GlesDrawer
+
     override fun beginScopedPass(textureUnits: Set<Int>?): AutoCloseable {
         val owner = Thread.currentThread()
         val generation = resourceGeneration
@@ -180,6 +205,7 @@ internal object GlesRenderContext : RenderContext {
         GlesRenderTarget(width, height, depthStencil)
 
     override fun createSampler(sampling: TextureSampling): TextureSampler = GlesTextureSampler(sampling)
+
     override fun createRgbaTexture(width: Int, height: Int, rgba: ByteArray): Texture = GlesRgbaTexture(width, height, rgba)
 
     override fun bindSampler(sampler: TextureSampler?, unit: Int) {
@@ -204,9 +230,6 @@ internal object GlesRenderContext : RenderContext {
         )
     }
 
-    private var bindingsGeneration = 0L
-    private var currentShader: ShaderInstance = EmptyShaderInstance
-    private var currentTexture: Texture = EmptyTexture
     private fun synchronizeBindings() {
         val generation = resourceGeneration
         if (generation != bindingsGeneration) {
@@ -215,27 +238,6 @@ internal object GlesRenderContext : RenderContext {
             currentTexture = EmptyTexture
         }
     }
-
-    override var shader: ShaderInstance
-        get() {
-            synchronizeBindings()
-            return currentShader
-        }
-        set(value) {
-            synchronizeBindings()
-            currentShader = value
-        }
-    override var texture: Texture
-        get() {
-            synchronizeBindings()
-            return currentTexture
-        }
-        set(value) {
-            synchronizeBindings()
-            currentTexture = value
-        }
-
-    override val drawer: Drawer = GlesDrawer
 
     override fun bindShader(shader: ShaderInstance) {
         this.shader = shader

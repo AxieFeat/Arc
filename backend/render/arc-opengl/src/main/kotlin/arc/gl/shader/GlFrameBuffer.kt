@@ -11,7 +11,9 @@ import org.lwjgl.opengl.GL11.GL_COLOR_BUFFER_BIT
 import org.lwjgl.opengl.GL11.GL_DEPTH_BUFFER_BIT
 import org.lwjgl.opengl.GL11.glClear
 
-/** Legacy facade backed by the scoped target contract. render composites without clearing the destination. */
+/**
+ * Legacy facade backed by the scoped target contract. render composites without clearing the destination.
+ */
 internal class GlFrameBuffer(width: Int, height: Int, override val isUseDepth: Boolean) : FrameBuffer {
 
     private val context = GlRenderContext
@@ -34,6 +36,7 @@ internal class GlFrameBuffer(width: Int, height: Int, override val isUseDepth: B
     override val height get() = target.height
     override val textureWidth get() = target.width
     override val textureHeight get() = target.height
+
     override fun bind(viewport: Boolean) {
         checkOpen()
         context.bindTarget(target)

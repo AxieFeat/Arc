@@ -78,6 +78,21 @@ internal class GlRenderTarget(
         }
 
         // A borrowed attachment view never destroys its owning target.
+        private fun attachColorTexture(width: Int, height: Int, texture: Int) {
+            glTexImage2D(
+                GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0,
+                GL_RGBA, GL_UNSIGNED_BYTE, 0L
+            )
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR)
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR)
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE)
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE)
+            glFramebufferTexture2D(
+                GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,
+                GL_TEXTURE_2D, texture, 0
+            )
+        }
+
         override fun cleanup() = Unit
     }
 
@@ -111,18 +126,8 @@ internal class GlRenderTarget(
                 glActiveTexture(GL_TEXTURE0)
                 glBindTexture(GL_TEXTURE_2D, newTexture)
                 glBindBuffer(GL_PIXEL_UNPACK_BUFFER, 0)
-                glTexImage2D(
-                    GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0,
-                    GL_RGBA, GL_UNSIGNED_BYTE, 0L
-                )
-                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR)
-                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR)
-                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE)
-                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE)
-                glFramebufferTexture2D(
-                    GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,
-                    GL_TEXTURE_2D, newTexture, 0
-                )
+                attachColorTexture(width, height, newTexture)
+
                 if (depthStencil) {
                     newDepthStencil = glGenRenderbuffers()
                     glBindRenderbuffer(GL_RENDERBUFFER, newDepthStencil)
@@ -149,6 +154,21 @@ internal class GlRenderTarget(
         this.width = width
         this.height = height
         return true
+    }
+
+    private fun attachColorTexture(width: Int, height: Int, texture: Int) {
+        glTexImage2D(
+            GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0,
+            GL_RGBA, GL_UNSIGNED_BYTE, 0L
+        )
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR)
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR)
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE)
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE)
+        glFramebufferTexture2D(
+            GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,
+            GL_TEXTURE_2D, texture, 0
+        )
     }
 
     override fun cleanup() {

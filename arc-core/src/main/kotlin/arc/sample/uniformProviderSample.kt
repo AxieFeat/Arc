@@ -1,7 +1,7 @@
 @file:Suppress("MatchingDeclarationName")
+
 package arc.sample
 
-import arc.Application
 import arc.asset.FileAsset
 import arc.graphics.Camera
 import arc.shader.AbstractUniformProvider
@@ -16,10 +16,8 @@ import java.io.File
 // TODO Update sample.
 internal object UniformProviderSample : AbstractUniformProvider() {
 
-    private val application = Application.find()
-
     // ONLY for example. In real application you need use camera from your scene.
-    private val camera = Camera.of(1f, 1f , 1f)
+    private val camera = Camera.of(1f, 1f, 1f)
 
     // Now we can configure uniforms for providing to shaders.
     init {
