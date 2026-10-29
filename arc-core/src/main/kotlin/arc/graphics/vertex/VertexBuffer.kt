@@ -2,6 +2,7 @@ package arc.graphics.vertex
 
 import arc.Arc.single
 import arc.annotations.TypeFactory
+import arc.graphics.ContextResource
 import arc.graphics.DrawBuffer
 import arc.graphics.DrawerMode
 import arc.util.pattern.Bindable
@@ -14,7 +15,7 @@ import java.nio.ByteBuffer
  *
  * @sample arc.sample.meshSample
  */
-interface VertexBuffer : Bindable, Cleanable {
+interface VertexBuffer : Bindable, Cleanable, ContextResource {
 
     /**
      * ID of this buffer in a Render system.
@@ -42,9 +43,14 @@ interface VertexBuffer : Bindable, Cleanable {
     val vertices: Int
 
     /**
+     * Initialized GPU bytes drawn by this buffer. [size] is allocation capacity in bytes.
+     */
+    val activeBytes: Int get() = Math.multiplyExact(vertices, format.nextOffset)
+
+    /**
      * Store some [ByteBuffer] in this vertex buffer (It will overwrite old values).
      *
-     * @param buffer Buffer for writing it this vertex buffer instance.
+     * @param buffer Direct input buffer; active bytes start at its current position. Position/limit are unchanged.
      * @param vertices Count of vertices in the buffer.
      */
     fun write(buffer: ByteBuffer, vertices: Int)

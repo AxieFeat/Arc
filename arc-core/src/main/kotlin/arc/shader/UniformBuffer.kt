@@ -2,6 +2,7 @@ package arc.shader
 
 import arc.Arc.single
 import arc.annotations.TypeFactory
+import arc.graphics.ContextResource
 import arc.util.pattern.Bindable
 import arc.util.pattern.Cleanable
 import org.jetbrains.annotations.ApiStatus
@@ -96,7 +97,7 @@ import kotlin.jvm.Throws
  * shader.uploadUniformBuffer("Lights", buffer) // <- Upload our buffer to shader via uniform name.
  * ```
  */
-interface UniformBuffer : Cleanable, Bindable {
+interface UniformBuffer : Cleanable, Bindable, ContextResource {
 
     /**
      * ID of this buffer in a render system.

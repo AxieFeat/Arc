@@ -16,41 +16,31 @@ internal object GlfwKeyboardInput : KeyboardInput {
     override val bindingProcessor: BindingProcessor = GlfwBindingProcessor()
 
     override fun isPressed(key: KeyCode): Boolean {
-        if(key.keyType != KeyType.KEY) return false
+        if (key.keyType != KeyType.KEY) return false
 
-        try {
-            if(GLFW.glfwGetKey(window!!.handle, key.id) == GLFW.GLFW_PRESS ||
-                GLFW.glfwGetKey(window!!.handle, key.id) == GLFW.GLFW_REPEAT) return true
-        } catch (ignore: Throwable) {}
-
-        return false
+        return window?.events?.gameplayKeyDown(key.id) ?: false
     }
 
     override fun isReleased(key: KeyCode): Boolean {
-        if(key.keyType != KeyType.KEY) return false
+        if (key.keyType != KeyType.KEY) return false
 
-        try {
-            if(GLFW.glfwGetKey(window!!.handle, key.id) == GLFW.GLFW_RELEASE ||
-                GLFW.glfwGetKey(window!!.handle, key.id) == GLFW.GLFW_REPEAT) return true
-        } catch (ignore: Throwable) {}
-
-        return false
+        return !isPressed(key)
     }
 
     @Suppress("OptionalWhenBraces")
     fun keyUpdate(key: KeyCode, pressed: Boolean) {
-        if(key.keyType != KeyType.KEY) return
+        if (key.keyType != KeyType.KEY) return
 
-        GlfwInputEngine.executor.submit {
+        GlfwInputEngine.executeBinding {
             bindingProcessor.bindings.forEach { binding ->
 
-                GlfwInputEngine.executor.submit {
+                GlfwInputEngine.executeBinding {
                     when (binding) {
                         is Binding if (
                                 binding.key == key ||
-                                binding.key == KeyCode.ANY ||
-                                binding.key == KeyCode.ANY_KEY
-                            ) -> {
+                                        binding.key == KeyCode.ANY ||
+                                        binding.key == KeyCode.ANY_KEY
+                                ) -> {
 
                             if (pressed) {
                                 binding.onPress(key)

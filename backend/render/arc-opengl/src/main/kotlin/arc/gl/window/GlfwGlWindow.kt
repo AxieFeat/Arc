@@ -30,6 +30,7 @@ internal class GlfwGlWindow(
 
     fun pollEvents() {
         GLFW.glfwPollEvents()
+        events.drainAutomatically()
     }
 
     fun swapBuffers() {

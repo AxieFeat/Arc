@@ -22,6 +22,9 @@ if (!isPublishingSkipped()) {
         .orElse(providers.environmentVariable("GITHUB_SHA").map { it.take(7) })
         .orElse(providers.provider { shortGitCommitHash(rootProject.layout.projectDirectory.asFile) ?: version.toString() })
 
+    // Project dependencies must use the same version as their published artifacts.
+    version = publishingVersion.get()
+
     val githubRepository = providers.gradleProperty("githubRepository")
         .orElse(providers.environmentVariable("GITHUB_REPOSITORY"))
         .orElse("AxieFeat/${rootProject.name}")
@@ -42,7 +45,7 @@ if (!isPublishingSkipped()) {
             create<MavenPublication>("maven") {
                 groupId = rootProject.group.toString()
                 artifactId = project.name
-                version = publishingVersion.get()
+                version = project.version.toString()
 
                 from(project.components.getByName("java"))
             }

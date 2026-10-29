@@ -1,12 +1,27 @@
 package arc.window.glfw
 
+import arc.window.CursorShape
+import arc.window.FocusEvent
+import arc.window.KeyAction
+import arc.window.KeyModifiers
+import arc.window.KeySymbol
+import arc.window.KeyboardEvent
+import arc.window.MetricsEvent
+import arc.window.PointerBoundary
+import arc.window.PointerButton
+import arc.window.PointerMotion
+import arc.window.PointerWheel
+import arc.window.UnicodeCommit
 import arc.window.Window
 import arc.window.WindowBackend
+import arc.window.WindowEvents
 import arc.window.WindowException
 import arc.window.WindowHandler
+import arc.window.WindowMetrics
 import io.github.oshai.kotlinlogging.KLogger
 import org.joml.Vector2i
 import org.lwjgl.glfw.Callbacks
+import org.lwjgl.glfw.GLFW
 import org.lwjgl.glfw.GLFW.GLFW_CURSOR
 import org.lwjgl.glfw.GLFW.GLFW_CURSOR_DISABLED
 import org.lwjgl.glfw.GLFW.GLFW_CURSOR_NORMAL
@@ -59,6 +74,27 @@ abstract class AbstractGlfwWindow(
     override var handle: Long = 0
     override var position: Vector2i = Vector2i(0, 0)
     override var isFocus: Boolean = true
+    override val events = WindowEvents()
+
+    init {
+        // Compatibility input is a lower-priority listener, so UI consumption also protects
+        // applications still using Window.handler for camera movement or scrolling.
+        events.subscribe(priority = Int.MIN_VALUE) { event ->
+            when (event) {
+                is PointerMotion -> handler.cursorMove(event.x, event.y)
+                is PointerWheel -> handler.scroll(event.deltaX, event.deltaY)
+                is PointerBoundary -> if (event.entered) handler.cursorEntered() else handler.cursorLeaved()
+            }
+            false
+        }
+    }
+
+    final override var metrics = WindowMetrics(width, height, width, height)
+        private set
+    private var cursorX = 0.0
+    private var cursorY = 0.0
+    private var closed = false
+    private val cursors = mutableMapOf<CursorShape, Long>()
 
     override var clipboardText: String
         get() {
@@ -82,10 +118,10 @@ abstract class AbstractGlfwWindow(
 
     override var isHidden: Boolean = false
         set(value) {
-            if(value && !field) {
-                glfwShowWindow(handle)
-            } else if (!value && field) {
+            if (value && !field) {
                 glfwHideWindow(handle)
+            } else if (!value && field) {
+                glfwShowWindow(handle)
             }
 
             field = value
@@ -93,9 +129,9 @@ abstract class AbstractGlfwWindow(
 
     override var isVsync: Boolean = true
         set(value) {
-            if(value && !field) {
+            if (value && !field) {
                 glfwSwapInterval(GLFW_TRUE)
-            } else if(!value && field) {
+            } else if (!value && field) {
                 glfwSwapInterval(GLFW_FALSE)
             }
 
@@ -104,17 +140,17 @@ abstract class AbstractGlfwWindow(
 
     override var isShowCursor: Boolean = true
         set(value) {
-            if(value && !field) {
-                glfwSetInputMode(
-                    handle,
-                    GLFW_CURSOR,
-                    GLFW_CURSOR_DISABLED
-                )
-            } else if(!value && field) {
+            if (value && !field) {
                 glfwSetInputMode(
                     handle,
                     GLFW_CURSOR,
                     GLFW_CURSOR_NORMAL
+                )
+            } else if (!value && field) {
+                glfwSetInputMode(
+                    handle,
+                    GLFW_CURSOR,
+                    GLFW_CURSOR_DISABLED
                 )
             }
 
@@ -131,6 +167,28 @@ abstract class AbstractGlfwWindow(
         glfwWindowHint(GLFW_RESIZABLE, if (isResizable) GLFW_TRUE else GLFW_FALSE)
     }
 
+    override fun setCursor(shape: CursorShape) {
+        require(handle != 0L && !closed)
+        if (shape == CursorShape.DEFAULT) {
+            GLFW.glfwSetCursor(handle, 0L)
+            return
+        }
+        val cursor = cursors.getOrPut(shape) {
+            GLFW.glfwCreateStandardCursor(
+                when (shape) {
+                    CursorShape.POINTER -> GLFW.GLFW_HAND_CURSOR
+                    CursorShape.TEXT -> GLFW.GLFW_IBEAM_CURSOR
+                    CursorShape.CROSSHAIR -> GLFW.GLFW_CROSSHAIR_CURSOR
+                    CursorShape.RESIZE_HORIZONTAL -> GLFW.GLFW_HRESIZE_CURSOR
+                    CursorShape.RESIZE_VERTICAL -> GLFW.GLFW_VRESIZE_CURSOR
+                    else -> GLFW.GLFW_ARROW_CURSOR
+                }
+            )
+        }
+        check(cursor != 0L) { "Could not create cursor $shape" }
+        GLFW.glfwSetCursor(handle, cursor)
+    }
+
     override fun create() {
         handle = glfwCreateWindow(width, height, name, MemoryUtil.NULL, MemoryUtil.NULL)
 
@@ -140,12 +198,29 @@ abstract class AbstractGlfwWindow(
         glfwSetCursorEnterCallback(handle, ::onEnter)
         glfwSetCursorPosCallback(handle, ::onCursorMove)
         glfwSetScrollCallback(handle, ::onScroll)
+        GLFW.glfwSetWindowSizeCallback(handle) { _, _, _ -> refreshMetrics() }
+        GLFW.glfwSetWindowContentScaleCallback(handle) { _, _, _ -> refreshMetrics() }
+        GLFW.glfwSetWindowIconifyCallback(handle) { _, _ -> refreshMetrics() }
+        GLFW.glfwSetKeyCallback(handle) { _, key, scan, action, mods ->
+            events.enqueue(
+                KeyboardEvent(symbol(key), key, scan, keyAction(action), modifiers(mods), events.nextSequence(), System.nanoTime(), handle)
+            )
+        }
+        GLFW.glfwSetMouseButtonCallback(handle) { _, button, action, mods ->
+            events.enqueue(
+                PointerButton(button, keyAction(action), cursorX, cursorY, modifiers(mods), events.nextSequence(), System.nanoTime(), handle)
+            )
+        }
+        GLFW.glfwSetCharCallback(handle) { _, codepoint ->
+            events.enqueue(UnicodeCommit(String(Character.toChars(codepoint)), events.nextSequence(), System.nanoTime(), handle))
+        }
 
         val arrWidth = IntArray(1)
         val arrHeight = IntArray(1)
         glfwGetFramebufferSize(handle, arrWidth, arrHeight)
         width = arrWidth[0]
         height = arrHeight[0]
+        refreshMetrics()
 
         logger.atInfo {
             message = "Initialized GLFW window"
@@ -160,6 +235,11 @@ abstract class AbstractGlfwWindow(
     }
 
     override fun close() {
+        if (closed) return
+        closed = true
+        events.close()
+        cursors.values.forEach(GLFW::glfwDestroyCursor)
+        cursors.clear()
         logger.info { "Closing GLFW window" }
 
         Callbacks.glfwFreeCallbacks(handle)
@@ -186,31 +266,89 @@ abstract class AbstractGlfwWindow(
     }
 
     private fun onCursorMove(handle: Long, x: Double, y: Double) {
-        handler.cursorMove(x, y)
+        cursorX = x
+        cursorY = y
+        events.enqueue(PointerMotion(x, y, events.nextSequence(), System.nanoTime(), handle))
     }
 
     private fun onScroll(handle: Long, xOffset: Double, yOffset: Double) {
-        handler.scroll(xOffset, yOffset)
+        events.enqueue(PointerWheel(cursorX, cursorY, xOffset, yOffset, events.nextSequence(), System.nanoTime(), handle))
     }
 
     private fun onResize(handle: Long, width: Int, height: Int) {
         this.width = width
         this.height = height
+        refreshMetrics()
 
         handler.resize(width, height)
     }
 
     private fun onFocus(handle: Long, focus: Boolean) {
         this.isFocus = focus
+        refreshMetrics()
+        events.enqueue(FocusEvent(focus, events.nextSequence(), System.nanoTime(), handle))
 
         handler.focus(focus)
     }
 
     private fun onEnter(handle: Long, entered: Boolean) {
-        if (entered) handler.cursorEntered() else handler.cursorLeaved()
+        events.enqueue(PointerBoundary(entered, events.nextSequence(), System.nanoTime(), handle))
     }
 
+    private fun refreshMetrics() {
+        val w = IntArray(1)
+        val h = IntArray(1)
+        val fw = IntArray(1)
+        val fh = IntArray(1)
+        val sx = FloatArray(1)
+        val sy = FloatArray(1)
+        GLFW.glfwGetWindowSize(handle, w, h)
+        GLFW.glfwGetFramebufferSize(handle, fw, fh)
+        GLFW.glfwGetWindowContentScale(handle, sx, sy)
+        width = fw[0]
+        height = fh[0]
+        metrics = WindowMetrics(
+            w[0], h[0], fw[0], fh[0], sx[0], sy[0], isFocus, GLFW.glfwGetWindowAttrib(handle, GLFW.GLFW_ICONIFIED) == GLFW.GLFW_TRUE,
+            metrics.generation + 1
+        )
+        events.enqueue(MetricsEvent(metrics, events.nextSequence(), System.nanoTime(), handle))
+    }
+
+    private fun keyAction(action: Int) = when (action) {
+        GLFW.GLFW_PRESS -> KeyAction.PRESS
+        GLFW.GLFW_REPEAT -> KeyAction.REPEAT
+        else -> KeyAction.RELEASE
+    }
+
+    private fun modifiers(mods: Int) = KeyModifiers(
+        mods and GLFW.GLFW_MOD_SHIFT != 0, mods and GLFW.GLFW_MOD_CONTROL != 0, mods and GLFW.GLFW_MOD_ALT != 0, mods and GLFW.GLFW_MOD_SUPER != 0
+    )
+
+    private fun symbol(key: Int) = KEY_SYMBOLS[key] ?: KeySymbol.UNKNOWN
+
     companion object {
+
+        private val KEY_SYMBOLS = mapOf(
+            GLFW.GLFW_KEY_TAB to KeySymbol.TAB,
+            GLFW.GLFW_KEY_ENTER to KeySymbol.ENTER,
+            GLFW.GLFW_KEY_KP_ENTER to KeySymbol.ENTER,
+            GLFW.GLFW_KEY_SPACE to KeySymbol.SPACE,
+            GLFW.GLFW_KEY_ESCAPE to KeySymbol.ESCAPE,
+            GLFW.GLFW_KEY_LEFT to KeySymbol.LEFT,
+            GLFW.GLFW_KEY_RIGHT to KeySymbol.RIGHT,
+            GLFW.GLFW_KEY_UP to KeySymbol.UP,
+            GLFW.GLFW_KEY_DOWN to KeySymbol.DOWN,
+            GLFW.GLFW_KEY_HOME to KeySymbol.HOME,
+            GLFW.GLFW_KEY_END to KeySymbol.END,
+            GLFW.GLFW_KEY_BACKSPACE to KeySymbol.BACKSPACE,
+            GLFW.GLFW_KEY_DELETE to KeySymbol.DELETE,
+            GLFW.GLFW_KEY_A to KeySymbol.A,
+            GLFW.GLFW_KEY_C to KeySymbol.C,
+            GLFW.GLFW_KEY_V to KeySymbol.V,
+            GLFW.GLFW_KEY_X to KeySymbol.X,
+            GLFW.GLFW_KEY_Y to KeySymbol.Y,
+            GLFW.GLFW_KEY_Z to KeySymbol.Z,
+        )
 
         @JvmStatic
         private fun bootCrash(code: Int, text: Long) {

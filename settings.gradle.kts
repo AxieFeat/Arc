@@ -44,12 +44,12 @@ window("egl")
 window("sdl")
 
 project("extensions")
-extension("font",         "core", "simple")
-extension("model",        "core", "simple")
-extension("display",      "core", "common", "opengl")
-extension("audio",        "core", "openal")
-extension("profiler",     "core", "simple")
-extension("input",        "core", "glfw")
+extension("font", "core", "simple", "native")
+extension("model", "core", "simple")
+extension("display", "core", "common", "opengl")
+extension("audio", "core", "openal")
+extension("profiler", "core", "simple")
+extension("input", "core", "glfw")
 
 project("demo")
 

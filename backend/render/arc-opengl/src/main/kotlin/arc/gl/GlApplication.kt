@@ -31,7 +31,8 @@ internal object GlApplication : AbstractApplication() {
 
     override val window: GlfwGlWindow
         get() = checkNotNull(_window) {
-            "Window is not initialized yet. Accessing it before Application.init() is not allowed." }
+            "Window is not initialized yet. Accessing it before Application.init() is not allowed."
+        }
     override val renderContext: RenderContext
         get() = checkNotNull(_renderSystem) {
             "RenderSystem is not initialized yet. Accessing it before Application.init() is not allowed."
@@ -92,7 +93,11 @@ internal object GlApplication : AbstractApplication() {
     }
 
     override fun close() {
-        window.close()
+        try {
+            window.close()
+        } finally {
+            GL.setCapabilities(null)
+        }
     }
 
     internal object Provider : Application.Provider {

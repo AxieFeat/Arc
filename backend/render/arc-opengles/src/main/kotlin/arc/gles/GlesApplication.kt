@@ -30,7 +30,8 @@ internal object GlesApplication : AbstractApplication() {
 
     override val window: EglGlesWindow
         get() = checkNotNull(_window) {
-            "Window is not initialized yet. Accessing it before Application.init() is not allowed." }
+            "Window is not initialized yet. Accessing it before Application.init() is not allowed."
+        }
     override val renderContext: GlesRenderContext
         get() = checkNotNull(_renderSystem) {
             "RenderSystem is not initialized yet. Accessing it before Application.init() is not allowed."
@@ -92,10 +93,15 @@ internal object GlesApplication : AbstractApplication() {
     }
 
     override fun close() {
-        window.close()
+        try {
+            window.close()
+        } finally {
+            GLES.setCapabilities(null)
+        }
     }
 
     internal object Provider : Application.Provider {
+
         override fun provide(): Application {
             return GlesApplication
         }

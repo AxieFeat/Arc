@@ -1,62 +1,88 @@
 package arc.gles.shader
 
+import arc.gles.graphics.GlesContextResource
 import arc.shader.UniformBuffer
-import org.lwjgl.opengles.GLES20.GL_DYNAMIC_DRAW
-import org.lwjgl.opengles.GLES20.glBindBuffer
-import org.lwjgl.opengles.GLES20.glBufferData
-import org.lwjgl.opengles.GLES20.glBufferSubData
-import org.lwjgl.opengles.GLES20.glDeleteBuffers
-import org.lwjgl.opengles.GLES20.glGenBuffers
-import org.lwjgl.opengles.GLES30.GL_UNIFORM_BUFFER
-import org.lwjgl.system.MemoryUtil.memAlloc
-import org.lwjgl.system.MemoryUtil.memFree
 import java.nio.ByteBuffer
+import org.lwjgl.opengles.GLES20.glGetInteger
+import org.lwjgl.opengles.GLES30.GL_DYNAMIC_DRAW
+import org.lwjgl.opengles.GLES30.GL_UNIFORM_BUFFER
+import org.lwjgl.opengles.GLES30.GL_UNIFORM_BUFFER_BINDING
+import org.lwjgl.opengles.GLES30.glBindBuffer
+import org.lwjgl.opengles.GLES30.glBufferData
+import org.lwjgl.opengles.GLES30.glBufferSubData
+import org.lwjgl.opengles.GLES30.glDeleteBuffers
+import org.lwjgl.opengles.GLES30.glGenBuffers
+import org.lwjgl.system.MemoryUtil
 
-internal class GlesUniformBuffer(
-    override val size: Int
-) : UniformBuffer {
+internal class GlesUniformBuffer(override val size: Int) : GlesContextResource(), UniformBuffer {
 
-    override val id: Int = glGenBuffers()
-    private val cachedBuffer = memAlloc(size)
+    override var id = 0
+        private set
+    private val cachedBuffer = MemoryUtil.memAlloc(size.also { require(it >= 0) { "Uniform buffer size must be nonnegative" } })
+    private var closed = false
 
     init {
-        bind()
-        glBufferData(GL_UNIFORM_BUFFER, size.toLong(), GL_DYNAMIC_DRAW)
-        unbind()
+        id = glGenBuffers()
+        val previous = glGetInteger(GL_UNIFORM_BUFFER_BINDING)
+        try {
+            bind()
+            glBufferData(GL_UNIFORM_BUFFER, size.toLong(), GL_DYNAMIC_DRAW)
+        } catch (failure: Throwable) {
+            cleanup()
+            throw failure
+        } finally {
+            glBindBuffer(GL_UNIFORM_BUFFER, previous)
+        }
     }
 
     override fun update(data: ByteBuffer) {
-        require(data.remaining() <= size) { "Data size (${data.remaining()}) > buffer capacity ($size)"  }
-
+        requireCurrentContext()
+        check(!closed) { "Uniform buffer is closed" }
+        require(data.remaining() <= size) { "Uniform update exceeds capacity $size" }
         cachedBuffer.clear()
-        cachedBuffer.put(data)
+        cachedBuffer.put(data.duplicate())
         cachedBuffer.flip()
-
-        bind()
-        glBufferSubData(GL_UNIFORM_BUFFER, 0, cachedBuffer)
-        unbind()
+        val previous = glGetInteger(GL_UNIFORM_BUFFER_BINDING)
+        try {
+            bind()
+            glBufferSubData(GL_UNIFORM_BUFFER, 0, cachedBuffer)
+        } finally {
+            glBindBuffer(GL_UNIFORM_BUFFER, previous)
+        }
     }
 
     override fun update(size: Int, data: ByteBuffer.() -> Unit) {
-        val buffer = memAlloc(size).apply(data).flip()
+        require(size in 0..this.size) { "Uniform update size exceeds capacity" }
+        val temporary = MemoryUtil.memAlloc(size)
         try {
-            update(buffer)
+            temporary.apply(data).flip()
+            update(temporary)
         } finally {
-            memFree(buffer)
+            MemoryUtil.memFree(temporary)
         }
+    }
+
+    override fun bind() {
+        requireCurrentContext()
+        check(!closed) { "Uniform buffer is closed" }
+        glBindBuffer(GL_UNIFORM_BUFFER, id)
+    }
+
+    override fun unbind() {
+        requireCurrentContext()
+        glBindBuffer(GL_UNIFORM_BUFFER, 0)
     }
 
     override fun cleanup() {
-        memFree(cachedBuffer)
-        glDeleteBuffers(id)
+        if (closed) return
+        if (isCurrentContext()) glDeleteBuffers(id)
+        MemoryUtil.memFree(cachedBuffer)
+        id = 0
+        closed = true
     }
 
-    override fun bind() = glBindBuffer(GL_UNIFORM_BUFFER, id)
-    override fun unbind() = glBindBuffer(GL_UNIFORM_BUFFER, 0)
-
     object Factory : UniformBuffer.Factory {
-        override fun create(size: Int): UniformBuffer {
-            return GlesUniformBuffer(size)
-        }
+
+        override fun create(size: Int): UniformBuffer = GlesUniformBuffer(size)
     }
 }
