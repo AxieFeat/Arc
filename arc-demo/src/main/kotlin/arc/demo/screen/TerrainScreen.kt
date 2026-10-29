@@ -7,7 +7,6 @@ import arc.demo.input.CameraControlBind
 import arc.demo.input.ScreenshotBind
 import arc.demo.shader.ShaderContainer
 import arc.demo.shader.VertexFormatContainer
-import arc.demo.world.block.Blocks
 import arc.demo.world.World
 import arc.demo.world.block.Block
 import arc.files.classpath
@@ -30,9 +29,8 @@ import kotlin.math.*
 
 object TerrainScreen : Screen("terrain") {
 
-    init {
-        Blocks // We should load texture in blocks list
-    }
+    private val world = World()
+    private val player = Player(world, camera)
 
     private val drawer = application.renderContext.drawer
 
@@ -40,7 +38,7 @@ object TerrainScreen : Screen("terrain") {
     private val matrix = Matrix4f().ortho(0f, application.window.width.toFloat(), 0f, application.window.height.toFloat(), -1f, 1f)
     private val hello = font.prepare(matrix.translate(10f, 10f, 0f).scale(5f), "temez gondon")
 
-    private val lighting = listOf<Light>(
+    private val lighting = listOf(
         Light(Color.RED, Vector3f(0f, 5f, -5f), 10f),
         Light(Color.GREEN, Vector3f(0f, 1f, 5f), 10f),
         Light(Color.BLUE, Vector3f(5f, 1f, 0f), 10f),
@@ -120,9 +118,6 @@ object TerrainScreen : Screen("terrain") {
         buffer.build()
     }
 
-    private val world = World()
-    private val player = Player(world, camera)
-
     init {
         isShowCursor = false
         application.keyboard.bind(CameraControlBind)
@@ -130,21 +125,22 @@ object TerrainScreen : Screen("terrain") {
 
         application.renderContext.enableCull()
 
-        application.window.isVsync = false
+        application.window.isVsync = true
 
-        player.viewDistance = 5
-        player.memoryDistance = 5
+        player.viewDistance = 8
+        player.memoryDistance = 16
 
-        player.position = Vector3f(0f, 50f, 0f)
+        player.position = Vector3f(0f, 15f, 0f)
         player.fly = true
+        camera.rotate(-25f, 0f, 0f)
 
-        for(x in 0..8) {
-            for(y in 0..8) {
-                world.generateChunkAt(x, y)
-            }
-        }
-
-        world.rebuild()
+//        for(x in 0..8) {
+//            for(y in 0..8) {
+//                world.generateChunkAt(x, y)
+//            }
+//        }
+//
+//        world.allChanged()
     }
 
     override fun doRender() {
@@ -152,21 +148,21 @@ object TerrainScreen : Screen("terrain") {
 
         renderSky()
 
-        ShaderContainer.blitScreen.bind()
-        font.bind()
-        drawer.draw(hello)
-
-        renderCrosshair()
-
         ShaderContainer.positionTexColor.bind()
         uploadLights(ShaderContainer.positionTexColor, lighting, ubo)
-        world.render()
-        ShaderContainer.positionTexColor.unbind()
+        world.render(ShaderContainer.positionTexColor, player)
 
         val aabb = generateAABBForHoveredBlock()
         if (aabb != null) {
             renderAABB(aabb)
         }
+
+        application.renderContext.disableDepthTest()
+        ShaderContainer.blitScreen.bind()
+        font.bind()
+        drawer.draw(hello)
+        renderCrosshair()
+        application.renderContext.enableDepthTest()
 
         name = "FPS: $fps, Frame time: $frameTime ms"
     }
@@ -175,7 +171,7 @@ object TerrainScreen : Screen("terrain") {
         val block = raycastForBlock()
 
         if(block != null) {
-            world.setBlockAndNotify(block.x, block.y, block.z, Blocks.AIR)
+            world.setBlockAndUpdateChunk(block.x, block.y, block.z, null)
         }
     }
 
@@ -190,7 +186,7 @@ object TerrainScreen : Screen("terrain") {
         val targetY = y + ny
         val targetZ = z + nz
 
-        world.setBlockAndNotify(targetX.toInt(), targetY.toInt(), targetZ.toInt(), Blocks.STONE)
+        world.setBlockAndUpdateChunk(targetX.toInt(), targetY.toInt(), targetZ.toInt())
     }
 
     private fun renderCrosshair() {
@@ -301,7 +297,7 @@ object TerrainScreen : Screen("terrain") {
 
         while (distanceTraveled <= maxDistance) {
             val block = world.getBlock(x, y, z)
-            if (block != Blocks.AIR) {
+            if (block != null) {
                 return RaycastHit(x, y, z, lastStepFace, block)
             }
 

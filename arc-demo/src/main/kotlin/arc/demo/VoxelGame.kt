@@ -5,10 +5,12 @@ import arc.audio.SoundEngine
 import arc.demo.screen.FaultyTerminalScreen
 import arc.demo.screen.FractalScreen
 import arc.demo.screen.Screen
+import arc.demo.screen.TerrainScreen
 import arc.demo.shader.ShaderContainer
 import arc.graphics.vertex.VertexFormat
 import arc.input.GlfwInputEngine
 import arc.window.WindowHandler
+import io.github.oshai.kotlinlogging.KotlinLogging
 import kotlin.system.exitProcess
 
 object VoxelGame : WindowHandler {
@@ -17,24 +19,24 @@ object VoxelGame : WindowHandler {
     private val soundEngine: SoundEngine = SoundEngine.find()
     var screen: Screen? = null
 
+    private val logger = KotlinLogging.logger {}
+
     fun start() {
         application.init()
         soundEngine.start()
 
         GlfwInputEngine.hook(application.window)
 
-//        loadShaders()
+        loadShaders()
 
         // Set window handler to this instance.
         application.window.handler = this
 
         // Demo with julia fractal.
-        screen = FaultyTerminalScreen
+        screen = TerrainScreen
 
         // Demo with minecraft-like game.
 //        setScreen(FaultyTerminalScreen)
-
-        application.window.isVsync = false
 
 //        val asset = classpath("arc/sound/pigstep.ogg").asFileAsset()
 //        val sound = SoundLoader.of(SoundFormat.OGG).load(asset)
@@ -64,13 +66,13 @@ object VoxelGame : WindowHandler {
     }
 
     private fun loadShaders() {
-        application.window.name = "Loading shaders..."
+        logger.info { "Loading shaders..." }
 
         val start = System.currentTimeMillis()
         ShaderContainer
         VertexFormat
 
-        application.window.name = "Shaders loaded in ${System.currentTimeMillis() - start} ms"
+        logger.info { "Shaders loaded in ${System.currentTimeMillis() - start} ms" }
     }
 
 }
