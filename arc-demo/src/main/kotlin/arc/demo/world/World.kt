@@ -1,96 +1,175 @@
 package arc.demo.world
 
+import arc.demo.VoxelGame
 import arc.demo.entity.Player
 import arc.demo.world.block.Block
-import arc.demo.world.block.Blocks
 import arc.demo.world.chunk.Chunk
+import arc.model.Face
+import arc.model.Model
+import arc.model.cube.Cube
+import arc.model.cube.CubeFace
+import arc.model.texture.ModelTexture
 import arc.shader.ShaderInstance
 import de.articdive.jnoise.core.api.functions.Interpolation
 import de.articdive.jnoise.generators.noisegen.perlin.PerlinNoiseGenerator
-import kotlin.collections.forEach
+import java.util.concurrent.CompletableFuture
+import java.util.concurrent.Executors
 
 class World {
+
+    private val executor = Executors.newFixedThreadPool(4)
+
     private val noise = PerlinNoiseGenerator.newBuilder().setInterpolation(Interpolation.COSINE).build();
+    val chunks = mutableMapOf<Pair<Int, Int>, Chunk>()
 
-    private val chunks = HashMap<Long, Chunk>(1024)
-
-    // Ключ чанка по координатам (x,z)
-    private fun key(cx: Int, cz: Int): Long {
-        return (cx.toLong() shl 32) or (cz.toLong() and 0xFFFFFFFFL)
+    fun getChunk(chunkX: Int, chunkZ: Int): Chunk? {
+        return chunks[chunkX to chunkZ]
     }
 
-    fun isChunkLoaded(chunkX: Int, chunkZ: Int): Boolean =
-        chunks.containsKey(key(chunkX, chunkZ))
-
-    fun getChunk(chunkX: Int, chunkZ: Int): Chunk =
-        chunks.getOrPut(key(chunkX, chunkZ)) { Chunk(this, chunkX, chunkZ) }
-
-    fun getBlock(worldX: Int, worldY: Int, worldZ: Int): Block {
-        val chunkX = worldX shr 4
-        val chunkZ = worldZ shr 4
-        val localX = worldX and 15
-        val localZ = worldZ and 15
-        return getChunk(chunkX, chunkZ).getBlock(localX, worldY, localZ)
+    fun getOrCreateChunk(chunkX: Int, chunkZ: Int): Chunk {
+        return chunks.getOrPut(chunkX to chunkZ) { Chunk(this, chunkX, chunkZ) }
     }
 
-    fun setBlock(worldX: Int, worldY: Int, worldZ: Int, block: Block) {
-        val chunkX = worldX shr 4
-        val chunkZ = worldZ shr 4
-        val localX = worldX and 15
-        val localZ = worldZ and 15
-        getChunk(chunkX, chunkZ).setBlock(localX, worldY, localZ, block)
+    fun getBlock(x: Int, y: Int, z: Int): Block? {
+        val chunkX = x shr 4
+        val chunkZ = z shr 4
+        val chunk = getChunk(chunkX, chunkZ) ?: return null
+        return chunk.getBlock(x and 15, y, z and 15)
     }
 
-    fun setBlockAndNotify(worldX: Int, worldY: Int, worldZ: Int, block: Block) {
-        val chunkX = worldX shr 4
-        val chunkZ = worldZ shr 4
-        val localX = worldX and 15
-        val localZ = worldZ and 15
-        getChunk(chunkX, chunkZ).setBlockAndNotify(localX, worldY, localZ, block)
-    }
-
-    // Пример: перебрать все загруженные чанки (для вашего рендера/обновлений и т.д.)
-    fun forEachChunk(action: (Chunk) -> Unit) {
-        chunks.values.forEach(action)
-    }
-
-    fun rebuild() {
-        chunks.values.toList().forEach { chunk ->
-            chunk.sections.toList().forEach { s -> s?.renderer?.rebuild() }
+    fun setBlock(x: Int, y: Int, z: Int, model: Model?) {
+        if(y !in 0..255) {
+            println("Can not block at [$y] height!")
+            return
         }
+
+        val chunkX = x shr 4
+        val chunkZ = z shr 4
+        val chunk = getOrCreateChunk(chunkX, chunkZ)
+        chunk.setBlock(x and 15, y, z and 15, model)
     }
 
-    fun render() {
-        forEachChunk { chunk ->
-            chunk.forEachNonEmptySection { section ->
-                section.renderer.render()
+    fun setBlockAndUpdateChunk(x: Int, y: Int, z: Int, model: Model? = model()) {
+        if(y !in 0..255) {
+            println("Can not block at [$y] height!")
+            return
+        }
+
+        val start = System.currentTimeMillis()
+        val chunkX = x shr 4
+        val chunkZ = z shr 4
+        val chunk = getOrCreateChunk(chunkX, chunkZ)
+        chunk.setBlockAndUpdateChunk(x and 15, y, z and 15, model)
+        println("Block [$x:$y:$z] took ${System.currentTimeMillis() - start} ms")
+    }
+
+    fun updateChunkSection(chunkX: Int, chunkY: Int, chunkZ: Int) {
+//        getChunk(chunkX, chunkZ)?.sections
+    }
+
+    fun allChanged() {
+        var counter = 0
+        chunks.values.forEach { chunk ->
+            chunk.sections.forEach { section ->
+                section?.rebuildModel()
+                counter += section?.dispatcher?.cubes?.size ?: 0
             }
         }
+        println("Blocks in world: $counter")
     }
 
-    fun generateChunkAt(chunkX: Int, chunkZ: Int) {
-        val scale = 0.05
-        val maxHeight = 255
+    fun render(shader: ShaderInstance, player: Player) {
+        shader.bind()
 
-        for (localX in 0..16) {
-            for (localZ in 0..16) {
-                val worldX = chunkX * 16 + localX
-                val worldZ = chunkZ * 16 + localZ
+        // Load the nearest missing chunk first, without blocking the first frame on the whole world.
+        val next = player.shouldLoad()
+            .sortedBy { (x, z) ->
+                val dx = x * 16 + 8 - player.position.x
+                val dz = z * 16 + 8 - player.position.z
+                dx * dx + dz * dz
+            }
+            .firstOrNull { (x, z) -> getChunk(x, z)?.isLoaded != true }
+        if (next != null) {
+            val chunk = getChunk(next.first, next.second)
+                ?.takeUnless { it.isEmpty() }
+                ?: generateChunkAt(next.first, next.second).join()
+            chunk?.load()
+        }
 
-                val height = (perlin(worldX * scale, worldZ * scale) * 10).toInt()
-                    .coerceIn(1, maxHeight)
+        val camera = VoxelGame.screen?.camera
 
-                for (y in 0..height) {
-                    setBlock(worldX, y, worldZ, Blocks.STONE)
+        chunks.values.forEach { chunk ->
+            camera?.let { chunk.render(it, player) }
+        }
+
+        shader.unbind()
+    }
+
+    fun generateChunkAt(chunkX: Int, chunkZ: Int): CompletableFuture<Chunk?> {
+        if(getChunk(chunkX, chunkZ) != null && !getChunk(chunkX, chunkZ)!!.isEmpty()) return CompletableFuture.completedFuture(null)
+
+        return CompletableFuture.supplyAsync({
+            val start = System.currentTimeMillis()
+            val scale = 0.05
+            val maxHeight = 255
+
+            val chunk = getOrCreateChunk(chunkX, chunkZ)
+
+            for (localX in 0 until 16) {
+                for (localZ in 0 until 16) {
+                    val worldX = chunkX * 16 + localX
+                    val worldZ = chunkZ * 16 + localZ
+
+                    val height = (perlin(worldX * scale, worldZ * scale) * 10).toInt()
+                        .coerceIn(1, maxHeight)
+
+                    for (y in 0 until height) {
+                        chunk.setBlock(localX, y, localZ, model())
+                    }
                 }
             }
-        }
+
+            println("Chunk [${chunkX}:${chunkZ}] generated for ${System.currentTimeMillis() - start} ms!")
+
+            chunk
+        }, executor)
+    }
+
+    fun unload(chunkX: Int, chunkZ: Int) {
+        getChunk(chunkX, chunkZ)?.unload()
     }
 
     private fun perlin(x: Double, y: Double): Double {
         val value = noise.evaluateNoise(x, y)
 
         return (value + 1.0) / 2.0
+//        return 0.0
+    }
+
+    private fun model() = Model.builder()
+        .addCube(
+            Cube.builder()
+                .setFrom(0f, 0f, 0f)
+                .setTo(1f, 1f, 1f)
+                .addFace(Face.NORTH, defaultFace())
+                .addFace(Face.SOUTH, defaultFace())
+                .addFace(Face.WEST, defaultFace())
+                .addFace(Face.EAST, defaultFace())
+                .addFace(Face.UP, defaultFace())
+                .addFace(Face.DOWN, defaultFace())
+                .build()
+        )
+        .setTexture(
+            ModelTexture.builder()
+                .setImage("iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAAAAAA6mKC9AAAAZElEQVR42jWNsQ0AMQjEGJcB3HsEr/xSkncBOgkfUyXIguoo4mEXGdkFFvBdlGmpwKCAWIWOeYFladCK4n2BXZZn6vR3dsXRfLnKWfFoXmtUrX81AiboaZ9u4I1G8KdqPICl6AdyLn2NfcJFIAAAAABJRU5ErkJggg==")
+                .build()
+        )
+        .build()
+
+    private fun defaultFace(): CubeFace {
+        return CubeFace.builder()
+            .setUvMin(0, 0)
+            .setUvMax(16, 16)
+            .build()
     }
 }
-

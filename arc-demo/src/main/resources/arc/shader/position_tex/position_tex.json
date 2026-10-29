@@ -2,6 +2,7 @@
   "uniforms": [
     "projectionMatrix",
     "viewMatrix",
+    "modelMatrix",
     "Sampler"
   ]
 }
