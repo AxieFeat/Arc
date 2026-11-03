@@ -1,44 +1,56 @@
-name: Publish to GitHub Packages
+name: Publish to GitHub Packages and Reposilite
 
 on:
   push:
-    branches: [ main, master ]
+    branches: [main, master]
 
 jobs:
   detekt:
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
+
       - uses: actions/setup-java@v3
         with:
           java-version: '21'
-          distribution: 'temurin'
-          cache: 'gradle'
+          distribution: temurin
+          cache: gradle
+
       - name: Validate Gradle Wrapper
         run: ./gradlew --version
+
       - name: Detekt
         run: ./gradlew detekt
 
   publish:
     needs: detekt
     runs-on: ubuntu-latest
+
     permissions:
       contents: read
       packages: write
+
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
+
       - uses: actions/setup-java@v3
         with:
           java-version: '21'
-          distribution: 'temurin'
-          cache: 'gradle'
+          distribution: temurin
+          cache: gradle
+
       - name: Validate Gradle Wrapper
         run: ./gradlew --version
+
       - name: Publish
         run: ./gradlew publish --no-daemon --stacktrace
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPOSILITE_URL: https://repo.arial.su/snapshots
+          REPOSILITE_USERNAME: ${{ secrets.REPOSILITE_USERNAME }}
+          REPOSILITE_TOKEN: ${{ secrets.REPOSILITE_TOKEN }}

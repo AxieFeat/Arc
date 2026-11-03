@@ -36,6 +36,16 @@ if (!isPublishingSkipped()) {
     val githubToken = providers.gradleProperty("gpr.key")
         .orElse(providers.environmentVariable("GITHUB_TOKEN"))
 
+    val reposiliteUrl = providers.gradleProperty("reposilite.url")
+        .orElse(providers.environmentVariable("REPOSILITE_URL"))
+        .orElse("https://repo.arial.su/snapshots")
+
+    val reposiliteUsername = providers.gradleProperty("reposilite.user")
+        .orElse(providers.environmentVariable("REPOSILITE_USERNAME"))
+
+    val reposiliteToken = providers.gradleProperty("reposilite.token")
+        .orElse(providers.environmentVariable("REPOSILITE_TOKEN"))
+
     extensions.configure<JavaPluginExtension> {
         withSourcesJar()
     }
@@ -55,9 +65,20 @@ if (!isPublishingSkipped()) {
             maven {
                 name = "GitHubPackages"
                 url = uri("https://maven.pkg.github.com/${githubRepository.get()}")
+
                 credentials {
                     username = githubActor.orNull
                     password = githubToken.orNull
+                }
+            }
+
+            maven {
+                name = "Reposilite"
+                url = uri(reposiliteUrl.get())
+
+                credentials {
+                    username = reposiliteUsername.orNull
+                    password = reposiliteToken.orNull
                 }
             }
         }
