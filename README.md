@@ -45,19 +45,34 @@ Basic "cave-game" on this engine. (You can see code in `arc-demo`)
 ### Setup
 
 1. Specify the Arc repository:
-```kotlin
-repositories {
-    maven("https://maven.pkg.github.com/AxieFeat/Arc") {
-        credentials {
-            // GitHub Packages requires authentication :(
+> Method 1: Via a third-party repository that contains Arc Engine
+> ```kotlin
+> repositories {
+>     maven("https://repo.arial.su/snapshots")
+> }
+> ```
 
-            username = System.getenv("GITHUB_ACTOR") // System environment variable with your GitHub login
-            password = System.getenv("GITHUB_TOKEN") // System environment variable with your GitHub token
-        }
-    }
-}
-```
-...Or alternatively you could use a JitPack, but I don't recommend it for this project.
+> Method 2: Via GitHub Packages
+> ```kotlin
+> repositories {
+>     maven("https://maven.pkg.github.com/AxieFeat/Arc") {
+>         credentials {
+>             // GitHub Packages requires authentication :(
+>
+>             username = System.getenv("GITHUB_ACTOR") // System environment variable with your GitHub login
+>             password = System.getenv("GITHUB_TOKEN") // System environment variable with your GitHub token
+>         }
+>     }
+> }
+> ```
+
+> Method 3: Via JitPack
+> ```kotlin
+> repositories {
+>     maven("https://jitpack.io")
+> }
+> ```
+> JitPack don't recommend for this project.
 
 2. Add the dependency to your project:
 ```kotlin
@@ -106,21 +121,21 @@ fun main() {
     val shader: ShaderInstance = getShaderInstance()
     shader.compileShaders()
 
-    val renderSystem: RenderSystem = application.renderSystem
+    val renderContext: RenderContext = application.renderContext
 
     // Create buffer with our vertices
     val buffer: VertexBuffer = createBuffer(application)
 
     while (!application.window.shouldClose()) {
         // Begin render frame
-        renderSystem.beginFrame()
+        renderContext.beginFrame()
 
         shader.bind()
-        renderSystem.drawer.draw(buffer)
+        renderContext.drawer.draw(buffer)
         shader.unbind()
 
         // End frame
-        renderSystem.endFrame()
+        renderContext.endFrame()
     }
 }
 

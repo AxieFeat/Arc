@@ -45,20 +45,34 @@ Arc Engine - это гибкий 3D/2D игровой движок, разраб
 ### Установка
 
 1. Укажите репозиторий проекта Arc:
-```kotlin
-repositories {
-    maven("https://maven.pkg.github.com/AxieFeat/Arc") {
-        credentials {
-            // GitHub Packages требует авторизации :(
+> Метод 1: Через сторонний репозиторий, который содержит Arc Engine
+> ```kotlin
+> repositories {
+>     maven("https://repo.arial.su/snapshots")
+> }
+> ```
 
-            username = System.getenv("GITHUB_ACTOR") // Переменная окружения с вашим логином GitHub
-            password = System.getenv("GITHUB_TOKEN") // Переменная с вашим токеном GitHub
-        }
-    }
-}
-```
-...Или в качестве альтернативы вы можете использовать JitPack, но я не рекомендую его для этого проекта.
+> Метод 2: Через GitHub Packages
+> ```kotlin
+> repositories {
+>     maven("https://maven.pkg.github.com/AxieFeat/Arc") {
+>         credentials {
+>             // GitHub Packages требует авторизации :(
+>
+>             username = System.getenv("GITHUB_ACTOR") // Переменная окружения с вашим логином GitHub
+>             password = System.getenv("GITHUB_TOKEN") // Переменная с вашим токеном GitHub
+>         }
+>     }
+> }
+> ```
 
+> Метод 3: Через JitPack
+> ```kotlin
+> repositories {
+>     maven("https://jitpack.io")
+> }
+> ```
+> JitPack не рекомендуется для этого проекта.
 2. Добавьте зависимость в ваш проект:
 ```kotlin
 dependencies {
@@ -106,21 +120,21 @@ fun main() {
     val shader: ShaderInstance = getShaderInstance()
     shader.compileShaders()
 
-    val renderSystem: RenderSystem = application.renderSystem
+    val renderContext: RenderContext = application.renderContext
 
     // Создать буфер с нашими вершинами
     val buffer: VertexBuffer = createBuffer(application)
 
     while (!application.window.shouldClose()) {
         // Начать кадр рендеринга
-        renderSystem.beginFrame()
+        renderContext.beginFrame()
 
         shader.bind()
-        renderSystem.drawer.draw(buffer)
+        renderContext.drawer.draw(buffer)
         shader.unbind()
 
         // Завершить кадр
-        renderSystem.endFrame()
+        renderContext.endFrame()
     }
 }
 
