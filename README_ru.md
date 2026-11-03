@@ -1,5 +1,7 @@
 # Arc Engine
 
+![Latest version](https://img.shields.io/maven-metadata/v?metadataUrl=https%3A%2F%2Frepo.arial.su%2Fsnapshots%2Farc%2Fengine%2Farc-core%2Fmaven-metadata.xml&label=Latest%20version&style=for-the-badge&color=6366f1)
+
 [English](README.md) | [Русский](README_ru.md)
 
 Arc Engine - это гибкий 3D/2D игровой движок, разработанный с учетом независимости от реализации, что позволяет ему работать практически с любой технологией и платформой.
@@ -74,6 +76,7 @@ Arc Engine - это гибкий 3D/2D игровой движок, разраб
 > ```
 > JitPack не рекомендуется для этого проекта.
 2. Добавьте зависимость в ваш проект:
+> Хеш последнего коммита (версии) вверху README
 ```kotlin
 dependencies {
     // Хеш коммита можно взять из истории - https://github.com/AxieFeat/Arc/commits/master/

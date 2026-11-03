@@ -1,5 +1,7 @@
 # Arc Engine
 
+![Latest version](https://img.shields.io/maven-metadata/v?metadataUrl=https%3A%2F%2Frepo.arial.su%2Fsnapshots%2Farc%2Fengine%2Farc-core%2Fmaven-metadata.xml&label=Latest%20version&style=for-the-badge&color=6366f1)
+
 [English](README.md) | [Русский](README_ru.md)
 
 Arc Engine is a flexible 3D/2D game engine designed to be implementation-agnostic, allowing it to work with virtually any technology and platform.
@@ -75,6 +77,7 @@ Basic "cave-game" on this engine. (You can see code in `arc-demo`)
 > JitPack don't recommend for this project.
 
 2. Add the dependency to your project:
+> Last commit hash (version) at the top of README
 ```kotlin
 dependencies {
     // Hash of commit can be taked from history - https://github.com/AxieFeat/Arc/commits/master/
