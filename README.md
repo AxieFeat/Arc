@@ -89,6 +89,10 @@ dependencies {
     // Or if you want to create your own game - select a backend implementation of engine.
     implementation("arc.engine:arc-opengl:<first 7 symbols of commit hash>") // For OpenGL
     implementation("arc.engine:arc-vulkan:<first 7 symbols of commit hash>") // For Vulkan
+
+    // If you are using JitPack, you can use the following dependency:
+    implementation("com.github.AxieFeat.Arc:arc-core:<first 7 symbols of commit hash>")
+    // Same for other modules, just replace `arc-core` with the desired module name.
 }
 ```
 

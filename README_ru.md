@@ -88,6 +88,10 @@ dependencies {
     // Или если вы хотите создать свою игру - выберите бэкенд-реализацию движка.
     implementation("arc.engine:arc-opengl:<первые 7 символов хеша коммита>") // Для OpenGL
     implementation("arc.engine:arc-vulkan:<первые 7 символов хеша коммита>") // Для Vulkan
+
+    // Если вы используете JitPack, то используйте следующую зависимость:
+    implementation("com.github.AxieFeat.Arc:arc-core:<first 7 symbols of commit hash>")
+    // Так же и для других модулей, просто меняйте `arc-core` на название нужного модуля.
 }
 ```
 
