@@ -2,15 +2,31 @@ name: Publish to GitHub Packages and Reposilite
 
 on:
   push:
-    branches: [main, master]
+    branches: ['**']
+    tags: ['**']
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Existing tag to publish
+        required: true
+        type: string
+      branch:
+        description: Branch containing the tagged commit
+        required: true
+        type: string
+
+permissions:
+  contents: read
 
 jobs:
   detekt:
+    if: ${{ github.event.deleted != true && (github.event_name == 'workflow_dispatch' || github.ref_type != 'tag' || github.event.created == true) }}
     runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v4
         with:
+          ref: ${{ github.event_name == 'workflow_dispatch' && format('refs/tags/{0}', inputs.tag) || github.sha }}
           fetch-depth: 0
 
       - uses: actions/setup-java@v3
@@ -27,7 +43,7 @@ jobs:
 
   publish:
     needs: detekt
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
 
     permissions:
       contents: read
@@ -36,7 +52,14 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
+          ref: ${{ github.event_name == 'workflow_dispatch' && format('refs/tags/{0}', inputs.tag) || github.sha }}
           fetch-depth: 0
+
+      # Use the version of the resolver belonging to this workflow, including for older tags.
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.workflow_sha }}
+          path: .publish-workflow
 
       - uses: actions/setup-java@v3
         with:
@@ -47,10 +70,21 @@ jobs:
       - name: Validate Gradle Wrapper
         run: ./gradlew --version
 
-      - name: Publish
-        run: ./gradlew publish --no-daemon --stacktrace
+      - name: Check publication rules
+        run: node --test .publish-workflow/.github/scripts/publish-coordinates.test.mjs
+
+      - name: Resolve version and destination
+        id: coordinates
+        run: node .publish-workflow/.github/scripts/publish-coordinates.mjs
         env:
+          INPUT_TAG: ${{ inputs.tag }}
+          INPUT_BRANCH: ${{ inputs.branch }}
+
+      - name: Publish
+        run: ./gradlew publish --no-daemon --stacktrace "-PpublishingVersion=$PUBLISHING_VERSION" "-Preposilite.url=https://repo.arial.su/$PUBLISHING_CHANNEL"
+        env:
+          PUBLISHING_VERSION: ${{ steps.coordinates.outputs.version }}
+          PUBLISHING_CHANNEL: ${{ steps.coordinates.outputs.channel }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          REPOSILITE_URL: https://repo.arial.su/snapshots
           REPOSILITE_USERNAME: ${{ secrets.REPOSILITE_USERNAME }}
           REPOSILITE_TOKEN: ${{ secrets.REPOSILITE_TOKEN }}

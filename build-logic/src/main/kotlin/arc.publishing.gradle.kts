@@ -9,8 +9,8 @@ import java.util.concurrent.TimeUnit
 /**
  * Convention plugin for publishing library modules to GitHub Packages.
  *
- * The GitHub Actions workflow provides GITHUB_SHA, GITHUB_ACTOR and GITHUB_TOKEN.
- * For local publishing, -PpublishingVersion, -Pgpr.user and -Pgpr.key can be used.
+ * The workflow provides PUBLISHING_VERSION and PUBLISHING_CHANNEL, along with credentials.
+ * For local publishing, -PpublishingVersion, -Preposilite.channel, -Pgpr.user and -Pgpr.key can be used.
  *
  * It will be skipped, if `skipPublishing` property is set to "true".
  */
@@ -21,6 +21,7 @@ if (!isPublishingSkipped()) {
     pluginManager.apply("maven-publish")
 
     val publishingVersion = providers.gradleProperty("publishingVersion")
+        .orElse(providers.environmentVariable("PUBLISHING_VERSION"))
         .orElse(providers.environmentVariable("GITHUB_SHA").map { it.take(7) })
         .orElse(providers.provider { shortGitCommitHash(rootProject.layout.projectDirectory.asFile) ?: version.toString() })
 
@@ -38,9 +39,19 @@ if (!isPublishingSkipped()) {
     val githubToken = providers.gradleProperty("gpr.key")
         .orElse(providers.environmentVariable("GITHUB_TOKEN"))
 
+    val reposiliteChannel = providers.gradleProperty("reposilite.channel")
+        .orElse(providers.environmentVariable("PUBLISHING_CHANNEL"))
+        .orElse("snapshots")
+        .map { channel ->
+            require(channel == "snapshots" || channel == "releases") {
+                "Invalid Reposilite channel '$channel': expected snapshots or releases"
+            }
+            channel
+        }
+
     val reposiliteUrl = providers.gradleProperty("reposilite.url")
         .orElse(providers.environmentVariable("REPOSILITE_URL"))
-        .orElse("https://repo.arial.su/snapshots")
+        .orElse(reposiliteChannel.map { "https://repo.arial.su/$it" })
 
     val reposiliteUsername = providers.gradleProperty("reposilite.user")
         .orElse(providers.environmentVariable("REPOSILITE_USERNAME"))
