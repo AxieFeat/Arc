@@ -1,13 +1,14 @@
 package arc.demo.screen
 
+
 import arc.asset.asRuntimeAsset
 import arc.graphics.DrawerMode
 import arc.graphics.vertex.VertexFormat
 import arc.graphics.vertex.VertexFormatElement
 import arc.input.mouse
 import arc.shader.ShaderInstance
-import org.joml.Vector2f
-import org.joml.Vector3f
+import korlibs.math.geom.Vector2F
+import korlibs.math.geom.Vector3F
 
 object PlasmaScreen : Screen("plasma") {
 
@@ -114,15 +115,15 @@ object PlasmaScreen : Screen("plasma") {
         val width = application.window.width.toFloat()
         val height = application.window.height.toFloat()
 
-        shader.setUniform("iResolution", Vector2f(width, height))
+        shader.setUniform("iResolution", Vector2F(width, height))
         shader.setUniform("iTime", (System.currentTimeMillis() - start) / 1000f * 0.5f)
-        shader.setUniform("uCustomColor", Vector3f())
+        shader.setUniform("uCustomColor", Vector3F(0f, 0f, 0f))
         shader.setUniform("uUseCustomColor", 0f)
         shader.setUniform("uSpeed", 1f)
         shader.setUniform("uDirection", 1f)
         shader.setUniform("uScale", 1f)
         shader.setUniform("uOpacity", 1f)
-        shader.setUniform("uMouse", application.mouse.position)
+        shader.setUniform("uMouse", Vector2F(application.mouse.position.x, application.mouse.position.y))
         shader.setUniform("uMouseInteractive", 1f)
 
         drawer.draw(buffer)

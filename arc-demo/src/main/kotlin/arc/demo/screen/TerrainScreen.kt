@@ -1,5 +1,6 @@
 package arc.demo.screen
 
+
 import arc.asset.asFileAsset
 import arc.demo.entity.Player
 import arc.demo.font.FontLoader
@@ -18,11 +19,8 @@ import arc.model.Face
 import arc.shader.ShaderInstance
 import arc.shader.UniformBuffer
 import arc.util.Color
-import org.joml.Matrix4f
-import org.joml.Vector3f
-import org.joml.component1
-import org.joml.component2
-import org.joml.component3
+import korlibs.math.geom.Matrix4
+import korlibs.math.geom.Vector3F
 import java.lang.Math
 import java.util.*
 import kotlin.math.*
@@ -35,13 +33,13 @@ object TerrainScreen : Screen("terrain") {
     private val drawer = application.renderContext.drawer
 
     private val font = FontLoader.load(classpath("arc/font/Monocraft.json").asFileAsset())
-    private val matrix = Matrix4f().ortho(0f, application.window.width.toFloat(), 0f, application.window.height.toFloat(), -1f, 1f)
-    private val hello = font.prepare(matrix.translate(10f, 10f, 0f).scale(5f), "temez gondon")
+    private val matrix = Matrix4.ortho(0f, application.window.width.toFloat(), 0f, application.window.height.toFloat(), -1f, 1f)
+    private val hello = font.prepare(matrix.translated(10f, 10f, 0f).scaled(5f, 5f, 5f), "temez gondon")
 
     private val lighting = listOf(
-        Light(Color.RED, Vector3f(0f, 5f, -5f), 10f),
-        Light(Color.GREEN, Vector3f(0f, 1f, 5f), 10f),
-        Light(Color.BLUE, Vector3f(5f, 1f, 0f), 10f),
+        Light(Color.RED, Vector3F(0f, 5f, -5f), 10f),
+        Light(Color.GREEN, Vector3F(0f, 1f, 5f), 10f),
+        Light(Color.BLUE, Vector3F(5f, 1f, 0f), 10f),
     )
     private val ubo = storeUbo(lighting)
 
@@ -86,7 +84,7 @@ object TerrainScreen : Screen("terrain") {
                 val d15 = sin(d14)
                 val d16 = cos(d14)
 
-                val vertices = Array(4) { Vector3f(0f, 0f, 0f) }
+                val vertices = Array(4) { Vector3F(0f, 0f, 0f) }
 
                 for (j in 0..3) {
                     val d18 = ((j and 2) - 1).toDouble() * d3
@@ -98,7 +96,7 @@ object TerrainScreen : Screen("terrain") {
                     val d25 = d24 * d9 - d22 * d10
                     val d26 = d22 * d9 + d24 * d10
 
-                    vertices[j] = Vector3f(
+                    vertices[j] = Vector3F(
                         (d5 + d25).toFloat(),
                         (d6 + d23).toFloat(),
                         (d7 + d26).toFloat()
@@ -130,7 +128,7 @@ object TerrainScreen : Screen("terrain") {
         player.viewDistance = 8
         player.memoryDistance = 16
 
-        player.position = Vector3f(0f, 15f, 0f)
+        player.position = Vector3F(0f, 15f, 0f)
         player.fly = true
         camera.rotate(-25f, 0f, 0f)
 
@@ -198,8 +196,8 @@ object TerrainScreen : Screen("terrain") {
     private fun generateAABBForHoveredBlock(maxDistance: Float = 5f): AABB? {
         val hit = raycastForBlock(maxDistance)
         return if (hit != null) {
-            val blockMin = Vector3f(hit.x.toFloat() - 0.001f, hit.y.toFloat() - 0.001f, hit.z.toFloat() - 0.001f)
-            val blockMax = Vector3f((hit.x + 1.001).toFloat(), (hit.y + 1.001).toFloat(), (hit.z + 1.001).toFloat())
+            val blockMin = Vector3F(hit.x.toFloat() - 0.001f, hit.y.toFloat() - 0.001f, hit.z.toFloat() - 0.001f)
+            val blockMax = Vector3F((hit.x + 1.001).toFloat(), (hit.y + 1.001).toFloat(), (hit.z + 1.001).toFloat())
 
             AABB.of(blockMin, blockMax)
         } else {
@@ -348,18 +346,18 @@ object TerrainScreen : Screen("terrain") {
                 val light = lights.getOrNull(i)
 
                 if (light != null && light.color.alpha > 0f) {
-                    this.putFloat(light.color.red / 255f)
-                    this.putFloat(light.color.green / 255f)
-                    this.putFloat(light.color.blue / 255f)
-                    this.putFloat(light.color.alpha.toFloat())
+                    this.writeFloat(light.color.red / 255f)
+                    this.writeFloat(light.color.green / 255f)
+                    this.writeFloat(light.color.blue / 255f)
+                    this.writeFloat(light.color.alpha.toFloat())
 
-                    this.putFloat(light.position.x)
-                    this.putFloat(light.position.y)
-                    this.putFloat(light.position.z)
-                    this.putFloat(light.radius)
+                    this.writeFloat(light.position.x)
+                    this.writeFloat(light.position.y)
+                    this.writeFloat(light.position.z)
+                    this.writeFloat(light.radius)
                 } else {
-                    this.putFloat(0f).putFloat(0f).putFloat(0f).putFloat(0f)
-                    this.putFloat(0f).putFloat(0f).putFloat(0f).putFloat(0f)
+                    this.writeFloat(0f).writeFloat(0f).writeFloat(0f).writeFloat(0f)
+                    this.writeFloat(0f).writeFloat(0f).writeFloat(0f).writeFloat(0f)
                 }
             }
         }
@@ -374,7 +372,7 @@ object TerrainScreen : Screen("terrain") {
 
     data class Light(
         val color: Color,
-        val position: Vector3f,
+        val position: Vector3F,
         val radius: Float
     )
 

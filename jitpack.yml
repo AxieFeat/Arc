@@ -1,2 +1,3 @@
+# This file needed to build the project on JitPack. JitPack uses JDK 8 by default, but project required JDK 21.
 jdk:
   - openjdk21

@@ -2,7 +2,7 @@ package arc.demo.shader
 
 import arc.demo.VoxelGame
 import arc.shader.AbstractUniformProvider
-import org.joml.Matrix4f
+import korlibs.math.geom.Matrix4
 
 object DefaultUniformProvider : AbstractUniformProvider() {
 
@@ -20,7 +20,7 @@ object DefaultUniformProvider : AbstractUniformProvider() {
         }
 
         addUniform("modelMatrix") { shader, name ->
-            shader.setUniform(name, Matrix4f())
+            shader.setUniform(name, Matrix4())
         }
 
         addUniform("Sampler") { shader, name ->

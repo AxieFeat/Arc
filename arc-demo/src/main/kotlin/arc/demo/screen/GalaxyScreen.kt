@@ -1,13 +1,14 @@
 package arc.demo.screen
 
+
 import arc.asset.asRuntimeAsset
 import arc.graphics.DrawerMode
 import arc.graphics.vertex.VertexFormat
 import arc.graphics.vertex.VertexFormatElement
 import arc.input.mouse
 import arc.shader.ShaderInstance
-import org.joml.Vector2f
-import org.joml.Vector3f
+import korlibs.math.geom.Vector2F
+import korlibs.math.geom.Vector3F
 
 object GalaxyScreen : Screen("galaxy") {
 
@@ -216,13 +217,12 @@ object GalaxyScreen : Screen("galaxy") {
 
         val time = (System.currentTimeMillis() - start) / 1000f * 0.5f
 
-        val mousePosition = Vector2f(application.mouse.position)
-        mousePosition.set(mousePosition.x / width, 1f - mousePosition.y / height)
+        val mousePosition = Vector2F(application.mouse.position.x / width, 1f - application.mouse.position.y / height)
 
         shader.setUniform("uTime", time)
-        shader.setUniform("uResolution", Vector3f(width, height, width / height))
-        shader.setUniform("uFocal", Vector2f(0.5f, 0.5f))
-        shader.setUniform("uRotation", Vector2f(1.0f, 0.0f))
+        shader.setUniform("uResolution", Vector3F(width, height, width / height))
+        shader.setUniform("uFocal", Vector2F(0.5f, 0.5f))
+        shader.setUniform("uRotation", Vector2F(1.0f, 0.0f))
         shader.setUniform("uStarSpeed", 0.5f)
         shader.setUniform("uDensity", 2f)
         shader.setUniform("uHueShift", 240f)

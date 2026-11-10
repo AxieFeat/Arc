@@ -1,9 +1,21 @@
+plugins {
+    id("arc.multiplatform")
+    id("arc.publishing")
+    id("arc.ksp")
+}
+
+kotlin {
+    sourceSets {
+        commonMain.dependencies {
+            api(projects.arcExtensions.arcFont.arcFontCore)
+        }
+        desktopMain.dependencies {
+            implementation(libs.lwjgl.harfbuzz)
+        }
+    }
+}
+
 dependencies {
-    api(projects.arcExtensions.arcFont.arcFontCore)
-    lwjgl(libs.lwjgl.lib)
-    lwjgl(libs.lwjgl.freetype)
-    implementation(libs.lwjgl.harfbuzz)
-    testImplementation("org.junit.jupiter:junit-jupiter-api:6.0.0")
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:6.0.0")
-    testRuntimeOnly("org.junit.platform:junit-platform-launcher:6.0.0")
+    lwjglDesktop(libs.lwjgl.lib)
+    lwjglDesktop(libs.lwjgl.freetype)
 }

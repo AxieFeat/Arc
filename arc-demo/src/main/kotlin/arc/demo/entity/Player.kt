@@ -11,7 +11,7 @@ import arc.input.KeyCode
 import arc.input.keyboard
 import arc.input.mouse
 import arc.math.AABB
-import org.joml.Vector3f
+import korlibs.math.geom.Vector3F
 import kotlin.math.abs
 import kotlin.math.min
 
@@ -20,16 +20,16 @@ class Player(
     val camera: Camera,
 ) {
 
-    var position: Vector3f = Vector3f()
+    var position: Vector3F = Vector3F(0f, 0f, 0f)
     set(value) {
         field = value
-        camera.position.set(
+        camera.position = Vector3F(
             position.x,
             position.y + 1.65f,
             position.z
         )
     }
-    private val velocity = Vector3f(0f, 0f, 0f)
+    private var velocity = Vector3F(0f, 0f, 0f)
 
     var viewDistance = 8
 
@@ -55,14 +55,14 @@ class Player(
 
     private var isGrounded = false
 
-    private val playerSize = Vector3f(0.6f, 1.79f, 0.6f)
+    private val playerSize = Vector3F(0.6f, 1.79f, 0.6f)
     private val gravity = -20f
     private val jumpVelocity = 8f
     private val terminalVelocity = -50f
 
-    private fun getPlayerAABB(pos: Vector3f): AABB {
-        val min = Vector3f(pos.x - playerSize.x, pos.y, pos.z - playerSize.z)
-        val max = Vector3f(pos.x + playerSize.x, pos.y + playerSize.y, pos.z + playerSize.z)
+    private fun getPlayerAABB(pos: Vector3F): AABB {
+        val min = Vector3F(pos.x - playerSize.x, pos.y, pos.z - playerSize.z)
+        val max = Vector3F(pos.x + playerSize.x, pos.y + playerSize.y, pos.z + playerSize.z)
         return AABB.of(min, max)
     }
 
@@ -85,28 +85,28 @@ class Player(
         return false
     }
 
-    private fun resolveCollision(pos: Vector3f, delta: Vector3f): Vector3f {
-        val newPos = Vector3f(pos).add(delta)
+    private fun resolveCollision(pos: Vector3F, delta: Vector3F): Vector3F {
+        val newPos = pos + delta
         val aabb = getPlayerAABB(newPos)
 
         if (!collides(aabb)) return delta
 
-        val resolvedDelta = Vector3f(delta)
+        var resolvedDelta = delta
 
-        val tempX = Vector3f(newPos.x, pos.y, pos.z)
+        val tempX = Vector3F(newPos.x, pos.y, pos.z)
         if (collides(getPlayerAABB(tempX))) {
-            resolvedDelta.x = 0f
+            resolvedDelta = resolvedDelta.copy(x = 0f)
         }
 
-        val tempY = Vector3f(pos.x, newPos.y, pos.z)
+        val tempY = Vector3F(pos.x, newPos.y, pos.z)
         if (collides(getPlayerAABB(tempY))) {
-            resolvedDelta.y = 0f
+            resolvedDelta = resolvedDelta.copy(y = 0f)
             if (delta.y < 0f) isGrounded = true
         }
 
-        val tempZ = Vector3f(pos.x, pos.y, newPos.z)
+        val tempZ = Vector3F(pos.x, pos.y, newPos.z)
         if (collides(getPlayerAABB(tempZ))) {
-            resolvedDelta.z = 0f
+            resolvedDelta = resolvedDelta.copy(z = 0f)
         }
 
         return resolvedDelta
@@ -122,34 +122,33 @@ class Player(
         currentFov += (targetFov - currentFov) * min(1f, fovLerpSpeed * delta)
         camera.fov = currentFov
 
-        val cameraForward = Vector3f(camera.ray.direction.x, 0f, camera.ray.direction.z).normalize()
-        val cameraRight = Vector3f(-cameraForward.z, 0f, cameraForward.x).normalize()
+        val cameraForward = Vector3F(camera.ray.direction.x, 0f, camera.ray.direction.z).normalized()
+        val cameraRight = Vector3F(-cameraForward.z, 0f, cameraForward.x).normalized()
 
-        val moveDir = Vector3f()
-        if (keyboard.isPressed(KeyCode.KEY_W)) moveDir.add(cameraForward)
-        if (keyboard.isPressed(KeyCode.KEY_S)) moveDir.sub(cameraForward)
-        if (keyboard.isPressed(KeyCode.KEY_A)) moveDir.add(cameraRight.negate())
-        if (keyboard.isPressed(KeyCode.KEY_D)) moveDir.sub(cameraRight.negate())
+        var moveDir = Vector3F(0f, 0f, 0f)
+        if (keyboard.isPressed(KeyCode.KEY_W)) moveDir += cameraForward
+        if (keyboard.isPressed(KeyCode.KEY_S)) moveDir -= cameraForward
+        if (keyboard.isPressed(KeyCode.KEY_A)) moveDir -= cameraRight
+        if (keyboard.isPressed(KeyCode.KEY_D)) moveDir += cameraRight
 
         if (fly) {
-            if (keyboard.isPressed(KeyCode.KEY_SPACE)) moveDir.y += 1f
-            if (keyboard.isPressed(KeyCode.KEY_LSHIFT)) moveDir.y -= 1f
+            if (keyboard.isPressed(KeyCode.KEY_SPACE)) moveDir = moveDir.copy(y = moveDir.y + 1f)
+            if (keyboard.isPressed(KeyCode.KEY_LSHIFT)) moveDir = moveDir.copy(y = moveDir.y - 1f)
 
-            if (moveDir.lengthSquared() > 0f) {
-                moveDir.normalize().mul(speed)
+            if (moveDir.lengthSquared > 0f) {
+                moveDir = moveDir.normalized() * speed
             }
 
-            position = position.add(moveDir.mul(delta))
+            position += moveDir * delta
         } else {
-            if (moveDir.lengthSquared() > 0f) {
-                moveDir.normalize().mul(speed)
+            if (moveDir.lengthSquared > 0f) {
+                moveDir = moveDir.normalized() * speed
             }
 
-            velocity.x = moveDir.x
-            velocity.z = moveDir.z
+            velocity = velocity.copy(x = moveDir.x, z = moveDir.z)
 
             if (isGrounded && keyboard.isPressed(KeyCode.KEY_SPACE)) {
-                velocity.y = jumpVelocity
+                velocity = velocity.copy(y = jumpVelocity)
                 isGrounded = false
             }
 
@@ -159,10 +158,9 @@ class Player(
                 val step = min(remainingTime, maxStep)
                 remainingTime -= step
 
-                velocity.y += gravity * step
-                velocity.y = velocity.y.coerceAtLeast(terminalVelocity)
+                velocity = velocity.copy(y = (velocity.y + gravity * step).coerceAtLeast(terminalVelocity))
 
-                val movement = Vector3f(
+                val movement = Vector3F(
                     velocity.x * step,
                     velocity.y * step,
                     velocity.z * step
@@ -170,12 +168,12 @@ class Player(
 
                 val resolved = resolveCollision(position, movement)
 
-                position = position.add(resolved)
+                position += resolved
             }
 
             if (collides(getPlayerAABB(position))) {
                 for (i in 1..5) {
-                    position.y += 0.1f
+                    position = position.copy(y = position.y + 0.1f)
                     if (!collides(getPlayerAABB(position))) break
                 }
             }

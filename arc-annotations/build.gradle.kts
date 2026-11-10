@@ -1,7 +1,4 @@
 plugins {
+    id("arc.multiplatform")
     id("arc.publishing")
-}
-
-dependencies {
-    api(libs.annotations)
 }

@@ -9,7 +9,7 @@ import arc.input.KeyCode
 import arc.input.keyboard
 import arc.input.mouse
 import arc.texture.TextureAtlas
-import org.joml.Vector3f
+import korlibs.math.geom.Vector3F
 
 object MainMenuScreen : Screen("main-menu") {
 
@@ -21,9 +21,6 @@ object MainMenuScreen : Screen("main-menu") {
 
     private val cube = CubeEntity(application, grassAtlas, VertexFormatContainer.positionTex)
 
-    private val front = Vector3f()
-    private val right = Vector3f()
-    private val up = Vector3f()
 
     private var sensitivity = 0f
     private var speed = 0f
@@ -32,7 +29,7 @@ object MainMenuScreen : Screen("main-menu") {
         camera.fov = 65f
         camera.zNear = 0.0001f
         camera.zFar = 10000000000000000000000000000000000f
-        camera.position = Vector3f()
+        camera.position = Vector3F(0f, 0f, 0f)
         camera.update()
 
         application.renderContext.enableCull()
@@ -45,9 +42,10 @@ object MainMenuScreen : Screen("main-menu") {
     }
 
     private fun handleInput() {
-        this.front.set(0f, 0f, -1f).rotate(camera.rotation).normalize()
-        this.right.set(1f, 0f, 0f).rotate(camera.rotation).normalize()
-        this.up.set(0f, 1f, 0f).rotate(camera.rotation).normalize()
+        val rotation = camera.rotation
+        val front = rotation.transform(Vector3F(0f, 0f, -1f)).normalized()
+        val right = rotation.transform(Vector3F(1f, 0f, 0f)).normalized()
+        val up = rotation.transform(Vector3F(0f, 1f, 0f)).normalized()
 
         var newX = camera.position.x
         var newY = camera.position.y
@@ -90,7 +88,7 @@ object MainMenuScreen : Screen("main-menu") {
             newZ -= up.z * speed
         }
 
-        camera.position.set(newX, newY, newZ)
+        camera.position = Vector3F(newX, newY, newZ)
 
         if (application.mouse.isPressed(KeyCode.MOUSE_LEFT)) {
             this.sensitivity = 65f * delta

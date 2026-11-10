@@ -1,3 +1,13 @@
-dependencies {
-    api(projects.arcExtensions.arcModel.arcModelCore)
+plugins {
+    id("arc.multiplatform")
+    id("arc.publishing")
+    id("arc.ksp")
+}
+
+kotlin {
+    sourceSets {
+        commonMain.dependencies {
+            api(projects.arcExtensions.arcModel.arcModelCore)
+        }
+    }
 }

@@ -1,4 +1,13 @@
-dependencies {
-    implementation(projects.arcCommon)
-    implementation(projects.arcExtensions.arcProfiler.arcProfilerCore)
+plugins {
+    id("arc.multiplatform")
+    id("arc.publishing")
+    id("arc.ksp")
+}
+
+kotlin {
+    sourceSets {
+        commonMain.dependencies {
+            api(projects.arcExtensions.arcProfiler.arcProfilerCore)
+        }
+    }
 }

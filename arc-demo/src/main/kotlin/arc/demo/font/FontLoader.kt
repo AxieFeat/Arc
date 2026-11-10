@@ -6,7 +6,11 @@ import arc.font.Glyph
 import arc.font.GlyphFont
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import java.io.File
+import kotlinx.io.buffered
+import kotlinx.io.files.Path
+import kotlinx.io.files.SystemFileSystem
+import kotlinx.io.readString
+import kotlinx.io.writeString
 
 object FontLoader {
 
@@ -19,10 +23,10 @@ object FontLoader {
         )
     }
 
-    private fun loadGlyphsFromJson(file: File): List<Glyph> {
+    private fun loadGlyphsFromJson(file: Path): List<Glyph> {
         val gson = Gson()
 
-        val jsonString = file.readText()
+        val jsonString = SystemFileSystem.source(file).buffered().use { it.readString() }
 
         val type = object : TypeToken<List<GlyphJson>>() {}.type
 
@@ -40,9 +44,9 @@ object FontLoader {
         }
     }
 
-    private fun fixGlyphs(file: File) {
+    private fun fixGlyphs(file: Path) {
         val gson = Gson()
-        val jsonString = file.readText()
+        val jsonString = SystemFileSystem.source(file).buffered().use { it.readString() }
         val type = object : TypeToken<List<GlyphJson>>() {}.type
         val glyphJsonList: MutableList<GlyphJson> = gson.fromJson(jsonString, type)
 
@@ -66,7 +70,7 @@ object FontLoader {
 
         if (modified) {
             val updatedJson = gson.toJson(glyphJsonList)
-            file.writeText(updatedJson)
+            SystemFileSystem.sink(file).buffered().use { it.writeString(updatedJson) }
         }
     }
 

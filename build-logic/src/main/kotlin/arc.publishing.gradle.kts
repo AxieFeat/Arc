@@ -15,7 +15,9 @@ import java.util.concurrent.TimeUnit
  * It will be skipped, if `skipPublishing` property is set to "true".
  */
 if (!isPublishingSkipped()) {
-    pluginManager.apply("arc.base")
+    if (!pluginManager.hasPlugin("org.jetbrains.kotlin.multiplatform")) {
+        pluginManager.apply("arc.base")
+    }
     pluginManager.apply("maven-publish")
 
     val publishingVersion = providers.gradleProperty("publishingVersion")
@@ -46,18 +48,22 @@ if (!isPublishingSkipped()) {
     val reposiliteToken = providers.gradleProperty("reposilite.token")
         .orElse(providers.environmentVariable("REPOSILITE_TOKEN"))
 
-    extensions.configure<JavaPluginExtension> {
-        withSourcesJar()
+    if (!pluginManager.hasPlugin("org.jetbrains.kotlin.multiplatform")) {
+        extensions.configure<JavaPluginExtension> {
+            withSourcesJar()
+        }
     }
 
     extensions.configure<PublishingExtension> {
-        publications {
-            create<MavenPublication>("maven") {
-                groupId = rootProject.group.toString()
-                artifactId = project.name
-                version = project.version.toString()
+        if (!pluginManager.hasPlugin("org.jetbrains.kotlin.multiplatform")) {
+            publications {
+                create<MavenPublication>("maven") {
+                    groupId = rootProject.group.toString()
+                    artifactId = project.name
+                    version = project.version.toString()
 
-                from(project.components.getByName("java"))
+                    from(project.components.getByName("java"))
+                }
             }
         }
 

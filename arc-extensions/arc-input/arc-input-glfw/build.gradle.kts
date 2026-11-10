@@ -1,5 +1,17 @@
-dependencies {
-    api(projects.arcExtensions.arcInput.arcInputCore)
+plugins {
+    id("arc.multiplatform")
+    id("arc.publishing")
+    id("arc.ksp")
+}
 
-    lwjgl(libs.lwjgl.glfw)
+kotlin {
+    sourceSets {
+        commonMain.dependencies {
+            api(projects.arcExtensions.arcInput.arcInputCore)
+        }
+    }
+}
+
+dependencies {
+    lwjglDesktop(libs.lwjgl.glfw)
 }

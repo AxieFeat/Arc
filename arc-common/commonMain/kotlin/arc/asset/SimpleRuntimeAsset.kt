@@ -1,0 +1,26 @@
+package arc.asset
+
+internal data class SimpleRuntimeAsset(
+    override val bytes: ByteArray
+) : AbstractStringAsset(), RuntimeAsset {
+
+    override val text: String = bytes.decodeToString()
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is SimpleRuntimeAsset) return false
+
+        return bytes.contentEquals(other.bytes)
+    }
+
+    override fun hashCode(): Int {
+        return bytes.contentHashCode()
+    }
+
+    object Factory : RuntimeAsset.Factory {
+
+        override fun create(bytes: ByteArray): RuntimeAsset {
+            return SimpleRuntimeAsset(bytes)
+        }
+    }
+}

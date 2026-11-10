@@ -2,6 +2,7 @@ package arc.annotation.processor.factory
 
 import arc.annotation.processor.util.ContextualVisitor
 import arc.annotation.processor.util.VisitorContext
+import arc.annotations.InternalApi
 import com.google.devtools.ksp.KspExperimental
 import com.google.devtools.ksp.getDeclaredFunctions
 import com.google.devtools.ksp.getDeclaredProperties
@@ -17,7 +18,9 @@ object FactoryChecker : ContextualVisitor() {
         val parent = classDeclaration.parentDeclaration
         if (parent == null || parent !is KSClassDeclaration) fail(classDeclaration, "Must be a member type")
         if (classDeclaration.classKind != ClassKind.INTERFACE) fail(classDeclaration, "Must be an interface")
-        if (!classDeclaration.isAnnotationPresent(ApiStatus.Internal::class)) fail(classDeclaration, "Must be marked with @ApiStatus.Internal")
+        if (!classDeclaration.isAnnotationPresent(ApiStatus.Internal::class) &&
+            !classDeclaration.isAnnotationPresent(InternalApi::class)
+        ) fail(classDeclaration, "Must be marked with @ApiStatus.Internal or @InternalApi")
         if (classDeclaration.getDeclaredProperties().count() != 0) fail(classDeclaration, "Must not have properties")
         if (classDeclaration.getDeclaredFunctions().count() == 0) fail(classDeclaration, "Must have at least one factory function")
     }

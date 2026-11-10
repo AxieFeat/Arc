@@ -5,8 +5,8 @@ import arc.graphics.DrawerMode
 import arc.graphics.vertex.VertexFormat
 import arc.shader.ShaderInstance
 import arc.texture.TextureAtlas
-import org.joml.Math
-import org.joml.Matrix4f
+import korlibs.math.geom.Matrix4
+import korlibs.math.geom.degrees
 
 class CubeEntity(
     private val application: Application,
@@ -35,9 +35,10 @@ class CubeEntity(
         intArrayOf(0, 1, 2, 2, 3, 0)
     )
 
-    private val cubeMatrix = Matrix4f()
+    private var cubeMatrix = Matrix4()
 
     private val buffer = application.renderContext.drawer.begin(DrawerMode.TRIANGLES, vertexFormat, 200).also {
+        val vertexMatrix = cubeMatrix
         for (i in indices.indices step 6) {
             val (row, col) = texCoords[i / 6]
 
@@ -52,7 +53,7 @@ class CubeEntity(
 
             repeat(6) { j ->
                 it.addVertex(
-                    cubeMatrix,
+                    vertexMatrix,
                     positions[indices[i + j] * 3],
                     positions[indices[i + j] * 3 + 1],
                     positions[indices[i + j] * 3 + 2]
@@ -77,16 +78,14 @@ class CubeEntity(
     }
 
     fun rotate(x: Float, y: Float, z: Float) {
-        cubeMatrix.setRotationXYZ(
-            Math.toRadians(x), Math.toRadians(y), Math.toRadians(z)
-        ).normal()
+        cubeMatrix = Matrix4().rotated(x.degrees, y.degrees, z.degrees)
     }
 
     fun setPosition(x: Float, y: Float, z: Float) {
-        cubeMatrix.translate(x, y, z)
+        cubeMatrix = cubeMatrix.translated(x, y, z)
     }
 
     fun setScale(x: Float, y: Float = x, z: Float = x) {
-        cubeMatrix.scale(x, y, z)
+        cubeMatrix = cubeMatrix.scaled(x, y, z)
     }
 }

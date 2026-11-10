@@ -1,0 +1,111 @@
+package arc.graphics
+
+import kotlin.jvm.JvmStatic
+
+import arc.util.checkedProduct
+
+import arc.Arc.single
+import arc.annotations.TypeFactory
+import arc.graphics.vertex.VertexArrayBuffer
+import arc.graphics.vertex.VertexBuffer
+import arc.graphics.vertex.VertexConsumer
+import arc.graphics.vertex.VertexFormat
+import arc.util.pattern.Cleanable
+import arc.annotations.InternalApi
+import com.ditchoom.buffer.PlatformBuffer
+
+/**
+ * DrawBuffer is an interface that used for setting vertex data.
+ * With this buffer you can render any polygon.
+ *
+ * In simple words - the buffer allows you to specify vertices and their parameters (coordinates, textures, etc.).
+ * To specify what parameters the vertices will have, there is [VertexFormat]. As its name suggests,
+ * it represents the vertex format for the buffer, i.e., what vertex data will be transferred and in what order.
+ * ```kotlin
+ * VertexFormat.builder()
+ *         .add(VertexFormatElement.POSITION) // <- First element should be position ALWAYS!
+ *         .add(VertexFormatElement.COLOR) // <- Any elements, example color.
+ *         .build()
+ *
+ * // Then we can use our format for buffer.
+ * ```
+ *
+ * In addition to the fact that [VertexFormat] allows you to control [DrawBuffer],
+ * it is also used to provide parameters to shaders, more details in the [VertexFormat] class
+ *
+ * @sample arc.sample.drawBufferSample
+ */
+interface DrawBuffer : VertexConsumer, Cleanable {
+
+    /**
+     * Size of buffer.
+     *
+     * Legacy allocation units: native storage contains bufferSize * 4 bytes, not bufferSize vertices.
+     * Use [activeBytes] and the vertex format stride when sizing uploads.
+     */
+    val bufferSize: Int
+
+    /**
+     * Byte buffer, where stored all vertex data. Use it only if you know what to do.
+     */
+    val byteBuffer: PlatformBuffer
+
+    /**
+     * Count of vertices in this buffer.
+     */
+    val vertexCount: Int
+
+    /**
+     * Initialized bytes occupied by complete vertices; independent from allocation capacity.
+     */
+    val activeBytes: Int get() = checkedProduct(vertexCount, format.nextOffset)
+
+    /**
+     * Represents the drawing mode used for rendering operations within the buffer.
+     */
+    val mode: DrawerMode
+
+    /**
+     * Represents the format structure of the vertices used in the [DrawBuffer].
+     */
+    val format: VertexFormat
+
+    /**
+     * Clear current vertex info in the buffer.
+     */
+    fun clear()
+
+    /**
+     * Build current buffer in vertex buffer.
+     */
+    fun build(): VertexBuffer
+
+    /**
+     * Build current buffer in vertex array buffer.
+     */
+    fun buildArray(): VertexArrayBuffer
+
+    @InternalApi
+    @TypeFactory
+    interface Factory {
+
+        fun create(mode: DrawerMode, format: VertexFormat, bufferSize: Int): DrawBuffer
+    }
+
+    companion object {
+
+        /**
+         * Create new instance of [DrawBuffer].
+         *
+         * @param mode Draw mode.
+         * @param format Vertex setting.
+         * @param bufferSize Size for buffer.
+         *
+         * @return New instance of [DrawBuffer]
+         */
+        @JvmStatic
+        fun of(mode: DrawerMode, format: VertexFormat, bufferSize: Int = 256): DrawBuffer {
+            return single<Factory>().create(mode, format, bufferSize)
+        }
+    }
+}

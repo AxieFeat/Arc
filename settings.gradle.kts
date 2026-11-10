@@ -9,6 +9,7 @@ dependencyResolutionManagement {
     repositoriesMode = RepositoriesMode.PREFER_SETTINGS
 
     repositories {
+        google()
         mavenCentral()
     }
 }
@@ -17,6 +18,7 @@ pluginManagement {
     includeBuild("build-logic")
 
     repositories {
+        google()
         mavenCentral()
         gradlePluginPortal()
     }

@@ -1,13 +1,14 @@
 package arc.demo.screen
 
+
 import arc.asset.asRuntimeAsset
 import arc.graphics.DrawerMode
 import arc.graphics.vertex.VertexFormat
 import arc.graphics.vertex.VertexFormatElement
 import arc.input.mouse
 import arc.shader.ShaderInstance
-import org.joml.Vector2f
-import org.joml.Vector3f
+import korlibs.math.geom.Vector2F
+import korlibs.math.geom.Vector3F
 
 object FaultyTerminalScreen : Screen("faulty-terminal") {
 
@@ -256,13 +257,12 @@ object FaultyTerminalScreen : Screen("faulty-terminal") {
 
         val time = (System.currentTimeMillis() - start) / 1000f * 0.5f
 
-        val mousePosition = Vector2f(application.mouse.position)
-        mousePosition.set(mousePosition.x / width, 1f - mousePosition.y / height)
+        val mousePosition = Vector2F(application.mouse.position.x / width, 1f - application.mouse.position.y / height)
 
         shader.setUniform("iTime", time)
-        shader.setUniform("iResolution", Vector2f(width, height))
+        shader.setUniform("iResolution", Vector2F(width, height))
         shader.setUniform("uScale", 2f)
-        shader.setUniform("uGridMul", Vector2f(2f, 1f))
+        shader.setUniform("uGridMul", Vector2F(2f, 1f))
         shader.setUniform("uDigitSize", 1.2f)
         shader.setUniform("uScanlineIntensity", 0.1f)
         shader.setUniform("uGlitchAmount", 1f)
@@ -271,7 +271,7 @@ object FaultyTerminalScreen : Screen("faulty-terminal") {
         shader.setUniform("uChromaticAberration", 0f)
         shader.setUniform("uDither", 0f)
         shader.setUniform("uCurvature", 0.1f)
-        shader.setUniform("uTint", Vector3f(167f / 255f, 239f / 255f, 158f / 255f))
+        shader.setUniform("uTint", Vector3F(167f / 255f, 239f / 255f, 158f / 255f))
         shader.setUniform("uMouse", mousePosition)
         shader.setUniform("uMouseStrength", 0.5f)
         shader.setUniform("uUseMouse", 1f)

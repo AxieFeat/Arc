@@ -1,11 +1,12 @@
 package arc.demo.screen
 
+
 import arc.asset.asRuntimeAsset
 import arc.graphics.DrawerMode
 import arc.graphics.vertex.VertexFormat
 import arc.graphics.vertex.VertexFormatElement
 import arc.shader.ShaderInstance
-import org.joml.Vector2f
+import korlibs.math.geom.Vector2F
 
 object DarkVeilScreen : Screen("dark-veil") {
 
@@ -118,7 +119,7 @@ object DarkVeilScreen : Screen("dark-veil") {
         val width = application.window.width.toFloat()
         val height = application.window.height.toFloat()
 
-        shader.setUniform("uResolution", Vector2f(width, height))
+        shader.setUniform("uResolution", Vector2F(width, height))
         shader.setUniform("uTime", (System.currentTimeMillis() - start) / 1000f * 0.5f)
         shader.setUniform("uHueShift", 0f)
         shader.setUniform("uNoise", 0f)

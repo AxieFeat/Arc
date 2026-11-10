@@ -7,7 +7,7 @@ import arc.model.cube.Cube
 import arc.model.cube.CubeFace
 import arc.model.texture.ModelTexture
 import arc.texture.TextureAtlas
-import org.joml.Vector3f
+import korlibs.math.geom.Vector3F
 
 object Blocks {
 

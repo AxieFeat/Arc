@@ -5,7 +5,7 @@ import arc.demo.world.WorldModelDispatcher
 import arc.demo.world.block.Block
 import arc.math.AABB
 import arc.model.Model
-import org.joml.Vector3f
+import korlibs.math.geom.Vector3F
 
 class ChunkSection(
     val chunk: Chunk
@@ -16,8 +16,8 @@ class ChunkSection(
     val aabb by lazy {
         val sectionY = chunk.sections.indexOf(this)
         AABB.of(
-            Vector3f((chunk.x * 16).toFloat(), (sectionY * 16).toFloat(), (chunk.z * 16).toFloat()),
-            Vector3f((chunk.x * 16).toFloat() + 16f, (sectionY * 16 + 16).toFloat(), (chunk.z * 16).toFloat() + 16f)
+            Vector3F((chunk.x * 16).toFloat(), (sectionY * 16).toFloat(), (chunk.z * 16).toFloat()),
+            Vector3F((chunk.x * 16).toFloat() + 16f, (sectionY * 16 + 16).toFloat(), (chunk.z * 16).toFloat() + 16f)
         )
     }
 
@@ -46,8 +46,8 @@ class ChunkSection(
                 worldZ,
                 model,
                 AABB.of(
-                    Vector3f(worldX.toFloat(), worldY.toFloat(), worldZ.toFloat()),
-                    Vector3f(worldX.toFloat() + 1f, worldY.toFloat() + 1f, worldZ.toFloat() + 1f)
+                    Vector3F(worldX.toFloat(), worldY.toFloat(), worldZ.toFloat()),
+                    Vector3F(worldX.toFloat() + 1f, worldY.toFloat() + 1f, worldZ.toFloat() + 1f)
                 )
             )
         }

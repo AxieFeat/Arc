@@ -1,0 +1,13 @@
+package arc.extra.graphics.extra
+
+import arc.window.Window
+import kotlin.jvm.JvmStatic
+
+internal object TimeUtil {
+
+    @JvmStatic
+    @Suppress("MagicNumber") // TODO What is 1000L mean here?
+    fun getTime(window: Window): Long {
+        return (window.timeFromInitialize * 1000L).toLong()
+    }
+}

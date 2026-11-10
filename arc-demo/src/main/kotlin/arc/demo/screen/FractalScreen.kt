@@ -1,5 +1,6 @@
 package arc.demo.screen
 
+
 import arc.asset.asRuntimeAsset
 import arc.demo.shader.ShaderContainer
 import arc.graphics.DrawerMode
@@ -12,7 +13,7 @@ import arc.input.onRelease
 import arc.input.onScroll
 import arc.shader.FrameBuffer
 import arc.shader.ShaderInstance
-import org.joml.Vector2f
+import korlibs.math.geom.Vector2F
 
 object FractalScreen : Screen("fractal") {
 
@@ -108,7 +109,7 @@ object FractalScreen : Screen("fractal") {
         buffer.build()
     }
 
-    var center = Vector2f(0f, 0f)
+    var center = Vector2F(0f, 0f)
     var scale = 1f / application.window.height.toFloat()
 
     var dragging = false
@@ -124,17 +125,17 @@ object FractalScreen : Screen("fractal") {
             val windowWidth = application.window.width.toFloat()
             val windowHeight = application.window.height.toFloat()
 
-            val mouseWorldBefore = Vector2f(
+            val mouseWorldBefore = Vector2F(
                 (mousePos.x - windowWidth / 2f) * oldScale + center.x,
                 (windowHeight / 2f - mousePos.y) * oldScale + center.y
             )
 
-            val mouseWorldAfter = Vector2f(
+            val mouseWorldAfter = Vector2F(
                 (mousePos.x - windowWidth / 2f) * scale + center.x,
                 (windowHeight / 2f - mousePos.y) * scale + center.y
             )
 
-            center.add(mouseWorldBefore).sub(mouseWorldAfter)
+            center = center + mouseWorldBefore - mouseWorldAfter
 
             needUpdate = true
         }
@@ -152,7 +153,7 @@ object FractalScreen : Screen("fractal") {
     override fun doRender() {
 
         if (dragging) {
-            center.sub(application.mouse.displayVec.x * scale, -application.mouse.displayVec.y * scale)
+            center = center - Vector2F(application.mouse.displayVec.x * scale, -application.mouse.displayVec.y * scale)
             needUpdate = true
         }
 
@@ -162,11 +163,11 @@ object FractalScreen : Screen("fractal") {
             val width = application.window.width.toFloat()
             val height = application.window.height.toFloat()
 
-            shader.setUniform("iResolution", Vector2f(width, height))
+            shader.setUniform("iResolution", Vector2F(width, height))
             shader.setUniform("center", center)
             shader.setUniform("scale", scale)
             shader.setUniform("iTime", 0.0f)
-            shader.setUniform("juliaC", Vector2f(-1.2f, 0.15015f))
+            shader.setUniform("juliaC", Vector2F(-1.2f, 0.15015f))
             shader.setUniform("maxIter", 15000)
 
             drawer.draw(buffer)

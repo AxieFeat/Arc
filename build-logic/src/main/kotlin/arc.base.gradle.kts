@@ -12,9 +12,3 @@ kotlin {
             ?: throw IllegalStateException("Java version not specified")
     )
 }
-
-tasks.test {
-    useJUnitPlatform()
-}
-
-

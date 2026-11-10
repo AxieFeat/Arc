@@ -12,10 +12,7 @@ import arc.model.Face
 import arc.texture.TextureAtlas
 import arc.util.Color
 import arc.util.pattern.Cleanable
-import org.joml.Matrix4f
-import org.joml.component1
-import org.joml.component2
-import org.joml.component3
+import korlibs.math.geom.Matrix4
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.Executors
 
@@ -31,7 +28,7 @@ class WorldModelDispatcher(
         private val executor = Executors.newFixedThreadPool(4)
     }
 
-    private val matrix = Matrix4f()
+    private val matrix = Matrix4()
     private val aoFactor = 0.15f
 
     private val vertexFormat = VertexFormat.builder()

@@ -3,6 +3,13 @@ metadata.format.version = "1.1"
 [versions]
 
 kotlin = "2.4.10"
+kotlinx-io = "0.9.2"
+kotlinx-datetime = "0.8.0"
+kotlinx-serialization = "1.12.0"
+kotlinx-coroutines = "1.10.2"
+korlibs = "6.1.0"
+ditchoom-buffer = "5.0.0"
+agp = "9.5.1"
 ksp = "2.3.10" # Not forget to keep in sync with kotlin version
 
 lwjgl = "3.4.2"
@@ -10,7 +17,6 @@ gson = "2.14.0"
 annotations = "26.1.0"
 fastutil = "8.5.18"
 oshi = "7.4.0"
-joml = "1.10.9"
 commons-io = "2.22.0"
 detekt = "1.23.8"
 logging = "8.0.4"
@@ -18,11 +24,17 @@ logback = "1.5.38"
 
 [libraries]
 
+kotlinx-io = { group = "org.jetbrains.kotlinx", name = "kotlinx-io-core", version.ref = "kotlinx-io" }
+kotlinx-datetime = { group = "org.jetbrains.kotlinx", name = "kotlinx-datetime", version.ref = "kotlinx-datetime" }
+kotlinx-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinx-serialization" }
+kotlinx-coroutines = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "kotlinx-coroutines" }
+korlibs-math-vector = { group = "org.korge", name = "korlibs-math-vector", version.ref = "korlibs" }
+ditchoom-buffer = { group = "com.ditchoom", name = "buffer", version.ref = "ditchoom-buffer" }
+
 annotations = { group = "org.jetbrains", name = "annotations", version.ref = "annotations" }
 gson = { group = "com.google.code.gson", name = "gson", version.ref = "gson" }
 fastutil = { group = "it.unimi.dsi", name = "fastutil", version.ref = "fastutil" }
 ksp = { group = "com.google.devtools.ksp", name = "symbol-processing-api", version.ref = "ksp" }
-joml = { group = "org.joml", name = "joml", version.ref = "joml" }
 oshi = { group = "com.github.oshi", name = "oshi-core", version.ref = "oshi" }
 commonsIo = { group = "commons-io", name = "commons-io", version.ref = "commons-io" }
 logging = { group = "io.github.oshai", name = "kotlin-logging-jvm", version.ref = "logging" }
@@ -46,6 +58,10 @@ lwjgl-openal = { group = "org.lwjgl", name = "lwjgl-openal", version.ref = "lwjg
 plugin-kotlin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
 plugin-ksp = { group = "com.google.devtools.ksp", name = "symbol-processing-gradle-plugin", version.ref = "ksp" }
 plugin-detekt = { group = "io.gitlab.arturbosch.detekt", name = "detekt-gradle-plugin", version.ref = "detekt" }
+plugin-multiplatform = { group = "com.android.kotlin.multiplatform.library", name = "com.android.kotlin.multiplatform.library.gradle.plugin", version.ref = "agp" }
+
+[plugins]
+android-multiplatform-library = { id = "com.android.kotlin.multiplatform.library", version.ref = "agp" }
 
 [bundles]
 

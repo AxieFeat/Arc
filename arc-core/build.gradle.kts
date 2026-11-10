@@ -1,12 +1,25 @@
 plugins {
+    id("arc.multiplatform")
     id("arc.publishing")
     id("arc.detekt")
     id("arc.ksp")
 }
 
-dependencies {
-    api(projects.arcAnnotations)
+kotlin {
+    sourceSets {
+        desktopMain.dependencies {
+            api(libs.bundles.logging)
+        }
 
-    api(libs.joml)
-    api(libs.gson)
+        commonMain.dependencies {
+            api(libs.kotlinx.io)
+            api(libs.kotlinx.datetime)
+            api(libs.korlibs.math.vector)
+            api(libs.ditchoom.buffer)
+            api(projects.arcAnnotations)
+
+            implementation(libs.kotlinx.json)
+            implementation(libs.kotlinx.coroutines)
+        }
+    }
 }

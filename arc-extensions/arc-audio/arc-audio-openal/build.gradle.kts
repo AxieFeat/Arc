@@ -1,6 +1,18 @@
-dependencies {
-    api(projects.arcExtensions.arcAudio.arcAudioCore)
+plugins {
+    id("arc.multiplatform")
+    id("arc.publishing")
+    id("arc.ksp")
+}
 
-    lwjgl(libs.lwjgl.openal)
-    lwjgl(libs.lwjgl.stb)
+kotlin {
+    sourceSets {
+        commonMain.dependencies {
+            api(projects.arcExtensions.arcAudio.arcAudioCore)
+        }
+    }
+}
+
+dependencies {
+    lwjglDesktop(libs.lwjgl.openal)
+    lwjglDesktop(libs.lwjgl.stb)
 }

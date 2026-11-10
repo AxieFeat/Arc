@@ -1,0 +1,69 @@
+package arc.gl.texture
+
+import arc.texture.TextureAtlas
+import arc.texture.TextureAtlasLoader
+import arc.texture.TextureFormat
+import arc.texture.TextureLoader
+import org.lwjgl.stb.STBImage
+import org.lwjgl.system.MemoryStack
+import java.nio.ByteBuffer
+import com.ditchoom.buffer.PlatformBuffer
+import arc.buffer.nioView
+import kotlin.use
+
+internal class GlTextureLoader(
+    override val format: TextureFormat
+) : TextureAtlasLoader {
+
+    override fun load(buffer: PlatformBuffer, width: Int, height: Int): TextureAtlas {
+        val view = buffer.nioView()
+        val nativeBuffer = if (view.isDirect) view else ByteBuffer.allocateDirect(view.remaining()).put(view).flip()
+        val texture = GlTextureAtlas()
+        val id = texture.id
+
+        MemoryStack.stackPush().use { stack ->
+            when(format) {
+                TextureFormat.RAW -> {
+                    texture.width = width
+                    texture.height = height
+
+                    TextureUtil.loadRGB(id, width, height, nativeBuffer)
+                }
+                TextureFormat.PNG -> {
+                    val w = stack.mallocInt(1)
+                    val h = stack.mallocInt(1)
+                    val channels = stack.mallocInt(1)
+
+                    val buf: ByteBuffer = STBImage.stbi_load_from_memory(nativeBuffer, w, h, channels, 4)
+                        ?: throw RuntimeException("Image file not loaded: " + STBImage.stbi_failure_reason())
+
+                    try {
+                        texture.width = w.get()
+                        texture.height = h.get()
+                        TextureUtil.loadRGB(id, texture.width, texture.height, buf)
+                    } finally {
+                        STBImage.stbi_image_free(buf)
+                    }
+                }
+            }
+        }
+
+        return texture
+    }
+
+    object Factory : TextureAtlasLoader.Factory, TextureLoader.Factory {
+
+        @JvmField
+        val PNG = GlTextureLoader(TextureFormat.PNG)
+
+        @JvmField
+        val RAW = GlTextureLoader(TextureFormat.RAW)
+
+        override fun create(format: TextureFormat): TextureAtlasLoader {
+            return when(format) {
+                TextureFormat.PNG -> PNG
+                TextureFormat.RAW -> RAW
+            }
+        }
+    }
+}

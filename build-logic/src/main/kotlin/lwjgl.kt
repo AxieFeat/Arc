@@ -1,6 +1,7 @@
 import org.gradle.api.artifacts.dsl.DependencyHandler
 import org.gradle.api.provider.Provider
 import org.gradle.api.artifacts.MinimalExternalModuleDependency
+import org.jetbrains.kotlin.gradle.plugin.KotlinDependencyHandler
 
 /**
  * This enum represents the different LWJGL platforms and their corresponding classifiers.
@@ -28,4 +29,11 @@ fun DependencyHandler.lwjgl(depend: Provider<MinimalExternalModuleDependency>, v
 
 private fun DependencyHandler.add(depend: Provider<MinimalExternalModuleDependency>, platform: LwjglPlatform) {
     add("implementation", variantOf(depend) { classifier(platform.classifier) })
+}
+
+fun DependencyHandler.lwjglDesktop(depend: Provider<MinimalExternalModuleDependency>, vararg platform: LwjglPlatform = LwjglPlatform.values()) {
+    add("desktopMainImplementation", depend)
+    platform.forEach {
+        add("desktopMainImplementation", variantOf(depend) { classifier(it.classifier) })
+    }
 }

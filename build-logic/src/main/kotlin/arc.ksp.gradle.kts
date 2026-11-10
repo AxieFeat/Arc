@@ -1,6 +1,4 @@
 import org.gradle.api.Project
-import org.gradle.kotlin.dsl.dependencies
-import org.gradle.kotlin.dsl.project
 
 /**
  * Convention plugin for modules that use the KSP annotation processor.
@@ -13,9 +11,10 @@ import org.gradle.kotlin.dsl.project
 if(!isKspSkipped()) {
     pluginManager.apply("com.google.devtools.ksp")
 
-    dependencies {
-        add("ksp", project(":arc-annotation-processor"))
-    }
+    dependencies.add(
+        if (pluginManager.hasPlugin("org.jetbrains.kotlin.multiplatform")) "kspDesktop" else "ksp",
+        project(":arc-annotation-processor")
+    )
 }
 
 private fun Project.isKspSkipped(): Boolean =

@@ -1,11 +1,18 @@
 plugins {
+    id("arc.multiplatform")
     id("arc.publishing")
     id("arc.detekt")
     id("arc.ksp")
 }
 
-dependencies {
-    api(projects.arcCommon)
+kotlin {
+    sourceSets {
+        commonMain.dependencies {
+            api(projects.arcCommon)
+        }
+    }
+}
 
-    lwjgl(libs.lwjgl.glfw)
+dependencies {
+    lwjglDesktop(libs.lwjgl.glfw)
 }

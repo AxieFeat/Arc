@@ -1,0 +1,63 @@
+package arc.asset
+
+import kotlin.jvm.JvmStatic
+import kotlin.jvm.JvmField
+
+import arc.Arc.single
+import arc.annotations.ImmutableType
+import arc.annotations.TypeFactory
+import arc.annotations.InternalApi
+
+/**
+ * Represents an immutable stack of assets.
+ *
+ * @param T The type of asset contained in the stack, which must implement the [AssetLike] interface.
+ */
+@ImmutableType
+interface AssetStack<T : AssetLike> : Iterable<T> {
+
+    /**
+     * Set of all assets in this stack.
+     */
+    val assets: Set<T>
+
+    @InternalApi
+    @TypeFactory
+    interface Factory {
+
+        fun <T : AssetLike> create(assets: Set<T>): AssetStack<T>
+    }
+
+    companion object {
+
+        /**
+         * Empty [AssetStack].
+         */
+        @JvmField
+        val EMPTY = of(emptySet())
+
+        /**
+         * Create a new stack of assets.
+         *
+         * @param T Type of asset.
+         * @param assets Assets of stack.
+         *
+         * @return New instance of [AssetStack].
+         */
+        @JvmStatic
+        fun <T : AssetLike> of(assets: Set<T> = setOf()): AssetStack<T> {
+            return single<Factory>().create(assets)
+        }
+
+        /**
+         * Create a new stack of assets.
+         *
+         * @param T Type of asset.
+         * @param asset Assets of stack.
+         *
+         * @return New instance of [AssetStack].
+         */
+        @JvmStatic
+        fun <T : AssetLike> of(vararg asset: T): AssetStack<T> = of(asset.toSet())
+    }
+}

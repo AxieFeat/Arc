@@ -1,4 +1,9 @@
+plugins {
+    id("arc.base")
+}
+
 dependencies {
+    implementation(libs.gson)
     implementation(projects.arcExtra)
     implementation(projects.arcOpengl)
     implementation(projects.arcOpengles)
