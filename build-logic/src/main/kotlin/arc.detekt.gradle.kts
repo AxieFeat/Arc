@@ -1,6 +1,7 @@
 import io.gitlab.arturbosch.detekt.Detekt
 import io.gitlab.arturbosch.detekt.extensions.DetektExtension
 import org.gradle.api.Project
+import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 
 /**
  * Convention plugin for modules that should match with the code style of project.
@@ -26,6 +27,21 @@ if(!isDetektSkipped()) {
         }
 
         baseline = project.layout.projectDirectory.file("config/baseline.xml").asFile
+    }
+
+    pluginManager.withPlugin("org.jetbrains.kotlin.multiplatform") {
+        val detekt = extensions.getByType<DetektExtension>()
+        val multiplatform = extensions.getByType<KotlinMultiplatformExtension>()
+
+        // Source sets may be registered after this convention plugin is applied.
+        detekt.source.setFrom(emptyList<Any>())
+        multiplatform.sourceSets.all {
+            val sources = kotlin
+            detekt.source.from(providers.provider {
+                val buildDir = layout.buildDirectory.get().asFile.toPath().normalize()
+                sources.srcDirs.filterNot { it.toPath().normalize().startsWith(buildDir) }
+            })
+        }
     }
 
     tasks.named<Detekt>("detekt") {

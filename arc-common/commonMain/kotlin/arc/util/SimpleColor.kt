@@ -28,7 +28,7 @@ internal data class SimpleColor(
 
     override fun toInt(): Int {
         val alphaInt = (alpha * MAX_RGB_VALUE).toInt().coerceIn(MIN_RGB_VALUE, MAX_RGB_VALUE)
-        return (alphaInt shl 24) or (red shl 16) or (green shl 8) or blue
+        return (alphaInt shl ALPHA_SHIFT) or (red shl 16) or (green shl 8) or blue
     }
 
     override fun copy(): Color {
@@ -54,6 +54,8 @@ internal data class SimpleColor(
     }
 
     companion object {
+
+        private const val ALPHA_SHIFT = 24
 
         const val MAX_RGB_VALUE = 255
         const val MIN_RGB_VALUE = 0

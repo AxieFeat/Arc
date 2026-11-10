@@ -7,7 +7,6 @@ import arc.graphics.vertex.VertexArrayBuffer
 import arc.graphics.vertex.VertexFormat
 import arc.graphics.vertex.VertexType
 import com.ditchoom.buffer.PlatformBuffer
-import arc.buffer.nioView
 import org.lwjgl.opengles.GLES20.GL_FLOAT
 import org.lwjgl.opengles.GLES20.GL_INT
 import org.lwjgl.opengles.GLES20.GL_SHORT

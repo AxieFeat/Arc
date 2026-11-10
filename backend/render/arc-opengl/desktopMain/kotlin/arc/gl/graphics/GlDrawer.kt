@@ -1,6 +1,5 @@
 package arc.gl.graphics
 
-
 import arc.graphics.Drawer
 import arc.graphics.vertex.VertexBuffer
 import korlibs.math.geom.Matrix4

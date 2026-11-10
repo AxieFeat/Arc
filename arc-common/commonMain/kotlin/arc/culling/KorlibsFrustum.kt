@@ -3,6 +3,8 @@ package arc.culling
 import arc.math.AABB
 import korlibs.math.geom.Matrix4
 
+private const val CLIP_ROW_OFFSET = 12
+
 internal class KorlibsFrustum : Frustum {
     // Six inward-facing clip planes, four coefficients each. Normalization is unnecessary for AABB tests.
     private val planes = FloatArray(24)
@@ -33,8 +35,8 @@ internal class KorlibsFrustum : Frustum {
         matrix.copyToRows(matrixRows)
         for (axis in 0..2) {
             for (column in 0..3) {
-                planes[axis * 8 + column] = matrixRows[12 + column] + matrixRows[axis * 4 + column]
-                planes[axis * 8 + 4 + column] = matrixRows[12 + column] - matrixRows[axis * 4 + column]
+                planes[axis * 8 + column] = matrixRows[CLIP_ROW_OFFSET + column] + matrixRows[axis * 4 + column]
+                planes[axis * 8 + 4 + column] = matrixRows[CLIP_ROW_OFFSET + column] - matrixRows[axis * 4 + column]
             }
         }
     }

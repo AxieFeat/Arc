@@ -3,16 +3,16 @@ comments:
   UndocumentedPublicClass:
     active: true
     excludes: ["**/test/**"]
-    ignoreAnnotated: ["ApiStatus.Internal"]
+    ignoreAnnotated: ["ApiStatus.Internal", "InternalApi"]
     ignoreDefaultCompanionObject: true
   UndocumentedPublicFunction:
     active: true
     excludes: ["**/test/**"]
-    ignoreAnnotated: ["ApiStatus.Internal"]
+    ignoreAnnotated: ["ApiStatus.Internal", "InternalApi"]
   UndocumentedPublicProperty:
     active: true
     excludes: ["**/test/**"]
-    ignoreAnnotated: ["ApiStatus.Internal", "Catalogue"]
+    ignoreAnnotated: ["ApiStatus.Internal", "InternalApi", "Catalogue"]
 
 complexity:
   active: true

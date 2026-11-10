@@ -9,15 +9,15 @@ import kotlin.jvm.JvmSynthetic
  */
 object Arc {
 
+    @JvmStatic
+    internal var objectProvider: ObjectProvider? = null
+
     /**
      * Installs the provider used by the engine API.
      */
     fun install(provider: ObjectProvider) {
         objectProvider = provider
     }
-
-    @JvmStatic
-    internal var objectProvider: ObjectProvider? = null
 
     /**
      * Function for getting [ObjectProvider].

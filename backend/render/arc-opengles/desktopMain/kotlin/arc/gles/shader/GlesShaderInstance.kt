@@ -126,9 +126,16 @@ internal class GlesShaderInstance(
                 glUniformMatrix3fv(
                     this,
                     false,
-                    stack.mallocFloat(MATRIX3F_SIZE).put(value.v00).put(value.v10).put(value.v20)
-                        .put(value.v01).put(value.v11).put(value.v21)
-                        .put(value.v02).put(value.v12).put(value.v22).flip()
+                    stack.mallocFloat(MATRIX3F_SIZE).put(value.v00)
+                        .put(value.v10)
+                        .put(value.v20)
+                        .put(value.v01)
+                        .put(value.v11)
+                        .put(value.v21)
+                        .put(value.v02)
+                        .put(value.v12)
+                        .put(value.v22)
+                        .flip()
                 )
             }
         }
@@ -140,10 +147,23 @@ internal class GlesShaderInstance(
                 glUniformMatrix4fv(
                     this,
                     false,
-                    stack.mallocFloat(MATRIX4F_SIZE).put(value.v00).put(value.v10).put(value.v20).put(value.v30)
-                        .put(value.v01).put(value.v11).put(value.v21).put(value.v31)
-                        .put(value.v02).put(value.v12).put(value.v22).put(value.v32)
-                        .put(value.v03).put(value.v13).put(value.v23).put(value.v33).flip()
+                    stack.mallocFloat(MATRIX4F_SIZE).put(value.v00)
+                        .put(value.v10)
+                        .put(value.v20)
+                        .put(value.v30)
+                        .put(value.v01)
+                        .put(value.v11)
+                        .put(value.v21)
+                        .put(value.v31)
+                        .put(value.v02)
+                        .put(value.v12)
+                        .put(value.v22)
+                        .put(value.v32)
+                        .put(value.v03)
+                        .put(value.v13)
+                        .put(value.v23)
+                        .put(value.v33)
+                        .flip()
                 )
             }
         }
