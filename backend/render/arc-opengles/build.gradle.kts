@@ -13,12 +13,10 @@ kotlin {
         desktopMain.dependencies {
             implementation(projects.arcEgl)
             implementation(libs.commonsIo)
+
+            lwjglDesktop(libs.lwjgl.stb)
+            lwjglDesktop(libs.lwjgl.opengles)
+            lwjglDesktop(libs.lwjgl.glfw)
         }
     }
-}
-
-dependencies {
-    lwjglDesktop(libs.lwjgl.stb)
-    lwjglDesktop(libs.lwjgl.opengles)
-    lwjglDesktop(libs.lwjgl.glfw)
 }

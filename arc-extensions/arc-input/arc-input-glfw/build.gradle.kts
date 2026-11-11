@@ -9,9 +9,8 @@ kotlin {
         commonMain.dependencies {
             api(projects.arcExtensions.arcInput.arcInputCore)
         }
+        desktopMain.dependencies {
+            lwjglDesktop(libs.lwjgl.glfw)
+        }
     }
-}
-
-dependencies {
-    lwjglDesktop(libs.lwjgl.glfw)
 }

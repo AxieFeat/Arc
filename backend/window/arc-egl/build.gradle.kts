@@ -13,10 +13,8 @@ kotlin {
         }
         desktopMain.dependencies {
             implementation(libs.lwjgl.egl)
+
+            lwjglDesktop(libs.lwjgl.glfw)
         }
     }
-}
-
-dependencies {
-    lwjglDesktop(libs.lwjgl.glfw)
 }

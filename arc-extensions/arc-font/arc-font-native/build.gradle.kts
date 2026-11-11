@@ -11,11 +11,9 @@ kotlin {
         }
         desktopMain.dependencies {
             implementation(libs.lwjgl.harfbuzz)
+
+            lwjglDesktop(libs.lwjgl.lib)
+            lwjglDesktop(libs.lwjgl.freetype)
         }
     }
-}
-
-dependencies {
-    lwjglDesktop(libs.lwjgl.lib)
-    lwjglDesktop(libs.lwjgl.freetype)
 }

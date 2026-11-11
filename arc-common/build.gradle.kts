@@ -13,10 +13,8 @@ kotlin {
         desktopMain.dependencies {
             implementation(libs.fastutil)
             implementation(libs.oshi)
+
+            lwjglDesktop(libs.lwjgl.lib)
         }
     }
-}
-
-dependencies {
-    lwjglDesktop(libs.lwjgl.lib)
 }

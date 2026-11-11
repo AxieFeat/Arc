@@ -31,9 +31,13 @@ private fun DependencyHandler.add(depend: Provider<MinimalExternalModuleDependen
     add("implementation", variantOf(depend) { classifier(platform.classifier) })
 }
 
-fun DependencyHandler.lwjglDesktop(depend: Provider<MinimalExternalModuleDependency>, vararg platform: LwjglPlatform = LwjglPlatform.values()) {
-    add("desktopMainImplementation", depend)
+/** Adds an LWJGL dependency and its selected native classifiers to this Kotlin source set. */
+fun KotlinDependencyHandler.lwjglDesktop(
+    depend: Provider<MinimalExternalModuleDependency>,
+    vararg platform: LwjglPlatform = LwjglPlatform.values()
+) {
+    implementation(depend)
     platform.forEach {
-        add("desktopMainImplementation", variantOf(depend) { classifier(it.classifier) })
+        implementation(project.dependencies.variantOf(depend) { classifier(it.classifier) })
     }
 }

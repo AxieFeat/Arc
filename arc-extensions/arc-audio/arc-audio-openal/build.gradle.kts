@@ -9,10 +9,9 @@ kotlin {
         commonMain.dependencies {
             api(projects.arcExtensions.arcAudio.arcAudioCore)
         }
+        desktopMain.dependencies {
+            lwjglDesktop(libs.lwjgl.openal)
+            lwjglDesktop(libs.lwjgl.stb)
+        }
     }
-}
-
-dependencies {
-    lwjglDesktop(libs.lwjgl.openal)
-    lwjglDesktop(libs.lwjgl.stb)
 }

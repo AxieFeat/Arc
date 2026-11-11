@@ -10,9 +10,8 @@ kotlin {
         commonMain.dependencies {
             api(projects.arcCommon)
         }
+        desktopMain.dependencies {
+            lwjglDesktop(libs.lwjgl.glfw)
+        }
     }
-}
-
-dependencies {
-    lwjglDesktop(libs.lwjgl.glfw)
 }
