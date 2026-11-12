@@ -1,7 +1,7 @@
 plugins {
     id("arc.multiplatform")
     id("arc.publishing")
-//    id("arc.detekt") TODO enable detekt, when got stable
+    id("arc.detekt")
     id("arc.ksp")
 }
 

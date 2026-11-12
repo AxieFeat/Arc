@@ -7,10 +7,6 @@ plugins {
 
 kotlin {
     sourceSets {
-        desktopMain.dependencies {
-            api(libs.bundles.logging)
-        }
-
         commonMain.dependencies {
             api(libs.kotlinx.io)
             api(libs.kotlinx.datetime)
@@ -20,6 +16,10 @@ kotlin {
 
             implementation(libs.kotlinx.json)
             implementation(libs.kotlinx.coroutines)
+        }
+
+        desktopMain.dependencies {
+            api(libs.bundles.logging)
         }
     }
 }

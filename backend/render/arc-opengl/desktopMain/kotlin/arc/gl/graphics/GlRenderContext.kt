@@ -229,7 +229,7 @@ internal object GlRenderContext : RenderContext {
     override fun bindSampler(sampler: TextureSampler?, unit: Int) {
         require(sampler == null || sampler is GlTextureSampler) { "Sampler belongs to a different backend" }
         require(unit in 0 until textureUnitLimit) { "Invalid texture unit $unit" }
-        glBindSampler(unit, sampler?.let { (it as GlTextureSampler).checkedId() } ?: 0)
+        glBindSampler(unit, sampler?.checkedId() ?: 0)
     }
 
     override fun bindTarget(target: RenderTarget?) {

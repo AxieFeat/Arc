@@ -8,7 +8,7 @@ package arc.annotations
  * * The type is a member type
  * * The type has no declared properties
  * * The type has at least one declared function
- * * The type is marked with [org.jetbrains.annotations.ApiStatus.Internal]
+ * * The type is marked with [InternalApi]
  */
 @Target(AnnotationTarget.CLASS)
 @Retention(AnnotationRetention.RUNTIME)

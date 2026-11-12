@@ -211,7 +211,7 @@ internal object GlesRenderContext : RenderContext {
     override fun bindSampler(sampler: TextureSampler?, unit: Int) {
         require(sampler == null || sampler is GlesTextureSampler) { "Sampler belongs to a different backend" }
         require(unit in 0 until textureUnitLimit) { "Invalid texture unit $unit" }
-        glBindSampler(unit, sampler?.let { (it as GlesTextureSampler).checkedId() } ?: 0)
+        glBindSampler(unit, sampler?.let { it.checkedId() } ?: 0)
     }
 
     override fun bindTarget(target: RenderTarget?) {

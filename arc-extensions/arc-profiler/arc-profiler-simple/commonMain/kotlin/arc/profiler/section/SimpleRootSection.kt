@@ -60,7 +60,7 @@ internal class SimpleRootSection(
                 it?.startTime = this.startTime
                 it?.endTime = this.endTime
                 it?.root = root
-                it?.usage = SimpleTreeSectionResult.calculateUsage(it, it?.duration ?: 0)
+                it?.usage = SimpleTreeSectionResult.calculateUsage(it, it.duration)
             } ?:
                 SimpleTreeSectionResult(
                     name = this.name,

@@ -34,7 +34,7 @@ interface CubeFace {
     val rotation: Float
 
     /**
-     * Is this value set to false - this face will be ignored by [Model.cullFaces].
+     * Is this value set to false - this face will be ignored by [arc.model.Model.cullFaces].
      */
     val isCullable: Boolean
 

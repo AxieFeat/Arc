@@ -8,7 +8,6 @@ plugins {
 kotlin {
     sourceSets {
         commonMain.dependencies {
-            api(projects.arcCommon)
             api(projects.arcGlfw)
         }
         desktopMain.dependencies {

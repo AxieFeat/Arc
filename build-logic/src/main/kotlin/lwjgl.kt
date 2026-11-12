@@ -19,7 +19,7 @@ enum class LwjglPlatform(val classifier: String) {
  * @param depend The LWJGL dependency to add.
  * @param platform The platforms for which to include natives. Defaults to all supported platforms.
  */
-fun DependencyHandler.lwjgl(depend: Provider<MinimalExternalModuleDependency>, vararg platform: LwjglPlatform = LwjglPlatform.values()) {
+fun DependencyHandler.lwjgl(depend: Provider<MinimalExternalModuleDependency>, vararg platform: LwjglPlatform = LwjglPlatform.entries.toTypedArray()) {
     add("implementation", depend)
 
     platform.forEach {
@@ -34,7 +34,7 @@ private fun DependencyHandler.add(depend: Provider<MinimalExternalModuleDependen
 /** Adds an LWJGL dependency and its selected native classifiers to this Kotlin source set. */
 fun KotlinDependencyHandler.lwjglDesktop(
     depend: Provider<MinimalExternalModuleDependency>,
-    vararg platform: LwjglPlatform = LwjglPlatform.values()
+    vararg platform: LwjglPlatform = LwjglPlatform.entries.toTypedArray()
 ) {
     implementation(depend)
     platform.forEach {

@@ -181,7 +181,6 @@ abstract class AbstractGlfwWindow(
                     CursorShape.CROSSHAIR -> GLFW.GLFW_CROSSHAIR_CURSOR
                     CursorShape.RESIZE_HORIZONTAL -> GLFW.GLFW_HRESIZE_CURSOR
                     CursorShape.RESIZE_VERTICAL -> GLFW.GLFW_VRESIZE_CURSOR
-                    else -> GLFW.GLFW_ARROW_CURSOR
                 }
             )
         }
