@@ -17,6 +17,7 @@ gson = "2.15.0"
 annotations = "26.1.0"
 fastutil = "8.5.19"
 oshi = "7.7.3"
+jspecify = "1.0.0"
 commons-io = "2.22.0"
 detekt = "1.23.8"
 logging = "8.0.6"
@@ -36,6 +37,7 @@ gson = { group = "com.google.code.gson", name = "gson", version.ref = "gson" }
 fastutil = { group = "it.unimi.dsi", name = "fastutil", version.ref = "fastutil" }
 ksp = { group = "com.google.devtools.ksp", name = "symbol-processing-api", version.ref = "ksp" }
 oshi = { group = "com.github.oshi", name = "oshi-core", version.ref = "oshi" }
+jspecify = { group = "org.jspecify", name = "jspecify", version.ref = "jspecify" }
 commonsIo = { group = "commons-io", name = "commons-io", version.ref = "commons-io" }
 logging = { group = "io.github.oshai", name = "kotlin-logging-jvm", version.ref = "logging" }
 logback = { group = "ch.qos.logback", name = "logback-classic", version.ref = "logback" }
