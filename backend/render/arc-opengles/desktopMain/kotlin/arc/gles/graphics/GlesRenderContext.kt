@@ -54,7 +54,6 @@ import org.lwjgl.opengles.GLES20.glStencilFunc
 import org.lwjgl.opengles.GLES20.glStencilMask
 import org.lwjgl.opengles.GLES20.glStencilOp
 import org.lwjgl.opengles.GLES20.glViewport
-import org.lwjgl.opengles.GLES30
 import org.lwjgl.opengles.GLES30.GL_FRAMEBUFFER
 import org.lwjgl.opengles.GLES30.GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS
 import org.lwjgl.opengles.GLES30.GL_RASTERIZER_DISCARD
@@ -167,7 +166,7 @@ internal object GlesRenderContext : RenderContext {
 
     override fun setBlend(state: BlendState) {
         glesToggle(GL_BLEND, state.enabled)
-        GLES30.glBlendFuncSeparate(
+        glBlendFuncSeparate(
             state.sourceColor.glesValue(), state.destinationColor.glesValue(),
             state.sourceAlpha.glesValue(), state.destinationAlpha.glesValue()
         )
@@ -211,7 +210,7 @@ internal object GlesRenderContext : RenderContext {
     override fun bindSampler(sampler: TextureSampler?, unit: Int) {
         require(sampler == null || sampler is GlesTextureSampler) { "Sampler belongs to a different backend" }
         require(unit in 0 until textureUnitLimit) { "Invalid texture unit $unit" }
-        glBindSampler(unit, sampler?.let { it.checkedId() } ?: 0)
+        glBindSampler(unit, sampler?.checkedId() ?: 0)
     }
 
     override fun bindTarget(target: RenderTarget?) {
