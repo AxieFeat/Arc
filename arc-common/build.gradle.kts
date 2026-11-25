@@ -12,4 +12,5 @@ dependencies {
 
     implementation(libs.fastutil)
     implementation(libs.oshi)
+    implementation(libs.jspecify)
 }
