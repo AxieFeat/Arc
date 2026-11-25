@@ -8,6 +8,7 @@ ksp = "2.3.10" # Not forget to keep in sync with kotlin version
 lwjgl = "3.4.2"
 gson = "2.14.0"
 annotations = "26.1.0"
+jspecify = "1.0.0"
 fastutil = "8.5.18"
 oshi = "7.4.0"
 joml = "1.10.9"
@@ -19,6 +20,7 @@ logback = "1.5.38"
 [libraries]
 
 annotations = { group = "org.jetbrains", name = "annotations", version.ref = "annotations" }
+jspecify = { group = "org.jspecify", name = "jspecify", version.ref = "jspecify" }
 gson = { group = "com.google.code.gson", name = "gson", version.ref = "gson" }
 fastutil = { group = "it.unimi.dsi", name = "fastutil", version.ref = "fastutil" }
 ksp = { group = "com.google.devtools.ksp", name = "symbol-processing-api", version.ref = "ksp" }
